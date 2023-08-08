@@ -1,12 +1,13 @@
-import './App.css';
-import SigninPage from './components/pages/SigninPage'
-import SignupPage from './components/pages/SignupPage'
+import "./components/styles/App.css";
+import "./components/styles/HomePage.css"
+import SigninPage from "./components/pages/SigninPage";
+import HomePage from './components/pages/HomePage'
+
 
 function App() {
   return (
     <div>
-      <SigninPage></SigninPage>
-      {/* <SignupPage></SignupPage> */}
+      <HomePage />
   </div>
   );
 }
