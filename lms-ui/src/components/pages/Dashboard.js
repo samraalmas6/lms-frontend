@@ -118,7 +118,7 @@ const Dashboard = () => {
       <div class="row ">
         <div class="col-lg-7 col-md-6 col-sm-12">
           <h5 class="mt-3 mb-3 text-secondary">
-            Check More Records of Employees
+            Check More Records of Users
           </h5>
           <div class="table-responsive">
             <table class="table table-striped">

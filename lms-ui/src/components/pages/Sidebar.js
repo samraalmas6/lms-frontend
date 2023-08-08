@@ -26,7 +26,7 @@ const Sidebar = () => {
           <ul class="list-unstyled flex-column pl-3 collapse" id="submenu1">
             <li class="nav-item mb-2 ">
               <a class="nav-link text-secondary" href="">
-              Overbiew
+              Overview
               </a>
             </li>
             <li class="nav-item mb-2 ">
@@ -55,7 +55,7 @@ const Sidebar = () => {
           <ul class="list-unstyled flex-column pl-3 collapse" id="submenu2">
             <li class="nav-item mb-2 ">
               <a class="nav-link text-secondary" href="">
-                Overbiew
+                Overview
               </a>
             </li>
             <li class="nav-item mb-2 ">
