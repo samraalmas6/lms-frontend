@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const SigninPage = () => {
+const SigninPage = ({setShowLogin}) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -13,6 +13,12 @@ const SigninPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        if(email==='admin@lms.com' && password === 'admin123'){
+          setShowLogin(false)
+        }
+        else {
+          alert('Invalid userName And password. correct email: admin@lms.com and password: admin123')
+        }
         const data = {
           email,
           password

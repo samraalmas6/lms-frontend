@@ -4,15 +4,7 @@ const Dashboard = () => {
 
   return (
     <div class="col main pt-2 mt-2">
-      {/* <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Library</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Data</li>
-        </ol>
-        </nav> */}
       <p class="lead d-none d-sm-block">Add User Details and Records</p>
-
       <div class="alert alert-warning fade collapse" role="alert" id="myAlert">
         <button
           type="button"

@@ -1,0 +1,20 @@
+.sidebar {
+    background-color: #b6cfce;
+    color: #0000 !important;
+    border-radius: 5px;
+    margin: 2px 5px 0px 0px;
+}
+.sidebar-nav li a{
+    border-bottom: 2px solid #a2a2a2;
+}
+.sidebar-nav-sub li a{
+    border-bottom: 1px solid #b7b7b7;
+}
+.sidebar-nav > :first-child a {
+    border-bottom: none;
+}
+.sidebar-nav li a span {
+    font-weight: 500;
+    text-transform: capitalize;
+    color: #4a4545;
+}

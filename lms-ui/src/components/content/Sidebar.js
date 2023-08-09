@@ -1,17 +1,18 @@
 import React from "react";
+import "../styles/Sidebar.css"
+import { Link, NavLink } from "react-router-dom";
 const Sidebar = () => {
   return (
     <div
-      class="col-md-3 col-lg-2 sidebar-offcanvas pl-0"
+      class="col-md-3 col-lg-2 sidebar-offcanvas pl-0 sidebar"
       id="sidebar"
       role="navigation"
-      style={{ backgroundColor: "#e9ecef" }}
     >
-      <ul class="nav flex-column sticky-top pl-0 pt-0 p-2 mt-3 ">
+      <ul class="nav flex-column sticky-top pl-0 pt-0 p-2 mt-3 sidebar-nav">
         <li class="nav-item mb-2 mt-3">
-          <a class="nav-link text-secondary" href="#">
-            <h5>Dashboard</h5>
-          </a>
+          <Link to='/dashboard' class="nav-link text-secondary" href="#">
+            <h5 style={{textAlign: 'center'}}>Dashboard</h5>
+          </Link>
         </li>
         <li class="nav-item mb-2 ">
           <a
@@ -23,16 +24,16 @@ const Sidebar = () => {
             <i class="fas fa-user font-weight-bold"></i>
             <span className="ml-2">People Management</span>
           </a>
-          <ul class="list-unstyled flex-column pl-3 collapse" id="submenu1">
+          <ul class="list-unstyled flex-column pl-3 collapse sidebar-nav-sub" id="submenu1">
             <li class="nav-item mb-2 ">
               <a class="nav-link text-secondary" href="">
               Overview
               </a>
             </li>
             <li class="nav-item mb-2 ">
-              <a class="nav-link text-secondary" href="">
+              <Link to='/adduser' class="nav-link text-secondary" >
                Add User
-              </a>
+              </Link>
             </li>
             <li class="nav-item mb-2 ">
               <a class="nav-link text-secondary" href="">
@@ -52,7 +53,7 @@ const Sidebar = () => {
             <i class="fas fa-book font-weight-bold"></i>
             <span className="ml-1">Course Management</span>
           </a>
-          <ul class="list-unstyled flex-column pl-3 collapse" id="submenu2">
+          <ul class="list-unstyled flex-column pl-3 collapse sidebar-nav-sub" id="submenu2">
             <li class="nav-item mb-2 ">
               <a class="nav-link text-secondary" href="">
                 Overview
@@ -80,7 +81,7 @@ const Sidebar = () => {
             <i class="fas fa-solid fa-comment font-weight-bold"></i>
             <span className="ml-2">Communication</span>
           </a>
-          <ul class="list-unstyled flex-column pl-3 collapse" id="submenu3">
+          <ul class="list-unstyled flex-column pl-3 collapse sidebar-nav-sub" id="submenu3">
 
       {/*  Chats and notification section will be developed in future  */}
 
@@ -117,7 +118,7 @@ const Sidebar = () => {
             <i class="fas fa-user font-weight-bold"></i>
             <span className="ml-2">Reports</span>
           </a>
-          <ul class="list-unstyled flex-column pl-3 collapse" id="submenu4">
+          <ul class="list-unstyled flex-column pl-3 collapse sidebar-nav-sub" id="submenu4">
             <li class="nav-item mb-2 ">
               <a class="nav-link text-secondary" href="">
                My Favorites
@@ -159,7 +160,7 @@ const Sidebar = () => {
             <i class="fas fa-solid fa-wrench font-weight-bold"></i>
             <span className="ml-2">Settings</span>
           </a>
-          <ul class="list-unstyled flex-column pl-3 collapse" id="submenu5">
+          <ul class="list-unstyled flex-column pl-3 collapse sidebar-nav-sub" id="submenu5">
             <li class="nav-item mb-2 ">
               <a class="nav-link text-secondary" href="">
                Accounts

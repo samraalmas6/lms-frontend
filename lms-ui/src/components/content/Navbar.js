@@ -1,13 +1,17 @@
 import React from "react";
 import user from "./user.png";
+import "../styles/HomePage.css";
+import { Link } from "react-router-dom";
 
 export const Navbar = () => {
+  const name = "Mohsen Ali";
+  const role = "Admin";
   return (
     <nav class="navbar navbar-expand-md mb-1 nav-bar">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <Link to='/' class="navbar-brand" href="#">
           LMS
-        </a>
+        </Link>
         <button
           class="navbar-toggler"
           type="button"
@@ -22,21 +26,20 @@ export const Navbar = () => {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav">
             <li class="nav-item active">
-              <a class="nav-link" href="#">
+              <Link to='/home' class="nav-link" href="#">
                 Home <span class="sr-only">Home</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="//www.codeply.com">
-                Link
-              </a>
+              </Link>
             </li>
           </ul>
-          <ul class="navbar-nav ml-auto ">
+          <div className="searchbar-container">
+            <input type="search" placeholder="Search" />
+          </div>
+          <ul class="navbar-nav ml-auto navbar-right ">
             <li class="nav-item">
               <a
                 class="nav-link"
                 href="/"
+                className="notification-icon"
                 data-target="#myModal"
                 data-toggle="modal"
               >
@@ -50,14 +53,19 @@ export const Navbar = () => {
                 data-target="#myModal"
                 data-toggle="modal"
               >
-                
-                <div style={{ display: 'flex'}}>
-                  <div><img src={user} alt="User" width="30" /></div>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                  <span>Mohsen Ali</span>
-                  <span>Admin</span>
-                  </div>
-
+                <img src={user} alt="User" className="user-image" />
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="/"
+                data-target="#myModal"
+                data-toggle="modal"
+              >
+                <div className="user-name-container">
+                  <span className="user-name">{name}</span>
+                  <span className="user-role">{role}</span>
                 </div>
               </a>
             </li>
