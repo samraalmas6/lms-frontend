@@ -1,8 +1,9 @@
 .sidebar {
-    background-color: #b6cfce;
+    background-color: #ffff;
     color: #0000 !important;
-    border-radius: 5px;
-    margin: 2px 5px 0px 0px;
+    border-radius: 0px;
+    margin: 0px 5px 0px 0px;
+    box-shadow: 4px 11px 21px -10px gray;
 }
 .sidebar-nav li a{
     border-bottom: 2px solid #a2a2a2;

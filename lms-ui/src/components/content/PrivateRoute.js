@@ -10,10 +10,10 @@ export default function PrivateRoute({ children }) {
   return (
     <div>
       <Navbar />
-      <div class="container-fluid" id="main">
-        <div class="row row-offcanvas row-offcanvas-left">
+      <div className="container-fluid" id="main">
+        <div className="row row-offcanvas row-offcanvas-left">
           <Sidebar />
-            <div class="col pt-2 mt-2">
+            <div className="col pt-2 mt-2 main-body">
                 {children}
             </div>
         </div>

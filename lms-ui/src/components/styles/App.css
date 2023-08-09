@@ -6,7 +6,12 @@
   box-sizing: border-box;
 }
 body {
-  background-color: #eef3f1;
+  background-color: #ffff;
+  border-radius: 0%;
+}
+.main-body {
+  height: 88vh;
+  box-shadow: 4px 3px 21px -10px gray;
 }
 
 /* Signup page */
@@ -63,7 +68,7 @@ margin-top: 12px;
   text-decoration: none;
   color: #848181;
   border-bottom: 1px solid #b7b7b7;
-}
+} */
 .active {
   color: #000;
-} */
+}

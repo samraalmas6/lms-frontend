@@ -7,13 +7,13 @@ export const Navbar = () => {
   const name = "Mohsen Ali";
   const role = "Admin";
   return (
-    <nav class="navbar navbar-expand-md mb-1 nav-bar">
-      <div class="container-fluid">
-        <Link to='/' class="navbar-brand" href="#">
+    <nav className="navbar navbar-expand-md mb-0 nav-bar">
+      <div className="container-fluid">
+        <Link to='/' className="navbar-brand" href="#">
           LMS
         </Link>
         <button
-          class="navbar-toggler"
+          className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent"
@@ -21,34 +21,42 @@ export const Navbar = () => {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav">
-            <li class="nav-item active">
-              <Link to='/home' class="nav-link" href="#">
-                Home <span class="sr-only">Home</span>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav">
+            <li className="nav-item active">
+              <Link to='/home' className="nav-link" href="#">
+                Home <span className="sr-only">Home</span>
               </Link>
             </li>
           </ul>
           <div className="searchbar-container">
             <input type="search" placeholder="Search" />
           </div>
-          <ul class="navbar-nav ml-auto navbar-right ">
-            <li class="nav-item">
+          <ul className="navbar-nav ml-auto navbar-right ">
+          <li className="nav-item">
               <a
-                class="nav-link"
+                className="nav-link notification-icon"
                 href="/"
-                className="notification-icon"
                 data-target="#myModal"
                 data-toggle="modal"
               >
-                <i class="fas fa-solid fa-bell"></i>
+<i class="fas fa-sharp fa-solid fa-message-sms"></i>          </a>
+            </li>
+            <li className="nav-item">
+              <a
+                className="nav-link notification-icon"
+                href="/"
+                data-target="#myModal"
+                data-toggle="modal"
+              >
+                <i className="fas fa-solid fa-bell"></i>
               </a>
             </li>
-            <li class="nav-item">
+            <li className="nav-item">
               <a
-                class="nav-link"
+                className="nav-link"
                 href="/"
                 data-target="#myModal"
                 data-toggle="modal"
@@ -56,9 +64,9 @@ export const Navbar = () => {
                 <img src={user} alt="User" className="user-image" />
               </a>
             </li>
-            <li class="nav-item">
+            <li className="nav-item">
               <a
-                class="nav-link"
+                className="nav-link"
                 href="/"
                 data-target="#myModal"
                 data-toggle="modal"
