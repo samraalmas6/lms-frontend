@@ -5,7 +5,7 @@ const mockData = [
     Role: "Learner",
     email: "abc@work.com",
     department: "CND",
-    active: 'false',
+    active: true,
     img: '~/lms-ui/public/user.png',
     designation: "Software Engineer"
   },
@@ -15,7 +15,7 @@ const mockData = [
     Role: "Learner",
     email: "abc@work.com",
     department: "CND",
-    active: 'true',
+    active: true,
     img: '~/lms-ui/public/user.png',
     designation: "Software Engineer"
   },
@@ -25,7 +25,7 @@ const mockData = [
     Role: "Learner",
     email: "abc@work.com",
     department: "CND",
-    active: 'true',
+    active: true,
     img: '~/lms-ui/public/user.png',
     designation: "Software Engineer"
   },
@@ -35,7 +35,7 @@ const mockData = [
     Role: "Learner",
     email: "abc@work.com",
     department: "CND",
-    active: 'false',
+    active: false,
     img: '~/lms-ui/public/user.png',
     designation: "Software Engineer"
   },
@@ -45,7 +45,7 @@ const mockData = [
     Role: "Learner",
     email: "abc@work.com",
     department: "CND",
-    active: 'true',
+    active: false,
     img: '~/lms-ui/public/user.png',
     designation: "Software Engineer"
   },
@@ -55,7 +55,7 @@ const mockData = [
     Role: "Learner",
     email: "abc@work.com",
     department: "CND",
-    active: 'false',
+    active: false,
     img: '~/lms-ui/public/user.png',
     designation: "Software Engineer"
   }

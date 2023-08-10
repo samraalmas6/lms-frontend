@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import React from 'react'
 
 const Dashboard = () => {
 
   return (
-    <div className="col main pt-2 mt-2">
+    <div className="main">
       <p className="lead d-none d-sm-block">Add User Details and Records</p>
       <div className="alert alert-warning fade collapse" role="alert" id="myAlert">
         <button

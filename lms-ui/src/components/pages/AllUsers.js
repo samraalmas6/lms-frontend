@@ -5,7 +5,7 @@ import "../styles/Users.css";
 
 const AllUsers = () => {
   return (
-    <div>
+    <div className="main">
       <form className="all-usersform">
         <input
           type="search"
@@ -31,9 +31,9 @@ const AllUsers = () => {
                 <>
                   <tr>
                     <td scope="row" className="allusers-name-container">
-                        <div>
+                      <div>
                         <img src={userImg} alt="" className="allusers-image" />
-                        </div>
+                      </div>
                       <div className="allusers-name-section">
                         <span>{user.name}</span>
                         <span className="designation">{user.designation}</span>
@@ -42,7 +42,18 @@ const AllUsers = () => {
                     <td>{user.Role}</td>
                     <td>{user.email}</td>
                     <td>{user.department}</td>
-                    <td>{user.active}</td>
+                    <td>
+                      <div class="form-check form-switch">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          role="switch"
+                          checked={user.active}
+                          id="flexSwitchCheckDisabled"
+                          disabled
+                        />
+                      </div>
+                    </td>
                   </tr>
                 </>
               );
