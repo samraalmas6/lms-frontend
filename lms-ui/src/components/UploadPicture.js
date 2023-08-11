@@ -24,7 +24,9 @@ const UploadPicture = () => {
     <div className={styles.pictures} >
       <div className={styles.cont_1} onClick={handlePictureChange} >
       {/* <h2>Upload Profile Picture</h2> */}
+    
       {image ? <img className={styles.img_aft} src={URL.createObjectURL(image)} alt=""/>:<img className={styles.img_bf} src={profile} alt=""></img>}
+      <h3 style={{ cursor: 'pointer', marginTop: '42px', color: 'purple'}}>Upload Profile Picture</h3>
       </div>
       
       
