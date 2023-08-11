@@ -3,13 +3,13 @@ import user from "./user.png";
 
 export const Navbar = () => {
   return (
-    <nav class="navbar navbar-expand-md mb-1 nav-bar">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+    <nav className="navbar navbar-expand-md mb-1 nav-bar">
+      <div className="container-fluid">
+        <a className="navbar-brand" href="#">
           LMS
         </a>
         <button
-          class="navbar-toggler"
+          className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent"
@@ -17,35 +17,35 @@ export const Navbar = () => {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">
-                Home <span class="sr-only">Home</span>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav">
+            <li className="nav-item active">
+              <a className="nav-link" href="#">
+                Home <span className="sr-only">Home</span>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="//www.codeply.com">
+            <li className="nav-item">
+              <a className="nav-link" href="//www.codeply.com">
                 Link
               </a>
             </li>
           </ul>
-          <ul class="navbar-nav ml-auto ">
-            <li class="nav-item">
+          <ul className="navbar-nav ml-auto ">
+            <li className="nav-item">
               <a
-                class="nav-link"
+                className="nav-link"
                 href="/"
                 data-target="#myModal"
                 data-toggle="modal"
               >
-                <i class="fas fa-solid fa-bell"></i>
+                <i className="fas fa-solid fa-bell"></i>
               </a>
             </li>
-            <li class="nav-item">
+            <li className="nav-item">
               <a
-                class="nav-link"
+                className="nav-link"
                 href="/"
                 data-target="#myModal"
                 data-toggle="modal"
