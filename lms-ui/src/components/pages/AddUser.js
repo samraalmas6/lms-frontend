@@ -102,10 +102,8 @@ const handleFormSubmit = (e) => {
    
     return (
         <>
-            <UploadPicture/>
-            <Navbar/>
-            <Sidebar/>
         <div className={styles.container}>
+        <UploadPicture/>
             <form className={styles.form} >
                 <div className={styles.firstlast}>
                     <label>
@@ -203,12 +201,6 @@ const handleFormSubmit = (e) => {
           
           </div>
         
-
-
-
-
-
-
             </form>
 
         </div>
