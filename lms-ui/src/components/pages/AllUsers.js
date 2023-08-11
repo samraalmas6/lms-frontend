@@ -45,12 +45,11 @@ const AllUsers = () => {
                     <td>
                       <div class="form-check form-switch">
                         <input
-                          class="form-check-input"
+                          className="form-check-input"
                           type="checkbox"
                           role="switch"
                           checked={user.active}
-                          id="flexSwitchCheckDisabled"
-                          disabled
+                          id="flexSwitchCheckDefault"
                         />
                       </div>
                     </td>

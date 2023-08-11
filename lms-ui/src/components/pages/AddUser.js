@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import countryList from 'react-select-country-list'
+import Select from 'react-select'
+
 
 const AddUser = () => {
   
@@ -8,7 +11,12 @@ const AddUser = () => {
   const [phoneNumber, setPhoneNumber] = useState('')
   const [password, setPassword] = useState('')
   const [about, setAbout] = useState('')
-  
+  const [value, setValue] = useState('')
+  const options = useMemo(() => countryList().getData(), [])
+
+  const changeHandler = value => {
+    setValue(value)
+  }
 
 
   return (
@@ -17,7 +25,7 @@ const AddUser = () => {
         <div className="img-div">
           <input type="image" />
         </div>
-        <div className="add-user-checkbox">
+        {/* <div className="add-user-checkbox">
           <label class="form-check-label" for="flexSwitchCheckChecked">
             Public Profile
           </label>
@@ -55,7 +63,7 @@ const AddUser = () => {
               id="flexSwitchCheckDefault"
             />
           </div>
-        </div>
+        </div> */}
       </div>
       <div classNameName="add-user-field-container">
         <form>
@@ -63,8 +71,11 @@ const AddUser = () => {
           <input type="text" placeholder="Last Name" />
           <input type="email" placeholder="Email Address" />
           <input type="password" placeholder="Password" />
+
           <input type="text" placeholder="Phone Number" />
          <textarea  id="" cols="30" rows="10" placeholder="About"></textarea>
+         <label>country:</label>
+          <Select options={options} value={value} onChange={changeHandler} />
          <button>Add User</button>
         </form>
       </div>

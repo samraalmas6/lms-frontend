@@ -39,11 +39,11 @@
 .all-users-content {
   box-shadow: 4px 5px 21px -10px gray;
 }
-.form-check-input:disabled {
+/* .form-check-input:disabled {
   pointer-events: none;
   filter: none;
   opacity: 1;
-}
+} */
 
 .add-user-main-container {
   display: flex;
