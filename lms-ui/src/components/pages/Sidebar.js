@@ -1,8 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 const Sidebar = () => {
   return (
     <div
-      class="col-md-3 col-lg-2 sidebar-offcanvas pl-0"
+      class="sidebar-offcanvas pl-0"
       id="sidebar"
       role="navigation"
       style={{ backgroundColor: "#e9ecef" }}
@@ -30,9 +31,9 @@ const Sidebar = () => {
               </a>
             </li>
             <li class="nav-item mb-2 ">
-              <a class="nav-link text-secondary" href="">
+              <Link to='/adduser' class="nav-link text-secondary" href="">
                Add User
-              </a>
+              </Link>
             </li>
             <li class="nav-item mb-2 ">
               <a class="nav-link text-secondary" href="">
