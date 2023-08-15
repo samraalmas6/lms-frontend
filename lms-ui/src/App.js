@@ -9,7 +9,7 @@ import {
 	Routes,
 	Route
 } from "react-router-dom";
-import AddUser from "./components/pages/AddUser";
+// import AddUser from "./components/pages/AddUser";
 import PrivateRoute from "./components/content/PrivateRoute";
 import AllUsers from "./components/pages/AllUsers";
 
@@ -28,7 +28,7 @@ function App() {
 				<Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>}></Route>
         <Route path="/dashboard" element={<PrivateRoute><HomePage /></PrivateRoute>} ></Route>
 				<Route path="/home" element={<PrivateRoute><HomePage /></PrivateRoute>} ></Route>
-        <Route path="/adduser" element={<PrivateRoute><AddUser /></PrivateRoute>}></Route>
+        {/* <Route path="/adduser" element={<PrivateRoute><AddUser /></PrivateRoute>}></Route> */}
         <Route path="/allusers" element={<PrivateRoute><AllUsers /></PrivateRoute>}></Route>
 			</Routes>
       </BrowserRouter>
