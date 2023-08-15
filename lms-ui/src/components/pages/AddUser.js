@@ -6,7 +6,7 @@ import countryList from "react-select-country-list";
 import * as XLSX from "xlsx";
 
 function AddUser() {
-    const excelFile = useRef()
+  const excelFile = useRef();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
@@ -86,8 +86,7 @@ function AddUser() {
     setValue(value);
   };
 
-
-  // Excel Import Functionality 
+  // Excel Import Functionality
 
   const handleExcelFile = (e) => {
     const reader = new FileReader();
@@ -102,7 +101,7 @@ function AddUser() {
       const keys = Object.keys(obj[0]);
       console.log(keys);
       const newObj = parseData.map(function (obj) {
-        obj["firstName"] = obj['first Name'];
+        obj["firstName"] = obj["first Name"];
         obj["lastName"] = obj["last Name"];
         obj["phoneNumber"] = obj["phone number"];
         obj["userType"] = obj["user type"];
@@ -113,12 +112,9 @@ function AddUser() {
         return obj;
       });
       console.log(newObj);
-      excelFile.current.value = null
-      alert("Users created")
+      excelFile.current.value = null;
+      alert("Users created");
     };
-
-
-
   };
   return (
     <div className="col">
@@ -128,7 +124,12 @@ function AddUser() {
           <div className={styles.excelFile}>
             <label>
               Import excel file
-              <input type="file" accept=".xlsx, xls" onChange={handleExcelFile} ref={excelFile} />
+              <input
+                type="file"
+                accept=".xlsx, xls"
+                onChange={handleExcelFile}
+                ref={excelFile}
+              />
             </label>
           </div>
           <div className={styles.firstlast}>
