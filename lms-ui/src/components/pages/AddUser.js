@@ -85,6 +85,10 @@ function AddUser() {
   const changeHandler = (value) => {
     setValue(value);
   };
+
+
+  // Excel Import Functionality 
+
   const handleExcelFile = (e) => {
     const reader = new FileReader();
     reader.readAsBinaryString(e.target.files[0]);
@@ -98,7 +102,7 @@ function AddUser() {
       const keys = Object.keys(obj[0]);
       console.log(keys);
       const newObj = parseData.map(function (obj) {
-        obj["firstName"] = obj["first Name"];
+        obj["firstName"] = obj['first Name'];
         obj["lastName"] = obj["last Name"];
         obj["phoneNumber"] = obj["phone number"];
         obj["userType"] = obj["user type"];
@@ -112,6 +116,9 @@ function AddUser() {
       excelFile.current.value = null
       alert("Users created")
     };
+
+
+
   };
   return (
     <div className="col">
