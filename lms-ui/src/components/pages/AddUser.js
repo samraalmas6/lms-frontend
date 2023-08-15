@@ -7,6 +7,7 @@ import * as XLSX from "xlsx";
 
 function AddUser() {
   const excelFile = useRef();
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
@@ -17,8 +18,9 @@ function AddUser() {
   const [isActive, setIsActive] = useState(false);
   const [userType, setUserType] = useState("");
 
-  const [value, setValue] = useState("");
+  const [country, setCountry] = useState("");
   const options = useMemo(() => countryList().getData(), []);
+  const [errors, setErros] = useState({});
 
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value);
@@ -52,25 +54,64 @@ function AddUser() {
     setUserType(e.target.value);
   };
 
+  const changeHandler = (value) => {
+    setCountry(value);
+  };
+
+  const validate = (values) => {
+    let errors = {};
+    if (!values.email) {
+      errors.email = "Email address is required";
+    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+      errors.email = "Email address is invalid";
+    } else if (/^\d/.test(values.email)) {
+      errors.email = "Email should not contain number in start";
+    }
+    if (!values.firstName) {
+      errors.firstName = "First Name is required";
+    } else if (
+      /[!@#$%&?]/g.test(values.firstName) ||
+      /\d/.test(values.firstName)
+    ) {
+      errors.firstName =
+        "First Name should not contain numbers or any special character";
+    }
+    if (!values.lastName) {
+      errors.lastName = "Last Name is required";
+    } else if (
+      /[!@#$%&?]/g.test(values.lastName) ||
+      /\d/.test(values.lastName)
+    ) {
+      errors.lastName =
+        "Last Name should not contain numbers or any special character";
+    }
+    if (/[!@#$%&?]/g.test(values.city) || /\d/.test(values.city)) {
+      errors.city =
+        "city Name should not contain numbers or any special character";
+    }
+    if (/[!@#$%&?]/g.test(values.country) || /\d/.test(values.country)) {
+      errors.country =
+        "Country Name should not contain numbers or any special character";
+    }
+
+    return errors;
+  };
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
-
-    const userData = {
-      firstName,
-      lastName,
-      password,
-      email,
-      city,
-      phoneNumber,
-      isActive,
-      userType,
-    };
-    if (firstName === "" || lastName === "" || email === "") {
-      alert("Fill in the required fields");
-      return;
-    } else {
-      alert("user created successfully");
-
+    const errors = validate({ firstName, lastName, email, city, country });
+    setErros(errors);
+    if (Object.keys(errors).length === 0) {
+      const userData = {
+        firstName,
+        lastName,
+        password,
+        email,
+        city,
+        phoneNumber,
+        isActive,
+        userType,
+      };
       setFirstName("");
       setLastName("");
       setPassword("");
@@ -80,10 +121,12 @@ function AddUser() {
       setIsActive(false);
       setUserType("");
     }
-  };
-
-  const changeHandler = (value) => {
-    setValue(value);
+    if (firstName === "" || lastName === "" || email === "") {
+      alert("Fill in the required fields");
+      return;
+    } else {
+      alert("user created successfully");
+    }
   };
 
   // Excel Import Functionality
@@ -178,7 +221,7 @@ function AddUser() {
             <div className={styles.country}>
               <Select
                 options={options}
-                value={value}
+                value={country}
                 onChange={changeHandler}
               />
             </div>

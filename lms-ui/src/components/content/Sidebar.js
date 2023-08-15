@@ -20,11 +20,12 @@ const Sidebar = () => {
             href="#submenu1"
             data-bs-toggle="collapse"
             data-target="#submenu1"
+            aria-expanded="true"
           >
             <i className="fas fa-user font-weight-bold"></i>
             <span className="ml-2">People Management</span>
           </a>
-          <ul className="list-unstyled flex-column pl-3 collapse sidebar-nav-sub" id="submenu1" aria-expanded='true'>
+          <ul className="list-unstyled flex-column pl-3 collapse sidebar-nav-sub show" id="submenu1" aria-expanded='true'>
             <li className="nav-item mb-2 ">
               <a className="nav-link text-secondary" href="">
               Overview
@@ -54,11 +55,12 @@ const Sidebar = () => {
             href="#submenu2"
             data-bs-toggle="collapse"
             data-target="#submenu2"
+            aria-expanded="true"
           >
             <i className="fas fa-book font-weight-bold"></i>
             <span className="ml-1">Course Management</span>
           </a>
-          <ul className="list-unstyled flex-column pl-3 collapse sidebar-nav-sub" id="submenu2">
+          <ul className="list-unstyled flex-column pl-3 collapse sidebar-nav-sub show" id="submenu2">
             <li className="nav-item mb-2 ">
               <a className="nav-link text-secondary" href="">
                 Overview
