@@ -1,6 +1,6 @@
 import React from "react";
 import mockData from "../hooks/mockData";
-import userImg from "../content/user.png";
+import userImg from "../content/Images/user.png";
 import "../styles/Users.css";
 
 const AllUsers = () => {

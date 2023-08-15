@@ -1,5 +1,5 @@
 import React from "react";
-import user from "./user.png";
+import user from "./Images/user.png";
 import "../styles/HomePage.css";
 import { Link } from "react-router-dom";
 

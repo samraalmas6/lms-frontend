@@ -1,6 +1,6 @@
 import React, { useState , useRef} from 'react';
-import styles from '../components/styles/AddUser.module.css';
-import profile from '../Images/profile.jpg'
+import styles from '../styles/AddUser.module.css';
+import profile from '../content/Images/profile.jpg'
 
 const UploadPicture = () => {
   const inputRef = useRef(null);
@@ -31,7 +31,7 @@ const UploadPicture = () => {
       
       
       <input 
-        type="file"ref={inputRef}  onChange={handleImageChange} style={{display:"none"}}
+        type="file" ref={inputRef} accept='image/jpg, image/png, image/jpeg'  onChange={handleImageChange} style={{display:"none"}}
          />
       <div>
       {/* <button onClick={handleToggle}>

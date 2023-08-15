@@ -73,3 +73,6 @@ margin-top: 12px;
 .active {
   color: #000;
 }
+.error {
+  color: red;
+}
