@@ -18,20 +18,17 @@ function App() {
 
   return (
     <div>
-      {/* {
-        showlogin ? <SigninPage setShowLogin={setShowLogin} /> : <HomePage />
-      } */}
-      
-      <BrowserRouter>
+       <BrowserRouter>
 			<Routes>
 				<Route element={<SigninPage />} path="/login" />
 				<Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>}></Route>
         <Route path="/dashboard" element={<PrivateRoute><HomePage /></PrivateRoute>} ></Route>
 				<Route path="/home" element={<PrivateRoute><HomePage /></PrivateRoute>} ></Route>
-        {/* <Route path="/adduser" element={<PrivateRoute><AddUser /></PrivateRoute>}></Route> */}
-        <Route path="/allusers" element={<PrivateRoute><AllUsers /></PrivateRoute>}></Route>
+        <Route path="/adduser" element={<PrivateRoute><AddUser /></PrivateRoute>}></Route>
+        {/* <Route path="/allusers" element={<PrivateRoute><AllUsers /></PrivateRoute>}></Route> */}
 			</Routes>
       </BrowserRouter>
+
   </div>
   );
 }

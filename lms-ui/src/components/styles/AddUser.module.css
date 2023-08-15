@@ -1,0 +1,190 @@
+/* 
+
+
+.container{
+    display: flex;
+
+}
+
+.form{
+    background-color: white;
+    padding: 10px;
+    position: absolute;
+    right: 306px;
+    top: 236px;
+}
+.firstlast{
+    gap: 20px;
+    display: flex;
+}
+.passemail{
+    gap: 20px;
+    display: flex;
+}
+.phonecity{
+    gap: 20px;
+    display: flex;
+}
+.active{
+    gap: 65px;
+    display: flex;
+}
+.btn_add{
+   background-color:  #4c8bf1;
+   color:white;
+   width: 100px;
+   border: none;
+   margin-top: 20px
+}
+.pictures{
+    background-color: white;
+    position: absolute;
+    left: 440px;
+    top: 236px;
+    width:255px;
+    height: 395px;
+}
+.img_bf{
+    height: 150px;
+    width: 150px;
+    border: 3px solid;
+    border-radius: 100%;
+    margin-left: 50px;
+    margin-top:30px ;
+}
+.img_aft{
+    height: 150px;
+    width: 150px;
+    border: 3px solid;
+    border-radius: 100%;
+    margin-left: 50px;
+    margin-top:30px ;
+}
+.cont_1{
+    background-color: rgb(237, 223, 223);
+    position: absolute;
+    border-radius: 100%;
+    left: 5px;
+    height: 0px
+
+}  */
+
+.container{
+    display: flex;
+    background-color: #ffff;
+}
+
+.pictures{
+    background-color: #ffff;
+    height: 600px;
+    width: 30%;
+    margin-right: 5px;
+    display: flex;
+    justify-content: center;
+    box-shadow: 5px 8px 19px -3px gray;
+}
+.img_bf{
+    height: 150px;
+    width: 150px;
+    border: 3px solid;
+    border-radius: 100%;
+    margin-left: 50px;
+    margin-top:30px ;
+}
+.img_aft{
+    height: 150px;
+    width: 150px;
+    border: 3px solid;
+    border-radius: 100%;
+    margin-left: 50px;
+    margin-top:30px ;
+}
+
+.form{
+    padding: 40px 5px 20px 30px;
+    width: 85%;
+    box-shadow: 5px 8px 19px -3px gray;
+}
+.form input, .roles {
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border-style: solid;
+    font-size: 17px;
+    width: 70%;
+    margin-top: 20px;
+}
+.form input:focus, .roles:focus, .form input:hover, .roles:hover{
+    outline: none;
+    box-shadow: 2px 2px 22px -9px #000;
+    border-color: #6f7b7e;
+  }
+  
+
+.firstlast, .passemail, .phonecity{
+    gap: 20px;
+    display: flex;
+    width: 80%;
+}
+.active{
+   display: flex;
+   align-items: center;
+}
+.active input[type='checkbox'] {
+    width: 30px;
+    height: 19px;
+    margin-top: 0px;
+    margin-bottom: 0;
+}
+.active label {
+    margin: 0px 15px;
+    font-size: 17px;
+    font-weight: 500;
+}
+.btn_container {
+    width: 80%;
+    display: flex;
+    justify-content: end;
+}
+.btn_add{
+   background-color:  #4c8bf1;
+   color:#fff;
+   width: 100px;
+   border: none;
+   padding: 12px 15px;
+   border-radius: 12px;
+   margin-top: 20px;
+   font-weight: 500;
+}
+.btn_add:hover {
+    background-color:  #4170bc;
+    color: #fff;
+    cursor: pointer;
+}
+
+.cont_1{
+    background-color: rgb(237, 223, 223);
+    height: 0px;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+
+/*  Country  */
+.country, .roles{
+    width: 71%;
+    margin-top: 21px;
+}
+.country > div > div {
+    border-radius: 6px;
+    border-style: solid;
+    border-color: rgb(133, 133, 133);
+    border-width: 2px;
+    font-size: 17px;
+}
+.roles {
+    border-style: solid;
+    border-color: rgb(133, 133, 133);
+    border-width: 2px;
+    font-size: 17px;
+}

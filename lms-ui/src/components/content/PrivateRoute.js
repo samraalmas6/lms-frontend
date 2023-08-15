@@ -1,6 +1,6 @@
 import React from "react";
-import Navbar from "./Navbar";
-import Sidebar from "./Sidebar";
+import Navbar from "../pages/Navbar";
+import Sidebar from "../pages/Sidebar";
 
 export default function PrivateRoute({ children }) {
   // if (sessionStorage.getItem('user_id') == null) {
@@ -22,6 +22,4 @@ export default function PrivateRoute({ children }) {
       </div>
     </div>
   );
-
-  // }
-}
+  }
