@@ -1,0 +1,46 @@
+.contain{
+    display: flex;
+  background-color: none;
+   margin-top: 20px;
+   width: 1000px;
+   height: 300px;
+}
+
+.form{
+    padding: 40px 30px 290px 30px;
+    width: 85%;
+    box-shadow: 5px 8px 19px -3px gray;
+    margin-top: 100px;
+    margin-left: 400px;
+}
+.form input, .roles {
+    padding: 5px 15px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border-style: solid;
+    font-size: 17px;
+    width: 80%;
+    margin-top: 10px;
+    margin-left: 111px;
+}
+.btn_container {
+    width: 80%;
+    display: flex;
+    justify-content: end;
+}
+.btn_add{
+   background-color:  #4c8bf1;
+   color:#fff;
+   width: 100px;
+   border: none;
+   padding: 12px 15px;
+   border-radius: 12px;
+   margin-top: 10px;
+   font-weight: 500;
+   margin-left: 410px;
+}
+.btn_add:hover {
+    background-color:  #4170bc;
+    color: #fff;
+    cursor: pointer;
+}

@@ -5,10 +5,13 @@ import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Select from "react-select";
 import countryList from "react-select-country-list";
+import ExcelImport from "../ExcelImport";
+
+
 
 function AddUser() {
 
-
+    <ExcelImport/>
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
@@ -23,6 +26,10 @@ function AddUser() {
 
     const [value, setValue] = useState('')
     const options = useMemo(() => countryList().getData(), [])
+
+
+
+  
 
     const handleFirstNameChange = (e) => {
         setFirstName(e.target.value);
@@ -60,7 +67,7 @@ function AddUser() {
     const handleFormSubmit = (e) => {
         e.preventDefault();
 
-        const userData = {
+        const userData= {
             firstName,
             lastName,
             password,
