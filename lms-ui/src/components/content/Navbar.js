@@ -9,7 +9,7 @@ export const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-md mb-0 nav-bar">
       <div className="container-fluid">
-        <Link to='/' className="navbar-brand" href="#">
+        <Link to="/" className="navbar-brand" href="#">
           LMS
         </Link>
         <button
@@ -26,7 +26,7 @@ export const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav">
             <li className="nav-item active">
-              <Link to='/home' className="nav-link" href="#">
+              <Link to="/home" className="nav-link" href="#">
                 Home <span className="sr-only">Home</span>
               </Link>
             </li>
@@ -35,14 +35,15 @@ export const Navbar = () => {
             <input type="search" placeholder="Search" />
           </div>
           <ul className="navbar-nav ml-auto navbar-right ">
-          <li className="nav-item">
+            <li className="nav-item">
               <a
                 className="nav-link notification-icon"
                 href="/"
                 data-target="#myModal"
                 data-toggle="modal"
               >
-<i class="fas fa-sharp fa-solid fa-message-sms"></i>          </a>
+                <i className="fas fa-sharp fa-solid fa-message-sms"></i>{" "}
+              </a>
             </li>
             <li className="nav-item">
               <a

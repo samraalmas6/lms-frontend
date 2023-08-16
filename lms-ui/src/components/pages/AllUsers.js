@@ -2,6 +2,7 @@ import React from "react";
 import mockData from "../hooks/mockData";
 import userImg from "../content/Images/user.png";
 import "../styles/Users.css";
+import { Link } from "react-router-dom";
 
 const AllUsers = () => {
   return (
@@ -12,7 +13,7 @@ const AllUsers = () => {
           className="all-users-input"
           placeholder="Search user.."
         />
-        <button className="btn btn-primary">Add New User</button>
+        <button className="btn btn-primary"><Link to='/adduser'>Add New User</Link></button>
       </form>
       <div className="all-users-content">
         <table className="table">
@@ -28,8 +29,8 @@ const AllUsers = () => {
           <tbody>
             {mockData.map((user) => {
               return (
-                <>
-                  <tr>
+             
+                  <tr key={user.name}>
                     <td scope="row" className="allusers-name-container">
                       <div>
                         <img src={userImg} alt="" className="allusers-image" />
@@ -43,18 +44,18 @@ const AllUsers = () => {
                     <td>{user.email}</td>
                     <td>{user.department}</td>
                     <td>
-                      <div class="form-check form-switch">
+                      <div className="form-check form-switch">
                         <input
                           className="form-check-input"
                           type="checkbox"
                           role="switch"
+                          readOnly
                           checked={user.active}
                           id="flexSwitchCheckDefault"
                         />
                       </div>
                     </td>
                   </tr>
-                </>
               );
             })}
           </tbody>

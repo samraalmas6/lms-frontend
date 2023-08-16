@@ -32,14 +32,14 @@ const Sidebar = () => {
               </a>
             </li>
             <li className="nav-item mb-2 ">
-              <NavLink to='/adduser' activeclassName="active" style={{textDecoration: 'none', color: 'black',     borderBottom: '1px solid #b7b7b7'}} className="nav-link text-secondary navLink" >
+              <Link to='/adduser' style={{textDecoration: 'none', color: 'black',     borderBottom: '1px solid #b7b7b7'}} className="nav-link text-secondary navLink" >
                Add User
-              </NavLink>
+              </Link>
             </li>
             <li className="nav-item mb-2 ">
-              <NavLink to='/allusers' activeclassName="active" style={{textDecoration: 'none', color: 'black',     borderBottom: '1px solid #b7b7b7'}} className="nav-link text-secondary navLink" >
+              <Link to='/allusers'  style={{textDecoration: 'none', color: 'black',     borderBottom: '1px solid #b7b7b7'}} className="nav-link text-secondary navLink" >
                All Users
-              </NavLink>
+              </Link>
             </li>
             <li className="nav-item mb-2 ">
               <a className="nav-link text-secondary" href="">

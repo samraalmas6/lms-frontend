@@ -1,8 +1,9 @@
-import React, { useState, useMemo, useRef } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import styles from "../../components/styles/AddUser.module.css";
 import UploadPicture from "./UploadPicture";
 import Select from "react-select";
 import countryList from "react-select-country-list";
+import emailjs from "@emailjs/browser";
 import * as XLSX from "xlsx";
 
 function AddUser() {
@@ -18,9 +19,11 @@ function AddUser() {
   const [isActive, setIsActive] = useState(false);
   const [userType, setUserType] = useState("");
 
-  const [country, setCountry] = useState("");
+  const [country, setCountry] = useState("Pakistan");
   const options = useMemo(() => countryList().getData(), []);
   const [errors, setErros] = useState({});
+
+  useEffect(() => emailjs.init("739xGz6oDs9E1tq_w"), []);
 
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value);
@@ -97,7 +100,7 @@ function AddUser() {
     return errors;
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     const errors = validate({ firstName, lastName, email, city, country });
     setErros(errors);
@@ -112,6 +115,21 @@ function AddUser() {
         isActive,
         userType,
       };
+
+      const serviceId = "service_x39w5wk";
+      const templateId = "template_yakcx3c";
+      try {
+        await emailjs.send(serviceId, templateId, {
+          name: `${firstName} ${lastName}`,
+          recipient: email,
+          message: 'Verify Account',
+          sender: 'LMS'
+        });
+        alert("email successfully sent check inbox");
+      } catch (error) {
+        console.log(error);
+      }
+
       setFirstName("");
       setLastName("");
       setPassword("");
@@ -166,7 +184,7 @@ function AddUser() {
         <form className={styles.form}>
           <div className={styles.excelFile}>
             <label>
-              Import excel file
+              Import From Excel file
               <input
                 type="file"
                 accept=".xlsx, xls"
