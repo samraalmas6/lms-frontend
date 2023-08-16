@@ -19,7 +19,7 @@
 }
 .searchbar-container input[type='search']:focus {
   outline: none;
-  box-shadow: 2px 2px 22px -9px #000;
+  box-shadow: 2px 2px 15px -9px #000;
   border-color: #6f7b7e;
 }
 .notification-icon i {

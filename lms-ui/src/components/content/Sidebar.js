@@ -4,7 +4,7 @@ import { Link, NavLink } from "react-router-dom";
 const Sidebar = () => {
   return (
     <div
-      className="sidebar-offcanvas pl-0 sidebar"
+      className="sidebar-offcanvas pl-0 sidebar position-fixed"
       id="sidebar"
       role="navigation"
     >

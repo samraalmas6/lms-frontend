@@ -12,7 +12,7 @@
 }
 .all-usersform input[type="search"]:focus {
   outline: none;
-  box-shadow: 2px 2px 22px -9px #000;
+  box-shadow: 2px 2px 15px -9px #000;
   border-color: #6f7b7e;
 }
 
@@ -37,7 +37,7 @@
   font-weight: 300;
 }
 .all-users-content {
-  box-shadow: 4px 5px 21px -10px gray;
+  box-shadow: 4px 5px 15px -3px gray;
 }
 /* .form-check-input:disabled {
   pointer-events: none;
@@ -67,4 +67,25 @@
 .add-new-user:hover {
   text-decoration: none;
   background-color: #176cbb !important;
+}
+
+/* Block view */
+.userCard {
+  display: flex;
+  flex-wrap: wrap;
+}
+.userCardImg {
+  border-radius: 50%;
+  border: 1px solid gray;
+  width: 70px;
+  margin: 5px auto;
+}
+.userBlockCard {
+  width: 12rem;
+  box-shadow: 0px 0px 5px -2px gray;
+  margin: 5px;
+}
+.blockCardBody {
+  text-align: center;
+  font-size: 12px;
 }
