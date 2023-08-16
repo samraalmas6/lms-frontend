@@ -13,7 +13,7 @@ const AllUsers = () => {
           className="all-users-input"
           placeholder="Search user.."
         />
-        <button className="btn btn-primary"><Link to='/adduser'>Add New User</Link></button>
+        <Link to='/adduser' className="text-bg-primary add-new-user">Add New User</Link>
       </form>
       <div className="all-users-content">
         <table className="table">

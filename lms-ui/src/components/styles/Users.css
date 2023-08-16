@@ -56,3 +56,15 @@
   align-items: center;
   justify-content: start;
 }
+
+.add-new-user {
+  margin-right: 15px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+}
+.add-new-user:hover {
+  text-decoration: none;
+  background-color: #176cbb !important;
+}

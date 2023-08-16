@@ -5,6 +5,9 @@ import Select from "react-select";
 import countryList from "react-select-country-list";
 import emailjs from "@emailjs/browser";
 import * as XLSX from "xlsx";
+import * as FileSaver from 'file-saver'
+import ExcelExportData from "../hooks/ExcelExportData";
+import ExportExcel from "../content/Excelexport";
 
 function AddUser() {
   const excelFile = useRef();
@@ -183,6 +186,10 @@ function AddUser() {
         <UploadPicture />
         <form className={styles.form}>
           <div className={styles.excelFile}>
+            <label className={styles.downloadExcel}>
+              Download Excel File Template
+              <ExportExcel excelData={ExcelExportData} fileName={"Excel Export"} className={styles.excelexport}/>
+            </label>
             <label>
               Import From Excel file
               <input
