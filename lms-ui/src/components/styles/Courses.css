@@ -1,0 +1,4 @@
+.course-create-form, .course-module-form, .course-unit-form {
+    display: flex;
+    flex-direction: column;
+}
