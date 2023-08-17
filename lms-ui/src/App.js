@@ -11,7 +11,7 @@ import {
 } from "react-router-dom";
 
 import AddUser from "./components/pages/AddUser";
-import PrivateRoute from "./components/content/PrivateRoute";
+import PrivateRoute from "./components/content/PrivateRoute"
 import AllUsers from "./components/pages/AllUsers";
 
 function App() {
