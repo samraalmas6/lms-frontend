@@ -5,6 +5,7 @@ import HomePage from './components/pages/HomePage';
 import AddUser from "./components/pages/AddUser";
 import ExcelImport from "./components/ExcelImport";
 import VerificationPage from "./components/pages/VerificationPage";
+import Quizpage from "./components/pages/Quizpage";
 
 import {
 	BrowserRouter,
@@ -18,7 +19,11 @@ function App() {
   return (
 
     <div>
-    <VerificationPage/>
+
+    {/* <AddUser/> */}
+      <Quizpage/>
+    {/* <VerificationPage/> */}
+  
        {/* <BrowserRouter>
 			{/* <Routes>
 				<Route element={<SigninPage />} path="/login" />

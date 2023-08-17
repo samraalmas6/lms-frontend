@@ -1,0 +1,146 @@
+.App {
+    text-align: center;
+    padding: 20px;
+  }
+
+.contain{
+    margin : 0 auto;
+    width: 500px;
+    height: 500px;
+    background-color: aqua;
+}
+
+.h1{
+    margin-left: 550px;
+}
+  
+  .quiz {
+    max-width: 800px;
+    margin: 0 auto;
+    color: aqua;
+  }
+
+  .quized {
+    max-width: 100%;
+    margin: 0 auto;
+    background-color: #4c79e3;
+    
+  }
+  
+  .question {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  .question_form{
+    
+    width: 550px;
+    height: 400px;
+    background-color: rgb(184, 190, 189);
+    margin-left: 400px;
+    margin-top: 20px;
+  }
+  
+  .question h2 {
+    margin-bottom: 10px;
+  }
+  
+  .question img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+  }
+  
+  .options {
+    margin-top: 10px;
+  }
+  
+  .options div {
+    margin-bottom: 5px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  input[type="text"]{
+  /* input[type="file"],
+  input[type="radio"] { */
+    margin-right: 10px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  input[type="file"] {
+    display: block;
+    margin-top: 5px;
+  }
+  
+  label {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .input_field{
+    margin-top: 30px;
+    margin-right: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    width: 500px;
+    margin-left: 25px;
+  }
+  .input_option{
+   margin-top: 2px;
+    margin-right: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    width: 300px;
+    margin-left: 25px;
+  }
+
+.remove_btn{
+   border-radius: 5px;
+   color:rgb(12, 5, 5);
+   text-align:justify;
+   background-color: #f0e7e7;
+  }
+
+  .add_btn {
+    border-radius: 5px;
+   color:rgb(12, 5, 5);
+   text-align:justify;
+   background-color: #f0e7e7;
+   margin-left: 7px;
+
+  }
+  .add_btn:hover {
+   background-color: #a39f9f;
+   color:#fff;
+  }
+  .remove_btn:hover {
+    background-color: #a39f9f;
+   color:#fff;
+  }
+  .radio_input{
+    margin-left: 30px;
+  }
+  .submit_button{
+    margin-top: 10px;
+    margin-left: 230px;
+    border-radius: 5px;
+    
+  }
+  .submit_button:hover {
+    background-color:  #4170bc;
+    color: #fff;
+    cursor: pointer;
+  }
+  .img_option{
+    margin-left: 70px;
+  }
