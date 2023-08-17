@@ -94,7 +94,7 @@ const AllUsers = () => {
                   />
                   <div className="card-body blockCardBody">
                     <p className="card-text p-0 m-0">{user.name}</p>
-                    <p className="card-text p-0 m-0">{user.designation}</p>
+                    <p className="card-text p-0 m-0">{user.Role}</p>
                   </div>
                 </div>
               );

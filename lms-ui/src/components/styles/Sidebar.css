@@ -5,6 +5,10 @@
     margin: 0px 5px 0px 0px;
     box-shadow: 4px 11px 21px -10px gray;
 }
+.sidebar:hover {
+    overflow-y: scroll;
+    height: 100vh;
+}
 .sidebar-nav li a{
     border-bottom: 2px solid #a2a2a2;
 }

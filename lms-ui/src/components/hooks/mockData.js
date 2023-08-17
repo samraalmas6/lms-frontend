@@ -32,7 +32,7 @@ const mockData = [
   {
     id: 4,
     name: "Abdullah",
-    Role: "Learner",
+    Role: "Instructor",
     email: "abc@work.com",
     department: "CND",
     active: false,
@@ -42,7 +42,7 @@ const mockData = [
   {
     id: 5,
     name: "Hammad",
-    Role: "Learner",
+    Role: "Instructor",
     email: "abc@work.com",
     department: "CND",
     active: false,
@@ -52,7 +52,7 @@ const mockData = [
   {
     id: 6,
     name: "Abeera",
-    Role: "Learner",
+    Role: "Admin",
     email: "abc@work.com",
     department: "CND",
     active: false,
@@ -72,7 +72,7 @@ const mockData = [
   {
     id: 8,
     name: "Humza",
-    Role: "Learner",
+    Role: "Admin",
     email: "abc@work.com",
     department: "CND",
     active: true,
@@ -92,7 +92,7 @@ const mockData = [
   {
     id: 10,
     name: "Abdullah",
-    Role: "Learner",
+    Role: "Admin",
     email: "abc@work.com",
     department: "CND",
     active: false,
@@ -122,7 +122,7 @@ const mockData = [
   {
     id: 13,
     name: "Mohsen Ali",
-    Role: "Learner",
+    Role: "Instructor",
     email: "abc@work.com",
     department: "CND",
     active: true,
@@ -142,7 +142,7 @@ const mockData = [
   {
     id: 15,
     name: "Samra",
-    Role: "Learner",
+    Role: "Instructor",
     email: "abc@work.com",
     department: "CND",
     active: true,
@@ -172,7 +172,7 @@ const mockData = [
   {
     id: 18,
     name: "Abeera",
-    Role: "Learner",
+    Role: "Instructor",
     email: "abc@work.com",
     department: "CND",
     active: false,
@@ -202,7 +202,7 @@ const mockData = [
   {
     id: 21,
     name: "Samra",
-    Role: "Learner",
+    Role: "Instructor",
     email: "abc@work.com",
     department: "CND",
     active: true,
