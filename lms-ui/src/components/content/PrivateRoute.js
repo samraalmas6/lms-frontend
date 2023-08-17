@@ -16,7 +16,7 @@ export default function PrivateRoute({ children }) {
           </div>
           <div className="col-sm-8 col-md-9 col-xl-10 ps-1">
             <Navbar />
-            <div className="col pt-2 mt-2 main-body">{children}</div>
+            <div className="col pt-2 mt-2 main-body" style={{minHeight: '85vh'}}>{children}</div>
           </div>
         </div>
       </div>

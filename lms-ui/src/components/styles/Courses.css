@@ -1,4 +1,46 @@
 .course-create-form, .course-module-form, .course-unit-form {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+}
+.course-create-form .course-title, .course-start, .course-end, .module-title, .module-start, .module-end {
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+}
+.course-create-form label, .course-module-form label {
+    padding: 8px 12px;
+    font-size: 17px;
+    font-weight: 500;
+    margin-top: 10px;
+    margin: 10px 2px 0px 3px;
+}
+.course-create-form input, .course-module-form input{
+    padding: 8px 12px;
+    border: none;
+    border-bottom: 1px solid #969595;
+    font-size: 17px;
+    width: 70%;
+    margin: 6px 2px 3px;
+}
+.course-create-form input:hover, .course-module-form input:hover {
+    box-shadow: 0px 4px 8px -5px #aaa7a7;
+}
+.course-create-form  input:focus, .course-module-form input:focus {
+    outline: none;
+    border-bottom: 2px solid #8998e4;
+    box-shadow: 0px 4px 8px -5px #8998e4;
+
+}
+.add-course-btn {
+    display: flex;
+    justify-content: end;
+    margin-top: 12px;
+    margin-right: 12px;
+}
+.course-module-section {
+   width: 90%;
+   margin: 0 auto;
+   
+
 }
