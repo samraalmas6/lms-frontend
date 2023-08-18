@@ -72,9 +72,9 @@ const Sidebar = () => {
               </Link>
             </li>
             <li className="nav-item mb-2 ">
-              <a className="nav-link text-secondary" href="">
+              <Link to='/course/all' className="nav-link text-secondary" >
                 All Courses
-              </a>
+              </Link>
             </li>
             <li className="nav-item mb-2 ">
               <a className="nav-link text-secondary" href="">

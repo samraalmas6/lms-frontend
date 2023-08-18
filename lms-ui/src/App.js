@@ -14,6 +14,7 @@ import AddUser from "./components/pages/AddUser";
 import PrivateRoute from "./components/content/PrivateRoute";
 import AllUsers from "./components/pages/AllUsers";
 import CreateCourse from "./components/pages/courses/CreateCourse";
+import AllCourse from "./components/pages/courses/AllCourses";
 
 function App() {
   const [showlogin, setShowLogin] = useState(false)
@@ -31,7 +32,9 @@ function App() {
         <Route path="/adduser" element={<PrivateRoute><AddUser /></PrivateRoute>}></Route>
         <Route path="/allusers" element={<PrivateRoute><AllUsers /></PrivateRoute>}></Route>
         <Route path="/course/create" element={<PrivateRoute><CreateCourse /></PrivateRoute>}></Route>
-			</Routes>
+        <Route path="/course/all" element={<PrivateRoute><AllCourse /></PrivateRoute>}></Route>
+      </Routes>
+
       </BrowserRouter>
 
   </div>
