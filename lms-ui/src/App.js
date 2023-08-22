@@ -23,7 +23,7 @@ function App() {
     <div>
        <BrowserRouter>
        <Routes>
-       <Route element={<SigninPage />} path="/login" />
+       <Route element={<SigninPage />} path="/auth/login" />
        </Routes>
 			<Routes>
 				<Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>}></Route>

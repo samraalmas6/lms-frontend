@@ -130,7 +130,7 @@ const Sidebar = () => {
             <i className="fas fa-user font-weight-bold"></i>
             <span className="ml-2">Reports</span>
           </a>
-          <ul className="list-unstyled flex-column pl-3 collapse sidebar-nav-sub" id="submenu4">
+          <ul className="list-unstyled flex-column pl-3 collapse sidebar-nav-sub show" id="submenu4">
             <li className="nav-item mb-2 ">
               <a className="nav-link text-secondary" href="">
                My Favorites

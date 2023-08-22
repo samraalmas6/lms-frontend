@@ -59,15 +59,17 @@
 .active{
    display: flex;
    align-items: center;
+   width: 61%;
 }
 .active input[type='checkbox'] {
     width: 30px;
     height: 19px;
-    margin-top: 0px;
+    margin-top: 5px;
     margin-bottom: 0;
+    margin-left: 12px;
 }
 .active label {
-    margin: 0px 15px;
+    margin: 0px 0px;
     font-size: 17px;
     font-weight: 500;
 }

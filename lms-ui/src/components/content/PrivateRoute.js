@@ -1,12 +1,13 @@
 import React from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
+import { Navigate } from "react-router-dom";
 
 export default function PrivateRoute({ children }) {
-  // if (sessionStorage.getItem('user_id') == null) {
-  //     return <Navigate to="/login" />
-  // }
-  // else {
+  if (sessionStorage.getItem('user_id') == null) {
+      return <Navigate to="/auth/login" />
+  }
+  else {
   return (
     <div>
       <div className="container-fluid" id="main">
@@ -22,4 +23,5 @@ export default function PrivateRoute({ children }) {
       </div>
     </div>
   );
+  }
   }
