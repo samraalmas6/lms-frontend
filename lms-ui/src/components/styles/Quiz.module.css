@@ -4,10 +4,11 @@
   }
 
 .contain{
-    margin : 0 auto;
-    width: 500px;
+ 
+    width: 800px;
     height: 500px;
-    background-color: aqua;
+    background-color:#c5c7ca;
+    margin-left: 275px;
 }
 
 .h1{
@@ -36,10 +37,11 @@
   .question_form{
     
     width: 550px;
-    height: 400px;
+    height: auto;
     background-color: rgb(184, 190, 189);
     margin-left: 400px;
     margin-top: 20px;
+    padding-bottom: 20px;
   }
   
   .question h2 {
@@ -88,7 +90,7 @@
   }
   
   .input_field{
-    margin-top: 30px;
+    margin-top: 10px;
     margin-right: 10px;
     padding: 10px;
     border-radius: 5px;
@@ -116,7 +118,7 @@
    color:rgb(12, 5, 5);
    text-align:justify;
    background-color: #f0e7e7;
-   margin-left: 7px;
+   margin-left: 220px;
 
   }
   .add_btn:hover {
@@ -144,3 +146,43 @@
   .img_option{
     margin-left: 70px;
   }
+  .mark_btn{
+    margin-top: 5px;
+    margin-left: 9px;
+    padding: 5px;
+    border-radius: 5px;
+    width: 100px;
+}
+  
+  .mark_label{
+    padding-top: 10px;
+    left: 363px;
+    position: relative;
+  }
+  
+  .toggle_btn{
+    border-radius: 5px;
+    color:rgb(252, 248, 248);
+    margin-left: 750px;
+    width: 0px;
+    background-color: #2d5da4;
+    font-weight: 1000;
+    
+  }
+  .nav{
+    background-color: #2d5da4;
+    top: 0px;
+    width: auto;
+
+  }
+  .edit_delete{
+    width: 90px;
+   margin-left: auto;
+   background-color: #f9f9f9;
+   color:black
+  }
+  .edit_delete:hover{
+    background-color: #4379d0;
+   color:#f4eeee;
+  }
+  

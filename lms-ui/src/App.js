@@ -21,7 +21,7 @@ function App() {
     <div>
 
     {/* <AddUser/> */}
-      <Quizpage/>
+      <VerificationPage/>
     {/* <VerificationPage/> */}
   
        {/* <BrowserRouter>

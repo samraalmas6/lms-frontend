@@ -1,11 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from "../../components/styles/Quiz.module.css";
 
-const QuestionForm = ({ onAddQuestion }) => {
+const QuestionForm = ({ onAddQuestion , editingQuestion }) => {
   const [question, setQuestion] = useState('');
   const [image, setImage] = useState(null);
   const [options, setOptions] = useState(['', '', '', '']);
   const [correctOption, setCorrectOption] = useState(0);
+  const [marks, setMarks] = useState(10);
+
+useEffect(() => {
+  if (editingQuestion) {
+    setQuestion(editingQuestion.question);
+    setImage(editingQuestion.image);
+    setOptions(editingQuestion.options);
+    setCorrectOption(editingQuestion.correctOption);
+    setMarks(editingQuestion.marks)
+  }
+}, [editingQuestion]);
+
+  
+
 
   const handleOptionChange = (index, value) => {
     const updatedOptions = [...options];
@@ -36,17 +50,30 @@ const QuestionForm = ({ onAddQuestion }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (question.trim() !== '') {
-      onAddQuestion({ question, image, options, correctOption });
+      onAddQuestion({ question, image, options, correctOption,marks });
       setQuestion('');
       setImage(null);
       setOptions(['', '', '', '']);
       setCorrectOption(0);
+      setMarks(10);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className={styles.question_form}>
       
+      <div  >
+        <label className= {styles.mark_label}>Marks:   
+        <input
+        type="number"
+        min="1"
+        value={marks}
+        onChange={(e) => setMarks(e.target.value)}
+        className= {styles.mark_btn}
+        />
+       </label>
+      
+      </div>
 
       <input
         type="text"
@@ -84,13 +111,16 @@ const QuestionForm = ({ onAddQuestion }) => {
             <button type="img" className={styles.remove_btn} onClick={() => handleRemoveOption(index)}>
             -
             </button>
+
             
           )}
-           <button type="button" className={styles.add_btn} onClick={handleAddOption}>
-        +
-      </button>
-        </div>
+          </div>
       ))}
+           <button type="button" className={styles.add_btn} onClick={handleAddOption}>
+        + Add Options
+      </button>
+        
+    
       
       <button type="submit" className={styles.submit_button}>Add Question</button>
     </form>
