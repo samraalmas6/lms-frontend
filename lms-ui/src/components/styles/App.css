@@ -47,11 +47,11 @@ body {
 }
 
 .sign-in-form .button {
-  border: none;
+ border: none;
   background-color: #8d42fb;
   color: #ffffff;
   margin-top: 12px;
-  font-weight: 500;
+  font-weight: 500; 
 }
 .sign-in-form .button:hover {
   background-color: #69459e;

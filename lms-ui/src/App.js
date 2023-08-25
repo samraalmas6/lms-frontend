@@ -15,6 +15,7 @@ import PrivateRoute from "./components/content/PrivateRoute";
 import AllUsers from "./components/pages/AllUsers";
 import CreateCourse from "./components/pages/courses/CreateCourse";
 import AllCourse from "./components/pages/courses/AllCourses";
+import VerificationPage from "./components/pages/VerificationPage";
 
 function App() {
   const [showlogin, setShowLogin] = useState(false)
@@ -24,6 +25,7 @@ function App() {
        <BrowserRouter>
        <Routes>
        <Route element={<SigninPage />} path="/auth/login" />
+       <Route element= {<VerificationPage />} path="/auth/verification"></Route>
        </Routes>
 			<Routes>
 				<Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>}></Route>

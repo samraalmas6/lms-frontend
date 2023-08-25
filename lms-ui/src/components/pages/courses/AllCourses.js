@@ -33,9 +33,9 @@ const AllCourse = () => {
     setCategory("");
     setCategoryTitle("");
   };
-useEffect(() => {
-  console.log(process.env.REACT_APP_API_KEY);
-},[])
+
+  // console.log(process.env.REACT_APP_API_KEY);
+
   return (
     <div>
       <div className="all-course-content">
@@ -215,7 +215,7 @@ useEffect(() => {
                     data-bs-target="#offcanvasCourse"
                     aria-controls="offcanvasRight"
                   >
-                    <td scope="row">{course.course_title}</td>
+                    <td >{course.course_title}</td>
                     <td>{course.author}</td>
                     <td>{course.duration}</td>
                     <td>{course.users_enrolled}</td>
