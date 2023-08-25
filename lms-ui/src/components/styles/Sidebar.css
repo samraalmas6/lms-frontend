@@ -2,11 +2,12 @@
     background-color: #ffff;
     color: #0000 !important;
     border-radius: 0px;
+    /* width: inherit; */
     margin: 0px 5px 0px 0px;
     box-shadow: 4px 11px 21px -10px gray;
 }
 .sidebar:hover {
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 100vh;
 }
 .sidebar-nav li a{
