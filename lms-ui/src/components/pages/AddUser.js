@@ -107,7 +107,7 @@ function AddUser() {
     return errors;
   };
 
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
     const errors = validate({ firstName, lastName, email, city, country });
     setErros(errors);
@@ -149,7 +149,9 @@ function AddUser() {
             setIsActive(false);
             setUserType("");
           });
+          sendEmail()
         }
+        
         // else if (response.status == 404) {
         //   response.json().then(function (res) {
         //     setInvalidUser(res)
@@ -159,20 +161,22 @@ function AddUser() {
           console.log(response);
         }
       });
-
-      const serviceId = "service_x39w5wk";
-      const templateId = "template_yakcx3c";
-      try {
-        await emailjs.send(serviceId, templateId, {
-          name: `${firstName} ${lastName}`,
-          recipient: email,
-          message: "Verify Account",
-          sender: "LMS",
-        });
-        alert("email successfully sent check inbox");
-      } catch (error) {
-        console.log(error);
+      const sendEmail = async () => {
+        const serviceId = "service_x39w5wk";
+        const templateId = "template_yakcx3c";
+        try {
+          await emailjs.send(serviceId, templateId, {
+            name: `${firstName} ${lastName}`,
+            recipient: email,
+            message: "Verify Account",
+            sender: "LMS",
+          });
+          alert("email successfully sent check inbox");
+        } catch (error) {
+          console.log(error);
+        }
       }
+     
 
     //   setFirstName("");
     //   setLastName("");

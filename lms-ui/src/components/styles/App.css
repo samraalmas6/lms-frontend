@@ -76,3 +76,23 @@ margin-top: 12px;
 .error {
   color: red;
 }
+.password-field {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.password-field input {
+  min-width: 100%;
+}
+.password-field i {
+  position: relative;
+  right: 25px;
+  padding-bottom: 8px;
+}
+
+.eye_show{
+  cursor: pointer;
+}
+.eye_show:hover{
+  color: black;
+}

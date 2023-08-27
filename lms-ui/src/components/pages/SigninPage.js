@@ -9,6 +9,8 @@ const SigninPage = () => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [invalidUser, setInvalidUser] = useState({})
+	const [eyeMode,setEyeMode] = useState('fa-eye-slash');
+	const [passwordType,setPasswordType] = useState("password");
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
@@ -16,6 +18,18 @@ const SigninPage = () => {
   const handlePassword = (e) => {
     setPassword(e.target.value);
   };
+
+
+  const handleEyeMode =()=>{
+		if(eyeMode === 'fa-eye-slash'){
+			setEyeMode('fa-eye');
+			setPasswordType("text");
+		}
+		else{
+			setEyeMode('fa-eye-slash');
+			setPasswordType("password");
+		}
+	}
 
   const validateLogin = (values) => {
     let errors = {};
@@ -103,12 +117,17 @@ const SigninPage = () => {
         />
         {errors.email && <p className={`error m-0`}>{errors.email}</p>}
         <label>Password</label>
+        <div className="password-field">
         <input
-          type="password"
+          type={passwordType}
           value={password}
           onChange={handlePassword}
           placeholder="Password"
-        />
+          />
+          <i className={`eye_show fas fa-solid ${eyeMode}`} onClick={handleEyeMode}></i>
+        </div>
+     
+  
         {errors.password && <p className={`error m-0`}>{errors.password}</p>}
         <input
           type="submit"

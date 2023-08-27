@@ -7,44 +7,35 @@ function VerificationPage() {
   const { search } = useLocation();
   const query = new URLSearchParams(search, [search]);
 
-  // const [searchParams, setSearchParams] = useSearchParams();
-  // // Get a specific query parameter
-  // const myParam = searchParams.get('email');
-  // // Set a query parameter
-  // // setSearchParams({ myParam: 'email' });
-  // // Remove a query parameter
-  // setSearchParams((params) => {
-  // params.delete('email');
-  // return params;
-  // });// ...
-  // console.log(searchParams);
-  // console.log(myParam);
-
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // useEffect(() => {
-  //   const getUsers = () => {
-  //   fetch('http://127.0.0.1:8000/list_all_users/',  {
-  //     method: "GET",
-  //     headers: {
-  //       // "Authorization": `Token ${sessionStorage.getItem('user_token')}` ,
-  //     },
-  //   }).then((response) => {
-  //     response.json().then(function (result) {
-  //       console.log(result);
-  //       const user = result.filter((users) => {
-  //         return users.email == "mohsenali3366@gmail.com"
-  //       })
-  //       setUser(user)
-  //     })
-  //   })
-  //   }
-  //   getUsers()
-  // },[])
+  const [eyeMode, setEyeMode] = useState("fa-eye-slash");
+  const [eyeModeConfirm, setEyeModeConfirm] = useState("fa-eye-slash");
+  const [passwordType, setPasswordType] = useState("password");
+  const [passwordConfirmType, setConfirmPasswordType] = useState("password");
 
-  // console.log(process.env.REACT_APP_ADMIN_TOKEN);
+
+
+  const handleEyeMode1 = () => {
+    if (eyeMode === "fa-eye-slash") {
+      setEyeMode("fa-eye");
+      setPasswordType("text");
+    } else {
+      setEyeMode("fa-eye-slash");
+      setPasswordType("password");
+    }
+  };
+  const handleEyeMode2 = () => {
+    if (eyeModeConfirm === "fa-eye-slash") {
+      setEyeModeConfirm("fa-eye");
+      setConfirmPasswordType("text");
+    } else {
+      setEyeModeConfirm("fa-eye-slash");
+      setConfirmPasswordType("password");
+    }
+  };
 
   const handleOldPasswordChange = (e) => {
     setOldPassword(e.target.value);
@@ -100,7 +91,7 @@ function VerificationPage() {
       {/* <div className="col"> */}
       <div className={styles.contain}>
         <form className={styles.form}>
-        <h2 className={styles.activateHeading}>Activate Account</h2>
+          <h2 className={styles.activateHeading}>Activate Account</h2>
           {/* <label>
                     <input
                     type="password"
@@ -110,30 +101,37 @@ function VerificationPage() {
                     onChange={handleOldPasswordChange}
                    />
                 </label> */}
-
-          <input
-            type="password"
-            name="NewPassword"
-            placeholder="New Password"
-            value={newPassword}
-            onChange={handleNewPasswordChange}
-          />
-
-          <input
-            type="password"
-            name="ConfirmPassword"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={handleConfirmPasswordChange}
-          />
-
-
+          <div className="password-field">
             <input
-              type="submit"
-              onClick={handleFormSubmit}
-              value="Update"
-              className={styles.btn_add}
+              type={passwordType}
+              value={newPassword}
+              onChange={handleNewPasswordChange}
+              placeholder="New Password"
             />
+            <i
+              className={`eye_show fas fa-solid ${eyeMode}`}
+              onClick={handleEyeMode1}
+            ></i>
+          </div>
+          <div className="password-field">
+            <input
+              type={passwordConfirmType}
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
+              placeholder="Confirm Password"
+            />
+            <i
+              className={`eye_show fas fa-solid ${eyeModeConfirm}`}
+              onClick={handleEyeMode2}
+            ></i>
+          </div>
+
+          <input
+            type="submit"
+            onClick={handleFormSubmit}
+            value="Update"
+            className={styles.btn_add}
+          />
         </form>
       </div>
       {/* </div> */}

@@ -1,5 +1,6 @@
 import "./components/styles/App.css";
 import "./components/styles/HomePage.css"
+import "./components/styles/Responsive.css"
 
 import SigninPage from "./components/pages/SigninPage";
 import HomePage from './components/content/HomePage'
