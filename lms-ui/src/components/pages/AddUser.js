@@ -5,7 +5,7 @@ import Select from "react-select";
 import countryList from "react-select-country-list";
 import emailjs from "@emailjs/browser";
 import * as XLSX from "xlsx";
-import * as FileSaver from 'file-saver'
+import * as FileSaver from "file-saver";
 import ExcelExportData from "../hooks/ExcelExportData";
 import ExportExcel from "../content/Excelexport";
 
@@ -15,6 +15,7 @@ function AddUser() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
+  const [gender, setGender] = useState("");
   const [email, setEmail] = useState("");
   const [city, setCity] = useState("");
 
@@ -36,6 +37,9 @@ function AddUser() {
     setLastName(e.target.value);
   };
 
+  const handleGender = (e) => {
+    setGender(e.target.value);
+  };
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
@@ -103,51 +107,93 @@ function AddUser() {
     return errors;
   };
 
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
     const errors = validate({ firstName, lastName, email, city, country });
     setErros(errors);
     if (Object.keys(errors).length === 0) {
       const userData = {
-        firstName,
-        lastName,
+        first_name: firstName,
+        last_name: lastName,
         password,
         email,
         city,
-        phoneNumber,
-        isActive,
-        userType,
+        gender,
+        country: country.label,
+        phone_number: phoneNumber,
+        is_active: isActive,
+        role: userType,
       };
+      console.log(userData);
 
-      const serviceId = "service_x39w5wk";
-      const templateId = "template_yakcx3c";
-      try {
-        await emailjs.send(serviceId, templateId, {
-          name: `${firstName} ${lastName}`,
-          recipient: email,
-          message: 'Verify Account',
-          sender: 'LMS'
-        });
-        alert("email successfully sent check inbox");
-      } catch (error) {
-        console.log(error);
+      fetch(`${"http://127.0.0.1:8000/register/"}`, {
+        method: "POST",
+        body: JSON.stringify(userData),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          "Authorization": `Token bf57457f47fb84e4689ef7104e74eb2990a50984`
+        },
+      }).then((response) => {
+        if (response.status == 201) {
+
+          response.json().then(function (result) {
+            console.log(result);
+
+            setFirstName("");
+            setLastName("");
+            setGender('')
+            setPassword("");
+            setEmail("");
+            setCity("");
+            setPhoneNumber("");
+            setIsActive(false);
+            setUserType("");
+          });
+          sendEmail()
+        }
+        
+        // else if (response.status == 404) {
+        //   response.json().then(function (res) {
+        //     setInvalidUser(res)
+        //   });
+        // }
+        else {
+          console.log(response);
+        }
+      });
+      const sendEmail = async () => {
+        const serviceId = "service_x39w5wk";
+        const templateId = "template_yakcx3c";
+        try {
+          await emailjs.send(serviceId, templateId, {
+            name: `${firstName} ${lastName}`,
+            recipient: email,
+            message: "Verify Account",
+            sender: "LMS",
+          });
+          alert("email successfully sent check inbox");
+        } catch (error) {
+          console.log(error);
+        }
       }
+     
 
-      setFirstName("");
-      setLastName("");
-      setPassword("");
-      setEmail("");
-      setCity("");
-      setPhoneNumber("");
-      setIsActive(false);
-      setUserType("");
+    //   setFirstName("");
+    //   setLastName("");
+    //   setPassword("");
+    //   setEmail("");
+    //   setGender('')
+    //   setCity("");
+    //   setPhoneNumber("");
+    //   setIsActive(false);
+    //   setUserType("");
     }
-    if (firstName === "" || lastName === "" || email === "") {
-      alert("Fill in the required fields");
-      return;
-    } else {
-      alert("user created successfully");
-    }
+    // if (firstName === "" || lastName === "" || email === "") {
+    //   alert("Fill in the required fields");
+    //   return;
+    // } else {
+    //   alert("user created successfully");
+    // }
   };
 
   // Excel Import Functionality
@@ -188,7 +234,11 @@ function AddUser() {
           <div className={styles.excelFile}>
             <label className={styles.downloadExcel}>
               Download Excel File Template
-              <ExportExcel excelData={ExcelExportData} fileName={"Excel Export"} className={styles.excelexport}/>
+              <ExportExcel
+                excelData={ExcelExportData}
+                fileName={"Excel Export"}
+                className={styles.excelexport}
+              />
             </label>
             <label>
               Import From Excel file
@@ -219,46 +269,18 @@ function AddUser() {
             />
           </div>
           <div className={styles.passemail}>
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={password}
-              onChange={handlePasswordChange}
-            />
-            <input
-              type="text"
-              name="email"
-              placeholder="Email"
-              required
-              value={email}
-              onChange={handleEmailChange}
-            />
-          </div>
-          <div className={styles.phonecity}>
-            <input
-              type="number"
-              name="phoneNumber"
-              placeholder="Phone Number (optional) "
-              value={phoneNumber}
-              onChange={handlePhoneNumberChange}
-            />
-            <div className={styles.country}>
-              <Select
-                options={options}
-                value={country}
-                onChange={changeHandler}
-              />
-            </div>
-          </div>
-          <div className={styles.phonecity}>
-            <input
-              type="text"
-              name="city"
-              placeholder="City (optional)"
-              value={city}
-              onChange={handleCityChange}
-            />
+            <select
+              value={gender}
+              onChange={handleGender}
+              className={styles.roles}
+            >
+              <option value="" disabled>
+                ---Select Gender---
+              </option>
+              <option value="M">Male</option>
+              <option value="F">Female</option>
+              <option value="O">Other</option>
+            </select>
             <select
               value={userType}
               onChange={handleUserTypeChange}
@@ -268,29 +290,73 @@ function AddUser() {
               <option value="" disabled>
                 ---User Type---
               </option>
-              <option value="ADMIN">ADMIN</option>
-              <option value="INSTRUCTOR">INSTRUCTOR</option>
-              <option value="LEARNER">LEARNER</option>
-              <option value="CUSTOM">CUSTOM ROLE</option>
+              <option value="admin">ADMIN</option>
+              <option value="instructor">INSTRUCTOR</option>
+              <option value="learner">LEARNER</option>
+              <option value="custom">CUSTOM ROLE</option>
             </select>
           </div>
-          <div className={styles.active}>
-            <label htmlFor="IsActive" className="form-check-label">
+          <div className={styles.phonecity}>
+            <input
+              type="text"
+              name="email"
+              placeholder="Email"
+              required
+              value={email}
+              onChange={handleEmailChange}
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={password}
+              onChange={handlePasswordChange}
+            />
+          </div>
+          <div className={styles.phonecity}>
+            <input
+              type="text"
+              name="city"
+              placeholder="City (optional)"
+              value={city}
+              onChange={handleCityChange}
+            />
+            <div className={styles.country}>
+              <Select
+                options={options}
+                value={country}
+                onChange={changeHandler}
+              />
+            </div>
+          </div>
+          <div className={`${styles.active} `}>
+            <input
+              type="number"
+              name="phoneNumber"
+              placeholder="Phone Number (optional) "
+              value={phoneNumber}
+              onChange={handlePhoneNumberChange}
+            />
+        <div className="form-check form-switch">
+        <label htmlFor="IsActive" className="form-check-label">
               Is Active
             </label>
             <input
+              className="form-check-input"
               type="checkbox"
-              id="vehicle1"
-              name="IsActive"
+              role="switch"
               value={isActive}
               onChange={handleIsActiveChange}
+              id="flexSwitchCheckDefault"
             />
+        </div>
+
           </div>
           <div className={`${styles.btn_container}`}>
             <button
               className={styles.btn_add}
-              onClick={handleFormSubmit}
-              type="submit"
+              onClick={(e) => handleFormSubmit(e)}
+              type="button"
             >
               Add User
             </button>

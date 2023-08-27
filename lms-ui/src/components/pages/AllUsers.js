@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import mockData from "../hooks/mockData";
 import userImg from "../content/Images/user.png";
 import "../styles/Users.css";
@@ -6,6 +6,24 @@ import { Link } from "react-router-dom";
 
 const AllUsers = () => {
   const [showBlock, setShowBlock] = useState(false);
+  const [userData, setUserData] = useState([])
+
+  useEffect(() => {
+    const getUsers = () => {
+      fetch('http://127.0.0.1:8000/list_all_users/',  {
+        method: "GET",
+        headers: {
+          "Authorization": `Token ${sessionStorage.getItem('user_token')}` ,
+        },
+      }).then((response) => { 
+        response.json().then(function (result) {
+          console.log(result);
+          setUserData(result)
+        })
+      })
+    }
+    getUsers()
+  }, [])
 
   const handleViewTogle = () => {
     setShowBlock((prev) => !prev);
@@ -30,9 +48,9 @@ const AllUsers = () => {
             onClick={handleViewTogle}
           >
             {showBlock ? (
-              <i class="fas fa-solid fa-list"></i>
+              <i className="fas fa-solid fa-list"></i>
             ) : (
-              <i class="fas fa-solid fa-grip-vertical"></i>
+              <i className="fas fa-solid fa-grip-vertical"></i>
             )}
           </button>
         </div>
@@ -45,26 +63,26 @@ const AllUsers = () => {
                 <th scope="col">Name</th>
                 <th scope="col">Role</th>
                 <th scope="col">Email</th>
-                <th scope="col">Department</th>
+                <th scope="col">Phone Number</th>
                 <th scope="col">Active</th>
               </tr>
             </thead>
             <tbody>
-              {mockData.map((user) => {
+              {userData && userData.map((user) => {
                 return (
-                  <tr key={user.id}>
+                  <tr key={user.email}>
                     <td scope="row" className="allusers-name-container">
                       <div>
                         <img src={userImg} alt="" className="allusers-image" />
                       </div>
                       <div className="allusers-name-section">
-                        <span>{user.name}</span>
-                        <span className="designation">{user.designation}</span>
+                        <span>{user.first_name} {user.last_name}</span>
+                        <span className="designation">{user.country}</span>
                       </div>
                     </td>
-                    <td>{user.Role}</td>
+                    <td>{user.role}</td>
                     <td>{user.email}</td>
-                    <td>{user.department}</td>
+                    <td>{user.phone_number}</td>
                     <td>
                       <div className="form-check form-switch">
                         <input
@@ -72,7 +90,7 @@ const AllUsers = () => {
                           type="checkbox"
                           role="switch"
                           readOnly
-                          checked={user.active}
+                          checked={user.is_active}
                           id="flexSwitchCheckDefault"
                         />
                       </div>
@@ -84,17 +102,17 @@ const AllUsers = () => {
           </table>
         ) : (
           <div className="userCard">
-            {mockData.map((user) => {
+            {userData.map((user) => {
               return (
-                <div className="card userBlockCard" key={user.id}>
+                <div className="card userBlockCard" key={user.email}>
                   <img
                     src={userImg}
                     className="card-img-top userCardImg"
                     alt="LMS User"
                   />
                   <div className="card-body blockCardBody">
-                    <p className="card-text p-0 m-0">{user.name}</p>
-                    <p className="card-text p-0 m-0">{user.Role}</p>
+                    <p className="card-text p-0 m-0">{user.first_name} {user.last_name}</p>
+                    <p className="card-text p-0 m-0">{user.role}</p>
                   </div>
                 </div>
               );

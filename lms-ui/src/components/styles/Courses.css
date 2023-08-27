@@ -1,0 +1,110 @@
+.course-create-form, .course-module-form, .course-unit-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.course-create-form .course-title, .course-start, .course-end, .module-title, .module-start, .module-end {
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+}
+.course-create-form label, .course-module-form label {
+    padding: 8px 12px;
+    font-size: 17px;
+    font-weight: 500;
+    margin-top: 10px;
+    margin: 10px 2px 0px 3px;
+}
+.course-create-form input, .course-module-form input{
+    padding: 8px 12px;
+    border: none;
+    border-bottom: 1px solid #969595;
+    font-size: 17px;
+    width: 70%;
+    margin: 6px 2px 3px;
+}
+.course-create-form input:hover, .course-module-form input:hover {
+    box-shadow: 0px 4px 8px -5px #aaa7a7;
+}
+.course-create-form  input:focus, .course-module-form input:focus {
+    outline: none;
+    border-bottom: 2px solid #8998e4;
+    box-shadow: 0px 4px 8px -5px #8998e4;
+
+}
+.add-course-btn {
+    display: flex;
+    justify-content: end;
+    margin-top: 12px;
+    margin-right: 12px;
+}
+.course-module-section {
+   width: 90%;
+   margin: 0 auto;
+}
+.all-course-content {
+    box-shadow: 4px 5px 15px -3px gray;
+}
+.add-category-content {
+    height: 100%;
+
+}
+.add-category-content form {
+    height: 100%;
+}
+.add-category-content input, .add-category-content select {
+    width: 100%;
+    padding: 6px 12px;
+    margin-bottom: 3px;
+    border-radius: 6px;
+    border-style: solid;
+    font-size: 17px;
+    margin-top: 8px;
+}
+.add-category-content input:focus,.add-category-content input:hover, .add-category-content select:focus, .add-category-content select:hover {
+    outline: none;
+    box-shadow: 2px 2px 22px -9px #000;
+    border-color: #6f7b7e;
+}
+.category-save-btn {
+    height: 82%;
+    display: flex;
+    align-items: end;
+}
+.add-course-content {
+    display: flex;
+    height: 100%;
+   
+}
+.course-name-section {
+    width: 13%;
+    box-shadow: 5px 2px 10px -3px gray;
+    margin-right: 8px;
+    margin-left: -15px;
+    margin-top: -12px;
+    padding-top: 20px;
+    background-color: #eceff1;
+}
+.course-name-section div {
+    border-bottom: 1px solid #c8c6c6;
+}
+.course-name-section ul li {
+    list-style: none;
+    padding: 5px 6px;
+    margin: 0px;
+    font-weight: 500;
+}
+.course-form-section {
+    width: 86%;
+    box-shadow: 0px 0px 6px -1px gray;
+    padding: 15px;
+}
+.course-form-section form {
+    display: flex;
+    flex-direction: column;
+}
+.offcanvas-head {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}

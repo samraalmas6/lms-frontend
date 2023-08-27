@@ -1,95 +1,146 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SigninPage = () => {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
+  sessionStorage.clear()
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const [invalidUser, setInvalidUser] = useState({})
+	const [eyeMode,setEyeMode] = useState('fa-eye-slash');
+	const [passwordType,setPasswordType] = useState("password");
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+  };
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+  };
 
 
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [errors, setErrors] = useState({})
+  const handleEyeMode =()=>{
+		if(eyeMode === 'fa-eye-slash'){
+			setEyeMode('fa-eye');
+			setPasswordType("text");
+		}
+		else{
+			setEyeMode('fa-eye-slash');
+			setPasswordType("password");
+		}
+	}
 
-    const handleEmail = (e) => {
-        setEmail(e.target.value)
+  const validateLogin = (values) => {
+    let errors = {};
+    if (!values.email) {
+      errors.email = "Email address is required";
+    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+      errors.email = "Email address is invalid";
+    } else if (/^\d/.test(values.email)) {
+      errors.email = "Email should not contain number in start";
     }
-    const handlePassword = (e) => {
-        setPassword(e.target.value)
+    if (!values.password) {
+      errors.password = "Password is required";
     }
+    return errors;
+  };
 
-    const validateLogin = (values) => {
-      let errors = {};
-      if (!values.email) {
-        errors.email = "Email address is required";
-      } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-        errors.email = "Email address is invalid";
-      } else if (/^\d/.test(values.email)) {
-        errors.email = "Email should not contain number in start";
-      }
-      if (!values.password) {
-        errors.password = "Password is required";
-      } 
-      return errors;
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const errors = validateLogin({ email, password });
+    setErrors(errors);
+    if (Object.keys(errors).length === 0) {
+      const data = {
+        email,
+        password
+      };
+      console.log(data);
+      // API CALL
+      fetch(`${"http://127.0.0.1:8000/login/"}`, {
+        method: "POST",
+        // mode: 'no-cors',
+        body: JSON.stringify(data),
+        headers: {
+          "Content-type": "application/json",
+        },
+      }).then((response) => {
+        if (response.status == 200) {
+          sessionStorage.clear();
+          response.json().then(function (result) {
+            console.log(result);
+            sessionStorage.clear()
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        const errors = validateLogin({ email, password });
-        setErrors(errors);
-        // if (Object.keys(errors).length === 0) {
-        // const data = {
-        //   email,
-        //   password
-        // }
-        // // API CALL
-        // fetch(`${''}/auth/login`, {
-        //   method: 'POST',
-        //   body: JSON.stringify(data),
-        //   headers: {
-        //     'Content-type': 'application/json; charset=UTF-8',
-        //   },
-        // }).then((response) => {
-        //   if (response.status == 200) {
-        //     sessionStorage.clear();
-        //     response.json().then(function (result) {
+            sessionStorage.setItem("user_id", 1);
+            // sessionStorage.setItem('user_email', result.data.user.email);
+            // sessionStorage.setItem('user_firstname', result.data.user.full_name);
+            // sessionStorage.setItem('user_lastname', result.data.user.full_name);
+            // sessionStorage.setItem('user_roleid', result.role.id);
+            // sessionStorage.setItem('user_rolename', result.role.name);
+            sessionStorage.setItem('user_token', result.token);
+            console.log(sessionStorage);
+            navigate("/");
 
-        //       // sessionStorage.setItem("user_id", result.id);
-        //       // sessionStorage.setItem('user_email', result.email);
-        //       // sessionStorage.setItem('user_firstname', result.first_name);
-        //       // sessionStorage.setItem('user_lastname', result.last_name);
-        //       // sessionStorage.setItem('user_roleid', result.role.id);
-        //       // sessionStorage.setItem('user_rolename', result.role.name);
-        //       navigate('/');
-
-        //       setEmail('')
-        //       setPassword('')
-        //     });
-        //   }
-        //   });
-        // }
-        if(email==='admin@lms.com' && password === 'admin123'){
-          navigate('/')
-          // setShowLogin(false)
+            setEmail("");
+            setPassword("");
+          });
+        } else if (response.status == 404) {
+          response.json().then(function (res) {
+            setInvalidUser(res)
+          });
         }
         else {
-          alert('Invalid userName And password. correct email: admin@lms.com and password: admin123')
+          const err = {message: 'User is not Registered'}
+          setInvalidUser(err)
         }
-
-      }    
+      });
+    }
+    // if(email==='admin@lms.com' && password === 'admin123'){
+    //   navigate('/')
+    //   // setShowLogin(false)
+    // }
+    // else {
+    //   alert('Invalid userName And password. correct email: admin@lms.com and password: admin123')
+    // }
+  };
 
   return (
-    <div className='sign-in-page'>
-    <form className='sign-in-form'>
+    <div className="sign-in-page">
+      <form className="sign-in-form">
+        {invalidUser.message && <p className={`error m-0`}>{invalidUser.message}</p>}
         <label>Email</label>
-        <input type="email" value={email} onChange={handleEmail} placeholder='Email'/>
+        <input
+          type="email"
+          value={email}
+          onChange={handleEmail}
+          placeholder="Email"
+        />
         {errors.email && <p className={`error m-0`}>{errors.email}</p>}
         <label>Password</label>
-        <input type="password" value={password} onChange={handlePassword} placeholder='Password'/>
+        <div className="password-field">
+        <input
+          type={passwordType}
+          value={password}
+          onChange={handlePassword}
+          placeholder="Password"
+          />
+          <i className={`eye_show fas fa-solid ${eyeMode}`} onClick={handleEyeMode}></i>
+        </div>
+     
+  
         {errors.password && <p className={`error m-0`}>{errors.password}</p>}
-        <input type="button" onClick={handleSubmit} value="Login" className='button'/>
-        <span className='forgot-password'>Forgot your <a href="#">password?</a></span>
-    </form>
-</div>
-  )
-}
+        <input
+          type="submit"
+          onClick={handleSubmit}
+          value="Login"
+          className="button"
+        />
+        <span className="forgot-password">
+          Forgot your <a href="#">password?</a>
+        </span>
+      </form>
+    </div>
+  );
+};
 
-export default SigninPage
+export default SigninPage;
