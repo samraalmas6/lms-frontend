@@ -23,7 +23,7 @@ const Module = ({ setModuleData, setShowModule, minDate }) => {
   const handleAddModule = (e) => {
     setModuleData((pre) => [
       ...pre,
-      { moduleTitle, moduleStart, moduleEnd, unitData },
+      { moduleTitle, unitData },
     ]);
     setModuleTitle("");
     setModuleStart("");
@@ -43,7 +43,7 @@ const Module = ({ setModuleData, setShowModule, minDate }) => {
               onChange={handleModuleTitle}
             />
           </div>
-          <div className="module-start">
+          {/* <div className="module-start">
             <label>Module Start Date</label>
             <input
               type="date"
@@ -63,14 +63,15 @@ const Module = ({ setModuleData, setShowModule, minDate }) => {
               min={minDate}
               onChange={handleModuleEnd}
             />
-          </div>
+          </div> */}
         </form>
         <button
           type="button"
-          className="btn btn-secondary w-50"
+          className="btn w-50 add-unit-btn"
           onClick={() => setShowUnit(!showUnit)}
         >
           Add Unit
+          <i className="fas fa-solid fa-plus ms-2"></i>
         </button>
         {showUnit && (
           <LeasonForm

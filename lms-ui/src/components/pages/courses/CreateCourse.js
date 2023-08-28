@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import courseData from "../../hooks/courseData";
 import CourseModule from "./CourseModule";
 import "../../styles/Courses.css";
+import { Editor } from "@tinymce/tinymce-react";
 
-const CreateCourse = () => {
+const CreateCourse = ({  }) => {
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = String(currentDate.getMonth() + 1).padStart(2, "0");
@@ -16,6 +18,8 @@ const CreateCourse = () => {
   const [showModule, setShowModule] = useState(false);
   const [moduleData, setModuleData] = useState([]);
 
+  const editorRef = useRef(null);
+
   const handleCourseTitle = (e) => {
     setCourseTitle(e.target.value);
   };
@@ -27,10 +31,126 @@ const CreateCourse = () => {
   };
 
   return (
-    <div>
-      <h1>New Course</h1>
+    <div className="offcanvas-body">
+      <div className="add-course-content">
+        <div className="course-name-section">
+          <ul>
+            {courseData &&
+              courseData.map((course) => {
+                return (
+                  <div key={course.id}>
+                    <li>
+                      <a role="button">{course.course_title}</a>
+                    </li>
+                  </div>
+                );
+              })}
+          </ul>
+        </div>
+        <div className="course-form-section">
+          <div className="offcanvas-head">
+            <h5 className="offcanvas-title" id="offcanvasRightLabel">
+              Add Course
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="offcanvas"
+              aria-label="Close"
+            ></button>
+          </div>
+          <form>
+            <label className="mb-0">
+              Title<span style={{ color: "red" }}>*</span>
+            </label>
+            <input
+              type="text"
+              value={""}
+              onChange={""}
+              required
+              className="course-title"
+            />
+            <label className="mb-0 mt-1">Description</label>
+            <Editor
+              apiKey={process.env.REACT_APP_API_KEY}
+              onInit={(evt, editor) => (editorRef.current = editor)}
+              initialValue=""
+              init={{
+                height: 300,
+                menubar: false,
+                plugins: [
+                  "advlist",
+                  "autolink",
+                  "lists",
+                  "link",
+                  "image",
+                  "charmap",
+                  "preview",
+                  "anchor",
+                  "searchreplace",
+                  "visualblocks",
+                  "code",
+                  "fullscreen",
+                  "insertdatetime",
+                  "media",
+                  "table",
+                  "code",
+                  // "help",
+                  "wordcount",
+                ],
+                toolbar:
+                  "undo redo | blocks | " +
+                  "bold italic forecolor | alignleft aligncenter " +
+                  "alignright alignjustify | bullist numlist outdent indent | " +
+                  "removeformat",
+                content_style:
+                  "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+              }}
+            />
+            <div className="course-module-section">
+              <ul>
+                {moduleData &&
+                  moduleData.map((module) => {
+                    return (
+                      <div key={module.moduleTitle}>
+                        <li>{module.moduleTitle}</li>
+                      </div>
+                    );
+                  })}
+              </ul>
 
-      <button
+              <div>
+                <button
+                  type="button"
+                  className="btn w-50 add-module-btn"
+                  onClick={() => setShowModule((pre) => !pre)}
+                >
+                  Add Module
+                  <i className="fas fa-solid fa-plus ms-2"></i>
+                </button>
+                {showModule && (
+                  <CourseModule
+                    setModuleData={setModuleData}
+                    setShowModule={setShowModule}
+                    minDate={minDate}
+                  />
+                )}
+              </div>
+            </div>
+            <div className="category-save-btn">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                onClick={"handleSave"}
+              >
+                Save Course
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {/* <button
         type="button"
         className="btn btn-primary w-100"
         data-bs-toggle="collapse"
@@ -88,8 +208,8 @@ const CreateCourse = () => {
                   );
                 })
               : ""}
-          </ul>
-          <div className="course-module-section">
+          </ul> 
+           <div className="course-module-section">
             <div>
             <button
               type="button"
@@ -114,7 +234,7 @@ const CreateCourse = () => {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

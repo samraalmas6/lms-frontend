@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import courseData from "../../hooks/courseData";
 import { Editor } from "@tinymce/tinymce-react";
+import CreateCourse from './CreateCourse'
 
 const AllCourse = () => {
   const [showBlock, setShowBlock] = useState(false);
   const [categoryTitle, setCategoryTitle] = useState("");
   const [category, setCategory] = useState("");
-  const editorRef = useRef(null);
+
 
 
   const handleCategoryTitle = (e) => {
@@ -110,11 +111,11 @@ const AllCourse = () => {
           id="offcanvasCourse"
           aria-labelledby="offcanvasRightLabel"
         >
-          <div className="offcanvas-body">
+          <CreateCourse  courseData={ courseData } />
+          {/* <div className="offcanvas-body">
             <div className="add-course-content">
               <div className="course-name-section">
                 <ul>
-                  {/* <li><button type="button" className="btn btn-secondary">Add Category</button></li> */}
                   {courseData.map((course) => {
                     return (
                       <div key={course.id}>
@@ -192,7 +193,7 @@ const AllCourse = () => {
                 </form>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         {!showBlock ? (
           <table className="table">
