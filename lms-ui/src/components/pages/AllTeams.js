@@ -1,47 +1,33 @@
 import React, { useEffect, useRef, useState } from "react";
 import teamsData from "../hooks/teamData";
+import userImg from "../content/Images/user.png";
 import AddTeam from "./AddTeam";
 
-const AllTeams = ({show}) => {
+const AllTeams = ({ show }) => {
   const [showBlock, setShowBlock] = useState(false);
 
-  const [teamName, setTeamName] = useState('')
-  const [teamData, setTeamData] = useState(teamsData)
- 
-  const handleTeamName = (e) =>{
-      setTeamName(e.target.value)
-  }
-  
-  
-  const handleSaveTeam = (e) => {
-      e.preventDefault()
-      setTeamData([...teamData,{TeamName: teamName, id: 3}])
-      setTeamName('')
-      // savebtnRef.current.setAttribute('data-bs-dismiss', 'offcanvas')
-      
-  }
+  const [teamName, setTeamName] = useState("");
+  const [teamData, setTeamData] = useState(teamsData);
+  const [teamUsers, setTeamUser] = useState([]);
+  const [teamCourses, setTeamCourses] = useState([]);
+  const [teamDetail, setTeamDetail] = useState([])
 
-
-  const handleSave = (e) => {
-    // e.preventDefault();
-
-    // if (categoryTitle) {
-    //   const obj = {
-    //     id: courseData[courseData.length - 1].id + 1,
-    //     course_title: categoryTitle,
-    //     author: "",
-    //     duration: 25,
-    //     users_enrolled: 0,
-    //     last_updated: "3 hours ago",
-    //   };
-    //   courseData.push(obj);
-    // }
-    // setCategory("");
-    // setCategoryTitle("");
+  const handleTeamName = (e) => {
+    setTeamName(e.target.value);
   };
+
+  const handleSaveTeam = (e) => {
+    e.preventDefault();
+    setTeamData([...teamData, { TeamName: teamName, id: 3 }]);
+    setTeamName("");
+    // savebtnRef.current.setAttribute('data-bs-dismiss', 'offcanvas')
+  };
+
+  const handleSave = (e) => {};
 
   // console.log(process.env.REACT_APP_API_KEY);
 
+  // console.log(teamDetail);
   return (
     <div>
       <div className="all-course-content">
@@ -58,53 +44,53 @@ const AllTeams = ({show}) => {
           {/* This is for Team Add panel */}
         </div>
         <div
-        className= {`offcanvas offcanvas-end ${show}`}
-        tabIndex="-1"
-        style={{ width: "30%" }}
-        id="offcanvasTeam"
-        aria-labelledby="offcanvasRightLabel"
-      >
-        <div className="offcanvas-body ">
-          <div className="add-course-content w-100">
-            <div className="course-form-section w-100">
-              <div className="offcanvas-head">
-                <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                  Add Team
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="offcanvas"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <form>
-                <label className="mb-0">
-                  Team Name<span style={{ color: "red" }}>*</span>
-                </label>
-                <input
-                  type="text"
-                  value={teamName}
-                  onChange={handleTeamName}
-                  required
-                  placeholder="Team Name"
-                  className="team-name"
-                />
-                <div className="team-save-btn">
+          className={`offcanvas offcanvas-end ${show}`}
+          tabIndex="-1"
+          style={{ width: "30%" }}
+          id="offcanvasTeam"
+          aria-labelledby="offcanvasRightLabel"
+        >
+          <div className="offcanvas-body ">
+            <div className="add-course-content w-100">
+              <div className="course-form-section w-100">
+                <div className="offcanvas-head">
+                  <h5 className="offcanvas-title" id="offcanvasRightLabel">
+                    Add Team
+                  </h5>
                   <button
-                    type="submit"
-                    className="btn btn-primary"
-                    onClick={handleSaveTeam}
+                    type="button"
+                    className="btn-close"
                     data-bs-dismiss="offcanvas"
-                  >
-                    Save Team
-                  </button>
+                    aria-label="Close"
+                  ></button>
                 </div>
-              </form>
+                <form>
+                  <label className="mb-0">
+                    Team Name<span style={{ color: "red" }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={teamName}
+                    onChange={handleTeamName}
+                    required
+                    placeholder="Team Name"
+                    className="team-name"
+                  />
+                  <div className="team-save-btn">
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      onClick={handleSaveTeam}
+                      data-bs-dismiss="offcanvas"
+                    >
+                      Save Team
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
         {/* This is for Course Content */}
         <div
           className="offcanvas offcanvas-end"
@@ -113,157 +99,202 @@ const AllTeams = ({show}) => {
           id="offcanvasCourse"
           aria-labelledby="offcanvasRightLabel"
         >
-          
           <div className="offcanvas-body">
-      <div className="add-course-content">
-        <div className="course-name-section">
-          <ul>
-            {teamData &&
-              teamData.map((team) => {
-                return (
-                  <div key={team.id}>
-                    <li>
-                      <a role="button">{team.TeamName}</a>
-                    </li>
+            <div className="add-course-content">
+              <div className="course-name-section">
+                <ul>
+                  {teamData &&
+                    teamData.map((team) => {
+                      return (
+                        <div key={team.id}>
+                          <li>
+                            <a
+                              role="button"
+                              onClick={() => {
+                                setTeamName(team.TeamName)
+                                setTeamUser(team.Users)
+                                setTeamCourses(team.Courses)
+                              }
+                              }
+                            >
+                              {team.TeamName}
+                            </a>
+                          </li>
+                        </div>
+                      );
+                    })}
+                </ul>
+              </div>
+              <div className="course-form-section">
+                <div className="offcanvas-head">
+                  <h5 className="offcanvas-title" id="offcanvasRightLabel">
+                    Add Team Details
+                  </h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="offcanvas"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <form>
+                  <label className="mb-0">
+                    Team Name<span style={{ color: "red" }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={teamName}
+                    onChange={handleTeamName}
+                    required
+                    className="course-title"
+                  />
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Course Title</th>
+                          <th scope="col">Author</th>
+                          <th scope="col">Duration</th>
+                          <th scope="col">Users Enrolled</th>
+                          <th scope="col">Last Update</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {teamDetail &&
+                          teamDetail.map((team) => {
+                            console.log(team[0].name);
+                              return team.map((element) => {
+                              return (
+                                <tr
+                                  key={team[0].id}
+                                >           
+                                {/* {element.course_title ? <td>{element.course_title}</td>  : null}
+                                {element.name ? <td>{element.name}</td>  : null} */}
+                                <td>{element.name}</td>
+                                <td>{element.course_title}</td>
+                                {/* {console.log(element.name)}                        */}
+                                {/* <td>{element.course_title ? element.course_title : element.name}</td> */}
+                                </tr>
+                              );
+                            })
+                          })}
+                      </tbody>
+                    </table>
+
+                  <div className="teamCourse-section">
+                  <button className="btn btn-primary" type="button">Add Course</button>
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Course Title</th>
+                          <th scope="col">Author</th>
+                          <th scope="col">Duration</th>
+                          <th scope="col">Users Enrolled</th>
+                          <th scope="col">Last Update</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {teamCourses &&
+                          teamCourses.map((course) => {
+                            return (
+                              <tr
+                                key={course.id}
+                                // role="button"
+                                // data-bs-toggle="offcanvas"
+                                // data-bs-target="#offcanvasCourse"
+                                // aria-controls="offcanvasRight"
+                              >
+                                <td>{course.course_title}</td>
+                                <td>{course.author}</td>
+                                <td>{course.duration}</td>
+                                <td>{course.users_enrolled}</td>
+                                <td>{course.last_updated}</td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </table>
                   </div>
-                );
-              })}
-          </ul>
-        </div>
-        <div className="course-form-section">
-          <div className="offcanvas-head">
-            <h5 className="offcanvas-title" id="offcanvasRightLabel">
-              Add Team Details
-            </h5>
-            <button
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close"
-            ></button>
-          </div>
-          <form>
-            <label className="mb-0">
-              Team Name<span style={{ color: "red" }}>*</span>
-            </label>
-            <input
-              type="text"
-              value={teamName}
-              onChange={handleTeamName}
-              required
-              
-              className="course-title"
-            />
-            <label className="mb-0 mt-1">Description</label>
+                  <div className="teamUser-section">
+                    <button className="btn btn-primary" type="button">Add User</button>
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Name</th>
+                          <th scope="col">Role</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Phone Number</th>
+                          <th scope="col">Active</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {teamUsers &&
+                          teamUsers.map((user) => {
+                            return (
+                              <tr key={user.email}>
+                                <td
+                                  scope="row"
+                                  className="allusers-name-container"
+                                >
+                                  <div>
+                                    <img
+                                      src={userImg}
+                                      alt=""
+                                      className="allusers-image"
+                                    />
+                                  </div>
+                                  <div className="allusers-name-section">
+                                    <span>
+                                      {/* {user.first_name} {user.last_name} */}
+                                      { user.name}
+                                    </span>
+                                    <span className="designation">
+                                      {user.country}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td>{user.Role}</td>
+                                <td>{user.email}</td>
+                                <td>{user.phone_number}</td>
+                                <td>
+                                  <div className="form-check form-switch">
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      role="switch"
+                                      readOnly
+                                      checked={user.is_active}
+                                      id="flexSwitchCheckDefault"
+                                    />
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </table>
+                  </div>
 
-            <div className="category-save-btn">
-              <button
-                type="submit"
-                className="btn btn-primary"
-                onClick={"handleSave"}
-              >
-                Save Course
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      {/* <button
-        type="button"
-        className="btn btn-primary w-100"
-        data-bs-toggle="collapse"
-        data-bs-target="#collapseOne"
-        aria-expanded="true"
-        aria-controls="collapseOne"
-      >
-        Create Course +
-      </button>
-      <div
-        id="collapseOne"
-        className="collapse "
-        data-bs-parent="#accordionExample"
-      >
-        <div className="course-main">
-          <form className="course-create-form">
-            <div className="course-title">
-              <label>Course Name:</label>
-              <input
-                type="text"
-                placeholder="Course Title"
-                value={courseTitle}
-                onChange={handleCourseTitle}
-              />
-            </div>
-            <div className="course-start">
-              <label>Course Start Date:</label>
-              <input
-                type="date"
-                placeholder="Start Date"
-                min={minDate}
-                value={courseStart}
-                onChange={handleCourseStart}
-              />
-            </div>
-            <div className="course-end">
-              <label>Course End Date:</label>
-              <input
-                type="date"
-                max="2030-12-30"
-                min={minDate}
-                placeholder="End Date"
-                value={courseEnd}
-                onChange={handleCourseEnd}
-              />
-            </div>
-          </form>
-          <ul>
-            {moduleData
-              ? moduleData.map((data) => {
-                  return (
-                    <div key={data.moduleTitle}>
-                      <li>{data.moduleTitle}</li>
-                    </div>
-                  );
-                })
-              : ""}
-          </ul> 
-           <div className="course-module-section">
-            <div>
-            <button
-              type="button"
-              className="btn btn-secondary w-50"
-              onClick={() => setShowModule((pre) => !pre)}
-            >
-              Add Module
-            </button>
-            {showModule && (
-              <CourseModule
-                setModuleData={setModuleData}
-                setShowModule={setShowModule}
-                minDate={minDate}
-              />
-            )}
+                  <div className="category-save-btn">
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      onClick={"handleSave"}
+                    >
+                      Save Course
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
-
-          <div className="add-course-btn">
-            <button type="button" className="btn btn-outline-primary">
-              Create Course
-            </button>
-          </div>
-        </div>
-      </div> */}
-    </div>
         </div>
         {!showBlock ? (
           <table className="table">
             <thead>
               <tr>
-              <th scope="col">Names</th>
+                <th scope="col">Names</th>
                 <th scope="col">Users</th>
                 <th scope="col">Courses</th>
-
               </tr>
             </thead>
             <tbody>
@@ -272,21 +303,29 @@ const AllTeams = ({show}) => {
                   <tr
                     key={team.id}
                     role="button"
-                    onClick={() => setTeamName(team.TeamName)}
+                    onClick={() => {
+                      setTeamName(team.TeamName);
+                      setTeamUser(team.Users);
+                      setTeamCourses(team.Courses);
+                      setTeamDetail([team.Users, team.Courses])
+                    }}
                     data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasCourse"
                     aria-controls="offcanvasRight"
                   >
-                    <td >{team.TeamName}</td>
-                    <td>{team.Users && team.Users.map(user => {
-                      return user.name
-                    }).join(', ')
-                    
-                    }</td>
-                    <td>{team.Courses && team.Courses.map(course => {
-                      return course.course_title
-                    }).join(', ')
-                    }</td>
+                    <td>{team.TeamName}</td>
+                    <td>
+                      {team.Users &&
+                        team.Users.map((user) => {
+                          return user.name;
+                        }).join(", ")}
+                    </td>
+                    <td>
+                      {team.Courses &&
+                        team.Courses.map((course) => {
+                          return course.course_title;
+                        }).join(", ")}
+                    </td>
                   </tr>
                 );
               })}
@@ -294,7 +333,6 @@ const AllTeams = ({show}) => {
           </table>
         ) : (
           ""
-        
         )}
       </div>
     </div>
