@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import teamsData from "../hooks/teamData";
 import styles from "../../components/styles/AllTeam.module.css";
+import userImg from "../content/Images/user.png";
 import AddTeam from "./AddTeam";
 
 const AllTeams = ({ show }) => {
