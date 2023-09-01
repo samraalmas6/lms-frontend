@@ -1,0 +1,21 @@
+.back_ground{
+    background-color: rgb(98, 136, 136);
+}
+element.style{
+    background-color: aqua;
+}
+.text_with_background{
+    background-color: rgb(0, 145, 255);
+    margin-right: 5px;
+    color:#fff;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+.txt_with_background{
+    background-color: rgb(129, 198, 190);
+    margin-right: 5px;
+    color:#fff;
+    border-radius: 5px;
+    padding: 3px;
+}
