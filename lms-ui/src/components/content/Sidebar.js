@@ -45,7 +45,6 @@ const Sidebar = () => {
             <ul
               className="list-unstyled flex-column pl-3 collapse sidebar-nav-sub show"
               id="submenu1"
-              aria-expanded="true"
             >
               <li className="nav-item mb-2 ">
                 <a className="nav-link text-secondary" href="">
@@ -77,6 +76,16 @@ const Sidebar = () => {
                 >
                   All Users
                 </Link>
+              </li>
+              <li className="nav-item mb-2 ">
+                <a className="nav-link text-secondary" href='/addteam'>
+                  Add Team
+                </a>
+              </li>
+              <li className="nav-item mb-2 ">
+                <a className="nav-link text-secondary" href="/allteams">
+                  All Teams
+                </a>
               </li>
               <li className="nav-item mb-2 ">
                 <a className="nav-link text-secondary" href="">

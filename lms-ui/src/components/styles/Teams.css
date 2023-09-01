@@ -1,0 +1,20 @@
+.team-name {
+    padding: 5px 12px;
+    margin: 6px 2px 3px;
+    border-radius: 6px;
+    border-style: solid;
+    border-color: #eee;
+    font-size: 17px;
+}
+.team-name:hover, .team-name:focus {
+    outline: none;
+    box-shadow: 2px 2px 11px -8px #000;
+    border-color: #9c9c9c;
+}
+.team-save-btn {
+    height: 82%;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    margin-top: 7px;
+}
