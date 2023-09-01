@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import courseData from "../../hooks/courseData";
+import teamsData from "../../hooks/teamData";
 import AddTeam from "../AddTeam";
 
 const AllTeams = ({show}) => {
   const [showBlock, setShowBlock] = useState(false);
-  const [categoryTitle, setCategoryTitle] = useState("");
-  const [category, setCategory] = useState("");
 
   const [teamName, setTeamName] = useState('')
+  const [teamData, setTeamData] = useState(teamsData)
  
   const handleTeamName = (e) =>{
       setTeamName(e.target.value)
@@ -16,38 +15,29 @@ const AllTeams = ({show}) => {
   
   const handleSaveTeam = (e) => {
       e.preventDefault()
-      const TeamData = {
-          teamName
-      }
-      
+      setTeamData([...teamData,{TeamName: teamName, id: 3}])
       setTeamName('')
       // savebtnRef.current.setAttribute('data-bs-dismiss', 'offcanvas')
       
   }
 
-  const handleCategoryTitle = (e) => {
-    setCategoryTitle(e.target.value);
-  };
-  const handleCategory = (e) => {
-    setCategory(e.target.value);
-  };
 
   const handleSave = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
-    if (categoryTitle) {
-      const obj = {
-        id: courseData[courseData.length - 1].id + 1,
-        course_title: categoryTitle,
-        author: "",
-        duration: 25,
-        users_enrolled: 0,
-        last_updated: "3 hours ago",
-      };
-      courseData.push(obj);
-    }
-    setCategory("");
-    setCategoryTitle("");
+    // if (categoryTitle) {
+    //   const obj = {
+    //     id: courseData[courseData.length - 1].id + 1,
+    //     course_title: categoryTitle,
+    //     author: "",
+    //     duration: 25,
+    //     users_enrolled: 0,
+    //     last_updated: "3 hours ago",
+    //   };
+    //   courseData.push(obj);
+    // }
+    // setCategory("");
+    // setCategoryTitle("");
   };
 
   // console.log(process.env.REACT_APP_API_KEY);
@@ -130,28 +120,25 @@ const AllTeams = ({show}) => {
           <table className="table">
             <thead>
               <tr>
-                <th scope="col">Course Title</th>
-                <th scope="col">Author</th>
-                <th scope="col">Duration</th>
-                <th scope="col">Users Enrolled</th>
-                <th scope="col">Last Update</th>
+              <th scope="col">Names</th>
+                <th scope="col">Users</th>
+                <th scope="col">Courses</th>
+
               </tr>
             </thead>
             <tbody>
-              {courseData.map((course) => {
+              {teamData.map((team) => {
                 return (
                   <tr
-                    key={course.id}
+                    key={team.id}
                     role="button"
                     data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasCourse"
                     aria-controls="offcanvasRight"
                   >
-                    <td >{course.course_title}</td>
-                    <td>{course.author}</td>
-                    <td>{course.duration}</td>
-                    <td>{course.users_enrolled}</td>
-                    <td>{course.last_updated}</td>
+                    <td >{team.TeamName}</td>
+                    <td>{team.Users && team.Users.join(', ')}</td>
+                    <td>{team.Courses && team.Courses.join(', ')}</td>
                   </tr>
                 );
               })}
