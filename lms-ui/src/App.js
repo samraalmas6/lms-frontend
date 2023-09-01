@@ -18,7 +18,7 @@ import CreateCourse from "./components/pages/courses/CreateCourse";
 import AllCourse from "./components/pages/courses/AllCourses";
 import VerificationPage from "./components/pages/VerificationPage";
 import AddTeam from "./components/pages/AddTeam";
-import AllTeams from "./components/pages/courses/AllTeams";
+import AllTeams from "./components/pages/AllTeams";
 
 function App() {
   const [showlogin, setShowLogin] = useState(false)
