@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import teamsData from "../hooks/teamData";
-import userImg from "../content/Images/user.png";
+import styles from "../../components/styles/AllTeam.module.css";
 import AddTeam from "./AddTeam";
 
 const AllTeams = ({ show }) => {
@@ -300,7 +300,7 @@ const AllTeams = ({ show }) => {
             <tbody>
               {teamData.map((team) => {
                 return (
-                  <tr
+                  <tr 
                     key={team.id}
                     role="button"
                     onClick={() => {
@@ -312,20 +312,18 @@ const AllTeams = ({ show }) => {
                     data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasCourse"
                     aria-controls="offcanvasRight"
+                    
                   >
-                    <td>{team.TeamName}</td>
+                    <td >{team.TeamName}</td>
                     <td>
-                      {team.Users &&
-                        team.Users.map((user) => {
-                          return user.name;
-                        }).join(", ")}
-                    </td>
-                    <td>
-                      {team.Courses &&
-                        team.Courses.map((course) => {
-                          return course.course_title;
-                        }).join(", ")}
-                    </td>
+              {team.Users && team.Users.map(user => {
+             return <span className={styles.text_with_background}>{user.name}</span>;
+             })}
+    </td>
+                    <td>{team.Courses && team.Courses.map(course => {
+                      return <span className={styles.txt_with_background}>{course.course_title}</span> 
+                    })
+                    }</td>
                   </tr>
                 );
               })}
