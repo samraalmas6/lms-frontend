@@ -1,12 +1,12 @@
 import React, { useState , useRef} from 'react';
-import styles from '../components/styles/AddUser.module.css';
-import profile from '../Images/profile.jpg'
+import styles from '../styles/AddUser.module.css';
+import profile from '../pages/Images/profile.jpg'
 
 const UploadPicture = () => {
   const inputRef = useRef(null);
   const [image, setImage] = useState("");
   
-  const [isToggled, setIsToggled] = useState(false);
+ 
 
   const handlePictureChange = () => {
    inputRef.current.click();
@@ -16,9 +16,7 @@ const UploadPicture = () => {
   console.log(file);
   setImage(event.target.files[0]);
   }
-  const handleToggle = () => {
-    setIsToggled(!isToggled);
-  };
+  
   return (
     <>
     <div className={styles.pictures} >

@@ -6,6 +6,7 @@ import AddUser from "./components/pages/AddUser";
 import ExcelImport from "./components/ExcelImport";
 import VerificationPage from "./components/pages/VerificationPage";
 import Quizpage from "./components/pages/Quizpage";
+import MainListpage from "./components/pages/MainListpage";
 
 import {
 	BrowserRouter,
@@ -19,9 +20,9 @@ function App() {
   return (
 
     <div>
-
+     <MainListpage/>
     {/* <AddUser/> */}
-      <VerificationPage/>
+      {/* <Quizpage/> */}
     {/* <VerificationPage/> */}
   
        {/* <BrowserRouter>

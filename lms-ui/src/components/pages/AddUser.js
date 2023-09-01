@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import styles from "../../components/styles/AddUser.module.css";
-import UploadPicture from "../UploadPicture";
+import UploadPicture from "./UploadPicture";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import Select from "react-select";

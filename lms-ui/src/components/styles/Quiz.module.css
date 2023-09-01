@@ -6,7 +6,7 @@
 .contain{
  
     width: 800px;
-    height: 500px;
+    height: auto;
     background-color:#c5c7ca;
     margin-left: 275px;
 }
@@ -24,8 +24,7 @@
   .quized {
     max-width: 100%;
     margin: 0 auto;
-    background-color: #4c79e3;
-    
+    background-color: #7389af;
   }
   
   .question {
@@ -186,3 +185,53 @@
    color:#f4eeee;
   }
   
+  .upld{
+    height: 42px;
+    width: 42px;
+    margin-right: 35px;
+    margin-top: 12px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 60px;
+    cursor: pointer;
+  }
+
+  /* img, svg {
+    vertical-align: middle;
+    width: 799px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 60px;
+} */
+.placeholder{
+position: relative;
+background-color: #7389af;
+
+}
+.question_image{
+  height:500px;
+    width:500px;
+object-fit: cover; 
+display: block;
+margin: 0 auto;}
+
+
+.drop{
+  padding: 7px ;
+  position: relative;
+  background-color: rgb(221, 220, 230);
+  min-width: 260px;
+  box-shadow: 0px 8px 16px 0px rgba(42, 55, 175, 0.2);
+  margin-left: 1000px;
+  margin-bottom: 5px;
+  margin-top: -580px;
+  border-radius: 5px;
+
+}
+.drop:hover{
+  background-color: #f6f6fb;
+  cursor: pointer;
+}
+

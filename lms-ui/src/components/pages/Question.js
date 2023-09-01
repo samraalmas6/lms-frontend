@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import styles from "../../components/styles/Quiz.module.css";
 
 
-const Question = ({ question, image, options, marks, onEdit, onDelete, onSetMarks }) => {
+
+const Question = ({ question, image, options, marks, course,timer,onSetTimer, hideCourse,onEdit, onDelete, onSetMarks }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
-
+  const handleTimerChange = (e) => {
+    onSetTimer(parseInt(e.target.value, 10));
+  };
   // const handleSetMarks = () => {
   //   onSetMarks(marks);
   //   toggleDropdown();
@@ -18,9 +21,22 @@ const Question = ({ question, image, options, marks, onEdit, onDelete, onSetMark
 
 
   return (
+    <>
+    
+    
     <div className={styles.contain}>
-      
-        <div >
+    {!hideCourse && <div>Course: {course}</div>}
+    <div>
+        Timer: {timer} seconds
+        <input
+          type="range"
+          min={1}
+          max={600} // Maximum timer value (adjust as needed)
+          value={timer}
+          onChange={handleTimerChange}
+        />
+      </div>
+        <div>
           <div>
             <div className={styles.nav}>
             <button className={styles.toggle_btn} onClick={toggleDropdown}>...</button>
@@ -44,12 +60,12 @@ const Question = ({ question, image, options, marks, onEdit, onDelete, onSetMark
            
           </div>
         </div>
-
+       
 
         <div className="marks">Marks: {marks}</div>
-        <div> <h2>{question}</h2> </div>
+        <div> <h2>{question}</h2></div>
 
-        {image && <img className="question-image" src={image} alt="Question" />}
+        {image && <img className={styles.question_image}src={image} alt="Question" />}
         <div className="options">
           {options.map((option, index) => (
             <div className="option" key={index}>
@@ -58,11 +74,13 @@ const Question = ({ question, image, options, marks, onEdit, onDelete, onSetMark
                 {option}
               </label>
             </div>
+            
 
           ))}
         </div>
       </div>
-   
+      
+   </>
   );
 };
 
