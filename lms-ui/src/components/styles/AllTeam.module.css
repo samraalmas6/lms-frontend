@@ -5,17 +5,37 @@ element.style{
     background-color: aqua;
 }
 .text_with_background{
-    background-color: rgb(0, 145, 255);
+    /* background-color: #5393c3; */
     margin-right: 5px;
-    color:#fff;
+    color:#000000;
+    font-weight: bolder;
     border-radius: 5px;
-    padding: 3px;
+    padding: 7px 15px;
 }
 
 .txt_with_background{
-    background-color: rgb(129, 198, 190);
+    /* background-color: #e7d33e; */
     margin-right: 5px;
-    color:#fff;
+    color:#000000;
+    font-weight: bolder;
     border-radius: 5px;
-    padding: 3px;
+    padding: 7px 15px;
+}
+.teamListSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+}
+.deleteBtn {
+    padding: 0px 12px;
+    background-color: #fff;
+    color: #757171;
+    border: none;
+    font-weight:500;
+}
+.deleteBtn:hover {
+    color: #ff0000;
+}
+.borderLess {
+    border: none !important;
 }

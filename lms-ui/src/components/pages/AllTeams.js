@@ -3,15 +3,45 @@ import teamsData from "../hooks/teamData";
 import styles from "../../components/styles/AllTeam.module.css";
 import userImg from "../content/Images/user.png";
 import AddTeam from "./AddTeam";
+import courseData from "../hooks/courseData";
 
 const AllTeams = ({ show }) => {
   const [showBlock, setShowBlock] = useState(false);
+  const [showUserDelete, setShowUserDelete] = useState(false);
+  const [showCourseDelete, setShowCourseDelete] = useState(false);
+  const [check, setCheck] = useState(false);
+
+  const checkbox = useRef("");
 
   const [teamName, setTeamName] = useState("");
   const [teamData, setTeamData] = useState(teamsData);
   const [teamUsers, setTeamUser] = useState([]);
   const [teamCourses, setTeamCourses] = useState([]);
-  const [teamDetail, setTeamDetail] = useState([])
+  const [teamDetail, setTeamDetail] = useState([]);
+
+  const [userData, setUserData] = useState([]);
+  const [coursesData, setCoursesData] = useState([]);
+
+  useEffect(() => {
+    const getUsers = () => {
+      fetch("http://127.0.0.1:8000/list_all_users/", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        response.json().then(function (result) {
+          console.log(result);
+          setUserData(result);
+        });
+      });
+    };
+    const getCourse = () => {
+      setCoursesData(courseData);
+    };
+    getUsers();
+    getCourse();
+  }, []);
 
   const handleTeamName = (e) => {
     setTeamName(e.target.value);
@@ -21,7 +51,21 @@ const AllTeams = ({ show }) => {
     e.preventDefault();
     setTeamData([...teamData, { TeamName: teamName, id: 3 }]);
     setTeamName("");
+
     // savebtnRef.current.setAttribute('data-bs-dismiss', 'offcanvas')
+  };
+
+  const handleCheckChange = (e) => {
+    const title = e.target.value;
+    e.target.setAttribute("cheked", check);
+    console.log(e.target.getAttribute("cheked"));
+    if (e.target.getAttribute("cheked")) {
+      const newObj = courseData.filter((course) => {
+        return course.course_title === title;
+      });
+      setTeamCourses([...teamCourses, newObj[0]]);
+      console.log(teamCourses);
+    }
   };
 
   const handleSave = (e) => {};
@@ -29,6 +73,7 @@ const AllTeams = ({ show }) => {
   // console.log(process.env.REACT_APP_API_KEY);
 
   // console.log(teamDetail);
+  console.log(teamCourses);
   return (
     <div>
       <div className="all-course-content">
@@ -112,11 +157,10 @@ const AllTeams = ({ show }) => {
                             <a
                               role="button"
                               onClick={() => {
-                                setTeamName(team.TeamName)
-                                setTeamUser(team.Users)
-                                setTeamCourses(team.Courses)
-                              }
-                              }
+                                setTeamName(team.TeamName);
+                                setTeamUser(team.Users);
+                                setTeamCourses(team.Courses);
+                              }}
                             >
                               {team.TeamName}
                             </a>
@@ -149,48 +193,66 @@ const AllTeams = ({ show }) => {
                     required
                     className="course-title"
                   />
+
+                  <div className={styles.teamListSection}>
                     <table className="table">
                       <thead>
                         <tr>
-                          <th scope="col">Course Title</th>
-                          <th scope="col">Author</th>
-                          <th scope="col">Duration</th>
-                          <th scope="col">Users Enrolled</th>
-                          <th scope="col">Last Update</th>
+                          <th style={{ borderTop: "none" }}>#</th>
+                          <th style={{ borderTop: "none" }}>Users</th>
+                          <th style={{ borderTop: "none" }}></th>
                         </tr>
                       </thead>
                       <tbody>
-                        {teamDetail &&
-                          teamDetail.map((team) => {
-                            console.log(team[0].name);
-                              return team.map((element) => {
-                              return (
-                                <tr
-                                  key={team[0].id}
-                                >           
-                                {/* {element.course_title ? <td>{element.course_title}</td>  : null}
-                                {element.name ? <td>{element.name}</td>  : null} */}
-                                <td>{element.name}</td>
-                                <td>{element.course_title}</td>
-                                {/* {console.log(element.name)}                        */}
-                                {/* <td>{element.course_title ? element.course_title : element.name}</td> */}
-                                </tr>
-                              );
-                            })
+                        {teamUsers &&
+                          teamUsers.map((user, index) => {
+                            return (
+                              <tr
+                                key={user.id}
+                                onMouseEnter={() => setShowUserDelete(true)}
+                                onMouseLeave={() => setShowUserDelete(false)}
+                              >
+                                <td className={styles.borderLess}>
+                                  {index + 1}
+                                </td>
+                                <td
+                                  className={styles.borderLess}
+                                  //   className="allusers-name-container"
+                                >
+                                  <span>
+                                    {/* {user.first_name} {user.last_name} */}
+                                    {user.name}
+                                  </span>
+                                </td>
+                                <td className={styles.borderLess}>
+                                  {showUserDelete ? (
+                                    <button
+                                      type="button"
+                                      className={styles.deleteBtn}
+                                    >
+                                      X
+                                    </button>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      style={{ color: "white" }}
+                                      className={styles.deleteBtn}
+                                    >
+                                      X
+                                    </button>
+                                  )}
+                                </td>
+                              </tr>
+                            );
                           })}
                       </tbody>
                     </table>
 
-                  <div className="teamCourse-section">
-                  <button className="btn btn-primary" type="button">Add Course</button>
                     <table className="table">
                       <thead>
                         <tr>
-                          <th scope="col">Course Title</th>
-                          <th scope="col">Author</th>
-                          <th scope="col">Duration</th>
-                          <th scope="col">Users Enrolled</th>
-                          <th scope="col">Last Update</th>
+                          <th style={{ borderTop: "none" }}>Courses</th>
+                          <th style={{ borderTop: "none" }}></th>
                         </tr>
                       </thead>
                       <tbody>
@@ -199,11 +261,106 @@ const AllTeams = ({ show }) => {
                             return (
                               <tr
                                 key={course.id}
+                                onMouseEnter={() => setShowCourseDelete(true)}
+                                onMouseLeave={() => setShowCourseDelete(false)}
+                              >
+                                <td className={styles.borderLess}>
+                                  {course.course_title}
+                                </td>
+                                <td className={styles.borderLess}>
+                                  {showCourseDelete ? (
+                                    <button
+                                      type="button"
+                                      className={styles.deleteBtn}
+                                    >
+                                      X
+                                    </button>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      style={{ color: "white" }}
+                                      className={styles.deleteBtn}
+                                    >
+                                      X
+                                    </button>
+                                  )}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="courseAddBtn">
+                    <button
+                      className="btn btn-primary me-3"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#show-course-list"
+                      aria-expanded="false"
+                      aria-controls="show-course-list"
+                    >
+                      Add Course
+                    </button>
+                    <button
+                      className="btn btn-secondary"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#show-user-list"
+                      aria-expanded="false"
+                      aria-controls="show-user-list"
+                    >
+                      Add User
+                    </button>
+                  </div>
+                  <div
+                    className="teamCourse-section collapse"
+                    id="show-course-list"
+                  >
+                    <h3>Team Courses</h3>
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th
+                            onClick={() => setCheck(!check)}
+                            style={{ cursor: "pointer" }}
+                          >
+                            Select All
+                          </th>
+                          <th scope="col">Course Title</th>
+                          <th scope="col">Author</th>
+                          <th scope="col">Duration</th>
+                          <th scope="col">Users Enrolled</th>
+                          <th scope="col">Last Update</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {coursesData &&
+                          coursesData.map((course) => {
+                            return (
+                              <tr
+                                key={course.id}
                                 // role="button"
                                 // data-bs-toggle="offcanvas"
                                 // data-bs-target="#offcanvasCourse"
                                 // aria-controls="offcanvasRight"
                               >
+                                <td>
+                                  <div className="form-check">
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      ref={checkbox}
+                                      value={course.course_title}
+                                      onChange={(e) => {
+                                        setCheck(!check);
+                                        handleCheckChange(e);
+                                      }}
+                                      // checked={check}
+                                      id="flexCheckDefult"
+                                    />
+                                  </div>
+                                </td>
                                 <td>{course.course_title}</td>
                                 <td>{course.author}</td>
                                 <td>{course.duration}</td>
@@ -215,8 +372,11 @@ const AllTeams = ({ show }) => {
                       </tbody>
                     </table>
                   </div>
-                  <div className="teamUser-section">
-                    <button className="btn btn-primary" type="button">Add User</button>
+                  <div
+                    className="teamUser-section collapse"
+                    id="show-user-list"
+                  >
+                    <h3>Team Users</h3>
                     <table className="table">
                       <thead>
                         <tr>
@@ -228,8 +388,8 @@ const AllTeams = ({ show }) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {teamUsers &&
-                          teamUsers.map((user) => {
+                        {userData &&
+                          userData.map((user) => {
                             return (
                               <tr key={user.email}>
                                 <td
@@ -246,7 +406,7 @@ const AllTeams = ({ show }) => {
                                   <div className="allusers-name-section">
                                     <span>
                                       {/* {user.first_name} {user.last_name} */}
-                                      { user.name}
+                                      {user.name}
                                     </span>
                                     <span className="designation">
                                       {user.country}
@@ -275,15 +435,7 @@ const AllTeams = ({ show }) => {
                     </table>
                   </div>
 
-                  <div className="category-save-btn">
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      onClick={"handleSave"}
-                    >
-                      Save Course
-                    </button>
-                  </div>
+                  <div className="category-save-btn"></div>
                 </form>
               </div>
             </div>
@@ -301,30 +453,52 @@ const AllTeams = ({ show }) => {
             <tbody>
               {teamData.map((team) => {
                 return (
-                  <tr 
+                  <tr
                     key={team.id}
                     role="button"
                     onClick={() => {
                       setTeamName(team.TeamName);
                       setTeamUser(team.Users);
                       setTeamCourses(team.Courses);
-                      setTeamDetail([team.Users, team.Courses])
+                      setTeamDetail([team.Users, team.Courses]);
                     }}
                     data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasCourse"
                     aria-controls="offcanvasRight"
-                    
                   >
-                    <td >{team.TeamName}</td>
+                    <td>{team.TeamName}</td>
                     <td>
-              {team.Users && team.Users.map(user => {
-             return <span className={styles.text_with_background}>{user.name}</span>;
-             })}
-    </td>
-                    <td>{team.Courses && team.Courses.map(course => {
-                      return <span className={styles.txt_with_background}>{course.course_title}</span> 
-                    })
-                    }</td>
+                      {
+                        team.Users && (
+                          <span className={styles.text_with_background}>
+                            {team.Users.length}
+                          </span>
+                        )
+                        // team.Users.map((user) => {
+                        //   return (
+                        //     <span   className={styles.text_with_background}>
+                        //      >{team.Users.length}
+                        //     </span>
+                        //   );
+                        // })
+                      }
+                    </td>
+                    <td>
+                      {
+                        team.Courses && (
+                          <span className={styles.txt_with_background}>
+                            {team.Courses.length}
+                          </span>
+                        )
+                        // team.Courses.map((course) => {
+                        //   return (
+                        //     <span   className={styles.txt_with_background}>
+                        //       {course.course_title}
+                        //     </span>
+                        //   );
+                        // })
+                      }
+                    </td>
                   </tr>
                 );
               })}
