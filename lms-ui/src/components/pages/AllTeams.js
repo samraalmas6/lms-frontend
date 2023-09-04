@@ -56,6 +56,8 @@ const AllTeams = ({ show }) => {
   };
 
   const handleCheckChange = (e) => {
+    setCheck((pre) => true);
+    console.log('Checked value', check);
     const title = e.target.value;
     e.target.setAttribute("cheked", check);
     console.log(e.target.getAttribute("cheked"));
@@ -353,7 +355,7 @@ const AllTeams = ({ show }) => {
                                       ref={checkbox}
                                       value={course.course_title}
                                       onChange={(e) => {
-                                        setCheck(!check);
+                                      
                                         handleCheckChange(e);
                                       }}
                                       // checked={check}
