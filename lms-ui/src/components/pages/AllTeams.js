@@ -9,7 +9,9 @@ const AllTeams = ({ show }) => {
   const [showBlock, setShowBlock] = useState(false);
   const [showUserDelete, setShowUserDelete] = useState(false);
   const [showCourseDelete, setShowCourseDelete] = useState(false);
-  const [check, setCheck] = useState(false);
+  const [checkedAll, setCheckAll] = useState(false);
+  const [userCheckedAll, setUserCheckAll] = useState(false);
+
 
   const checkbox = useRef("");
 
@@ -18,6 +20,7 @@ const AllTeams = ({ show }) => {
   const [teamUsers, setTeamUser] = useState([]);
   const [teamCourses, setTeamCourses] = useState([]);
   const [teamDetail, setTeamDetail] = useState([]);
+  const [addTeam, setAddTeam] = useState([])
 
   const [userData, setUserData] = useState([]);
   const [coursesData, setCoursesData] = useState([]);
@@ -52,30 +55,100 @@ const AllTeams = ({ show }) => {
     setTeamData([...teamData, { TeamName: teamName, id: 3 }]);
     setTeamName("");
 
-    // savebtnRef.current.setAttribute('data-bs-dismiss', 'offcanvas')
   };
 
   const handleCheckChange = (e) => {
-    setCheck((pre) => true);
-    console.log('Checked value', check);
     const title = e.target.value;
-    e.target.setAttribute("cheked", check);
-    console.log(e.target.getAttribute("cheked"));
-    if (e.target.getAttribute("cheked")) {
+    if (e.target.checked && title !='undefined') {
       const newObj = courseData.filter((course) => {
         return course.course_title === title;
       });
-      setTeamCourses([...teamCourses, newObj[0]]);
-      console.log(teamCourses);
+      setAddTeam([newObj[0]]);
+    }
+  };
+  const handleUserCheckChange = (e) => {
+    const title = e.target.value;
+    if (e.target.checked && title !='undefined') {
+      const newObj = courseData.filter((course) => {
+        return course.course_title === title;
+      });
+      setAddTeam([newObj[0]]);
     }
   };
 
+  const handlAllSelect = () => {
+    const selectItems = document.getElementsByClassName('course-check');
+    if (checkedAll) {
+    for (let item of selectItems) {
+      item.checked = false;
+    }
+  } else {
+    for (let item of selectItems) {
+      item.checked = true;
+    }
+  }
+  }
+  const handlUserAllSelect = () => {
+    const selectItems = document.getElementsByClassName('user-check');
+    if (checkedAll) {
+    for (let item of selectItems) {
+      item.checked = false;
+    }
+  } else {
+    for (let item of selectItems) {
+      item.checked = true;
+    }
+  }
+  }
+
+  const handleAddCourse = (e) => {
+    e.preventDefault()
+    // if( checkedAll == true ) {
+    //   setTeamCourses(() => [...teamCourses, courseData])
+    //   console.log('inside == ',teamCourses);
+    // }
+    // if (addTeam.length != 0 ) {
+    //   setTeamCourses(() => [...teamCourses, addTeam[0]])
+    //   setAddTeam([])
+    // }
+    const selectItems = document.getElementsByClassName('course-check');
+    for (let item of selectItems) {
+      if(item.checked){
+        const newObj = courseData.filter((course) => {
+          return course.course_title === item.value;
+        });
+        console.log(' obj  =',newObj);
+        setTeamCourses([...teamCourses, newObj[0]])
+      }
+   
+      item.checked = false;
+    }
+   
+    console.log(teamCourses);
+  }
+  const handleAddUser = (e) => {
+    e.preventDefault()
+    const selectItems = document.getElementsByClassName('user-check');
+    for (let item of selectItems) {
+      if(item.checked){
+        const newObj = userData.filter((user) => {
+          return user.email === item.value;
+        });
+        console.log(' obj  =',newObj);
+        setTeamUser([...teamUsers, newObj[0]])
+      }
+   
+      item.checked = false;
+    }
+   
+    console.log(teamUsers);
+  }
   const handleSave = (e) => {};
 
   // console.log(process.env.REACT_APP_API_KEY);
 
   // console.log(teamDetail);
-  console.log(teamCourses);
+  // console.log(teamCourses);
   return (
     <div>
       <div className="all-course-content">
@@ -222,8 +295,8 @@ const AllTeams = ({ show }) => {
                                   //   className="allusers-name-container"
                                 >
                                   <span>
-                                    {/* {user.first_name} {user.last_name} */}
-                                    {user.name}
+                                    {user.first_name} {user.last_name}
+                                    {/* {user.firstName} */}
                                   </span>
                                 </td>
                                 <td className={styles.borderLess}>
@@ -320,11 +393,14 @@ const AllTeams = ({ show }) => {
                     id="show-course-list"
                   >
                     <h3>Team Courses</h3>
+                    <button type="button" onClick={handleAddCourse}>Add</button>
                     <table className="table">
                       <thead>
                         <tr>
                           <th
-                            onClick={() => setCheck(!check)}
+                            onClick={() => {
+                              setCheckAll((pre) => !pre)
+                              handlAllSelect()}}
                             style={{ cursor: "pointer" }}
                           >
                             Select All
@@ -350,12 +426,12 @@ const AllTeams = ({ show }) => {
                                 <td>
                                   <div className="form-check">
                                     <input
-                                      className="form-check-input"
+                                      className="form-check-input course-check"
                                       type="checkbox"
                                       ref={checkbox}
+                                      name="check"
                                       value={course.course_title}
                                       onChange={(e) => {
-                                      
                                         handleCheckChange(e);
                                       }}
                                       // checked={check}
@@ -379,9 +455,18 @@ const AllTeams = ({ show }) => {
                     id="show-user-list"
                   >
                     <h3>Team Users</h3>
+                    <button type="button" onClick={handleAddUser}>Add</button>
                     <table className="table">
                       <thead>
                         <tr>
+                        <th
+                            onClick={() => {
+                              setUserCheckAll((pre) => !pre)
+                              handlUserAllSelect()}}
+                            style={{ cursor: "pointer" }}
+                          >
+                            Select All
+                          </th>
                           <th scope="col">Name</th>
                           <th scope="col">Role</th>
                           <th scope="col">Email</th>
@@ -394,6 +479,21 @@ const AllTeams = ({ show }) => {
                           userData.map((user) => {
                             return (
                               <tr key={user.email}>
+                                <td>
+                                  <div className="form-check">
+                                    <input
+                                      className="form-check-input user-check"
+                                      type="checkbox"
+                                      ref={checkbox}
+                                      name="check"
+                                      value={user.email}
+                                      onChange={(e) => {
+                                        handleUserCheckChange(e);
+                                      }}
+                                      id="flexCheckDefult"
+                                    />
+                                  </div>
+                                </td>
                                 <td
                                   scope="row"
                                   className="allusers-name-container"
