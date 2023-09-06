@@ -12,7 +12,6 @@ const AllTeams = ({ show }) => {
   const [checkedAll, setCheckAll] = useState(false);
   const [userCheckedAll, setUserCheckAll] = useState(false);
 
-
   const checkbox = useRef("");
 
   const [teamName, setTeamName] = useState("");
@@ -20,7 +19,7 @@ const AllTeams = ({ show }) => {
   const [teamUsers, setTeamUser] = useState([]);
   const [teamCourses, setTeamCourses] = useState([]);
   const [teamDetail, setTeamDetail] = useState([]);
-  const [addTeam, setAddTeam] = useState([])
+  const [addTeam, setAddTeam] = useState([]);
 
   const [userData, setUserData] = useState([]);
   const [coursesData, setCoursesData] = useState([]);
@@ -54,12 +53,11 @@ const AllTeams = ({ show }) => {
     e.preventDefault();
     setTeamData([...teamData, { TeamName: teamName, id: 3 }]);
     setTeamName("");
-
   };
 
   const handleCheckChange = (e) => {
     const title = e.target.value;
-    if (e.target.checked && title !='undefined') {
+    if (e.target.checked && title != "undefined") {
       const newObj = courseData.filter((course) => {
         return course.course_title === title;
       });
@@ -68,7 +66,7 @@ const AllTeams = ({ show }) => {
   };
   const handleUserCheckChange = (e) => {
     const title = e.target.value;
-    if (e.target.checked && title !='undefined') {
+    if (e.target.checked && title != "undefined") {
       const newObj = courseData.filter((course) => {
         return course.course_title === title;
       });
@@ -77,32 +75,32 @@ const AllTeams = ({ show }) => {
   };
 
   const handlAllSelect = () => {
-    const selectItems = document.getElementsByClassName('course-check');
+    const selectItems = document.getElementsByClassName("course-check");
     if (checkedAll) {
-    for (let item of selectItems) {
-      item.checked = false;
+      for (let item of selectItems) {
+        item.checked = false;
+      }
+    } else {
+      for (let item of selectItems) {
+        item.checked = true;
+      }
     }
-  } else {
-    for (let item of selectItems) {
-      item.checked = true;
-    }
-  }
-  }
+  };
   const handlUserAllSelect = () => {
-    const selectItems = document.getElementsByClassName('user-check');
+    const selectItems = document.getElementsByClassName("user-check");
     if (checkedAll) {
-    for (let item of selectItems) {
-      item.checked = false;
+      for (let item of selectItems) {
+        item.checked = false;
+      }
+    } else {
+      for (let item of selectItems) {
+        item.checked = true;
+      }
     }
-  } else {
-    for (let item of selectItems) {
-      item.checked = true;
-    }
-  }
-  }
+  };
 
   const handleAddCourse = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     // if( checkedAll == true ) {
     //   setTeamCourses(() => [...teamCourses, courseData])
     //   console.log('inside == ',teamCourses);
@@ -111,38 +109,46 @@ const AllTeams = ({ show }) => {
     //   setTeamCourses(() => [...teamCourses, addTeam[0]])
     //   setAddTeam([])
     // }
-    const selectItems = document.getElementsByClassName('course-check');
+    const selectItems = document.getElementsByClassName("course-check");
     for (let item of selectItems) {
-      if(item.checked){
+      if (item.checked) {
         const newObj = courseData.filter((course) => {
           return course.course_title === item.value;
         });
-        console.log(' obj  =',newObj);
-        setTeamCourses([...teamCourses, newObj[0]])
+        console.log(" obj  =", newObj);
+        if (typeof teamCourses !== "undefined") {
+          setTeamCourses(() => [...teamCourses, newObj[0]]);
+        } else {
+          setTeamCourses([newObj[0]]);
+        }
       }
-   
+
       item.checked = false;
     }
-   
+
     console.log(teamCourses);
-  }
+  };
   const handleAddUser = (e) => {
-    e.preventDefault()
-    const selectItems = document.getElementsByClassName('user-check');
+    e.preventDefault();
+    const selectItems = document.getElementsByClassName("user-check");
     for (let item of selectItems) {
-      if(item.checked){
+      if (item.checked) {
         const newObj = userData.filter((user) => {
           return user.email === item.value;
         });
-        console.log(' obj  =',newObj);
-        setTeamUser([...teamUsers, newObj[0]])
+        console.log(" obj  =", newObj);
+        if (typeof teamUsers !== "undefined") {
+          setTeamUser(() => [...teamUsers, newObj[0]]);
+        } else {
+          setTeamUser([newObj[0]]);
+        }
       }
-   
+
       item.checked = false;
     }
-   
+
     console.log(teamUsers);
-  }
+  };
   const handleSave = (e) => {};
 
   // console.log(process.env.REACT_APP_API_KEY);
@@ -370,7 +376,7 @@ const AllTeams = ({ show }) => {
                     <button
                       className="btn btn-primary me-3"
                       type="button"
-                      data-bs-toggle="collapse"
+                      data-bs-toggle="offcanvas"
                       data-bs-target="#show-course-list"
                       aria-expanded="false"
                       aria-controls="show-course-list"
@@ -380,7 +386,7 @@ const AllTeams = ({ show }) => {
                     <button
                       className="btn btn-secondary"
                       type="button"
-                      data-bs-toggle="collapse"
+                      data-bs-toggle="offcanvas"
                       data-bs-target="#show-user-list"
                       aria-expanded="false"
                       aria-controls="show-user-list"
@@ -388,19 +394,46 @@ const AllTeams = ({ show }) => {
                       Add User
                     </button>
                   </div>
-                  <div
-                    className="teamCourse-section collapse"
+
+
+
+                  <div className="category-save-btn"></div>
+                </form>
+              </div>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+        <div
+                    className={`${styles.teamCourseSection} offcanvas offcanvas-bottom`}
                     id="show-course-list"
+                    tabindex="-1"
                   >
                     <h3>Team Courses</h3>
-                    <button type="button" onClick={handleAddCourse}>Add</button>
+                    <div className={styles.addBtnSection}>
+                      <input
+                        type="search"
+                        className="all-users-input"
+                        placeholder="Search Course.."
+                      />
+                      <button
+                        type="button"
+                        className="text-bg-primary add-new-user"
+                        onClick={handleAddCourse}
+                      >
+                        Add
+                      </button>
+                    </div>
                     <table className="table">
                       <thead>
                         <tr>
                           <th
                             onClick={() => {
-                              setCheckAll((pre) => !pre)
-                              handlAllSelect()}}
+                              setCheckAll((pre) => !pre);
+                              handlAllSelect();
+                            }}
                             style={{ cursor: "pointer" }}
                           >
                             Select All
@@ -451,18 +484,33 @@ const AllTeams = ({ show }) => {
                     </table>
                   </div>
                   <div
-                    className="teamUser-section collapse"
+                    className={`${styles.teamUserSection} offcanvas offcanvas-bottom`}
                     id="show-user-list"
+                    tabindex="-1"
                   >
                     <h3>Team Users</h3>
-                    <button type="button" onClick={handleAddUser}>Add</button>
+                    <div className={styles.addBtnSection}>
+                      <input
+                        type="search"
+                        className="all-users-input"
+                        placeholder="Search User.."
+                      />
+                      <button
+                        type="button"
+                        className="text-bg-primary add-new-user"
+                        onClick={handleAddUser}
+                      >
+                        Add
+                      </button>
+                    </div>
                     <table className="table">
                       <thead>
                         <tr>
-                        <th
+                          <th
                             onClick={() => {
-                              setUserCheckAll((pre) => !pre)
-                              handlUserAllSelect()}}
+                              setUserCheckAll((pre) => !pre);
+                              handlUserAllSelect();
+                            }}
                             style={{ cursor: "pointer" }}
                           >
                             Select All
@@ -536,13 +584,6 @@ const AllTeams = ({ show }) => {
                       </tbody>
                     </table>
                   </div>
-
-                  <div className="category-save-btn"></div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
         {!showBlock ? (
           <table className="table">
             <thead>
@@ -562,7 +603,7 @@ const AllTeams = ({ show }) => {
                       setTeamName(team.TeamName);
                       setTeamUser(team.Users);
                       setTeamCourses(team.Courses);
-                      setTeamDetail([team.Users, team.Courses]);
+                      // setTeamDetail([team.Users, team.Courses]);
                     }}
                     data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasCourse"
