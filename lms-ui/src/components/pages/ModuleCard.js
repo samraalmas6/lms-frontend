@@ -37,7 +37,7 @@ const ModuleCard = ({ module }) => {
           </ul>
         </div>
       </Collapse>
-      <div className={styles.video_player_container}>
+      <div className="video_player_container">
         {selectedLesson && selectedLesson.videoId && (
           <YouTube videoId={selectedLesson.videoId} />
         )}

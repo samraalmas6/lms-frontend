@@ -8,3 +8,140 @@
     padding: 10px;
     width: 200px
 }
+
+/* Outer container */
+.main-outer-container{
+    display: flex;
+    gap: 20px;
+}
+
+
+.course-main{
+    width: 70%;
+    background-color: #04A1D8;
+}
+/* App.css */
+.App {
+    width: 30%;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    /* justify-content: flex-end; */
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    /* background-color: red; */
+  }
+  
+  .course-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .course-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 20px;
+    width: 300px;
+    max-width: 100%;
+  }
+  
+  .module-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 20px;
+    max-width: 100%;
+  }
+  
+  .module-list {
+    flex: 1;
+    padding-right: 20px;
+  }
+  
+  .module_list h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .module_list ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .module_list li {
+    margin: 5px 0;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .module_list li:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .video_player_container {
+  /* flex: 1;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; */
+position:absolute;
+top: 10px;
+left: 10px;
+border: 10px solid red;
+  border: 10px solid red;
+  }
+  
+/* .video_player_container.video_container{
+position:absolute;
+top: 10px;
+left: 10px;
+border: 10px solid red;
+  } */
+  .drawer {
+    width: 900px;
+    background-color: white;
+    padding: 35.5px 43px;
+    box-shadow: -11px -5px 39px -9px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+  .drawer .back {
+    display: none;
+    flex-direction: column;
+    gap: 30px;
+  }
+  .drawer .back p {
+    color: #54647A;
+    font-size: 20px;
+    letter-spacing: -0.34px;
+  }
+  .drawer .back .buttons-div {
+    gap: 10px;
+  }
+  .drawer .back .btn-modern {
+    padding: 10px 25px;
+  }
+  .drawer.active .front {
+    color: #04A1D8;
+  }
+  .drawer.active .back {
+    display: flex;
+  }
+  .drawer .front {
+    display: flex;
+    justify-content: space-between;
+    color: #54647A;
+    align-items: center;
+  }
+  .drawer .front h1 {
+    font-size: 20px;
+  }
