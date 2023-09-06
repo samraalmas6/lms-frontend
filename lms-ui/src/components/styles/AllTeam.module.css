@@ -60,17 +60,18 @@ element.style{
     padding: 8px 12px;
     border-radius: 8px;
     border: none !important;
-    text-decoration: none;
+    text-decoration: none !important;
     font-weight: 500;
   }
   .addBtnSection .add-new-user:hover {
-    text-decoration: none;
+    text-decoration: none !important;
     background-color: #176cbb !important;
     border: none !important;
   }
-  .teamUserSection, .teamCourseSection{
-    height: 96%;
-    width: 80%;
-    margin: 0 auto;
-    /* padding: auto; */
+  .teamUserSection , .teamCourseSection{
+    height: 96% !important;
+    width: 80% !important;
+    margin: 0 auto !important;
+    padding: 10px;
+    border-radius: 10px;
   }
