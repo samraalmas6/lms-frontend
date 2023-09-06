@@ -17,13 +17,15 @@ import AllUsers from "./components/pages/AllUsers";
 import CreateCourse from "./components/pages/courses/CreateCourse";
 import AllCourse from "./components/pages/courses/AllCourses";
 import VerificationPage from "./components/pages/VerificationPage";
-
+import CourseTable from "./components/pages/CourseTable";
+import Collapsible from "./components/pages/Collapsible";
 function App() {
   const [showlogin, setShowLogin] = useState(false)
 
   return (
     <div>
-       <BrowserRouter>
+      <CourseTable/>
+       {/* <BrowserRouter>
        <Routes>
        <Route element={<SigninPage />} path="/auth/login" />
        <Route element= {<VerificationPage />} path="/auth/verification"></Route>
@@ -38,7 +40,7 @@ function App() {
         <Route path="/course/all" element={<PrivateRoute><AllCourse /></PrivateRoute>}></Route>
       </Routes>
 
-      </BrowserRouter>
+      </BrowserRouter> */}
 
   </div>
   );
