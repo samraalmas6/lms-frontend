@@ -12,16 +12,16 @@ const coursesData = [
         id: 1,
         title: "Module 1",
         lessons: [
-          { id: 1, title: "Lesson 1.1", videoId: "your-youtube-video-id-1" },
-          { id: 2, title: "Lesson 1.2", videoId: "your-youtube-video-id-2" },
+          { id: 1,sno:"1.1", title: "Lesson Title", videoId: "your-youtube-video-id-1" , duration:"7 min"},
+          { id: 2, sno:"1.2", title: "Lesson Title", videoId: "your-youtube-video-id-2",duration:"7 min" },
         ],
       },
       {
         id: 2,
         title: "Module 2",
         lessons: [
-          { id: 3, title: "Lesson 2.1", videoId: "your-youtube-video-id-3" },
-          { id: 4, title: "Lesson 2.2", videoId: "your-youtube-video-id-4" },
+          { id: 3, sno:"1.3", title: "Lesson Title", videoId: "your-youtube-video-id-3",duration:"7 min" },
+          { id: 4, sno:"1.4", title: "Lesson Title", videoId: "your-youtube-video-id-4", },
         ],
       },
     ],
@@ -42,7 +42,8 @@ function CourseTable() {
         </div>
         <div className="App">
           <header className="App_header">
-            <h1>Course Content</h1>
+          <h1>Course Content</h1>
+          <i class="fa fa-times close-icon" aria-hidden="true"></i>
           </header>
           <div className="course_list">
             {coursesData.map((course) => (

@@ -4,6 +4,7 @@ import "./components/styles/Responsive.css"
 
 import SigninPage from "./components/pages/SigninPage";
 import HomePage from './components/content/HomePage'
+import CourseTable from './components/pages/CourseTable'
 import { useState } from "react";
 import {
 	BrowserRouter,
@@ -23,7 +24,7 @@ function App() {
 
   return (
     <div>
-      <CourseTable/>
+      <CourseTable />
        {/* <BrowserRouter>
        <Routes>
        <Route element={<SigninPage />} path="/auth/login" />

@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import YouTube from 'react-youtube';
-import Collapse from 'react-collapse';
-import styles from "../styles/CourseTable.module.css"
-import "../styles/CourseTable.css"
-
+import React, { useState } from "react";
+import YouTube from "react-youtube";
+import Collapse from "react-collapse";
+import styles from "../styles/CourseTable.module.css";
+import "../styles/CourseTable.css";
 
 const ModuleCard = ({ module }) => {
   const [selectedLesson, setSelectedLesson] = useState(null);
@@ -23,19 +22,60 @@ const ModuleCard = ({ module }) => {
         <h3>{module.title}</h3>
       </div>
       <Collapse isOpened={isModuleExpanded}>
-        <div className="module-list">
-          <ul>
+          <div className="module-list">
+            <ul className="module-content">
+              {module.lessons.map((lesson) => (
+                <>
+                <div className="module-content-container">
+                <div className="check-box-div">
+                    {/* <Checkbox {...label} /> */}
+                    <form action="">
+                      <input
+                        className="checkbox"
+                        type="checkbox"
+                        id="lesson"
+                        name="lesson"
+                        value="lesson"
+                      />
+                    </form>
+                  </div>
+                  <div className="content-inside-container">
+                    <li
+                      key={lesson.id}
+                      onClick={() => selectLesson(lesson)}
+                      className={`lesson-item ${
+                        selectedLesson === lesson ? "active" : ""
+                      } upper-row`}
+                    >
+                      <li>{lesson.sno}</li>
+                      <li> {lesson.title}</li>
+                    </li>
+                    <li>
+                      <div className="video-player-icon">
+                        <i class="fas fa-solid fa-tv"></i>
+                        {lesson.duration}
+                      </div>
+                    </li>
+                    {/* <i class="fas fa-solid fa-play"></i> */}
+                  </div>
+                </div>
+                </>
+              ))}
+            </ul>
+          </div>
+        
+
+        {/* -------------xxxxxxxxxxxxxx---------------- */}
+        {/* <div className="module-content">
+          <div className="row-1">
             {module.lessons.map((lesson) => (
-              <li
-                key={lesson.id}
-                onClick={() => selectLesson(lesson)}
-                className={`lesson-item ${selectedLesson === lesson ? 'active' : ''}`}
-              >
-                {lesson.title}
-              </li>
+                 key={lesson.id}
+              onClick = {() =>selectLesson(lesson)}
+              className={`lesson-item ${selectedLesson === lesson ? 'active' : ''}`}
             ))}
-          </ul>
-        </div>
+          </div>
+          <div className="row-2"></div>
+        </div> */}
       </Collapse>
       <div className="video_player_container">
         {selectedLesson && selectedLesson.videoId && (
