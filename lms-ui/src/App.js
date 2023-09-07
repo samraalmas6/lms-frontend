@@ -19,6 +19,8 @@ import AllCourse from "./components/pages/courses/AllCourses";
 import VerificationPage from "./components/pages/VerificationPage";
 import AddTeam from "./components/pages/AddTeam";
 import AllTeams from "./components/pages/AllTeams";
+import AddCategory from "./components/pages/AddCategory";
+import AllCategory from "./components/pages/AllCategory";
 
 function App() {
   const [showlogin, setShowLogin] = useState(false)
@@ -40,6 +42,8 @@ function App() {
         <Route path="/allteams" element={<PrivateRoute><AllTeams /></PrivateRoute>}></Route>
         <Route path="/course/create" element={<PrivateRoute><CreateCourse /></PrivateRoute>}></Route>
         <Route path="/course/all" element={<PrivateRoute><AllCourse /></PrivateRoute>}></Route>
+        <Route path="/category/add" element={<PrivateRoute><AddCategory /></PrivateRoute>}></Route>
+        <Route path="/category/all" element={<PrivateRoute><AllCategory /></PrivateRoute>}></Route>
       </Routes>
 
       </BrowserRouter>

@@ -34,7 +34,7 @@ const CreateCourse = ({  }) => {
     <div className="offcanvas-body">
       <div className="add-course-content">
         <div className="course-name-section">
-          <ul>
+        <ul style={{ paddingLeft: '10px'}}>
             {courseData &&
               courseData.map((course) => {
                 return (

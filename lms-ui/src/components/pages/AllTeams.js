@@ -234,7 +234,7 @@ const AllTeams = ({ show }) => {
           <div className="offcanvas-body">
             <div className="add-course-content">
               <div className="course-name-section">
-                <ul>
+              <ul style={{ paddingLeft: '10px'}}>
                   {teamData &&
                     teamData.map((team) => {
                       return (
@@ -363,7 +363,7 @@ const AllTeams = ({ show }) => {
                                       className={styles.deleteBtn}
                                       onClick={() => handleDeleteCourse(course.id)}
                                     >
-                                      X
+                                     
                                     </button>
                                   ) : (
                                     <button

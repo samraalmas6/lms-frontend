@@ -1,0 +1,57 @@
+.borderLess {
+    border: none !important;
+    padding: 5px 10px !important;
+}
+.catCourseBtn {
+    display: flex;
+    justify-content: end;
+}
+.teamCourseSection{
+    height: 96% !important;
+    width: 80% !important;
+    margin: 0 auto !important;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .addBtnSection {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 2px;
+}
+.addBtnSection input[type="search"] {
+    padding: 6px 13px;
+    border-radius: 12px;
+    border-style: solid;
+    font-size: 15px;
+    border-color: #aea7a7;
+  }
+  .addBtnSection input[type="search"]:focus {
+    outline: none;
+    box-shadow: 2px 2px 15px -9px #000;
+    border-color: #6f7b7e;
+  }
+  .addBtnSection .add-new-user{
+    margin-right: 15px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none !important;
+    text-decoration: none !important;
+    font-weight: 500;
+  }
+  .addBtnSection .add-new-user:hover {
+    text-decoration: none !important;
+    background-color: #176cbb !important;
+    border: none !important;
+  }
+
+  .deleteBtn {
+    padding: 0px 12px;
+    background-color: #fff;
+    color: #757171;
+    border: none;
+    font-weight:500;
+}
+.deleteBtn:hover {
+    color: #ff0000;
+}
