@@ -12,16 +12,16 @@ const coursesData = [
         id: 1,
         title: "Module 1",
         lessons: [
-          { id: 1,sno:"1.1", title: "Lesson Title", videoId: "your-youtube-video-id-1" , duration:"7 min"},
-          { id: 2, sno:"1.2", title: "Lesson Title", videoId: "your-youtube-video-id-2",duration:"7 min" },
+          { id: 1,sno:"1.1", title: "Lesson Title", url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u" , duration:"7 min"},
+          { id: 2, sno:"1.2", title: "Lesson Title", url: "https://youtu.be/hrTQipWp6co?si=JU117OrcED6iBQiD",duration:"7 min" },
         ],
       },
       {
         id: 2,
         title: "Module 2",
         lessons: [
-          { id: 3, sno:"1.3", title: "Lesson Title", videoId: "your-youtube-video-id-3",duration:"7 min" },
-          { id: 4, sno:"1.4", title: "Lesson Title", videoId: "your-youtube-video-id-4", },
+          { id: 3, sno:"1.3", title: "Lesson Title", url: "https://youtu.be/gwWKnnCMQ5c?si=_av7yUDr5ZKqGbgt",duration:"7 min" },
+          { id: 4, sno:"1.4", title: "Lesson Title", url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4", },
         ],
       },
     ],
