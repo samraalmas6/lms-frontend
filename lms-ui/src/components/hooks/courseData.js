@@ -5,7 +5,8 @@ const courseData = [
         duration: '15 days',
         author: "Muhammad Hassan",
         users_enrolled: 0,
-        last_updated: '2 hours ago'
+        last_updated: '2 hours ago',
+        progress: 0,
     },
     {
         id: 2,
@@ -13,7 +14,9 @@ const courseData = [
         duration: '25 days',
         author: "Hammad",
         users_enrolled: 0,
-        last_updated: '1 hours ago'
+        last_updated: '1 hours ago',
+        progress: 50
+
     },
     {
         id: 3,
@@ -21,7 +24,9 @@ const courseData = [
         duration: '19 days',
         author: "Muhammad Waqar",
         users_enrolled: 0,
-        last_updated: '30 minutes ago'
+        last_updated: '30 minutes ago',
+        progress:100
+
     },
     {
         id: 4,
@@ -29,7 +34,8 @@ const courseData = [
         duration: '13 days',
         author: "Samra Almas",
         users_enrolled: 0,
-        last_updated: '5 hours ago'
+        last_updated: '5 hours ago',
+        progress:99
     },
     {
         id: 5,
@@ -37,7 +43,8 @@ const courseData = [
         duration: '23 days',
         author: "Mohsen Ali",
         users_enrolled: 0,
-        last_updated: '8 hours ago'
+        last_updated: '8 hours ago',
+        progress:75
     }
 ]
 export default courseData
