@@ -55,3 +55,13 @@
 .deleteBtn:hover {
     color: #ff0000;
 }
+
+.label-tag {
+  background: #8686ee;
+  padding: 6px 5px;
+  color: #fff;
+  border-radius: 50%;
+  font-weight: 500;
+  margin-right: 5px;
+  min-width: 10px;
+}

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import '../styles/Teams.css'
+import '../../styles/Teams.css'
 import AllTeams from "./AllTeams";
 
 const AddTeam = () => {

@@ -2,7 +2,7 @@ import "./components/styles/App.css";
 import "./components/styles/HomePage.css"
 import "./components/styles/Responsive.css"
 
-import SigninPage from "./components/pages/SigninPage";
+import SigninPage from "./components/content/SigninPage";
 import HomePage from './components/content/HomePage'
 import { useState } from "react";
 import {
@@ -11,16 +11,16 @@ import {
 	Route
 } from "react-router-dom";
 
-import AddUser from "./components/pages/AddUser";
+import AddUser from "./components/pages/users/AddUser";
 import PrivateRoute from "./components/content/PrivateRoute";
-import AllUsers from "./components/pages/AllUsers";
+import AllUsers from "./components/pages/users/AllUsers";
 import CreateCourse from "./components/pages/courses/CreateCourse";
 import AllCourse from "./components/pages/courses/AllCourses";
-import VerificationPage from "./components/pages/VerificationPage";
-import AddTeam from "./components/pages/AddTeam";
-import AllTeams from "./components/pages/AllTeams";
-import AddCategory from "./components/pages/AddCategory";
-import AllCategory from "./components/pages/AllCategory";
+import VerificationPage from "./components/content/VerificationPage";
+import AddTeam from "./components/pages/teams/AddTeam";
+import AllTeams from "./components/pages/teams/AllTeams";
+import AddCategory from "./components/pages/category/AddCategory";
+import AllCategory from "./components/pages/category/AllCategory";
 
 function App() {
   const [showlogin, setShowLogin] = useState(false)

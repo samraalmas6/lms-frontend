@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import mockData from "../hooks/mockData";
-import userImg from "../content/Images/user.png";
-import "../styles/Users.css";
+import userImg from "../../content/Images/user.png";
+import "../../styles/Users.css";
 import { Link } from "react-router-dom";
 
 const AllUsers = () => {

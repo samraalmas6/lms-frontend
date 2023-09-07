@@ -1,13 +1,13 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
-import styles from "../../components/styles/AddUser.module.css";
-import UploadPicture from "./UploadPicture";
+import styles from "../../styles/AddUser.module.css";
+import UploadPicture from "../../content/UploadPicture";
 import Select from "react-select";
 import countryList from "react-select-country-list";
 import emailjs from "@emailjs/browser";
 import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
-import ExcelExportData from "../hooks/ExcelExportData";
-import ExportExcel from "../content/Excelexport";
+import ExcelExportData from "../../hooks/ExcelExportData";
+import ExportExcel from "../../content/Excelexport";
 
 function AddUser() {
   const excelFile = useRef();

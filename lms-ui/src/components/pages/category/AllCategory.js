@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import catData from "../hooks/catData";
-import "../styles/Category.css";
-import courseData from "../hooks/courseData";
+import catData from "../../hooks/catData";
+import "../../styles/Category.css";
+import courseData from "../../hooks/courseData";
 
 const AllCategory = ({ show }) => {
   const [categoryName, setCatgoryName] = useState("");
@@ -254,6 +254,7 @@ const AllCategory = ({ show }) => {
                           <span>{categoryName}</span>
                         </td>
                         <td className={"borderLess"}>
+                          {/* <span className="label-tag">{parentCat.slice(0,1).toUpperCase()+ parentCat.slice(-1).toUpperCase()}</span> */}
                           <span>{parentCat}</span>
                         </td>
                         <td className={"borderLess"}>

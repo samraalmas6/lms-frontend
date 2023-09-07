@@ -1,6 +1,6 @@
 import React from "react";
-import Dashboard from "../pages/Dashboard";
-import VerificationPage from "../pages/VerificationPage";
+import Dashboard from "./Dashboard";
+import VerificationPage from "./VerificationPage";
 
 
 const HomePage = () => {

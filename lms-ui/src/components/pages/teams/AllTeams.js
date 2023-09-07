@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import teamsData from "../hooks/teamData";
-import styles from "../../components/styles/AllTeam.module.css";
-import userImg from "../content/Images/user.png";
+import teamsData from "../../hooks/teamData";
+import styles from "../../styles/AllTeam.module.css";
+import userImg from "../../content/Images/user.png";
 import AddTeam from "./AddTeam";
-import courseData from "../hooks/courseData";
+import courseData from "../../hooks/courseData";
 
 const AllTeams = ({ show }) => {
   const [showBlock, setShowBlock] = useState(false);
