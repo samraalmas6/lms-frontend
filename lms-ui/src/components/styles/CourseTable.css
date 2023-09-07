@@ -158,7 +158,8 @@ border: 10px solid red;
 .content-inside-container {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .module-header h3 {
