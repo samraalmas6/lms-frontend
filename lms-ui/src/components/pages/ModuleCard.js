@@ -20,6 +20,7 @@ const ModuleCard = ({ module }) => {
     <div className="module-card">
       <div className="module-header" onClick={toggleModuleExpand}>
         <h3>{module.title}</h3>
+        <i class="fas fa-caret-up fa-rotate-180 arrow"></i>
       </div>
       <Collapse isOpened={isModuleExpanded}>
           <div className="module-list">
