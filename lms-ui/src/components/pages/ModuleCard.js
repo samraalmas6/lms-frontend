@@ -91,8 +91,8 @@ const ModuleCard = ({ module }) => {
                <ReactPlayer
                url={selectedLesson.url}
                controls={true} // Show video controls (play, pause, volume, etc.)
-               width="50%"
-               height="auto"
+               width="100%"
+              //  height="100%"
              />
              {/* ))} */}
           </div>

@@ -13,7 +13,7 @@ const coursesData = [
         title: "Module 1",
         lessons: [
           { id: 1,sno:"1.1", title: "Lesson Title", url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u" , duration:"7 min"},
-          { id: 2, sno:"1.2", title: "Lesson Title", url: "https://youtu.be/hrTQipWp6co?si=JU117OrcED6iBQiD",duration:"7 min" },
+          { id: 2, sno:"1.2", title: "Lesson Title", url: "https://youtu.be/waGfV-IoOt8?si=1Th7Y9ZQ_GzC_h-B",duration:"1 hr" },
         ],
       },
       {
@@ -21,7 +21,7 @@ const coursesData = [
         title: "Module 2",
         lessons: [
           { id: 3, sno:"1.3", title: "Lesson Title", url: "https://youtu.be/gwWKnnCMQ5c?si=_av7yUDr5ZKqGbgt",duration:"7 min" },
-          { id: 4, sno:"1.4", title: "Lesson Title", url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4", },
+          { id: 4, sno:"1.4", title: "Lesson Title", url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",duration:"2 hr" },
         ],
       },
     ],
@@ -38,7 +38,7 @@ function CourseTable() {
       <div className="main-outer-container">
         {/* main-div*/}
         <div className="course-main">
-          <h1>main central video div</h1>
+          {/* <h1>main central video div</h1> */}
         </div>
         <div className="App">
           <header className="App_header">
