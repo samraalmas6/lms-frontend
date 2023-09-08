@@ -15,6 +15,7 @@
     "react-collapse": "^5.1.1",
     "react-dom": "^18.2.0",
     "react-modal": "^3.16.1",
+    "react-player": "^2.13.0",
     "react-scripts": "5.0.1",
     "react-select": "^5.7.4",
     "react-select-country-list": "^2.2.3",

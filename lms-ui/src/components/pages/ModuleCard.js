@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import YouTube from "react-youtube";
 import Collapse from "react-collapse";
-import styles from "../styles/CourseTable.module.css";
+
 import "../styles/CourseTable.css";
 
 const ModuleCard = ({ module }) => {
@@ -16,13 +16,15 @@ const ModuleCard = ({ module }) => {
     setIsModuleExpanded(!isModuleExpanded);
   };
 
+
   return (
     <div className="module-card">
       <div className="module-header" onClick={toggleModuleExpand}>
         <h3>{module.title}</h3>
         <i class="fas fa-caret-up fa-rotate-180 arrow"></i>
       </div>
-      <Collapse isOpened={isModuleExpanded}>
+      <Collapse isOpened={isModuleExpanded} />
+        {isModuleExpanded && 
           <div className="module-list">
             <ul className="module-content">
               {module.lessons.map((lesson) => (
@@ -40,23 +42,35 @@ const ModuleCard = ({ module }) => {
                       />
                     </form>
                   </div>
-                  <div className="content-inside-container">
-                    <li
+                  <div className="content-inside-container" >
+                   {/* <Collapse isOpened={isModuleExpanded}> */}
+                 
+                   
+                   <li 
                       key={lesson.id}
-                      onClick={() => selectLesson(lesson)}
+                      onClick={(e) => {
+                        selectLesson(lesson)
+                    }}
+                        data-bs-toggle="collapse"
+                        data-bs-target={`#${lesson.id}`}
                       className={`lesson-item ${
                         selectedLesson === lesson ? "active" : ""
                       } upper-row`}
                     >
-                      <li>{lesson.sno}</li>
+                      <li >{lesson.sno}</li>
                       <li> {lesson.title}</li>
                     </li>
                     <li>
-                      <div className="video-player-icon">
+             
+                      <div className="video-player-icon collapse" id={lesson.id}>
                         <i class="fas fa-solid fa-tv"></i>
                         {lesson.duration}
                       </div>
+             
                     </li>
+
+                    {/* </Collapse>                     */}
+                    
                     {/* <i class="fas fa-solid fa-play"></i> */}
                   </div>
                 </div>
@@ -64,6 +78,7 @@ const ModuleCard = ({ module }) => {
               ))}
             </ul>
           </div>
+}
         
 
         {/* -------------xxxxxxxxxxxxxx---------------- */}
@@ -77,7 +92,7 @@ const ModuleCard = ({ module }) => {
           </div>
           <div className="row-2"></div>
         </div> */}
-      </Collapse>
+      {/* </Collapse> */}
       <div className="video_player_container">
         {selectedLesson && selectedLesson.videoId && (
           <YouTube videoId={selectedLesson.videoId} />
