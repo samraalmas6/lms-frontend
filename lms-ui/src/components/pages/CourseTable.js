@@ -18,6 +18,7 @@ const coursesData = [
             title: "Lesson Title",
             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
             duration: "7 min",
+            ppt:"https://xloop-my.sharepoint.com/:p:/g/personal/samara_mohsin_xloopdigital_com/EfoU-4J3K2xMjzZ1I3wkwdEB9POjRCIOc0luDu8N2Rq3bw?e=sAHpKS"
           },
           {
             id: 2,

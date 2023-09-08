@@ -83,6 +83,8 @@ const ModuleCard = ({ module }) => {
                 url={selectedLesson.url}
                 controls={true}
                 width="100%"
+                height="100%"
+                volume = {3.5}
               />
             </div>
           )}
