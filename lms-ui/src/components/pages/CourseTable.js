@@ -67,15 +67,17 @@ function CourseTable() {
       <div className="main-outer-container">
         {/* sidebar div */}
         <div className="course-main">
+          <div className="video-section">
           <h1>video container</h1>
           {/* tabs below video */}
-        <div className="try">
+          </div>
+          <div className="tabs-container">
           <ul className="tabs">
             <li
               className={activeTab === "Course Content" ? "active" : ""}
               onClick={() => handleTabChange("Course Content")}
             >
-              Course Content
+              Course-Content
             </li>
             <li
               className={activeTab === "Overview" ? "active" : ""}
@@ -89,14 +91,14 @@ function CourseTable() {
             {activeTab === "Course Content" && (
               <div>
                 {/* Add content for Course Content tab */}
-                <p>This is the Course Content tab.</p>
+                <p>Course Content tab.</p>
               </div>
             )}
 
             {activeTab === "Overview" && (
               <div>
                 {/* Add content for Overview tab */}
-                <p>This is the Overview tab.</p>
+                <p>Overview tab.</p>
               </div>
             )}
           </div>

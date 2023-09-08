@@ -28,9 +28,44 @@
 
 .course-main {
   width: 70%;
-  background-color: #04a1d8;
-  height: 70vh;
+  /* background-color: #04a1d8; */
+  /* height: 70vh; */
+  display: flex;
+  flex-direction: column;
 }
+
+.tabs-container{
+  /* background-color: red; */
+  padding: 15px;
+  background-color: rgb(211, 211, 211, 0.5);
+
+}
+
+.tabs{
+  display: flex;
+  list-style: none;
+  font-size: 20px;
+  gap: 20px;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-bottom: 2px solid transparent; /* Initial border color */
+}
+.tabs li.active {
+  border-bottom: 2px solid #007bff; /* Border color when active */
+}
+
+.tab-content{
+
+}
+
+.video-section{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #04a1d8;
+  height: 60vh;
+}
+
 /* App.css */
 .App {
   width: 30%;
@@ -183,6 +218,3 @@ border: 10px solid red;
 }
 
 
-.try{
-  background-color: red;
-}
