@@ -16,19 +16,19 @@
     box-shadow: 2px 2px 11px -8px #000;
     border-color: #e3e3e3;
 }
-.course-create-form .course-title, .course-start, .course-end, .module-title, .module-start, .module-end, .unit-title, .unit-content {
+.course-create-form .course-title, .course-start, .course-end, .module-title, .module-start, .module-end, .unit-title, .unit-start, .unit-end, .unit-content, .unit-video, .unit-slide, .unit-pdf, .unit-assignment, .unit-quiz {
     display: flex;
     justify-content: space-between;
     width: 50%;
+    align-items: center;
 }
-.course-create-form label, .course-module-form label, .course-unit-form-label, .course-unit-content-label {
-    padding: 8px 12px;
+.course-create-form label, .course-module-form label, .course-unit-form-label, .course-unit-content-label, .unit-start label, .unit-end label {
     font-size: 17px;
     font-weight: 500;
     margin-top: 10px;
     margin: 10px 2px 0px 3px;
 }
-.course-create-form input, .course-module-form input, .course-unit-form input, .unit-content select{
+.course-create-form input, .course-module-form input, .course-unit-form input, .unit-content, .unit-video input, select{
     padding: 8px 12px;
     margin: 6px 2px 3px;
     border-radius: 6px;
@@ -36,6 +36,16 @@
     border-color: #eee;
     font-size: 17px;
     width: 70%;
+}
+.unit-slide span, .unit-pdf span, .unit-assignment span, .unit-quiz span {
+    padding: 8px 12px;
+    margin: 6px 2px 3px;
+    border-radius: 6px;
+    border-style: solid;
+    border-color: #eee;
+    font-size: 17px;
+    width: 70%;
+    cursor: pointer;
 }
 .unit-content select {
     border: 2px solid #eee;
@@ -145,7 +155,14 @@
     width: 86%;
     box-shadow: 0px 0px 6px -1px gray;
     padding: 15px;
+    overflow: auto;
 }
+body::-webkit-scrollbar {
+    display: none; 
+  }
+.course-form-section::-webkit-scrollbar {
+    display: none; 
+  }
 .course-form-section form {
     display: flex;
     flex-direction: column;
@@ -181,7 +198,13 @@
 }
 .category-section {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
     /* flex-direction: column; */
+}
+.category-section label {
+    font-size: 17px;
+    font-weight: 500;
 }
 .category-section select {
     width: 30%;
@@ -190,5 +213,6 @@
     border-radius: 6px;
     border-style: solid;
     font-size: 17px;
-    margin-top: 8px;
+    margin-top: 3px;
+    /* margin-left: 12px; */
 }

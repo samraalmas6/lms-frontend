@@ -5,6 +5,7 @@ const Module = ({ setModuleData, setShowModule, minDate }) => {
   const [moduleTitle, setModuleTitle] = useState("");
   const [moduleStart, setModuleStart] = useState("");
   const [moduleEnd, setModuleEnd] = useState("");
+  const [moduleVisibility, setModuleVisibility] = useState(false)
 
   const [unitData, setUnitData] = useState([]);
 
@@ -43,7 +44,7 @@ const Module = ({ setModuleData, setShowModule, minDate }) => {
               onChange={handleModuleTitle}
             />
           </div>
-          {/* <div className="module-start">
+          <div className="module-start">
             <label>Module Start Date</label>
             <input
               type="date"
@@ -63,7 +64,7 @@ const Module = ({ setModuleData, setShowModule, minDate }) => {
               min={minDate}
               onChange={handleModuleEnd}
             />
-          </div> */}
+          </div>
         </form>
         <button
           type="button"
@@ -77,6 +78,7 @@ const Module = ({ setModuleData, setShowModule, minDate }) => {
           <LeasonForm
             setUnitData={setUnitData}
             handleAddModule={handleAddModule}
+            minDate={minDate}
           />
         )}
       </div>

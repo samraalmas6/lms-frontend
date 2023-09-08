@@ -265,7 +265,7 @@ const AllCourse = ({ show }) => {
                   </div>
                   <div className="category-section">
                     <label className="mb-0 mt-1">Category</label>
-                    <select onChange={''} value={''}>
+                    <select onChange={handleCategory} value={category}>
                       <option value="">--Select Category--</option>
                       <option value="Category 1">Category 1</option>
                       <option value="Category 2">Category 2</option>
@@ -288,6 +288,13 @@ const AllCourse = ({ show }) => {
                     </ul>
 
                     <div>
+                    {showModule && (
+                        <CourseModule
+                          setModuleData={setModuleData}
+                          setShowModule={setShowModule}
+                          minDate={minDate}
+                        />
+                      )}
                       <button
                         type="button"
                         className="btn w-50 add-module-btn"
@@ -296,13 +303,7 @@ const AllCourse = ({ show }) => {
                         Add Module
                         <i className="fas fa-solid fa-plus ms-2"></i>
                       </button>
-                      {showModule && (
-                        <CourseModule
-                          setModuleData={setModuleData}
-                          setShowModule={setShowModule}
-                          minDate={minDate}
-                        />
-                      )}
+                     
                     </div>
                   </div>
                   <div className="category-save-btn">
