@@ -64,6 +64,7 @@ const ModuleCard = ({ module }) => {
              
                       <div className="video-player-icon collapse" id={lesson.id}>
                         <i class="fas fa-solid fa-tv"></i>
+                        {lesson.title}
                         {lesson.duration}
                       </div>
              
