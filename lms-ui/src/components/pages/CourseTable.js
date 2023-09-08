@@ -6,7 +6,7 @@ import ModuleCard from "./ModuleCard";
 const coursesData = [
   {
     id: 1,
-    title: "Course 1",
+    title: "Cloud Native",
     modules: [
       {
         id: 1,
@@ -15,16 +15,21 @@ const coursesData = [
           {
             id: 1,
             sno: "1.1",
-            title: "Lesson Title",
+            title: "Extreme Programming",
+            lecture_name: "Introduction",
             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
             duration: "7 min",
+            ppt: "../content/ppts/Your_big_idea.pptx",
           },
           {
             id: 2,
             sno: "1.2",
             title: "Lesson Title",
+            lecture_name: "Introduction",
             url: "https://youtu.be/waGfV-IoOt8?si=1Th7Y9ZQ_GzC_h-B",
             duration: "1 hr",
+            ppt: "../content/ppts/Your_big_idea.pptx",
+
           },
         ],
       },
@@ -36,15 +41,21 @@ const coursesData = [
             id: 3,
             sno: "1.3",
             title: "Lesson Title",
+            lecture_name: "Introduction",
             url: "https://youtu.be/gwWKnnCMQ5c?si=_av7yUDr5ZKqGbgt",
             duration: "7 min",
+            ppt: "Your_big_idea.pptx",
+
           },
           {
             id: 4,
             sno: "1.4",
             title: "Lesson Title",
+            lecture_name: "Introduction",
             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
             duration: "2 hr",
+            ppt: "../content/ppts/Your_big_idea.pptx",
+
           },
         ],
       },

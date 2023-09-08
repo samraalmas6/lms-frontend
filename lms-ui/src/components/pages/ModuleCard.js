@@ -30,7 +30,7 @@ const ModuleCard = ({ module }) => {
           <i class="fas fa-caret-up fa-rotate-180 arrow"></i>
         </div>
         <Collapse isOpened={isModuleExpanded} />
-        {isModuleExpanded && 
+        {isModuleExpanded && (
           <div className="module-list">
             <ul className="module-content">
               {module.lessons.map((lesson) => (
@@ -47,43 +47,52 @@ const ModuleCard = ({ module }) => {
                         />
                       </form>
                     </div>
-                    <div className="content-inside-container" >
-                   {/* <Collapse isOpened={isModuleExpanded}> */}
-                 
-                   
-                     <li 
-                        key={lesson.id}
-                        onClick={(e) => {
-                        selectLesson(lesson)
-                    }}
+                    <div className="content-inside-container">
+                      {/* <Collapse isOpened={isModuleExpanded}> */}
+
+                      <li
                         data-bs-toggle="collapse"
                         data-bs-target={`#${lesson.id}`}
                         className={`lesson-item ${
                           selectedLesson === lesson ? "active" : ""
                         } upper-row`}
                       >
-                        <li >{lesson.sno}</li>
+                        <li>{lesson.sno}</li>
                         <li> {lesson.title}</li>
                       </li>
                       <li>
-             
-                        <div className="video-player-icon collapse" id={lesson.id}>
-                          <i class="fas fa-solid fa-tv"></i>
-                        {lesson.title}
-                          {lesson.duration}
+                        <div
+                          className="video-player-icon collapse"
+                          id={lesson.id}
+                        >
+                          <li
+                            key={lesson.id}
+                            onClick={(e) => {
+                              selectLesson(lesson);
+                            }}
+                            data-bs-toggle="collapse"
+                            data-bs-target={`#${lesson.id}`}
+                            className={`lesson-item ${
+                              selectedLesson === lesson ? "active" : ""
+                            } upper-row`}
+                          >
+                            <li>{lesson.lecture_name}</li>
+                            {/* <i class="fas fa-solid fa-tv"></i>
+                            {lesson.duration} */}
+                            {/* <li>{lesson.ppt}</li> */}
+                          </li>
+                          <li></li>
                         </div>
-             
                       </li>
 
-                    {/* </Collapse>                     */}
-                    
+                      {/* </Collapse>                     */}
                     </div>
                   </div>
                 </>
               ))}
             </ul>
           </div>
-}
+        )}
         {/* </Collapse> */}
         <div className="video_player_container">
           {selectedLesson && selectedLesson.url && (
