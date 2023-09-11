@@ -8,6 +8,7 @@ const courseData = [
         picture: 'https://pixabay.com/illustrations/domain-names-domain-extension-domain-1772242/',
         visibility: true,
         last_updated: '2 hours ago',
+        category: 'Cat 5',
         modules: [
             {
             id: 1,
@@ -373,6 +374,7 @@ const courseData = [
         picture: 'https://pixabay.com/illustrations/domain-names-domain-extension-domain-1772242/',
         visibility: true,
         last_updated: '1 hours ago',
+        category: 'Cat 4',
         modules: [
             {
             id: 1,
@@ -738,6 +740,7 @@ const courseData = [
         picture: 'https://pixabay.com/illustrations/domain-names-domain-extension-domain-1772242/',
         visibility: true,
         last_updated: '30 minutes ago',
+        category: 'Cat 3',
         modules: [
             {
             id: 1,
@@ -1103,6 +1106,7 @@ const courseData = [
         picture: 'https://pixabay.com/illustrations/domain-names-domain-extension-domain-1772242/',
         visibility: true,
         last_updated: '5 hours ago',
+        category: 'Cat 2',
         modules: [
             {
             id: 1,
@@ -1468,6 +1472,7 @@ const courseData = [
         picture: 'https://pixabay.com/illustrations/domain-names-domain-extension-domain-1772242/',
         visibility: true,
         last_updated: '8 hours ago',
+        category: 'Cat 1',
         modules: [
             {
             id: 1,

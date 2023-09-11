@@ -16,11 +16,21 @@
     box-shadow: 2px 2px 11px -8px #000;
     border-color: #e3e3e3;
 }
-.course-create-form .course-title, .course-start, .course-end, .module-title, .module-start, .module-end, .unit-title, .unit-start, .unit-end, .unit-content, .unit-video, .unit-slide, .unit-pdf, .unit-assignment, .unit-quiz {
+.course-create-form .course-title, .course-start, .course-end, .module-title, .module-start, .module-end, .unit-title, .unit-start, .unit-end, .unit-content, .unit-video, .unit-slide, .unit-pdf, .unit-assignment, .unit-quiz{
     display: flex;
     justify-content: space-between;
     width: 50%;
     align-items: center;
+}
+.visibility {
+    display: flex;
+    justify-content: space-between;
+    width: 18%;
+    align-items: center;
+    padding-left: 0%;
+}
+.visibility input {
+    position: static;
 }
 .course-create-form label, .course-module-form label, .course-unit-form-label, .course-unit-content-label, .unit-start label, .unit-end label {
     font-size: 17px;
@@ -215,4 +225,53 @@ body::-webkit-scrollbar {
     font-size: 17px;
     margin-top: 3px;
     /* margin-left: 12px; */
+}
+
+.unit-list-show {
+    width: 85% !important;
+    height: 99% !important;
+    margin-left: 13% !important;
+    border-radius: 10px !important;
+    padding: 12px !important;
+}
+.unit-list-show form {
+    padding: 0 30px;
+}
+.units {
+    padding: 0;
+}
+.units li {
+    background: #eceff1;
+    padding: 11px;
+    border-radius: 4px;
+    font-size: 17px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+}
+.module-list-show {
+    width: 85% !important;
+    height: 99% !important;
+    margin-left: 13% !important;
+    border-radius: 10px !important;
+    padding: 12px !important;
+}
+.module-content-section {
+    display: flex;
+    height: 100%;
+}
+.module-list-show .module-content-section .navigation {
+    width: 13%;
+    box-shadow: 5px 2px 10px -3px gray;
+    margin-right: 8px;
+    margin-left: -10px;
+    padding-top: 20px;
+    background-color: #eceff1;
+}
+.module-list-show .module-content-section .content {
+    width: 86%;
+    box-shadow: 0px 0px 6px -1px gray;
+    padding: 15px;
+    overflow: auto;
 }
