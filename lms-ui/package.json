@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@cyntler/react-doc-viewer": "^1.13.0",
     "@emailjs/browser": "^3.11.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -20,6 +21,7 @@
     "react-select": "^5.7.4",
     "react-select-country-list": "^2.2.3",
     "react-youtube": "^10.1.0",
+    "screenfull": "^6.0.2",
     "sheetjs-style": "^0.15.8",
     "web-vitals": "^2.1.4",
     "xlsx": "^0.18.5"

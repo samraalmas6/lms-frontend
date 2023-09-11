@@ -18,7 +18,9 @@ const coursesData = [
             title: "Lesson Title",
             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
             duration: "7 min",
-            ppt:"https://xloop-my.sharepoint.com/:p:/g/personal/samara_mohsin_xloopdigital_com/EfoU-4J3K2xMjzZ1I3wkwdEB9POjRCIOc0luDu8N2Rq3bw?e=sAHpKS"
+            file_uri: require("../content/files/MOMS.pdf"),
+            fileType: "pdf",
+            fileName: "Min of meeting",
           },
           {
             id: 2,
@@ -26,6 +28,9 @@ const coursesData = [
             title: "Lesson Title",
             url: "https://youtu.be/waGfV-IoOt8?si=1Th7Y9ZQ_GzC_h-B",
             duration: "1 hr",
+            uri: require("../content/files/MOMS.pdf"),
+            fileType: "pdf",
+            fileName: "Min of meeting",
           },
         ],
       },
@@ -39,6 +44,9 @@ const coursesData = [
             title: "Lesson Title",
             url: "https://youtu.be/gwWKnnCMQ5c?si=_av7yUDr5ZKqGbgt",
             duration: "7 min",
+            uri: require("../content/files/MOMS.pdf"),
+            fileType: "pdf",
+            fileName: "Min of meeting",
           },
           {
             id: 4,
@@ -46,9 +54,64 @@ const coursesData = [
             title: "Lesson Title",
             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
             duration: "2 hr",
+            uri: require("../content/files/MOMS.pdf"),
+            fileType: "pdf",
+            fileName: "Min of meeting",
           },
         ],
       },
+      // {
+      //   id: 1,
+      //   title: "Module 1",
+      //   lessons: [
+      //     {
+      //       id: 1,
+      //       sno: "1.1",
+      //       title: "Lesson Title",
+      //       url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
+      //       duration: "7 min",
+      //       uri: require("./files/MOMS.pdf"),
+      //       fileType: "pdf",
+      //       fileName: "Min of meeting pdf file",
+      //     },
+      //     {
+      //       id: 2,
+      //       sno: "1.2",
+      //       title: "Lesson Title",
+      //       url: "https://youtu.be/waGfV-IoOt8?si=1Th7Y9ZQ_GzC_h-B",
+      //       duration: "1 hr",
+      //       uri: require("./files/MOMS.pdf"),
+      //       fileType: "pdf",
+      //       fileName: "Min of meeting pdf file",
+      //     },
+      //   ],
+      // },
+      // {
+      //   id: 1,
+      //   title: "Module 1",
+      //   lessons: [
+      //     {
+      //       id: 1,
+      //       sno: "1.1",
+      //       title: "Lesson Title",
+      //       url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
+      //       duration: "7 min",
+      //       uri: require("./files/MOMS.pdf"),
+      //       fileType: "pdf",
+      //       fileName: "Min of meeting pdf file",
+      //     },
+      //     {
+      //       id: 2,
+      //       sno: "1.2",
+      //       title: "Lesson Title",
+      //       url: "https://youtu.be/waGfV-IoOt8?si=1Th7Y9ZQ_GzC_h-B",
+      //       duration: "1 hr",
+      //       uri: require("./files/MOMS.pdf"),
+      //       fileType: "pdf",
+      //       fileName: "Min of meeting pdf file",
+      //     },
+      //   ],
+      // },
     ],
   },
   // Add more courses and modules as needed
@@ -69,41 +132,41 @@ function CourseTable() {
         {/* sidebar div */}
         <div className="course-main">
           <div className="video-section">
-          <h1>video container</h1>
-          {/* tabs below video */}
+            {/* <h1>video container</h1> */}
+            {/* tabs below video */}
           </div>
           <div className="tabs-container">
-          <ul className="tabs">
-            <li
-              className={activeTab === "Course Content" ? "active" : ""}
-              onClick={() => handleTabChange("Course Content")}
-            >
-              Course-Content
-            </li>
-            <li
-              className={activeTab === "Overview" ? "active" : ""}
-              onClick={() => handleTabChange("Overview")}
-            >
-              Overview
-            </li>
-          </ul>
+            <ul className="tabs">
+              <li
+                className={activeTab === "Course Content" ? "active" : ""}
+                onClick={() => handleTabChange("Course Content")}
+              >
+                Course-Content
+              </li>
+              <li
+                className={activeTab === "Overview" ? "active" : ""}
+                onClick={() => handleTabChange("Overview")}
+              >
+                Overview
+              </li>
+            </ul>
 
-          <div className="tab-content">
-            {activeTab === "Course Content" && (
-              <div>
-                {/* Add content for Course Content tab */}
-                <p>Course Content tab.</p>
-              </div>
-            )}
+            <div className="tab-content">
+              {activeTab === "Course Content" && (
+                <div>
+                  {/* Add content for Course Content tab */}
+                  <p>Course Content tab.</p>
+                </div>
+              )}
 
-            {activeTab === "Overview" && (
-              <div>
-                {/* Add content for Overview tab */}
-                <p>Overview tab.</p>
-              </div>
-            )}
+              {activeTab === "Overview" && (
+                <div>
+                  {/* Add content for Overview tab */}
+                  <p>Overview tab.</p>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
         </div>
         <div className="App">
           <header className="App_header">

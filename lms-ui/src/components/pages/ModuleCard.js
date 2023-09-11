@@ -3,12 +3,14 @@ import YouTube from "react-youtube";
 import Collapse from "react-collapse";
 import styles from "../styles/CourseTable.module.css";
 import ReactPlayer from "react-player";
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import "../styles/CourseTable.css";
 
 const ModuleCard = ({ module }) => {
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [selectedModule, setSelectedModule] = useState(null);
   const [isModuleExpanded, setIsModuleExpanded] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   const selectLesson = (lesson) => {
     setSelectedLesson(lesson);
@@ -22,8 +24,24 @@ const ModuleCard = ({ module }) => {
     setIsModuleExpanded(!isModuleExpanded);
   };
 
+  const toggleFullScreen = () => {
+    const videoPlayer = document.getElementById("videoPlayer");
+
+    if (isFullScreen) {
+      document.exitFullscreen();
+    } else {
+      videoPlayer.requestFullscreen().catch((err) => {
+        console.error("Failed to enter full screen:", err);
+      });
+    }
+
+    setIsFullScreen(!isFullScreen);
+  };
 
   const videoUrl = "https://youtu.be/apGV9Kg7ics?si=yP2oeVUi684WxZyg";
+
+  // console.log(module)
+  console.log(module.lessons)
 
   // console.log(selectedLesson)
   // console.log(selectedLesson && selectedLesson.url)
@@ -68,10 +86,22 @@ const ModuleCard = ({ module }) => {
                           {lesson.duration}
                         </div>
                       </li>
+                      <li>
+                        {/* <DocViewer
+                          documents={lesson.file_uri}
+                          pluginRenderers={DocViewerRenderers}
+                          style={{ height: 1000 }}
+                        /> */}
+                      </li>
                     </div>
                   </div>
                 </>
               ))}
+              <DocViewer
+                          documents={module.lessons[0]}
+                          pluginRenderers={DocViewerRenderers}
+                          style={{ height: 1000 }}
+                        />
             </ul>
           </div>
         </Collapse>
@@ -84,7 +114,7 @@ const ModuleCard = ({ module }) => {
                 controls={true}
                 width="100%"
                 height="100%"
-                volume = {3.5}
+                volume={3.5}
               />
             </div>
           )}
