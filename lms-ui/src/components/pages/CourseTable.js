@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/CourseTable.css";
+import VideoPlayer from "./VideoPlayer";
 
 import ModuleCard from "./ModuleCard";
 
@@ -26,7 +27,7 @@ const coursesData = [
             sno: "1.2",
             title: "Lesson Title",
             lecture_name: "Introduction",
-            url: "https://youtu.be/waGfV-IoOt8?si=1Th7Y9ZQ_GzC_h-B",
+            url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
             duration: "1 hr",
             ppt: "../content/ppts/Your_big_idea.pptx",
 
@@ -66,8 +67,24 @@ const coursesData = [
 
 function CourseTable() {
   const [activeTab, setActiveTab] = useState("Course Content");
+  const [selectedLesson, setSelectedLesson] = useState(null);
+ const [expandedModule, setExpandedModule] = useState(null);
+
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
+  };
+  
+  const handleLessonSelect = (lesson) => {
+    setSelectedLesson(lesson);
+  };
+  
+  const toggleModule = (index) => {
+    if (expandedModule === index){
+      setExpandedModule(null);
+    }else{
+      setExpandedModule(index);
+    }
+
   };
 
   return (
@@ -79,6 +96,11 @@ function CourseTable() {
         {/* sidebar div */}
         <div className="course-main">
           <h1>video container</h1>
+          <div className="video_player_container">
+          <VideoPlayer selectedLesson={selectedLesson} />
+        </div>
+
+        
           {/* tabs below video */}
         <div className="try">
           <ul className="tabs">
@@ -122,8 +144,10 @@ function CourseTable() {
             {coursesData.map((course) => (
               <div key={course.id} className="course_card">
                 <h2>{course.title}</h2>
-                {course.modules.map((module) => (
-                  <ModuleCard key={module.id} module={module} />
+                {course.modules.map((module, index) => (
+                  <ModuleCard key={module.id} module={module}
+                  isExpanded={index === expandedModule}
+                  toggleModule={()=> toggleModule(index)} />
                 ))}
               </div>
             ))}
@@ -135,3 +159,5 @@ function CourseTable() {
 }
 
 export default CourseTable;
+
+

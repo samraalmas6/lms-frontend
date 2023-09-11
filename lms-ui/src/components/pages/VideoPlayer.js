@@ -1,17 +1,12 @@
 import React from 'react';
-import YouTube from 'react-youtube';
+import ReactPlayer from "react-player";
 
-const VideoPlayer = ({ videoId }) => {
-  const opts = {
-    width: '100%',
-    playerVars: {
-      // You can add additional YouTube player options here
-    },
-  };
-
+const VideoPlayer = ({ selectedLesson }) => {
   return (
-    <div className="video-player">
-      <YouTube videoId={videoId} opts={opts} />
+    <div className="video-player-container">
+      {selectedLesson && selectedLesson.url && (
+        <ReactPlayer url={selectedLesson.url} controls={true} width="100%" />
+      )}
     </div>
   );
 };
