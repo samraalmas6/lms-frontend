@@ -60,8 +60,8 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
       <Collapse isOpened={isExpanded}>
         <div className="module-list">
           <ul className="module-content">
-            {module.lessons.map((lesson) => (
-              <div className="module-content-container" key={lesson.id}>
+            {module.lessons.map((lesson) => {
+                return <div className="module-content-container" key={lesson.id}>
                 <div className="check-box-div">
                   <form action="">
                     <input
@@ -84,7 +84,6 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
                     <li>{lesson.sno}</li>
                     <li> {lesson.title}</li>
                   </li>
-                  <li>
                     <div
                       className={`video-player-icon collapse ${
                         selectedLesson === lesson ? "active" : ""
@@ -111,8 +110,8 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
                       </li>
                     </div>
                   </div>
-                </>
-              ))}
+                  </div>
+              })}
               <DocViewer
                           documents={module.lessons[0]}
                           pluginRenderers={DocViewerRenderers}
@@ -135,9 +134,7 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
             </div>
           )}
         </div>
-      </div>
-    </div>
-  );
+      </div>  );
 };
 
 export default ModuleCard;
