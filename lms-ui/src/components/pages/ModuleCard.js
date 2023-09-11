@@ -4,9 +4,11 @@ import styles from "../styles/CourseTable.module.css";
 import VideoPlayer from "./VideoPlayer";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import "../styles/CourseTable.css";
+import ReactPlayer from "react-player";
 
 const ModuleCard = ({ module, isExpanded, toggleModule }) => {
   const [selectedLesson, setSelectedLesson] = useState(null);
+  // const[selectModule,setSelectedModule] = useState(null);
 
   // Reset selectedLesson when the module is collapsed
   useEffect(() => {
@@ -20,13 +22,13 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
     setSelectedLesson(lesson);
   };
 
-  const selectModule = ({ module }) => {
-    setSelectedModule(module);
-  };
+  // const selectModule = ({ module }) => {
+  //   setSelectedModule(module);
+  // };
 
-  const toggleModuleExpand = () => {
-    setIsModuleExpanded(!isModuleExpanded);
-  };
+  // const toggleModuleExpand = () => {
+  //   setIsModuleExpanded(!isModuleExpanded);
+  // };
 
   const toggleFullScreen = () => {
     const videoPlayer = document.getElementById("videoPlayer");
