@@ -1,18 +1,22 @@
-import React, { useState } from "react";
-import YouTube from "react-youtube";
+import React, { useState, useEffect } from "react";
 import Collapse from "react-collapse";
 import styles from "../styles/CourseTable.module.css";
-import ReactPlayer from "react-player";
+import VideoPlayer from "./VideoPlayer";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import "../styles/CourseTable.css";
 
-const ModuleCard = ({ module }) => {
+const ModuleCard = ({ module, isExpanded, toggleModule }) => {
   const [selectedLesson, setSelectedLesson] = useState(null);
-  const [selectedModule, setSelectedModule] = useState(null);
-  const [isModuleExpanded, setIsModuleExpanded] = useState(false);
+
+  // Reset selectedLesson when the module is collapsed
+  useEffect(() => {
+    if (!isExpanded) {
+      setSelectedLesson(null);
+    }
+  }, [isExpanded]);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  const selectLesson = (lesson) => {
+  const toggleLesson = (lesson) => {
     setSelectedLesson(lesson);
   };
 
@@ -46,45 +50,57 @@ const ModuleCard = ({ module }) => {
   // console.log(selectedLesson)
   // console.log(selectedLesson && selectedLesson.url)
   return (
-    <>
-      <div className="module-card">
-        <div className="module-header" onClick={toggleModuleExpand}>
-          <h3>{module.title}</h3>
-          <i class="fas fa-caret-up fa-rotate-180 arrow"></i>
-        </div>
-        <Collapse isOpened={isModuleExpanded}>
-          <div className="module-list">
-            <ul className="module-content">
-              {module.lessons.map((lesson) => (
-                <>
-                  <div className="module-content-container">
-                    <div className="check-box-div">
-                      <form action="">
-                        <input
-                          className="checkbox"
-                          type="checkbox"
-                          id="lesson"
-                          name="lesson"
-                          value="lesson"
-                        />
-                      </form>
-                    </div>
-                    <div className="content-inside-container">
+    <div className="module-card">
+      <div className="module-header" onClick={toggleModule}>
+        <h3>{module.title}</h3>
+        <i
+          className={`fas fa-caret-up ${isExpanded ? "fa-rotate-180" : ""} arrow`}
+        ></i>
+      </div>
+      <Collapse isOpened={isExpanded}>
+        <div className="module-list">
+          <ul className="module-content">
+            {module.lessons.map((lesson) => (
+              <div className="module-content-container" key={lesson.id}>
+                <div className="check-box-div">
+                  <form action="">
+                    <input
+                      className="checkbox"
+                      type="checkbox"
+                      id={`lesson-${lesson.id}`}
+                      name="lesson"
+                      value={`lesson-${lesson.id}`}
+                    />
+                  </form>
+                </div>
+                <div className="content-inside-container">
+                  <li
+                    data-bs-toggle="collapse"
+                    data-bs-target={`#${lesson.id}`}
+                    className={`lesson-item ${
+                      selectedLesson === lesson ? "active" : ""
+                    } upper-row`}
+                  >
+                    <li>{lesson.sno}</li>
+                    <li> {lesson.title}</li>
+                  </li>
+                  <li>
+                    <div
+                      className={`video-player-icon collapse ${
+                        selectedLesson === lesson ? "active" : ""
+                      }`}
+                      id={lesson.id}
+                    >
                       <li
                         key={lesson.id}
-                        onClick={() => selectLesson(lesson)}
-                        className={`lesson-item ${
-                          selectedLesson === lesson ? "active" : ""
-                        } upper-row`}
+                        onClick={() => {
+                          toggleLesson(lesson);
+                        }}
+                        data-bs-toggle="collapse"
+                        data-bs-target={`#${lesson.id}`}
+                        className={`lesson-item upper-row`}
                       >
-                        <li>{lesson.sno}</li>
-                        <li> {lesson.title}</li>
-                      </li>
-                      <li>
-                        <div className="video-player-icon">
-                          <i class="fas fa-solid fa-tv"></i>
-                          {lesson.duration}
-                        </div>
+                        <li>{lesson.lecture_name}</li>
                       </li>
                       <li>
                         {/* <DocViewer
@@ -120,37 +136,11 @@ const ModuleCard = ({ module }) => {
           )}
         </div>
       </div>
-
-      {/* chatgpt */}
-      {/* <div className="module-card">
-        <div className="module-list">
-          <h3 onClick={toggleModuleExpand}>
-            {selectedModule ? selectedModule.title : "Select a Module"}
-          </h3>
-          <Collapse isOpened={isModuleExpanded}>
-            {modules.map((module) => (
-              <div key={module.id} className="module-item">
-                <h3 onClick={() => selectModule(module)}>{module.title}</h3>
-                <ul>
-                  {module.lessons.map((lesson) => (
-                    <li
-                      key={lesson.id}
-                      onClick={() => selectLesson(lesson)}
-                      className={`lesson-item ${
-                        selectedLesson === lesson ? "active" : ""
-                      }`}
-                    >
-                      {lesson.title}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </Collapse>
-        </div>
-      </div> */}
-    </>
+    </div>
   );
 };
 
 export default ModuleCard;
+
+
+
