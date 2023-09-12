@@ -156,8 +156,8 @@
   justify-content: center;
   align-items: center; */
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 5px;
+  left: 5px;
   width: 70%;
   /* border: 10px solid red; */
 }
@@ -215,6 +215,25 @@ border: 10px solid red;
   /* border: 2px solid red; */
   width: 99%;
   height: 500px !important;
+}
+
+.lesson-content-container{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lesson-title, .lecture-pdf{
+  display: flex;
+  gap: 20px;
+}
+
+.document-container{
+  position: absolute;
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  width: 50%;
 }
 
 

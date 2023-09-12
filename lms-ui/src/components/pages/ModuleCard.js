@@ -5,14 +5,13 @@ import VideoPlayer from "./VideoPlayer";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import "../styles/CourseTable.css";
 import ReactPlayer from "react-player";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCirclePlay } from '@fortawesome/free-regular-svg-icons';
-
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
 
 const ModuleCard = ({ module, isExpanded, toggleModule }) => {
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [videoCompleted, setVideoCompleted] = useState(false);
+  const [showPDF, setShowPdf] = useState(false)
   // const[selectModule,setSelectedModule] = useState(null);
 
   useEffect(() => {
@@ -24,9 +23,6 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
       setSelectedLesson(module.lessons[0]);
     }
   }, [isExpanded, module]);
-  
-
-  
 
   // Check if this is Module 1 and set the default selected lesson
   useEffect(() => {
@@ -41,11 +37,11 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
     if (played >= 0.95 && !videoCompleted) {
       // Mark the video as completed
       setVideoCompleted(true);
-      
+
       // Use the lesson id to select the corresponding checkbox
       const checkboxId = `lesson-${selectedLesson.id}`;
       const checkbox = document.getElementById(checkboxId);
-      
+
       // Check the checkbox
       if (checkbox) {
         checkbox.checked = true;
@@ -79,10 +75,14 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
     setIsFullScreen(!isFullScreen);
   };
 
+  const handleViewPdf =() => {
+    setShowPdf(!showPDF);
+  }
+
   const videoUrl = "https://youtu.be/apGV9Kg7ics?si=yP2oeVUi684WxZyg";
 
   // console.log(module)
-  console.log(module.lessons)
+  console.log(module.lessons);
 
   // console.log(selectedLesson)
   // console.log(selectedLesson && selectedLesson.url)
@@ -91,36 +91,39 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
       <div className="module-header" onClick={toggleModule}>
         <h3>{module.title}</h3>
         <i
-          className={`fas fa-caret-up ${isExpanded ? "fa-rotate-180" : ""} arrow`}
+          className={`fas fa-caret-up ${
+            isExpanded ? "fa-rotate-180" : ""
+          } arrow`}
         ></i>
       </div>
       <Collapse isOpened={isExpanded}>
         <div className="module-list">
           <ul className="module-content">
             {module.lessons.map((lesson) => {
-                return <div className="module-content-container" key={lesson.id}>
-                <div className="check-box-div">
-                  <form action="">
-                    <input
-                      className="checkbox"
-                      type="checkbox"
-                      id={`lesson-${lesson.id}`}
-                      name="lesson"
-                      value={`lesson-${lesson.id}`}
-                    />
-                  </form>
-                </div>
-                <div className="content-inside-container">
-                  <li
-                    data-bs-toggle="collapse"
-                    data-bs-target={`#${lesson.id}`}
-                    className={`lesson-item ${
-                      selectedLesson === lesson ? "active" : ""
-                    } upper-row`}
-                  >
-                    <li>{lesson.sno}</li>
-                    <li> {lesson.title}</li>
-                  </li>
+              return (
+                <div className="module-content-container" key={lesson.id}>
+                  <div className="check-box-div">
+                    <form action="">
+                      <input
+                        className="checkbox"
+                        type="checkbox"
+                        id={`lesson-${lesson.id}`}
+                        name="lesson"
+                        value={`lesson-${lesson.id}`}
+                      />
+                    </form>
+                  </div>
+                  <div className="content-inside-container">
+                    <li
+                      data-bs-toggle="collapse"
+                      data-bs-target={`#${lesson.id}`}
+                      className={`lesson-item ${
+                        selectedLesson === lesson ? "active" : ""
+                      } upper-row`}
+                    >
+                      <li>{lesson.sno}</li>
+                      <li> {lesson.title}</li>
+                    </li>
                     <div
                       className={`video-player-icon collapse ${
                         selectedLesson === lesson ? "active" : ""
@@ -136,8 +139,20 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
                         data-bs-target={`#${lesson.id}`}
                         className={`lesson-item upper-row`}
                       >
-                        <FontAwesomeIcon icon={faCirclePlay} className="my-icon" style={{ marginTop: '3px' }} />
-                        <li>{lesson.lecture_name}</li>
+                        <div className="lesson-content-container">
+                          <div className="lesson-title">
+                            <FontAwesomeIcon
+                              icon={faCirclePlay}
+                              className="my-icon"
+                              style={{ marginTop: "3px" }}
+                            />
+                            <li>{lesson.lecture_name}</li>
+                          </div>
+                          <div className="lecture-pdf">
+                            <i class="fas fa-solid fa-file-pdf"></i>
+                            <li onClick={handleViewPdf}>{lesson.doc_name}</li>
+                          </div>
+                        </div>
                       </li>
                       <li>
                         {/* <DocViewer
@@ -148,32 +163,40 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
                       </li>
                     </div>
                   </div>
-                  </div>
-              })}
-           
-                
-            </ul>
-          </div>
-        </Collapse>
-        <div className="video_player_container">
-          {selectedLesson && selectedLesson.url && (
-            <div className="video-player-container">
-              {console.log(selectedLesson.url)}
-              <ReactPlayer
-                url={selectedLesson.url}
-                controls={true}
-                width="100%"
-                height="100%"
-                volume={3.5}
-                onProgress={handleVideoProgress}
-              />
-            </div>
-          )}
+                </div>
+              );
+            })}
+          </ul>
         </div>
-      </div>  );
+      </Collapse>
+      <div className="video_player_container">
+        {selectedLesson && selectedLesson.url && (
+          <div className="video-player-container">
+            {console.log(selectedLesson.url)}
+            <ReactPlayer
+              url={selectedLesson.url}
+              controls={true}
+              width="100%"
+              height="100%"
+              volume={3.5}
+              onProgress={handleVideoProgress}
+            />
+          </div>
+        )}
+      </div>
+      <div className="document-container">
+        {console.log(module.lessons[0].doc)}
+        {showPDF && (
+           <DocViewer
+           documents={module.lessons[0].doc}
+           pluginRenderers={DocViewerRenderers}
+           style={{ height: 500 }}
+         />
+        ) }
+       
+      </div>
+    </div>
+  );
 };
 
 export default ModuleCard;
-
-
-
