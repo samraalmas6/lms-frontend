@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import LeasonForm from "./LeasonForm";
+import UpdateUnit from "./UpdateUnit";
 
 const Module = ({
   moduleData,
@@ -15,6 +16,7 @@ const Module = ({
   const [visibility, setVisibility] = useState(false);
 
   const [show, setShow] = useState(false);
+  const [unitContent, setUnitContent] =useState([])
   const [moduleContent, setModuelContent] = useState([]);
 
   const [showUnit, setShowUnit] = useState(false);
@@ -135,20 +137,21 @@ const Module = ({
           />
         )}
         {!showUnit && (
-          <button
-            type="button"
-            className="btn w-50 add-unit-btn"
-            onClick={() => setShowUnit(!showUnit)}
-          >
-            Add Unit
-            <i className="fas fa-solid fa-plus ms-2"></i>
-          </button>
+          <div className="module-btn-section">
+            <button
+              type="button"
+              className="btn w-50 add-unit-btn"
+              onClick={() => setShowUnit(!showUnit)}
+            >
+              Add Unit
+              <i className="fas fa-solid fa-plus ms-2"></i>
+            </button>
+          </div>
         )}
         <button className="btn btn-success w-50" onClick={handleAddModule}>
           save Module
         </button>
       </div>
-
 
       <div
         className={`offcanvas offcanvas-top module-list-show ${show}`}
@@ -157,24 +160,25 @@ const Module = ({
       >
         <div className="module-content-section">
           <div className="navigation">
-          <ul style={{ paddingLeft: "10px", listStyle: 'none' }}>
-                  {moduleContent && moduleContent.unit.map((unit) => {
-                      return (
-                        <div key={unit.id}>
-                          <li>
-                            <a
-                              role="button"
-                              onClick={() => {
-                                // s('ddd');
-                              }}
-                            >
-                              {unit.title}
-                            </a>
-                          </li>
-                        </div>
-                      );
-                    })}
-                </ul>
+            <ul style={{ paddingLeft: "10px", listStyle: "none" }}>
+              {moduleContent.unit &&
+                moduleContent.unit.map((unit) => {
+                  return (
+                    <div key={unit.id}>
+                      <li>
+                        <a
+                          role="button"
+                          onClick={() => {
+                            setUnitContent(unit)
+                          }}
+                        >
+                          {unit.title}
+                        </a>
+                      </li>
+                    </div>
+                  );
+                })}
+            </ul>
           </div>
           <div className="content">
             <div
@@ -233,129 +237,9 @@ const Module = ({
                 />
               </div>
             </form>
+            <UpdateUnit unitContent={unitContent} minDate={minDate} setUnitData={setUnitData} />
           </div>
         </div>
-
-        {/* <form className="course-unit-form">
-
-          <div className="unit-title">
-            <label className="course-unit-form-label">Unit Name </label>
-            <input
-              type="text"
-              placeholder="Unit Title"
-              value={unitContent.title}
-              onChange={handleUnitTitle}
-            />
-          </div>
-          <div className="unit-start">
-            <label>Unit Start Date</label>
-            <input
-              type="date"
-              placeholder="Start Date"
-              value={unitContent.start_date}
-              min={minDate}
-              onChange={handleUnitStart}
-            />
-          </div>
-          <div className="unit-end">
-            <label>Unit End Date</label>
-            <input
-              type="date"
-              placeholder="End Date"
-              value={unitContent.end_date}
-              max="2030-12-30"
-              min={minDate}
-              onChange={handleUnitEnd}
-            />
-          </div>
-          <div className="unit-video">
-            <label className="course-unit-form-label">Add Video </label>
-            <input
-              type="url"
-              value={unitContent.video}
-              placeholder="Upload Video Url Here"
-              onChange={handleUnitVideo}
-            />
-          </div>
-          <div className="unit-slide">
-            <label className="course-unit-form-label">Add slide</label>
-            <span onClick={() => pptRef.current.click()}>
-              {unitPpt ? unitPpt.name : "No PPT Selected"}
-            </span>
-            <input
-              type="file"
-              accept=".ppt"
-              ref={pptRef}
-              style={{ display: "none" }}
-              onChange={handleUnitPpt}
-            />
-          </div>
-          <div className="unit-pdf">
-            <label className="course-unit-form-label">Add PDF </label>
-            <span onClick={() => pdfRef.current.click()}>
-              {unitPdf ? unitPdf.name : "No PDF Selected"}
-            </span>
-            <input
-              type="file"
-              accept=".pdf"
-              ref={pdfRef}
-              style={{ display: "none" }}
-              onChange={handleUnitPdf}
-            />
-          </div>
-          <div className="unit-assignment">
-            <label className="course-unit-form-label">Add Assignment </label>
-            <span onClick={() => assignmentRef.current.click()}>
-              {unitAssignment ? unitAssignment.name : "No Assignment Selected"}
-            </span>
-            <input
-              type="file"
-              ref={assignmentRef}
-              style={{ display: "none" }}
-              onChange={handleUnitAssingment}
-            />
-          </div>
-          <div className="unit-quiz">
-            <label className="course-unit-form-label">Add Quiz </label>
-            <span onClick={() => quizRef.current.click()}>
-              {unitQuiz ? unitQuiz.name : "No Quiz Selected"}
-            </span>
-            <input
-              type="file"
-              ref={quizRef}
-              style={{ display: "none" }}
-              onChange={handleUnitQuiz}
-            />
-          </div>
-          <div className="unit-quiz">
-            <label className="course-unit-form-label">Resource Link</label>
-            <input
-              type="url"
-              placeholder="Reading Resources Link"
-              value={unitReadingResource}
-              onChange={handleUnitReadingResource}
-            />
-          </div>
-          <div className="form-check form-switch visibility">
-            <label htmlFor="IsActive" className=" course-unit-form-label">
-              Visibility
-            </label>
-            <input
-              className="form-check-input"
-              type="checkbox"
-              role="switch"
-              value={visibility}
-              onChange={handleVisibility}
-              id="flexSwitchCheckDefault"
-            />
-          </div>
-
-          <div className="save-module-btn-container">
-            <button type="button" onClick={handleAddUnit}>
-              Update Unit
-            </button>
-          </div>
-        </form> */}
       </div>
     </div>
   );
