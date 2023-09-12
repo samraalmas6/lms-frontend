@@ -21,9 +21,12 @@ const coursesData = [
             lecture_name: "Introduction",
             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
             duration: "7 min",
-            file_uri: require("../content/files/MOMS.pdf"),
-            fileType: "pdf",
-            fileName: "Min of meeting",
+            doc_name: "extreme prog doc",
+            doc:[ 
+            {uri: require("../content/files/MOMS.pdf")},
+            ]
+            // fileType: "pdf",
+            // fileName: "Min of meeting",
           },
           {
             id: 2,
@@ -32,9 +35,9 @@ const coursesData = [
             lecture_name: "Introduction",
             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
             duration: "1 hr",
-            uri: require("../content/files/MOMS.pdf"),
-            fileType: "pdf",
-            fileName: "Min of meeting",
+            doc:[ 
+              {uri: require("../content/files/MOMS.pdf")},
+              ]
           },
         ],
       },
@@ -49,9 +52,9 @@ const coursesData = [
             lecture_name: "Introduction",
             url: "https://youtu.be/gwWKnnCMQ5c?si=_av7yUDr5ZKqGbgt",
             duration: "7 min",
-            uri: require("../content/files/MOMS.pdf"),
-            fileType: "pdf",
-            fileName: "Min of meeting",
+            doc:[ 
+              {uri: require("../content/files/MOMS.pdf")},
+              ]
           },
           {
             id: 4,
@@ -60,9 +63,9 @@ const coursesData = [
             lecture_name: "Introduction",
             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
             duration: "2 hr",
-            uri: require("../content/files/MOMS.pdf"),
-            fileType: "pdf",
-            fileName: "Min of meeting",
+            doc:[ 
+              {uri: require("../content/files/MOMS.pdf")},
+              ]
           },
         ],
       },
@@ -205,7 +208,7 @@ function CourseTable() {
         </div>
         <div className="App">
           <header className="App_header">
-            <h1 >Course Content</h1>
+            Course Content
             {isCourseContentVisible && (
               <i
                 className="fa fa-times close-icon"
