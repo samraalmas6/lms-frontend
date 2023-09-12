@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../styles/CourseTable.css";
 import VideoPlayer from "./VideoPlayer";
 
+
 import ModuleCard from "./ModuleCard";
 
 const coursesData = [
@@ -126,6 +127,7 @@ function CourseTable() {
   const [activeTab, setActiveTab] = useState("Course Content");
   const [selectedLesson, setSelectedLesson] = useState(null);
  const [expandedModule, setExpandedModule] = useState(null);
+ const [isCourseContentVisible, setIsCourseContentVisible] = useState(true);
 
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
@@ -144,10 +146,16 @@ function CourseTable() {
 
   };
 
+  const toggleCourseContent = () => {
+    setIsCourseContentVisible(!isCourseContentVisible);
+  };
+
   return (
     <>
       {/* nav */}
-      <div className="course-nav"></div>
+      <div className="course-nav">
+      
+      </div>
       {/* main-div*/}
       <div className="main-outer-container">
         {/* sidebar div */}
@@ -161,13 +169,14 @@ function CourseTable() {
         
           {/* tabs below video */}
           </div>
-          <div className="tabs-container">
+
+          <div className="tabs-container"  >
             <ul className="tabs">
-              <li
+              <li 
                 className={activeTab === "Course Content" ? "active" : ""}
                 onClick={() => handleTabChange("Course Content")}
               >
-                Course-Content
+               <h1 onClick={toggleCourseContent}> Course-Content</h1> 
               </li>
               <li
                 className={activeTab === "Overview" ? "active" : ""}
@@ -196,9 +205,17 @@ function CourseTable() {
         </div>
         <div className="App">
           <header className="App_header">
-            <h1>Course Content</h1>
-            <i class="fa fa-times close-icon" aria-hidden="true"></i>
+            <h1 >Course Content</h1>
+            {isCourseContentVisible && (
+              <i
+                className="fa fa-times close-icon"
+                aria-hidden="true"
+                onClick={toggleCourseContent}
+              ></i>
+            )}
+            {/* <i class="fa fa-times close-icon" aria-hidden="true"></i> */}
           </header>
+          {isCourseContentVisible && (
           <div className="course_list">
             {coursesData.map((course) => (
               <div key={course.id} className="course_card">
@@ -211,6 +228,7 @@ function CourseTable() {
               </div>
             ))}
           </div>
+          )}
         </div>
       </div>
     </>

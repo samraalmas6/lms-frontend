@@ -5,18 +5,53 @@ import VideoPlayer from "./VideoPlayer";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import "../styles/CourseTable.css";
 import ReactPlayer from "react-player";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCirclePlay } from '@fortawesome/free-regular-svg-icons';
+
+
 
 const ModuleCard = ({ module, isExpanded, toggleModule }) => {
   const [selectedLesson, setSelectedLesson] = useState(null);
+  const [videoCompleted, setVideoCompleted] = useState(false);
   // const[selectModule,setSelectedModule] = useState(null);
 
-  // Reset selectedLesson when the module is collapsed
   useEffect(() => {
     if (!isExpanded) {
       setSelectedLesson(null);
+      setVideoCompleted(false);
+    } else if (module.lessons.length > 0) {
+      //  first lesson as selected when the module is expanded
+      setSelectedLesson(module.lessons[0]);
     }
-  }, [isExpanded]);
+  }, [isExpanded, module]);
+  
+
+  
+
+  // Check if this is Module 1 and set the default selected lesson
+  useEffect(() => {
+    if (module.title === "Module 1" && module.lessons.length > 0) {
+      setSelectedLesson(module.lessons[0]);
+    }
+  }, [module]);
   const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const handleVideoProgress = ({ played, playedSeconds }) => {
+    // Set a threshold value (e.g., 0.95) to consider the video as completed
+    if (played >= 0.95 && !videoCompleted) {
+      // Mark the video as completed
+      setVideoCompleted(true);
+      
+      // Use the lesson id to select the corresponding checkbox
+      const checkboxId = `lesson-${selectedLesson.id}`;
+      const checkbox = document.getElementById(checkboxId);
+      
+      // Check the checkbox
+      if (checkbox) {
+        checkbox.checked = true;
+      }
+    }
+  };
 
   const toggleLesson = (lesson) => {
     setSelectedLesson(lesson);
@@ -101,6 +136,7 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
                         data-bs-target={`#${lesson.id}`}
                         className={`lesson-item upper-row`}
                       >
+                        <FontAwesomeIcon icon={faCirclePlay} className="my-icon" style={{ marginTop: '3px' }} />
                         <li>{lesson.lecture_name}</li>
                       </li>
                       <li>
@@ -114,11 +150,8 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
                   </div>
                   </div>
               })}
-              <DocViewer
-                          documents={module.lessons[0]}
-                          pluginRenderers={DocViewerRenderers}
-                          style={{ height: 1000 }}
-                        />
+           
+                
             </ul>
           </div>
         </Collapse>
@@ -132,6 +165,7 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
                 width="100%"
                 height="100%"
                 volume={3.5}
+                onProgress={handleVideoProgress}
               />
             </div>
           )}
