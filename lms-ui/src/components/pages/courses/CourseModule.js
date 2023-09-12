@@ -157,11 +157,10 @@ const Module = ({
       >
         <div className="module-content-section">
           <div className="navigation">
-          <ul style={{ paddingLeft: "10px" }}>
-                  {/* {moduleContent &&
-                    moduleContent.map((module) => {
+          <ul style={{ paddingLeft: "10px", listStyle: 'none' }}>
+                  {moduleContent && moduleContent.unit.map((unit) => {
                       return (
-                        <div key={module.id}>
+                        <div key={unit.id}>
                           <li>
                             <a
                               role="button"
@@ -169,13 +168,12 @@ const Module = ({
                                 // s('ddd');
                               }}
                             >
-                              {module[0].title}
+                              {unit.title}
                             </a>
                           </li>
                         </div>
                       );
-                    })} */}
-                    {console.log(moduleContent)}
+                    })}
                 </ul>
           </div>
           <div className="content">
