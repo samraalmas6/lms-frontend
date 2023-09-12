@@ -3,38 +3,46 @@ import courseData from "../../hooks/courseData";
 import CourseModule from "./CourseModule";
 import img from "../../content/Images/uploadImg.jpg";
 import { Editor } from "@tinymce/tinymce-react";
-import CreateCourse from "./CreateCourse";
+import catData from "../../hooks/catData";
 
-const AllCourse = ({ show }) => {
+const AllCourse = ({
+  show,
+  courseTitle,
+  setCourseTitle,
+  courseCategory,
+  setCourseCategory,
+  courseImg,
+  setCourseImg,
+  minDate,
+  unitData,
+  setUnitData,
+  moduleData,
+  setModuleData
+}) => {
   //   Create Course Section
-
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-  const day = String(currentDate.getDate()).padStart(2, "0");
-  const minDate = `${year}-${month}-${day}`;
-
   const inpRef = useRef("");
-
-  const [courseTitle, setCourseTitle] = useState("");
-  const [courseStart, setCourseStart] = useState(minDate);
-  const [courseEnd, setCourseEnd] = useState("2025-12-30");
-  const [courseImg, setCourseImg] = useState("");
-  const [uploadImg, setUploadImg] = useState("");
+  const [showBlock, setShowBlock] = useState(false);
+  const [courseDescription, setCourseDescription] = useState("");
+  const [courseDes, setCourseDes] = useState("");
+  const [visibility, setVisibility] = useState(false)
 
   const [showModule, setShowModule] = useState(false);
-  const [moduleData, setModuleData] = useState([]);
+  // const [moduleData, setModuleData] = useState([]);
 
   const editorRef = useRef(null);
 
   const handleCourseTitle = (e) => {
     setCourseTitle(e.target.value);
   };
-  const handleCourseStart = (e) => {
-    setCourseStart(e.target.value);
+
+  const handlecourseCategory = (e) => {
+    setCourseCategory(e.target.value);
   };
-  const handleCourseEnd = (e) => {
-    setCourseEnd(e.target.value);
+
+  const handleDescription = (value, e) => {
+    setCourseDes(value);
+    setCourseDescription(e.getContent({ format: "text" }));
+    // console.log(courseDes)
   };
 
   const handlImgClick = () => {
@@ -44,30 +52,20 @@ const AllCourse = ({ show }) => {
     const file = e.target.files[0];
     if (file !== "undefined") {
       setCourseImg(file);
-      setUploadImg(() => e.target.files[0]);
     }
-
-    console.log(file);
+    console.log(courseImg);
   };
-
-  const [showBlock, setShowBlock] = useState(false);
-  const [categoryTitle, setCategoryTitle] = useState("");
-  const [category, setCategory] = useState("");
-
-  const handleCategoryTitle = (e) => {
-    setCategoryTitle(e.target.value);
-  };
-  const handleCategory = (e) => {
-    setCategory(e.target.value);
-  };
+  const handleVisibility = (e) => {
+    setVisibility(e.target.value)
+  }
 
   const handleSave = (e) => {
     e.preventDefault();
 
-    if (categoryTitle) {
+    if (courseTitle) {
       const obj = {
         id: courseData[courseData.length - 1].id + 1,
-        course_title: categoryTitle,
+        course_title: courseTitle,
         author: "",
         duration: 25,
         users_enrolled: 0,
@@ -75,11 +73,9 @@ const AllCourse = ({ show }) => {
       };
       courseData.push(obj);
     }
-    setCategory("");
-    setCategoryTitle("");
+    setCourseCategory("");
+    setCourseTitle("");
   };
-
-  // console.log(process.env.REACT_APP_API_KEY);
 
   return (
     <div>
@@ -116,30 +112,33 @@ const AllCourse = ({ show }) => {
           </div>
           <div className="offcanvas-body">
             <div className="add-category-content">
-              <form>
+              <form onSubmit={(e) => e.preventDefault()}>
                 <label className="mb-0">
                   Title<span style={{ color: "red" }}>*</span>
                 </label>
                 <input
                   type="text"
-                  value={categoryTitle}
-                  onChange={handleCategoryTitle}
+                  value={courseTitle}
+                  onChange={handleCourseTitle}
                   required
                 />
                 <label className="mb-0 mt-1">Category</label>
-                <select onChange={handleCategory} value={category}>
+                <select onChange={handlecourseCategory} value={courseCategory}>
                   <option value="">--Select Category--</option>
-                  <option value="Category 1">Category 1</option>
-                  <option value="Category 2">Category 2</option>
-                  <option value="Category 3">Category 3</option>
-                  <option value="Category 4">Category 4</option>
-                  <option value="Category 5">Category 5</option>
+                  {catData &&
+                    catData.map((category) => {
+                      return (
+                        <option value={category.name} key={category.id}>
+                          {category.name}
+                        </option>
+                      );
+                    })}
                 </select>
                 <div className="category-save-btn">
                   <button
-                    type="submit"
+                    type="button"
                     className="btn btn-primary"
-                    onClick={handleSave}
+                    onClick={(e) => handleSave(e)}
                   >
                     Save
                   </button>
@@ -211,6 +210,10 @@ const AllCourse = ({ show }) => {
                     apiKey={process.env.REACT_APP_API_KEY}
                     onInit={(evt, editor) => (editorRef.current = editor)}
                     initialValue=""
+                    // value={courseDescription}
+                    onEditorChange={(value, evt) =>
+                      handleDescription(value, evt)
+                    }
                     init={{
                       height: 300,
                       menubar: false,
@@ -249,8 +252,8 @@ const AllCourse = ({ show }) => {
                       className="upload-image-section"
                       onClick={handlImgClick}
                     >
-                      {uploadImg ? (
-                        <img src={URL.createObjectURL(uploadImg)} alt="" />
+                      {courseImg ? (
+                        <img src={URL.createObjectURL(courseImg)} alt="" />
                       ) : (
                         <img src={img} alt="" />
                       )}
@@ -265,18 +268,39 @@ const AllCourse = ({ show }) => {
                   </div>
                   <div className="category-section">
                     <label className="mb-0 mt-1">Category</label>
-                    <select onChange={handleCategory} value={category}>
+                    <select
+                      onChange={handlecourseCategory}
+                      value={courseCategory}
+                    >
                       <option value="">--Select Category--</option>
-                      <option value="Category 1">Category 1</option>
-                      <option value="Category 2">Category 2</option>
-                      <option value="Category 3">Category 3</option>
-                      <option value="Category 4">Category 4</option>
-                      <option value="Category 5">Category 5</option>
+                      {catData &&
+                        catData.map((category) => {
+                          return (
+                            <option value={category.name} key={category.id}>
+                              {category.name}
+                            </option>
+                          );
+                        })}
                     </select>
                   </div>
-
+                  <div className="form-check form-switch visibility">
+                    <label
+                      htmlFor="IsActive"
+                      className=" course-unit-form-label"
+                    >
+                      Course Visibility
+                    </label>
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      role="switch"
+                      value={visibility}
+                      onChange={handleVisibility}
+                      id="flexSwitchCheckDefault"
+                    />
+                  </div>
                   <div className="course-module-section">
-                    <ul>
+                    {/* <ul>
                       {moduleData &&
                         moduleData.map((module) => {
                           return (
@@ -285,25 +309,29 @@ const AllCourse = ({ show }) => {
                             </div>
                           );
                         })}
-                    </ul>
+                    </ul> */}
 
                     <div>
-                    {showModule && (
+                      {showModule && (
                         <CourseModule
-                          setModuleData={setModuleData}
+                          // setModuleData={setModuleData}
                           setShowModule={setShowModule}
                           minDate={minDate}
+                          unitData={unitData}
+                          setUnitData={setUnitData}
+                          moduleData={moduleData}
+                          setModuleData={setModuleData}
                         />
                       )}
-                      <button
+                      { !showModule && <button
                         type="button"
                         className="btn w-50 add-module-btn"
                         onClick={() => setShowModule((pre) => !pre)}
                       >
                         Add Module
                         <i className="fas fa-solid fa-plus ms-2"></i>
-                      </button>
-                     
+                      </button> }
+                      
                     </div>
                   </div>
                   <div className="category-save-btn">
