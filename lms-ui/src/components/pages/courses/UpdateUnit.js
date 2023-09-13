@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-const UpdateUnit = ({ setUnitData, unitContent, minDate }) => {
+const UpdateUnit = ({setShowUnit, setUnitData, unitContent, minDate }) => {
 
     const [unitTitle, setUnitTitle] = useState("");
     const [unitVideo, setUnitVideo] = useState("");
@@ -18,6 +18,7 @@ const UpdateUnit = ({ setUnitData, unitContent, minDate }) => {
     const pptRef = useRef(null);
     const quizRef = useRef(null);
     const assignmentRef = useRef(null);
+    const unitForm = useRef(null)
   
   useEffect(() => {
     if (unitContent && unitContent !== 'undefined' ){
@@ -68,6 +69,7 @@ const UpdateUnit = ({ setUnitData, unitContent, minDate }) => {
     console.log('unitContent',unitContent);
     const handleAddUnit = (e) => {
         e.preventDefault();
+        if (unitTitle){
         const obj = {
           id: Math.floor(Math.random() * 1000),
           title: unitTitle,
@@ -90,15 +92,17 @@ const UpdateUnit = ({ setUnitData, unitContent, minDate }) => {
         setUnitAssignment("");
         setUnitQuiz("");
         setVisibility(false);
-        // setShowForm(!showForm)
-        // setShowUnit((pre) => !pre)
+        // setShowForm(pre => !pre)
+        setShowUnit((pre) => !pre)
         // setShowModule(pre => !pre)
         // handleAddModule();
+
+      }
       };
 
   return (
     <div>  
-      <form className="course-unit-form">
+      <form className="course-unit-form" onSubmit={(e) => e.preventDefault()}>
         <div className="unit-title">
           <label className="course-unit-form-label">Unit Name </label>
           <input
@@ -106,6 +110,7 @@ const UpdateUnit = ({ setUnitData, unitContent, minDate }) => {
             placeholder="Unit Title"
             value={unitTitle}
             onChange={handleUnitTitle}
+            required
           />
         </div>
         <div className="unit-start">
@@ -212,10 +217,14 @@ const UpdateUnit = ({ setUnitData, unitContent, minDate }) => {
         </div>
 
         <div className="save-module-btn-container">
-          <button type="button" onClick={handleAddUnit}>
+          <button type="submit" onClick={(e) => {
+            unitForm.current.click()
+            handleAddUnit(e)
+            }}>
             Save Unit
           </button>
         </div>
+        <button type="button" style={{ display: 'none'}} ref={unitForm}></button>
       </form>
     </div>
   )

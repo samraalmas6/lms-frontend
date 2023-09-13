@@ -2,19 +2,19 @@ import React, { useRef, useState } from "react";
 import CourseModule from "./CourseModule";
 import UpdateUnit from "./UpdateUnit";
 
-const LeasonForm = ({ minDate, setShowUnit, setShowModule, unitData, setUnitData }) => {
-  const [unitContent, setUnitContent] = useState([]);
+const LeasonForm = ({ minDate, setShowUnit, setUnitData, showUnitContent, setShowUnitContent, unitContent }) => {
+
 
 
   const [showForm, setShowForm] = useState(true);
   const [show, setShow] = useState("");
 
-  const showUnitList = () => {
-    setShow("show");
-  };
+  // const showUnitList = () => {
+  //   setShow("show");
+  // };
   return (
     <div>
-      <div className="unitData-section">
+      {/* <div className="unitData-section">
         {unitData.length === 0 ? (
           "No Unit Added"
         ) : (
@@ -36,10 +36,10 @@ const LeasonForm = ({ minDate, setShowUnit, setShowModule, unitData, setUnitData
             })}
           </ul>
         )}
-      </div>
-      <UpdateUnit setUnitData={setUnitData} minDate={minDate}/>
+      </div> */}
+      <UpdateUnit setShowUnit={setShowUnit} setUnitData={setUnitData} minDate={minDate}/>
       <div
-        className={`offcanvas offcanvas-top unit-list-show ${show}`}
+        className={`offcanvas offcanvas-top unit-list-show ${showUnitContent}`}
         id="show-unit"
         tabindex="-1"
       >
@@ -50,11 +50,11 @@ const LeasonForm = ({ minDate, setShowUnit, setShowModule, unitData, setUnitData
           <h3>Update Unit</h3>
           <button
             type="button"
-            onClick={() => setShow("")}
+            onClick={() => setShowUnitContent("")}
             className="btn btn-close text-danger"
           ></button>
         </div>
-        <UpdateUnit unitContent={unitContent}  minDate={minDate} setUnitData={setUnitData}/>
+        <UpdateUnit setShowUnit={setShowUnit} unitContent={unitContent}  minDate={minDate} setUnitData={setUnitData}/>
       </div>
     </div>
   );

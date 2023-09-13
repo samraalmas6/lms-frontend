@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import LeasonForm from "./LeasonForm";
 import UpdateUnit from "./UpdateUnit";
 
@@ -9,21 +9,30 @@ const Module = ({
   minDate,
   unitData,
   setUnitData,
+  showModuleContent,
+  setShowModuleContent,
+  moduleContent
 }) => {
   const [moduleTitle, setModuleTitle] = useState("");
   const [moduleStart, setModuleStart] = useState("");
   const [moduleEnd, setModuleEnd] = useState("");
   const [visibility, setVisibility] = useState(false);
 
-  const [show, setShow] = useState(false);
+  const moduleForm = useRef(null)
+  // const [show, setShow] = useState(false);
   const [unitContent, setUnitContent] =useState([])
-  const [moduleContent, setModuelContent] = useState([]);
+  // const [moduleContent, setModuelContent] = useState([]);
 
   const [showUnit, setShowUnit] = useState(false);
+  const [showUnitContent, setShowUnitContent] = useState('')
 
-  const showModuleList = () => {
-    setShow("show");
+  const showUnitList = () => {
+    setShowUnitContent("show");
   };
+
+  // const showModuleList = () => {
+  //   setShow("show");
+  // };
   const handleModuleTitle = (e) => {
     setModuleTitle(e.target.value);
   };
@@ -38,7 +47,8 @@ const Module = ({
   };
 
   const handleAddModule = (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    if(moduleTitle){
     const obj = {
       id: Math.floor(Math.random() * 1000),
       title: moduleTitle,
@@ -50,12 +60,15 @@ const Module = ({
     setModuleTitle("");
     setModuleStart("");
     setModuleEnd("");
-    // setShowModule((pre) => !pre);
+    setShowModule((pre) => !pre);
+  }else {
+    // alert('Moule title is required')
+  }
   };
   console.log(moduleData);
   return (
     <div>
-      <div className="unitData-section">
+      {/* <div className="unitData-section">
         {moduleData.length === 0 ? (
           "No Module Added"
         ) : (
@@ -79,10 +92,10 @@ const Module = ({
             })}
           </ul>
         )}
-      </div>
+      </div> */}
 
       <div className="course-module">
-        <form className="course-module-form">
+        <form className="course-module-form" onSubmit={(e) => e.preventDefault()}>
           <div className="module-title">
             <label>Module Name</label>
             <input
@@ -90,6 +103,7 @@ const Module = ({
               placeholder="Module Title"
               value={moduleTitle}
               onChange={handleModuleTitle}
+              required
             />
           </div>
           <div className="module-start">
@@ -126,7 +140,31 @@ const Module = ({
               id="flexSwitchCheckDefault"
             />
           </div>
+          <button type="button" style={{ display: 'none'}} ref={moduleForm}></button>
         </form>
+        <div className="unitData-section">
+        {unitData.length === 0 ? (
+          "No Unit Added"
+        ) : (
+          <ul className="units d-grid gap-2 w-50">
+            {unitData && unitData.map((unit) => {
+              return (
+                <li
+                  key={unit.id}
+                  type="button"
+                  className="text-start ms-0 ps-2"
+                  onClick={() => {
+                    showUnitList()
+                    setUnitContent(unit)
+                  }}
+                >
+                  <span>{unit.title}</span><i class="fas fa-solid fa-caret-up"></i>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
         {showUnit && (
           <LeasonForm
             minDate={minDate}
@@ -134,6 +172,9 @@ const Module = ({
             setShowModule={setShowModule}
             unitData={unitData}
             setUnitData={setUnitData}
+            showUnitContent={showUnitContent}
+            setShowUnitContent={setShowUnitContent}
+            unitContent={unitContent}
           />
         )}
         {!showUnit && (
@@ -148,13 +189,16 @@ const Module = ({
             </button>
           </div>
         )}
-        <button className="btn btn-success w-50" onClick={handleAddModule}>
+        <button className="btn btn-success w-50" onClick={(e) => {
+          moduleForm.current.click()
+          handleAddModule(e)
+          }}>
           save Module
         </button>
       </div>
 
       <div
-        className={`offcanvas offcanvas-top module-list-show ${show}`}
+        className={`offcanvas offcanvas-top module-list-show ${showModuleContent}`}
         id="show-unit"
         tabindex="-1"
       >
@@ -188,7 +232,7 @@ const Module = ({
               <h3>Update Module</h3>
               <button
                 type="button"
-                onClick={() => setShow("")}
+                onClick={() => setShowModuleContent("")}
                 className="btn btn-close text-danger"
               ></button>
             </div>

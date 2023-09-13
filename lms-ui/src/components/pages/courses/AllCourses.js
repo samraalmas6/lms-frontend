@@ -27,9 +27,16 @@ const AllCourse = ({
   const [visibility, setVisibility] = useState(false)
 
   const [showModule, setShowModule] = useState(false);
+  const [moduleContent, setModuelContent] = useState([]);
+  const [showModuleContent, setShowModuleContent] = useState('');
+
   // const [moduleData, setModuleData] = useState([]);
 
   const editorRef = useRef(null);
+
+  const showModuleList = () => {
+    setShowModuleContent(() => "show");
+  };
 
   const handleCourseTitle = (e) => {
     setCourseTitle(e.target.value);
@@ -310,7 +317,31 @@ const AllCourse = ({
                           );
                         })}
                     </ul> */}
-
+      <div className="unitData-section">
+        {moduleData.length === 0 ? (
+          "No Module Added"
+        ) : (
+          <ul className="units d-grid gap-2 w-50">
+            {moduleData.map((module) => {
+              return (
+                <li
+                  key={module.id}
+                  type="button"
+                  className="text-start ms-0 ps-2"
+                  onClick={() => {
+                    showModuleList()
+                    // setUnitContent(unit)
+                    setModuelContent(module);
+                  }}
+                >
+                  <span>{module.title}</span>
+                  <i class="fas fa-solid fa-caret-up"></i>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
                     <div>
                       {showModule && (
                         <CourseModule
@@ -321,6 +352,10 @@ const AllCourse = ({
                           setUnitData={setUnitData}
                           moduleData={moduleData}
                           setModuleData={setModuleData}
+                          showModuleContent={showModuleContent}
+                          setShowModuleContent={setShowModuleContent}
+                          moduleContent={moduleContent}
+                          setModuelContent={setModuelContent}
                         />
                       )}
                       { !showModule && <button
