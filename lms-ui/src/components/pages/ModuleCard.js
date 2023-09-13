@@ -83,7 +83,7 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
     // console.log('handleViewPdf ka obj',obj)
     setDoc(() => obj);
     setShowPdf(!showPDF);
-    window.open(uri, '_blank');
+    window.open(uri, "_blank");
   };
 
   const videoUrl = "https://youtu.be/apGV9Kg7ics?si=yP2oeVUi684WxZyg";
@@ -97,7 +97,9 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
   return (
     <div className="module-card">
       <div className="module-header" onClick={toggleModule}>
-        <h3>{module.title}</h3>
+        <div className="module-title-container">
+          <h3>{module.title}</h3>
+        </div>
         <i
           className={`fas fa-caret-up ${
             isExpanded ? "fa-rotate-180" : ""
@@ -129,8 +131,16 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
                         selectedLesson === lesson ? "active" : ""
                       } upper-row`}
                     >
-                      <li>{lesson.sno}</li>
-                      <li> {lesson.title}</li>
+                      <li className="lecture-sno">{lesson.sno}</li>
+                      <li className="lecture-name"> {lesson.title}</li>
+                      <li>
+                        {" "}
+                        <i
+                          className={`fas fa-caret-up ${
+                            isExpanded ? "fa-rotate-180" : ""
+                          } arrow`}
+                        ></i>
+                      </li>
                     </li>
                     <div
                       className={`video-player-icon collapse ${
@@ -160,10 +170,17 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
                             <i class="fas fa-solid fa-file-pdf"></i>
                             <li
                               onClick={() => {
-                                handleViewPdf(lesson.id,lesson.doc[0].uri);
+                                handleViewPdf(lesson.id, lesson.doc[0].uri);
                               }}
                             >
-                              <a type="button" href={require("../content/files/third_lec.pdf")} target="_blank">{lesson.doc_name}</a>
+                              <a
+                                className="pdf-btn"
+                                type="button"
+                                href={require("../content/files/third_lec.pdf")}
+                                target="_blank"
+                              >
+                                {lesson.doc_name}
+                              </a>
                             </li>
                           </div>
                         </div>

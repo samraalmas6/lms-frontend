@@ -9,14 +9,14 @@
 
 .module-header {
   /* background-color: rgb(207, 216, 216); */
-  padding: 10px;
+  padding: 1.6rem;
   width: 100%;
   display: flex;
-  justify-content:space-between;
+  justify-content: space-between;
   align-items: center;
 }
 
-.arrow{
+.arrow {
   font-size: 20px;
 }
 
@@ -34,14 +34,13 @@
   flex-direction: column;
 }
 
-.tabs-container{
+.tabs-container {
   /* background-color: red; */
   padding: 15px;
-  background-color: rgb(211, 211, 211, 0.5);
-
+  /* background-color: rgb(211, 211, 211, 0.5); */
 }
 
-.tabs{
+.tabs {
   display: flex;
   list-style: none;
   font-size: 20px;
@@ -52,13 +51,21 @@
 }
 .tabs li.active {
   border-bottom: 2px solid #007bff; /* Border color when active */
+  color: #2d2f31;
 }
 
-.tab-content{
-
+.tabs li{
+  color: #6a6f73;
+  font-weight: bold;
+}
+.tabs li:hover{
+  color: #2d2f31;
 }
 
-.video-section{
+.tab-content {
+}
+
+.video-section {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -69,12 +76,12 @@
 /* App.css */
 .App {
   width: 30%;
-  border: 2px solid rgb(249, 244, 244);
+  border: 2px solid rgba(155, 141, 141, 0.952);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  /* gap: 15px; */
   /* justify-content: flex-end; */
-  padding: 20px;
+  /* padding: 20px; */
   font-family: Arial, sans-serif;
   /* background-color: red; */
 }
@@ -82,6 +89,7 @@
 .App_header {
   display: flex;
   justify-content: space-between;
+  border-bottom: 1px solid rgba(155, 141, 141, 0.952);
 }
 
 .App_header h1 {
@@ -115,12 +123,13 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  background-color: #fff;
+  /* background-color: #fff; */
+  background: #f7f9fa;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 10px;
-  padding: 20px;
+  /* margin: 10px; */
+  padding: 10px;
   max-width: 100%;
 }
 
@@ -177,6 +186,21 @@ border: 10px solid red;
 
 .module-content li {
   list-style: none;
+  cursor: pointer;
+}
+
+/* .module-content li:hover {
+  color: #1463b8;
+} */
+
+.lesson-content-container .lesson-title:hover{
+  color: #1463b8;
+}
+
+.lesson-content-container .lecture-pdf:hover{
+  color: #1463b8;
+  text-decoration: none;
+  list-style: none;
 }
 
 .module-content .upper-row {
@@ -192,6 +216,10 @@ border: 10px solid red;
 .checkbox {
   width: 20px;
   height: 20px;
+  background: #2d2f31;
+  border-color: #2d2f31;
+  color: white;
+  padding: 0.8rem 1.6rem;
 }
 
 .module-content-container {
@@ -204,31 +232,38 @@ border: 10px solid red;
   flex-direction: column;
   gap: 10px;
   margin-bottom: 10px;
+  color: #2d2f31;
 }
 
 .module-header h3 {
   font-weight: bold;
+  font-size: 1.5rem;
 }
 
-.video-player-container{
+.video-player-container {
   /* background-color: red; */
   /* border: 2px solid red; */
   width: 99%;
   height: 500px !important;
 }
 
-.lesson-content-container{
+.lesson-content-container {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.lesson-title, .lecture-pdf{
+.lesson-title,
+.lecture-pdf {
   display: flex;
   gap: 20px;
 }
 
-.document-container{
+.lecture-pdf li a:hover{
+  text-decoration: none;
+}
+
+.document-container {
   position: absolute;
   position: absolute;
   top: 30px;
@@ -236,4 +271,36 @@ border: 10px solid red;
   width: 50%;
 }
 
+.App .App_header h1 {
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02rem;
+  font-size: 1.6rem;
+  /* font-size: 1.75rem; */
+  /* padding: 10px; */
+  padding: 0.8rem 0.8rem 0.8rem 1.6rem;
+}
 
+.course_list .course_card h2 {
+  font-size: 1.75rem;
+  font-weight: bold;
+  padding: 10px;
+  width: 100%;
+  padding-top: 0px;
+}
+
+.pdf-btn {
+  text-decoration: none;
+  color: #000;
+}
+
+.lecture-sno,
+.lecture-name {
+  font-weight: 650;
+}
+
+
+/* .module-title-container{
+  width: 100%;
+  background: #f7f9fa;
+} */
