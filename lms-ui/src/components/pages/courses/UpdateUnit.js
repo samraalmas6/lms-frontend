@@ -143,11 +143,21 @@ const UpdateUnit = ({setShowUnit, setUnitData, unitContent, minDate }) => {
             onChange={handleUnitVideo}
           />
         </div>
+        <div className="unit-quiz">
+          <label className="course-unit-form-label">Resource Link</label>
+          <input
+            type="url"
+            placeholder="Reading Resources Link"
+            value={unitReadingResource}
+            onChange={handleUnitReadingResource}
+          />
+        </div>
         <div className="unit-slide">
           <label className="course-unit-form-label">Add slide</label>
-          <span onClick={() => pptRef.current.click()}>
-            {unitPpt ? unitPpt.name : "No PPT Selected"}
-          </span>
+          <i className='fas fa-solid fa-pls' onClick={() => pptRef.current.click()}>
+            {/* {unitPpt ? unitPpt.name : "No PPT Selected"} */}
+            Upload Slides
+          </i>
           <input
             type="file"
             accept=".ppt"
@@ -158,9 +168,10 @@ const UpdateUnit = ({setShowUnit, setUnitData, unitContent, minDate }) => {
         </div>
         <div className="unit-pdf">
           <label className="course-unit-form-label">Add PDF </label>
-          <span onClick={() => pdfRef.current.click()}>
-            {unitPdf ? unitPdf.name : "No PDF Selected"}
-          </span>
+          <i className='fas fa-solid fa-plu' onClick={() => pdfRef.current.click()}>
+            {/* {unitPdf ? unitPdf.name : "No PDF Selected"} */}
+            Upload PDF
+          </i>
           <input
             type="file"
             accept=".pdf"
@@ -171,9 +182,10 @@ const UpdateUnit = ({setShowUnit, setUnitData, unitContent, minDate }) => {
         </div>
         <div className="unit-assignment">
           <label className="course-unit-form-label">Add Assignment </label>
-          <span onClick={() => assignmentRef.current.click()}>
-            {unitAssignment ? unitAssignment.name : "No Assignment Selected"}
-          </span>
+          <i className='fas fa-solid fa-plu' onClick={() => assignmentRef.current.click()}>
+            {/* {unitAssignment ? unitAssignment.name : "No Assignment Selected"} */}
+            Upload Assignment
+          </i>
           <input
             type="file"
             ref={assignmentRef}
@@ -183,25 +195,18 @@ const UpdateUnit = ({setShowUnit, setUnitData, unitContent, minDate }) => {
         </div>
         <div className="unit-quiz">
           <label className="course-unit-form-label">Add Quiz </label>
-          <span onClick={() => quizRef.current.click()}>
-            {unitQuiz ? unitQuiz.name : "No Quiz Selected"}
-          </span>
+          <i className='fas fa-solid fa-pls' onClick={() => quizRef.current.click()} style={{ cursor: 'not-allowed', color: 'red'}} >
+            {unitQuiz ? unitQuiz.name : "Not Allowed"}
+          </i>
           <input
             type="file"
             ref={quizRef}
             style={{ display: "none" }}
             onChange={handleUnitQuiz}
+            disabled
           />
         </div>
-        <div className="unit-quiz">
-          <label className="course-unit-form-label">Resource Link</label>
-          <input
-            type="url"
-            placeholder="Reading Resources Link"
-            value={unitReadingResource}
-            onChange={handleUnitReadingResource}
-          />
-        </div>
+
         <div className="form-check form-switch visibility">
           <label htmlFor="IsActive" className=" course-unit-form-label">
             Visibility

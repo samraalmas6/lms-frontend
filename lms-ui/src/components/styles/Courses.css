@@ -16,10 +16,21 @@
     box-shadow: 2px 2px 11px -8px #000;
     border-color: #e3e3e3;
 }
-.course-create-form .course-title, .course-start, .course-end, .module-title, .module-start, .module-end, .unit-title, .unit-start, .unit-end, .unit-content, .unit-video, .unit-slide, .unit-pdf, .unit-assignment, .unit-quiz{
+.course-create-form .course-title, .course-start, .course-end, .module-title, .module-start, .module-end{
     display: flex;
     justify-content: space-between;
     width: 50%;
+    align-items: center;
+}
+.unitData-section {
+    display: flex;
+    justify-content: start;
+    width: 92%;
+}
+.unit-title, .unit-start, .unit-end, .unit-content, .unit-video, .unit-slide, .unit-pdf, .unit-assignment, .unit-quiz {
+    display: flex;
+    justify-content: space-between;
+    width: 48%;
     align-items: center;
 }
 .visibility {
@@ -32,7 +43,7 @@
 .visibility input {
     position: static;
 }
-.course-create-form label, .course-module-form label, .course-unit-form-label, .course-unit-content-label, .unit-start label, .unit-end label {
+.course-create-form label, .course-module-form label, .course-unit-form-label, .course-unit-content-label, .unit-start label, .unit-end label{
     font-size: 17px;
     font-weight: 500;
     margin-top: 10px;
@@ -47,15 +58,21 @@
     font-size: 17px;
     width: 70%;
 }
-.unit-slide span, .unit-pdf span, .unit-assignment span, .unit-quiz span {
-    padding: 8px 12px;
+.unit-slide i, .unit-pdf i, .unit-assignment i, .unit-quiz i {
+    padding: 12px 10px;
     margin: 6px 2px 3px;
     border-radius: 6px;
-    border-style: solid;
-    border-color: #eee;
+    /* border-style: solid; */
+    /* border-color: #eee; */
     font-size: 17px;
     width: 70%;
     cursor: pointer;
+    transition: background .3s ease-in;
+}
+.unit-slide i:hover, .unit-pdf i:hover, .unit-assignment i:hover {
+    /* text-align: center; */
+    background: #edf0f1;
+
 }
 .unit-content select {
     border: 2px solid #eee;
@@ -69,10 +86,12 @@
 }
 
 .save-module-btn-container {
-    width: 100%;
+    width: 48%;
+    display: flex;
+    justify-content: end;
 }
 .save-module-btn-container button {
-    width: 50%;
+    width: 25%;
     border: none;
     padding: 8px 0px;
     font-weight: 500;
@@ -88,7 +107,10 @@
 }
 .course-module-section {
    width: 100%;
-   margin: 0 auto;
+   margin: 10px auto;
+   padding-left: 6%;
+
+
 }
 .add-module-btn, .add-unit-btn {
     background: none;
@@ -274,4 +296,10 @@ body::-webkit-scrollbar {
     box-shadow: 0px 0px 6px -1px gray;
     padding: 15px;
     overflow: auto;
+}
+hr {
+    margin: 0px;
+    width: 100%;
+    border: none;
+    box-shadow: 2px 6px 2px 1px #727070;
 }

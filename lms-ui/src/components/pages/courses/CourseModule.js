@@ -11,20 +11,20 @@ const Module = ({
   setUnitData,
   showModuleContent,
   setShowModuleContent,
-  moduleContent
+  moduleContent,
 }) => {
   const [moduleTitle, setModuleTitle] = useState("");
   const [moduleStart, setModuleStart] = useState("");
   const [moduleEnd, setModuleEnd] = useState("");
   const [visibility, setVisibility] = useState(false);
 
-  const moduleForm = useRef(null)
+  const moduleForm = useRef(null);
   // const [show, setShow] = useState(false);
-  const [unitContent, setUnitContent] =useState([])
+  const [unitContent, setUnitContent] = useState([]);
   // const [moduleContent, setModuelContent] = useState([]);
 
   const [showUnit, setShowUnit] = useState(false);
-  const [showUnitContent, setShowUnitContent] = useState('')
+  const [showUnitContent, setShowUnitContent] = useState("");
 
   const showUnitList = () => {
     setShowUnitContent("show");
@@ -47,23 +47,23 @@ const Module = ({
   };
 
   const handleAddModule = (e) => {
-    e.preventDefault()
-    if(moduleTitle){
-    const obj = {
-      id: Math.floor(Math.random() * 1000),
-      title: moduleTitle,
-      start_date: moduleStart,
-      end_date: moduleEnd,
-      unit: unitData,
-    };
-    setModuleData((pre) => [...pre, obj]);
-    setModuleTitle("");
-    setModuleStart("");
-    setModuleEnd("");
-    setShowModule((pre) => !pre);
-  }else {
-    // alert('Moule title is required')
-  }
+    e.preventDefault();
+    if (moduleTitle) {
+      const obj = {
+        id: Math.floor(Math.random() * 1000),
+        title: moduleTitle,
+        start_date: moduleStart,
+        end_date: moduleEnd,
+        unit: unitData,
+      };
+      setModuleData((pre) => [...pre, obj]);
+      setModuleTitle("");
+      setModuleStart("");
+      setModuleEnd("");
+      setShowModule((pre) => !pre);
+    } else {
+      // alert('Moule title is required')
+    }
   };
   console.log(moduleData);
   return (
@@ -95,7 +95,10 @@ const Module = ({
       </div> */}
 
       <div className="course-module">
-        <form className="course-module-form" onSubmit={(e) => e.preventDefault()}>
+        <form
+          className="course-module-form"
+          onSubmit={(e) => e.preventDefault()}
+        >
           <div className="module-title">
             <label>Module Name</label>
             <input
@@ -140,31 +143,39 @@ const Module = ({
               id="flexSwitchCheckDefault"
             />
           </div>
-          <button type="button" style={{ display: 'none'}} ref={moduleForm}></button>
+          <button
+            type="button"
+            style={{ display: "none" }}
+            ref={moduleForm}
+          ></button>
         </form>
-        <div className="unitData-section">
-        {unitData.length === 0 ? (
-          "No Unit Added"
-        ) : (
-          <ul className="units d-grid gap-2 w-50">
-            {unitData && unitData.map((unit) => {
-              return (
-                <li
-                  key={unit.id}
-                  type="button"
-                  className="text-start ms-0 ps-2"
-                  onClick={() => {
-                    showUnitList()
-                    setUnitContent(unit)
-                  }}
-                >
-                  <span>{unit.title}</span><i class="fas fa-solid fa-caret-up"></i>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
+        {/* <hr style={{ margin: "0px 5px 0px -7%", width: '65%' }} /> */}
+        <hr style={{ margin: "20px 0px 40px -7%", width: '107%' }} />
+        <div className="unitData-section ms-5" >
+          {unitData.length === 0 ? (
+            "No Unit Added"
+          ) : (
+            <ul className="units d-grid gap-2 w-50">
+              {unitData &&
+                unitData.map((unit) => {
+                  return (
+                    <li
+                      key={unit.id}
+                      type="button"
+                      className="text-start ms-0 ps-2"
+                      onClick={() => {
+                        showUnitList();
+                        setUnitContent(unit);
+                      }}
+                    >
+                      <span>{unit.title}</span>
+                      <i class="fas fa-solid fa-caret-up"></i>
+                    </li>
+                  );
+                })}
+            </ul>
+          )}
+        </div>
         {showUnit && (
           <LeasonForm
             minDate={minDate}
@@ -189,10 +200,13 @@ const Module = ({
             </button>
           </div>
         )}
-        <button className="btn btn-success w-50" onClick={(e) => {
-          moduleForm.current.click()
-          handleAddModule(e)
-          }}>
+        <button
+          className="btn btn-success w-50"
+          onClick={(e) => {
+            moduleForm.current.click();
+            handleAddModule(e);
+          }}
+        >
           save Module
         </button>
       </div>
@@ -213,7 +227,7 @@ const Module = ({
                         <a
                           role="button"
                           onClick={() => {
-                            setUnitContent(unit)
+                            setUnitContent(unit);
                           }}
                         >
                           {unit.title}
@@ -281,7 +295,11 @@ const Module = ({
                 />
               </div>
             </form>
-            <UpdateUnit unitContent={unitContent} minDate={minDate} setUnitData={setUnitData} />
+            <UpdateUnit
+              unitContent={unitContent}
+              minDate={minDate}
+              setUnitData={setUnitData}
+            />
           </div>
         </div>
       </div>

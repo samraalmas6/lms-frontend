@@ -13,7 +13,7 @@ const LeasonForm = ({ minDate, setShowUnit, setUnitData, showUnitContent, setSho
   //   setShow("show");
   // };
   return (
-    <div>
+    <div className="ms-5">
       {/* <div className="unitData-section">
         {unitData.length === 0 ? (
           "No Unit Added"

@@ -25,6 +25,7 @@ const AllCourse = ({
   const [courseDescription, setCourseDescription] = useState("");
   const [courseDes, setCourseDes] = useState("");
   const [visibility, setVisibility] = useState(false)
+  const [courseContent, setCourseContent] = useState([])
 
   const [showModule, setShowModule] = useState(false);
   const [moduleContent, setModuelContent] = useState([]);
@@ -33,6 +34,13 @@ const AllCourse = ({
   // const [moduleData, setModuleData] = useState([]);
 
   const editorRef = useRef(null);
+
+  useEffect(() => {
+    const getCourseData = () => {
+      setCourseContent(courseData)
+    }
+    getCourseData()
+  },[0])
 
   const showModuleList = () => {
     setShowModuleContent(() => "show");
@@ -71,19 +79,33 @@ const AllCourse = ({
 
     if (courseTitle) {
       const obj = {
-        id: courseData[courseData.length - 1].id + 1,
+        id: Math.floor(Math.random() * 1000),
         course_title: courseTitle,
         author: "",
         duration: 25,
         users_enrolled: 0,
         last_updated: "3 hours ago",
       };
-      courseData.push(obj);
+      setCourseContent(() => [...courseContent, obj])
+      // courseData.push(obj);
     }
     setCourseCategory("");
     setCourseTitle("");
   };
-
+  const handleSaveCourse = (e) => {
+    e.preventDefault()
+    const obj = {
+      course_title: courseTitle,
+      course_description: courseDescription,
+      picture: courseImg,
+      category: courseCategory,
+      visibility,
+      modules: moduleData
+    }
+    setCourseContent(() => [...courseContent, ...obj])
+    console.log(obj);
+  }
+console.log(courseContent);
   return (
     <div>
       <div className="all-course-content">
@@ -94,8 +116,11 @@ const AllCourse = ({
             data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasRight"
             aria-controls="offcanvasRight"
+            onClick={() => {
+              setCourseTitle('') 
+              setCourseCategory('')}}
           >
-            <i className="fas fa-solid fa-plus"></i> Add Category
+            <i className="fas fa-solid fa-plus"></i> Add Course
           </button>
 
           {/* This is for Category panel */}
@@ -108,7 +133,7 @@ const AllCourse = ({
         >
           <div className="offcanvas-header">
             <h5 className="offcanvas-title" id="offcanvasRightLabel">
-              Add Category
+              Add Course
             </h5>
             <button
               type="button"
@@ -130,7 +155,7 @@ const AllCourse = ({
                   required
                 />
                 <label className="mb-0 mt-1">Category</label>
-                <select onChange={handlecourseCategory} value={courseCategory}>
+                <select onChange={handlecourseCategory} value={courseCategory} required>
                   <option value="">--Select Category--</option>
                   {catData &&
                     catData.map((category) => {
@@ -170,8 +195,8 @@ const AllCourse = ({
             <div className="add-course-content">
               <div className="course-name-section">
                 <ul style={{ paddingLeft: "10px" }}>
-                  {courseData &&
-                    courseData.map((course) => {
+                  {courseContent &&
+                    courseContent.map((course) => {
                       return (
                         <div key={course.id}>
                           <li>
@@ -192,7 +217,7 @@ const AllCourse = ({
               <div className="course-form-section">
                 <div className="offcanvas-head">
                   <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                    Add Course
+                    Add Course Content
                   </h5>
                   <button
                     type="button"
@@ -306,6 +331,8 @@ const AllCourse = ({
                       id="flexSwitchCheckDefault"
                     />
                   </div>
+                  {/* <hr style={{ margin: '0px', width: '53%'}}/> */}
+                  <hr style={{ margin:'20px 0px 20px 0px'}}/>
                   <div className="course-module-section">
                     {/* <ul>
                       {moduleData &&
@@ -373,7 +400,7 @@ const AllCourse = ({
                     <button
                       type="submit"
                       className="btn btn-primary"
-                      onClick={"handleSave"}
+                      onClick={handleSaveCourse}
                     >
                       Save Course
                     </button>
@@ -395,7 +422,7 @@ const AllCourse = ({
               </tr>
             </thead>
             <tbody>
-              {courseData.map((course) => {
+              {courseContent.map((course) => {
                 return (
                   <tr
                     key={course.id}
