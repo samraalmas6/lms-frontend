@@ -21,6 +21,7 @@ function App() {
 
   return (
     <div>
+      {/* <MyCourses /> */}
       <CourseTable />
       {/* <BrowserRouter>
         <Routes>

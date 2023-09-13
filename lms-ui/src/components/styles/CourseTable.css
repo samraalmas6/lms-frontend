@@ -70,7 +70,9 @@
   flex-direction: column;
   gap: 20px;
   /* background-color: #04a1d8; */
-  height: 60vh;
+  height: 62vh;
+  background: #2d2f31;
+  /* position: absolute; */
 }
 
 /* App.css */
@@ -84,12 +86,15 @@
   /* padding: 20px; */
   font-family: Arial, sans-serif;
   /* background-color: red; */
+  overflow-y: scroll;
+  height: 100vh;
 }
 
 .App_header {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(155, 141, 141, 0.952);
+  border-bottom: 1px solid #ddd;
+  padding-top: 10px;
 }
 
 .App_header h1 {
