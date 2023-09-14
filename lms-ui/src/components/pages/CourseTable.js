@@ -210,10 +210,11 @@ const coursesData = [
 ];
 
 function CourseTable() {
-  const [activeTab, setActiveTab] = useState("Course Content");
+  const [activeTab, setActiveTab] = useState("Overview");
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [expandedModule, setExpandedModule] = useState(null);
-  const [isCourseContentVisible, setIsCourseContentVisible] = useState(true);
+  const [extendedView, setExtendedView] = useState(false)
+  // const [isCourseContentVisible, setIsCourseContentVisible] = useState(true);
 
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
@@ -231,9 +232,13 @@ function CourseTable() {
     }
   };
 
-  const toggleCourseContent = () => {
-    setIsCourseContentVisible(!isCourseContentVisible);
-  };
+  const handleExtendedView = () =>{
+    setExtendedView(!extendedView)
+  }
+
+  // const toggleCourseContent = () => {
+  //   setIsCourseContentVisible(!isCourseContentVisible);
+  // };
 
   return (
     <>
@@ -241,15 +246,13 @@ function CourseTable() {
       <div className="course-nav">
         {/* <Navbar /> */}
       </div>
-      {/* main-div*/}
       <div className="main-outer-container">
-        {/* sidebar div */}
         <div className="course-main">
           <div className="video-section">
             {/* <h1>video container</h1> */}
-            <div className="video_player_container">
-              <VideoPlayer selectedLesson={selectedLesson} />
-            </div>
+            {/* <div className="video_player_container"> */}
+              {/* <VideoPlayer selectedLesson={selectedLesson} /> */}
+            {/* </div> */}
             {/* tabs below video */}
           </div>
           <div className="tabs-container">
@@ -258,7 +261,10 @@ function CourseTable() {
                 className={activeTab === "Course Content" ? "active" : ""}
                 onClick={() => handleTabChange("Course Content")}
               >
-                <p onClick={toggleCourseContent}> Course-Content</p>
+                <p 
+                // onClick={toggleCourseContent}
+                > 
+                Course-Content</p>
               </li>
               <li
                 className={activeTab === "Overview" ? "active" : ""}
@@ -295,9 +301,11 @@ function CourseTable() {
                 onClick={toggleCourseContent}
               ></i>
             )} */}
-            {/* <i class="fa fa-times close-icon" aria-hidden="true"></i> */}
+            {/* <i class="fa fa-times close-icon" aria-hidden="true" onClick={handleExtendedView}></i> */}
           </header>
-          {isCourseContentVisible && (
+          {
+          // isCourseContentVisible && 
+          (
             <div className="course_list">
               {coursesData.map((course) => (
                 <div key={course.id} className="course_card">
@@ -315,6 +323,9 @@ function CourseTable() {
             </div>
           )}
         </div>
+      </div>
+      <div className="extended-view-container">
+
       </div>
     </>
   );

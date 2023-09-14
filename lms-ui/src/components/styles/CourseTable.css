@@ -75,6 +75,19 @@
   /* position: absolute; */
 }
 
+.video_player_container {
+  /* flex: 1;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; */
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 70%;
+  /* border: 10px solid red; */
+}
+
 /* App.css */
 .App {
   width: 30%;
@@ -163,18 +176,7 @@
   background-color: #f0f0f0;
 }
 
-.video_player_container {
-  /* flex: 1;
-  max-width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center; */
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  width: 70%;
-  /* border: 10px solid red; */
-}
+
 
 /* .video_player_container.video_container{
 position:absolute;
@@ -193,6 +195,10 @@ border: 10px solid red;
   list-style: none;
   cursor: pointer;
 }
+
+/* .module-content li:hover {
+  color: #1463b8;
+} */
 
 /* .module-content li:hover {
   color: #1463b8;

@@ -19,9 +19,9 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
     if (!isExpanded) {
       setSelectedLesson(null);
       setVideoCompleted(false);
-    } else if (module.lessons.length > 0) {
-      //  first lesson as selected when the module is expanded
-      setSelectedLesson(module.lessons[0]);
+    // } else if (module.lessons.length > 0) {
+    //    first lesson as selected when the module is expanded
+    //   setSelectedLesson(module.lessons[0]);
     }
   }, [isExpanded, module]);
 
@@ -135,11 +135,13 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
                       <li className="lecture-name"> {lesson.title}</li>
                       <li>
                         {" "}
-                        <i
+                        {/* <i
                           className={`fas fa-caret-up ${
                             isExpanded ? "fa-rotate-180" : ""
                           } arrow`}
-                        ></i>
+                        ></i> */}
+                        <i className={`fas fa-thin fa-chevron-down ${isExpanded ?  "fa-rotate-180" : ""}arrow`}></i>
+                        
                       </li>
                     </li>
                     <div
