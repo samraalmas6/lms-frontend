@@ -19,9 +19,9 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
     if (!isExpanded) {
       setSelectedLesson(null);
       setVideoCompleted(false);
-    } else if (module.lessons.length > 0) {
-      //  first lesson as selected when the module is expanded
-      setSelectedLesson(module.lessons[0]);
+    // } else if (module.lessons.length > 0) {
+    //   //  first lesson as selected when the module is expanded
+    //   setSelectedLesson(module.lessons[0]);
     }
   }, [isExpanded, module]);
   
