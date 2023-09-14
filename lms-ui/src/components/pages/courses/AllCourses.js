@@ -17,19 +17,20 @@ const AllCourse = ({
   unitData,
   setUnitData,
   moduleData,
-  setModuleData
+  setModuleData,
 }) => {
   //   Create Course Section
   const inpRef = useRef("");
   const [showBlock, setShowBlock] = useState(false);
   const [courseDescription, setCourseDescription] = useState("");
   const [courseDes, setCourseDes] = useState("");
-  const [visibility, setVisibility] = useState(false)
-  const [courseContent, setCourseContent] = useState([])
+  const [visibility, setVisibility] = useState(false);
+  const [courseContent, setCourseContent] = useState([]);
+  const [course, setCourse] = useState([courseData[0]])
 
   const [showModule, setShowModule] = useState(false);
   const [moduleContent, setModuelContent] = useState([]);
-  const [showModuleContent, setShowModuleContent] = useState('');
+  const [showModuleContent, setShowModuleContent] = useState("");
 
   // const [moduleData, setModuleData] = useState([]);
 
@@ -37,10 +38,10 @@ const AllCourse = ({
 
   useEffect(() => {
     const getCourseData = () => {
-      setCourseContent(courseData)
-    }
-    getCourseData()
-  },[0])
+      setCourseContent(courseData);
+    };
+    getCourseData();
+  }, [0]);
 
   const showModuleList = () => {
     setShowModuleContent(() => "show");
@@ -71,8 +72,8 @@ const AllCourse = ({
     console.log(courseImg);
   };
   const handleVisibility = (e) => {
-    setVisibility(e.target.value)
-  }
+    setVisibility(e.target.value);
+  };
 
   const handleSave = (e) => {
     e.preventDefault();
@@ -86,26 +87,73 @@ const AllCourse = ({
         users_enrolled: 0,
         last_updated: "3 hours ago",
       };
-      setCourseContent(() => [...courseContent, obj])
-      // courseData.push(obj);
+      setCourseContent(() => [...courseContent, obj]);
     }
     setCourseCategory("");
     setCourseTitle("");
   };
-  const handleSaveCourse = (e) => {
-    e.preventDefault()
-    const obj = {
-      course_title: courseTitle,
-      course_description: courseDescription,
-      picture: courseImg,
-      category: courseCategory,
-      visibility,
-      modules: moduleData
-    }
-    setCourseContent(() => [...courseContent, ...obj])
-    console.log(obj);
+
+  const fun = (id) => {
+    const particularCourse = courseContent.filter((course) => {
+      return course.id === id
+    })
+    setCourse(() => particularCourse)
+    console.log(course[0]);
   }
-console.log(courseContent);
+  const updatedCourse = {
+    id: 1, // Specify the ID of the course you want to update
+    course_title: courseTitle,
+    course_description: courseDescription,
+    picture: courseImg,
+    category: courseCategory,
+    visibility,
+    modules: [
+     ...course[0].modules, moduleData[0]
+    ]
+    // [
+        // moduleData.map((module) => {
+        //   return module.id === 1
+        //   ? { ...module, ...updatedCourse }
+        //   : module
+        // })
+      // {
+      //   id: 1, // Specify the ID of the module you want to update
+      //   title: "Updated Module Title",
+      // },
+    // ],
+    // units: [
+    //   {
+    //     id: 1, // Specify the ID of the unit you want to update
+    //     title: "Updated Unit Title",
+    //   },
+    // ],
+    // Add other fields you want to update
+  };
+  const handleSaveCourse = (e) => {
+    e.preventDefault();
+
+    setCourseContent((prevCourseData) => {
+      return prevCourseData.map((course) =>
+        course.id === updatedCourse.id
+          ? { ...course, ...updatedCourse }
+          : course
+      );
+    });
+
+    // const obj = {
+    //   course_title: courseTitle,
+    //   course_description: courseDescription,
+    //   picture: courseImg,
+    //   category: courseCategory,
+    //   visibility,
+    //   modules: moduleData
+    // }
+    // setCourseContent(() => [...courseContent])
+    // console.log(obj);
+  };
+  console.log('Course Content',courseContent);
+  // console.log('Module Content',moduleData);
+  // console.log('unit Content',unitData);
   return (
     <div>
       <div className="all-course-content">
@@ -117,8 +165,9 @@ console.log(courseContent);
             data-bs-target="#offcanvasRight"
             aria-controls="offcanvasRight"
             onClick={() => {
-              setCourseTitle('') 
-              setCourseCategory('')}}
+              setCourseTitle("");
+              setCourseCategory("");
+            }}
           >
             <i className="fas fa-solid fa-plus"></i> Add Course
           </button>
@@ -155,7 +204,11 @@ console.log(courseContent);
                   required
                 />
                 <label className="mb-0 mt-1">Category</label>
-                <select onChange={handlecourseCategory} value={courseCategory} required>
+                <select
+                  onChange={handlecourseCategory}
+                  value={courseCategory}
+                  required
+                >
                   <option value="">--Select Category--</option>
                   {catData &&
                     catData.map((category) => {
@@ -199,15 +252,14 @@ console.log(courseContent);
                     courseContent.map((course) => {
                       return (
                         <div key={course.id}>
-                          <li>
-                            <a
-                              role="button"
+                          <li  role="button"
                               onClick={() => {
                                 setCourseTitle(course.course_title);
-                              }}
-                            >
+                                fun(course.id)
+           
+                              }}>
+                          
                               {course.course_title}
-                            </a>
                           </li>
                         </div>
                       );
@@ -241,7 +293,7 @@ console.log(courseContent);
                   <Editor
                     apiKey={process.env.REACT_APP_API_KEY}
                     onInit={(evt, editor) => (editorRef.current = editor)}
-                    initialValue=""
+                    initialValue={course[0].description}
                     // value={courseDescription}
                     onEditorChange={(value, evt) =>
                       handleDescription(value, evt)
@@ -279,7 +331,7 @@ console.log(courseContent);
                     }}
                   />
                   <div className="thumb-section">
-                    <span className="choose-img">Choose Image</span>
+                    <span className="choose-img">Upload Image</span>
                     <div
                       className="upload-image-section"
                       onClick={handlImgClick}
@@ -332,7 +384,7 @@ console.log(courseContent);
                     />
                   </div>
                   {/* <hr style={{ margin: '0px', width: '53%'}}/> */}
-                  <hr style={{ margin:'20px 0px 20px 0px'}}/>
+                  <hr style={{ margin: "20px 0px 20px 0px" }} />
                   <div className="course-module-section">
                     {/* <ul>
                       {moduleData &&
@@ -344,31 +396,31 @@ console.log(courseContent);
                           );
                         })}
                     </ul> */}
-      <div className="unitData-section">
-        {moduleData.length === 0 ? (
-          "No Module Added"
-        ) : (
-          <ul className="units d-grid gap-2 w-50">
-            {moduleData.map((module) => {
-              return (
-                <li
-                  key={module.id}
-                  type="button"
-                  className="text-start ms-0 ps-2"
-                  onClick={() => {
-                    showModuleList()
-                    // setUnitContent(unit)
-                    setModuelContent(module);
-                  }}
-                >
-                  <span>{module.title}</span>
-                  <i class="fas fa-solid fa-caret-up"></i>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
+                    <div className="unitData-section">
+                      {moduleData.length === 0 ? (
+                        "No Module Added"
+                      ) : (
+                        <ul className="units d-grid gap-2 w-50">
+                          {moduleData.map((module) => {
+                            return (
+                              <li
+                                key={module.id}
+                                type="button"
+                                className="text-start ms-0 ps-2"
+                                onClick={() => {
+                                  showModuleList();
+                                  // setUnitContent(unit)
+                                  setModuelContent(module);
+                                }}
+                              >
+                                <span>{module.title}</span>
+                                <i class="fas fa-solid fa-caret-up"></i>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      )}
+                    </div>
                     <div>
                       {showModule && (
                         <CourseModule
@@ -385,15 +437,16 @@ console.log(courseContent);
                           setModuelContent={setModuelContent}
                         />
                       )}
-                      { !showModule && <button
-                        type="button"
-                        className="btn w-50 add-module-btn"
-                        onClick={() => setShowModule((pre) => !pre)}
-                      >
-                        Add Module
-                        <i className="fas fa-solid fa-plus ms-2"></i>
-                      </button> }
-                      
+                      {!showModule && (
+                        <button
+                          type="button"
+                          className="btn w-50 add-module-btn"
+                          onClick={() => setShowModule((pre) => !pre)}
+                        >
+                          Add Module
+                          <i className="fas fa-solid fa-plus ms-2"></i>
+                        </button>
+                      )}
                     </div>
                   </div>
                   <div className="category-save-btn">
@@ -432,6 +485,8 @@ console.log(courseContent);
                     aria-controls="offcanvasRight"
                     onClick={() => {
                       setCourseTitle(course.course_title);
+                      fun(course.id)
+                   
                     }}
                   >
                     <td>{course.course_title}</td>
