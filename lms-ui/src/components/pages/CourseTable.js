@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../styles/CourseTable.css";
 import VideoPlayer from "./VideoPlayer";
-
+import Navbar from "../content/Navbar";
 
 import ModuleCard from "./ModuleCard";
 
@@ -21,20 +21,20 @@ const coursesData = [
             lecture_name: "Introduction",
             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
             duration: "7 min",
-            file_uri: require("../content/files/MOMS.pdf"),
-            fileType: "pdf",
-            fileName: "Min of meeting",
+            doc_name: "extreme prog doc",
+            doc: [{ uri: require("../content/files/MOMS.pdf") }],
+            // fileType: "pdf",
+            // fileName: "Min of meeting",
           },
           {
             id: 2,
             sno: "1.2",
             title: "Lesson Title",
             lecture_name: "Introduction",
+            doc_name: "dummy doc",
             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
             duration: "1 hr",
-            uri: require("../content/files/MOMS.pdf"),
-            fileType: "pdf",
-            fileName: "Min of meeting",
+            doc: [{ uri: require("../content/files/MyProjects.pdf") }],
           },
         ],
       },
@@ -47,101 +47,221 @@ const coursesData = [
             sno: "1.3",
             title: "Lesson Title",
             lecture_name: "Introduction",
+            doc_name: "lecture 3 doc",
             url: "https://youtu.be/gwWKnnCMQ5c?si=_av7yUDr5ZKqGbgt",
             duration: "7 min",
-            uri: require("../content/files/MOMS.pdf"),
-            fileType: "pdf",
-            fileName: "Min of meeting",
+            doc: [{ uri: require("../content/files/third_lec.pdf") }],
           },
           {
             id: 4,
             sno: "1.4",
             title: "Lesson Title",
             lecture_name: "Introduction",
+            doc_name: "lecture 4 doc",
             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
             duration: "2 hr",
-            uri: require("../content/files/MOMS.pdf"),
-            fileType: "pdf",
-            fileName: "Min of meeting",
+            doc: [{ uri: require("../content/files/fourth_lec.pdf") }],
           },
         ],
       },
-      // {
-      //   id: 1,
-      //   title: "Module 1",
-      //   lessons: [
-      //     {
-      //       id: 1,
-      //       sno: "1.1",
-      //       title: "Lesson Title",
-      //       url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
-      //       duration: "7 min",
-      //       uri: require("./files/MOMS.pdf"),
-      //       fileType: "pdf",
-      //       fileName: "Min of meeting pdf file",
-      //     },
-      //     {
-      //       id: 2,
-      //       sno: "1.2",
-      //       title: "Lesson Title",
-      //       url: "https://youtu.be/waGfV-IoOt8?si=1Th7Y9ZQ_GzC_h-B",
-      //       duration: "1 hr",
-      //       uri: require("./files/MOMS.pdf"),
-      //       fileType: "pdf",
-      //       fileName: "Min of meeting pdf file",
-      //     },
-      //   ],
-      // },
-      // {
-      //   id: 1,
-      //   title: "Module 1",
-      //   lessons: [
-      //     {
-      //       id: 1,
-      //       sno: "1.1",
-      //       title: "Lesson Title",
-      //       url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
-      //       duration: "7 min",
-      //       uri: require("./files/MOMS.pdf"),
-      //       fileType: "pdf",
-      //       fileName: "Min of meeting pdf file",
-      //     },
-      //     {
-      //       id: 2,
-      //       sno: "1.2",
-      //       title: "Lesson Title",
-      //       url: "https://youtu.be/waGfV-IoOt8?si=1Th7Y9ZQ_GzC_h-B",
-      //       duration: "1 hr",
-      //       uri: require("./files/MOMS.pdf"),
-      //       fileType: "pdf",
-      //       fileName: "Min of meeting pdf file",
-      //     },
-      //   ],
-      // },
+      {
+        id: 3,
+        title: "Module 3: ",
+        lessons: [
+          {
+            id: 1,
+            sno: "1.1",
+            title: "Extreme Programming",
+            lecture_name: "Introduction",
+            url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
+            duration: "7 min",
+            doc_name: "extreme prog doc",
+            doc: [{ uri: require("../content/files/MOMS.pdf") }],
+            // fileType: "pdf",
+            // fileName: "Min of meeting",
+          },
+          {
+            id: 2,
+            sno: "1.2",
+            title: "Lesson Title",
+            lecture_name: "Introduction",
+            doc_name: "dummy doc",
+            url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
+            duration: "1 hr",
+            doc: [{ uri: require("../content/files/MyProjects.pdf") }],
+          },
+        ],
+      },
+      {
+        id: 4,
+        title: "Module 4: ",
+        lessons: [
+          {
+            id: 1,
+            sno: "1.1",
+            title: "Extreme Programming",
+            lecture_name: "Introduction",
+            url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
+            duration: "7 min",
+            doc_name: "extreme prog doc",
+            doc: [{ uri: require("../content/files/MOMS.pdf") }],
+            // fileType: "pdf",
+            // fileName: "Min of meeting",
+          },
+          {
+            id: 2,
+            sno: "1.2",
+            title: "Lesson Title",
+            lecture_name: "Introduction",
+            doc_name: "dummy doc",
+            url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
+            duration: "1 hr",
+            doc: [{ uri: require("../content/files/MyProjects.pdf") }],
+          },
+        ],
+      },
+      {
+        id: 5,
+        title: "Module 5: ",
+        lessons: [
+          {
+            id: 1,
+            sno: "1.1",
+            title: "Extreme Programming",
+            lecture_name: "Introduction",
+            url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
+            duration: "7 min",
+            doc_name: "extreme prog doc",
+            doc: [{ uri: require("../content/files/MOMS.pdf") }],
+            // fileType: "pdf",
+            // fileName: "Min of meeting",
+          },
+          {
+            id: 2,
+            sno: "1.2",
+            title: "Lesson Title",
+            lecture_name: "Introduction",
+            doc_name: "dummy doc",
+            url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
+            duration: "1 hr",
+            doc: [{ uri: require("../content/files/MyProjects.pdf") }],
+          },
+        ],
+      },
+      {
+        id: 6,
+        title: "Module 6: ",
+        lessons: [
+          {
+            id: 1,
+            sno: "1.1",
+            title: "Extreme Programming",
+            lecture_name: "Introduction",
+            url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
+            duration: "7 min",
+            doc_name: "extreme prog doc",
+            doc: [{ uri: require("../content/files/MOMS.pdf") }],
+            // fileType: "pdf",
+            // fileName: "Min of meeting",
+          },
+          {
+            id: 2,
+            sno: "1.2",
+            title: "Lesson Title",
+            lecture_name: "Introduction",
+            doc_name: "dummy doc",
+            url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
+            duration: "1 hr",
+            doc: [{ uri: require("../content/files/MyProjects.pdf") }],
+          },
+        ],
+      },
+      {
+        id: 7,
+        title: "Module 7: ",
+        lessons: [
+          {
+            id: 1,
+            sno: "1.1",
+            title: "Extreme Programming",
+            lecture_name: "Introduction",
+            url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
+            duration: "7 min",
+            doc_name: "extreme prog doc",
+            doc: [{ uri: require("../content/files/MOMS.pdf") }],
+            // fileType: "pdf",
+            // fileName: "Min of meeting",
+          },
+          {
+            id: 2,
+            sno: "1.2",
+            title: "Lesson Title",
+            lecture_name: "Introduction",
+            doc_name: "dummy doc",
+            url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
+            duration: "1 hr",
+            doc: [{ uri: require("../content/files/MyProjects.pdf") }],
+          },
+        ],
+      },
     ],
   },
   // Add more courses and modules as needed
 ];
 
 function CourseTable() {
-  const [activeTab, setActiveTab] = useState("Course Content");
+  const [activeTab, setActiveTab] = useState("Overview");
   const [selectedLesson, setSelectedLesson] = useState(null);
- const [expandedModule, setExpandedModule] = useState(null);
- const [isCourseContentVisible, setIsCourseContentVisible] = useState(true);
-
   const [videoCompleted, setVideoCompleted] = useState(false);
- 
+  const [expandedModule, setExpandedModule] = useState(null);
+  const [extendedView, setExtendedView] = useState(false);
+  const [isCourseContentVisible, setIsCourseContentVisible] = useState(true);
+  const [videoPaneState, setVideoPaneState] = useState('collapsed')
 
- const handleVideoProgress = ({ played, playedSeconds }) => {
+  const handleTabChange = (tabName) => {
+    setActiveTab(tabName);
+  };
+
+  const handleLessonSelect = (lesson) => {
+    setSelectedLesson(lesson);
+  };
+
+  const handleVideoCompleted = (videoState) => {
+    setVideoCompleted(videoState);
+  };
+
+  const toggleModule = (index) => {
+    if (expandedModule === index) {
+      setExpandedModule(null);
+    } else {
+      setExpandedModule(index);
+    }
+  };
+
+  const handleExtendedView = () => {
+    setExtendedView(!extendedView);
+  };
+
+  const toggleCourseContent = () => {
+    if(isCourseContentVisible) {
+      setVideoPaneState('expanded')
+    }
+    else {
+      setVideoPaneState('collapsed')
+    }
+    setIsCourseContentVisible(!isCourseContentVisible);
+  };
+
+  const handleVideoProgress = ({ played, playedSeconds }) => {
     // Set a threshold value (e.g., 0.95) to consider the video as completed
     if (played >= 0.95 && !videoCompleted) {
       // Mark the video as completed
       setVideoCompleted(true);
-      
+
       // Use the lesson id to select the corresponding checkbox
       const checkboxId = `lesson-${selectedLesson.id}`;
       const checkbox = document.getElementById(checkboxId);
-      
+
       // Check the checkbox
       if (checkbox) {
         checkbox.checked = true;
@@ -149,54 +269,33 @@ function CourseTable() {
     }
   };
 
-  const handleTabChange = (tabName) => {
-    setActiveTab(tabName);
-  };
-  
-  const handleLessonSelect = (lesson) => {
-    setSelectedLesson(lesson);
-  };
-  
-  const toggleModule = (index) => {
-    if (expandedModule === index){
-      setExpandedModule(null);
-    }else{
-      setExpandedModule(index);
-    }
-
-  };
-
-  const toggleCourseContent = () => {
-    setIsCourseContentVisible(!isCourseContentVisible);
-  };
-
   return (
     <>
-      {/* nav */}
-      <div className="course-nav">
-      
-      </div>
-      {/* main-div*/}
       <div className="main-outer-container">
-        {/* sidebar div */}
-        <div className="course-main">
+        <div className={`course-main ${videoPaneState}`}>
           <div className="video-section">
+            <VideoPlayer
+              selectedLesson={selectedLesson}
+              handleVideoProgress={handleVideoProgress}
+            />
+
             {/* <h1>video container</h1> */}
-            <div className="video_player_container">
-          <VideoPlayer selectedLesson={selectedLesson} />
-        </div>
-
-        
-          {/* tabs below video */}
+            {/* <div className="video_player_container"> */}
+            {/* <VideoPlayer selectedLesson={selectedLesson} /> */}
+            {/* </div> */}
+            {/* tabs below video */}
           </div>
-
-          <div className="tabs-container"  >
+          <div className="tabs-container">
             <ul className="tabs">
-              <li 
+              <li
                 className={activeTab === "Course Content" ? "active" : ""}
                 onClick={() => handleTabChange("Course Content")}
               >
-               <h1 onClick={toggleCourseContent}> Course-Content</h1> 
+                <p
+                // onClick={toggleCourseContent}
+                >
+                  Course-Content
+                </p>
               </li>
               <li
                 className={activeTab === "Overview" ? "active" : ""}
@@ -223,42 +322,43 @@ function CourseTable() {
             </div>
           </div>
         </div>
-        <div className="App">
-          <header className="App_header">
-            <h1 >Course Content</h1>
-            {isCourseContentVisible && (
+        {isCourseContentVisible && (
+          <div className="App">
+            <header className="App_header">
+              <h1>Course Content</h1>
               <i
                 className="fa fa-times close-icon"
                 aria-hidden="true"
                 onClick={toggleCourseContent}
               ></i>
-            )}
-            {/* <i class="fa fa-times close-icon" aria-hidden="true"></i> */}
-          </header>
-          {isCourseContentVisible && (
-          <div className="course_list">
-            {coursesData.map((course) => (
-              <div key={course.id} className="course_card">
-                <h2>{course.title}</h2>
-                {course.modules.map((module, index) => (
-                  <ModuleCard key={module.id} module={module}
-                  isExpanded={index === expandedModule}
-                  toggleModule={()=> toggleModule(index)} 
-                  selectedLesson={selectedLesson}
-                  setSelectedLesson={setSelectedLesson}
-                  videoCompleted={videoCompleted}
-                  handleVideoProgress={handleVideoProgress}/>
-                ))}
-              </div>
-            ))}
+            </header>
+            <div className="course_list">
+              {coursesData.map((course) => (
+                <div key={course.id} className="course_card">
+                  {/* <h2>{course.title}</h2> */}
+                  {course.modules.map((module, index) => (
+                    <ModuleCard
+                      key={module.id}
+                      module={module}
+                      isExpanded={index === expandedModule}
+                      toggleModule={() => toggleModule(index)}
+                      handleLessonSelect={handleLessonSelect}
+                      handleVideoCompleted={handleVideoCompleted}
+                    />
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
-          )}
-        </div>
+        )}
+        {!isCourseContentVisible && 
+        <button onClick={toggleCourseContent}>
+          return 
+          </button>}
       </div>
+      <div className="extended-view-container"></div>
     </>
   );
 }
 
 export default CourseTable;
-
-
