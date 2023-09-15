@@ -8,17 +8,17 @@ import ReactPlayer from "react-player";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
 
-const ModuleCard = ({ module, isExpanded, toggleModule }) => {
-  const [selectedLesson, setSelectedLesson] = useState(null);
-  const [videoCompleted, setVideoCompleted] = useState(false);
+const ModuleCard = ({ module, isExpanded, toggleModule, handleLessonSelect, selectedLesson, handleVideoCompleted }) => {
+  // const [selectedLesson, setSelectedLesson] = useState(null);
   const [showPDF, setShowPdf] = useState(false);
   const [doc, setDoc] = useState([]);
+  const [isCourseContentVisible, setIsCourseContentVisible] = useState(true);
   // const[selectModule,setSelectedModule] = useState(null);
 
   useEffect(() => {
     if (!isExpanded) {
-      setSelectedLesson(null);
-      setVideoCompleted(false);
+      handleLessonSelect(null);
+      handleVideoCompleted(false);
     // } else if (module.lessons.length > 0) {
     //    first lesson as selected when the module is expanded
     //   setSelectedLesson(module.lessons[0]);
@@ -27,31 +27,22 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
 
   // Check if this is Module 1 and set the default selected lesson
   useEffect(() => {
+    console.log('hi')
     if (module.title === "Module 1" && module.lessons.length > 0) {
-      setSelectedLesson(module.lessons[0]);
+      console.log(module.lessons[0])
+      handleLessonSelect(module.lessons[0]);
     }
   }, [module]);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  const handleVideoProgress = ({ played, playedSeconds }) => {
-    // Set a threshold value (e.g., 0.95) to consider the video as completed
-    if (played >= 0.95 && !videoCompleted) {
-      // Mark the video as completed
-      setVideoCompleted(true);
-
-      // Use the lesson id to select the corresponding checkbox
-      const checkboxId = `lesson-${selectedLesson.id}`;
-      const checkbox = document.getElementById(checkboxId);
-
-      // Check the checkbox
-      if (checkbox) {
-        checkbox.checked = true;
-      }
-    }
-  };
+ 
 
   const toggleLesson = (lesson) => {
-    setSelectedLesson(lesson);
+    handleLessonSelect(lesson);
+  };
+
+    const toggleCourseContent = () => {
+    setIsCourseContentVisible(!isCourseContentVisible);
   };
 
   // const selectModule = ({ module }) => {
@@ -202,8 +193,10 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
           </ul>
         </div>
       </Collapse>
-      <div className="video_player_container">
-        {selectedLesson && selectedLesson.url && (
+
+      {/* ------------------- */}
+      {/* <div className="video_player_container_extended_view">
+        {selectedLesson && selectedLesson.url (
           <div className="video-player-container">
             {console.log(selectedLesson.url)}
             <ReactPlayer
@@ -216,7 +209,9 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
             />
           </div>
         )}
-      </div>
+      </div> */}
+
+      {/* ------------ */}
       <div className="document-container">
         {/* {console.log(module.lessons[0].doc)} */}
         {/* {module.lessons.filter((lesson) => { */}

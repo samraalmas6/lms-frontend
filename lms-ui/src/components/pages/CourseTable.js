@@ -12,7 +12,7 @@ const coursesData = [
     modules: [
       {
         id: 1,
-        title: "Module 1: ",
+        title: "Module 1",
         lessons: [
           {
             id: 1,
@@ -212,9 +212,11 @@ const coursesData = [
 function CourseTable() {
   const [activeTab, setActiveTab] = useState("Overview");
   const [selectedLesson, setSelectedLesson] = useState(null);
+  const [videoCompleted, setVideoCompleted] = useState(false);
   const [expandedModule, setExpandedModule] = useState(null);
-  const [extendedView, setExtendedView] = useState(false)
-  // const [isCourseContentVisible, setIsCourseContentVisible] = useState(true);
+  const [extendedView, setExtendedView] = useState(false);
+  const [isCourseContentVisible, setIsCourseContentVisible] = useState(true);
+  const [videoPaneState, setVideoPaneState] = useState('collapsed')
 
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
@@ -222,6 +224,10 @@ function CourseTable() {
 
   const handleLessonSelect = (lesson) => {
     setSelectedLesson(lesson);
+  };
+
+  const handleVideoCompleted = (videoState) => {
+    setVideoCompleted(videoState);
   };
 
   const toggleModule = (index) => {
@@ -232,26 +238,50 @@ function CourseTable() {
     }
   };
 
-  const handleExtendedView = () =>{
-    setExtendedView(!extendedView)
-  }
+  const handleExtendedView = () => {
+    setExtendedView(!extendedView);
+  };
 
-  // const toggleCourseContent = () => {
-  //   setIsCourseContentVisible(!isCourseContentVisible);
-  // };
+  const toggleCourseContent = () => {
+    if(isCourseContentVisible) {
+      setVideoPaneState('expanded')
+    }
+    else {
+      setVideoPaneState('collapsed')
+    }
+    setIsCourseContentVisible(!isCourseContentVisible);
+  };
+
+  const handleVideoProgress = ({ played, playedSeconds }) => {
+    // Set a threshold value (e.g., 0.95) to consider the video as completed
+    if (played >= 0.95 && !videoCompleted) {
+      // Mark the video as completed
+      setVideoCompleted(true);
+
+      // Use the lesson id to select the corresponding checkbox
+      const checkboxId = `lesson-${selectedLesson.id}`;
+      const checkbox = document.getElementById(checkboxId);
+
+      // Check the checkbox
+      if (checkbox) {
+        checkbox.checked = true;
+      }
+    }
+  };
 
   return (
     <>
-      {/* nav */}
-      <div className="course-nav">
-        {/* <Navbar /> */}
-      </div>
       <div className="main-outer-container">
-        <div className="course-main">
+        <div className={`course-main ${videoPaneState}`}>
           <div className="video-section">
+            <VideoPlayer
+              selectedLesson={selectedLesson}
+              handleVideoProgress={handleVideoProgress}
+            />
+
             {/* <h1>video container</h1> */}
             {/* <div className="video_player_container"> */}
-              {/* <VideoPlayer selectedLesson={selectedLesson} /> */}
+            {/* <VideoPlayer selectedLesson={selectedLesson} /> */}
             {/* </div> */}
             {/* tabs below video */}
           </div>
@@ -261,10 +291,11 @@ function CourseTable() {
                 className={activeTab === "Course Content" ? "active" : ""}
                 onClick={() => handleTabChange("Course Content")}
               >
-                <p 
+                <p
                 // onClick={toggleCourseContent}
-                > 
-                Course-Content</p>
+                >
+                  Course-Content
+                </p>
               </li>
               <li
                 className={activeTab === "Overview" ? "active" : ""}
@@ -291,21 +322,16 @@ function CourseTable() {
             </div>
           </div>
         </div>
-        <div className="App">
-          <header className="App_header">
-            <h1>Course Content</h1>
-            {/* {isCourseContentVisible && (
+        {isCourseContentVisible && (
+          <div className="App">
+            <header className="App_header">
+              <h1>Course Content</h1>
               <i
                 className="fa fa-times close-icon"
                 aria-hidden="true"
                 onClick={toggleCourseContent}
               ></i>
-            )} */}
-            {/* <i class="fa fa-times close-icon" aria-hidden="true" onClick={handleExtendedView}></i> */}
-          </header>
-          {
-          // isCourseContentVisible && 
-          (
+            </header>
             <div className="course_list">
               {coursesData.map((course) => (
                 <div key={course.id} className="course_card">
@@ -316,17 +342,21 @@ function CourseTable() {
                       module={module}
                       isExpanded={index === expandedModule}
                       toggleModule={() => toggleModule(index)}
+                      handleLessonSelect={handleLessonSelect}
+                      handleVideoCompleted={handleVideoCompleted}
                     />
                   ))}
                 </div>
               ))}
             </div>
-          )}
-        </div>
+          </div>
+        )}
+        {!isCourseContentVisible && 
+        <button onClick={toggleCourseContent}>
+          return 
+          </button>}
       </div>
-      <div className="extended-view-container">
-
-      </div>
+      <div className="extended-view-container"></div>
     </>
   );
 }

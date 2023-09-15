@@ -27,11 +27,21 @@
 }
 
 .course-main {
-  width: 70%;
+  /* width: 70%; */
   /* background-color: #04a1d8; */
   /* height: 70vh; */
   display: flex;
   flex-direction: column;
+}
+
+.collapsed {
+  background-color: #04a1d8;
+  width: 70%;
+}
+
+.expanded {
+  background-color: red;
+  width: 100%;
 }
 
 .tabs-container {
@@ -84,8 +94,16 @@
   position: absolute;
   top: 5px;
   left: 5px;
+  right: 5px;
   width: 70%;
   /* border: 10px solid red; */
+}
+
+.video_player_container_extended_view{
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 100%;
 }
 
 /* App.css */
