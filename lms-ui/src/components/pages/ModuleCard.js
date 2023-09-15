@@ -10,14 +10,14 @@ import { faCirclePlay } from '@fortawesome/free-regular-svg-icons';
 
 
 
-const ModuleCard = ({ module, isExpanded, toggleModule }) => {
+const ModuleCard = ({ module, isExpanded, toggleModule, }) => {
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [videoCompleted, setVideoCompleted] = useState(false);
   // const[selectModule,setSelectedModule] = useState(null);
 
   useEffect(() => {
     if (!isExpanded) {
-      setSelectedLesson(null);
+      // setSelectedLesson();
       setVideoCompleted(false);
     // } else if (module.lessons.length > 0) {
     //   //  first lesson as selected when the module is expanded
@@ -55,6 +55,8 @@ const ModuleCard = ({ module, isExpanded, toggleModule }) => {
 
   const toggleLesson = (lesson) => {
     setSelectedLesson(lesson);
+
+    setVideoCompleted(false);
   };
 
   // const selectModule = ({ module }) => {

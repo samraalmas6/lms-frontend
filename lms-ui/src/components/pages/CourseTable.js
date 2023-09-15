@@ -129,6 +129,26 @@ function CourseTable() {
  const [expandedModule, setExpandedModule] = useState(null);
  const [isCourseContentVisible, setIsCourseContentVisible] = useState(true);
 
+  const [videoCompleted, setVideoCompleted] = useState(false);
+ 
+
+ const handleVideoProgress = ({ played, playedSeconds }) => {
+    // Set a threshold value (e.g., 0.95) to consider the video as completed
+    if (played >= 0.95 && !videoCompleted) {
+      // Mark the video as completed
+      setVideoCompleted(true);
+      
+      // Use the lesson id to select the corresponding checkbox
+      const checkboxId = `lesson-${selectedLesson.id}`;
+      const checkbox = document.getElementById(checkboxId);
+      
+      // Check the checkbox
+      if (checkbox) {
+        checkbox.checked = true;
+      }
+    }
+  };
+
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
   };
@@ -223,7 +243,11 @@ function CourseTable() {
                 {course.modules.map((module, index) => (
                   <ModuleCard key={module.id} module={module}
                   isExpanded={index === expandedModule}
-                  toggleModule={()=> toggleModule(index)} />
+                  toggleModule={()=> toggleModule(index)} 
+                  selectedLesson={selectedLesson}
+                  setSelectedLesson={setSelectedLesson}
+                  videoCompleted={videoCompleted}
+                  handleVideoProgress={handleVideoProgress}/>
                 ))}
               </div>
             ))}
