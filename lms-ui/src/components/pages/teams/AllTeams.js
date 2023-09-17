@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import teamsData from "../../hooks/teamData";
 import styles from "../../styles/AllTeam.module.css";
 import userImg from "../../content/Images/user.png";
-import AddTeam from "./AddTeam";
-import courseData from "../../hooks/courseData";
+// import courseData from "../../hooks/courseData";
 
 const AllTeams = ({ show }) => {
   const [showBlock, setShowBlock] = useState(false);
@@ -39,7 +38,18 @@ const AllTeams = ({ show }) => {
       });
     };
     const getCourse = () => {
-      setCoursesData(courseData);
+      fetch("http://127.0.0.1:8000/api/courses", {
+        method: "GET",
+        headers: {
+          Authorization: `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61`,
+        },
+      }).then((response) => {
+        response.json().then(function (result) {
+          console.log(result);
+          setCoursesData(result);
+        });
+      });
+      // setCoursesData(courseData);
     };
     getUsers();
     getCourse();
@@ -58,8 +68,8 @@ const AllTeams = ({ show }) => {
   const handleCheckChange = (e) => {
     const title = e.target.value;
     if (e.target.checked && title != "undefined") {
-      const newObj = courseData.filter((course) => {
-        return course.course_title === title;
+      const newObj = coursesData.filter((course) => {
+        return course.title === title;
       });
       setAddTeam([newObj[0]]);
     }
@@ -67,8 +77,8 @@ const AllTeams = ({ show }) => {
   const handleUserCheckChange = (e) => {
     const title = e.target.value;
     if (e.target.checked && title != "undefined") {
-      const newObj = courseData.filter((course) => {
-        return course.course_title === title;
+      const newObj = coursesData.filter((course) => {
+        return course.title === title;
       });
       setAddTeam([newObj[0]]);
     }
@@ -117,8 +127,8 @@ const AllTeams = ({ show }) => {
     const selectItems = document.getElementsByClassName("course-check");
     for (let item of selectItems) {
       if (item.checked) {
-        const newObj = courseData.filter((course) => {
-          return course.course_title === item.value;
+        const newObj = coursesData.filter((course) => {
+          return course.title === item.value;
         });
         console.log(" obj  =", newObj);
         if (typeof teamCourses !== "undefined") {
@@ -354,7 +364,7 @@ const AllTeams = ({ show }) => {
                                 onMouseLeave={() => setShowCourseDelete(false)}
                               >
                                 <td className={styles.borderLess}>
-                                  {course.course_title}
+                                  {course.title}
                                 </td>
                                 <td className={styles.borderLess}>
                                   {showCourseDelete ? (
@@ -447,7 +457,7 @@ const AllTeams = ({ show }) => {
                 </th>
                 <th scope="col">Course Title</th>
                 <th scope="col">Author</th>
-                <th scope="col">Duration</th>
+                <th scope="col">Description</th>
                 <th scope="col">Users Enrolled</th>
                 <th scope="col">Last Update</th>
               </tr>
@@ -470,7 +480,7 @@ const AllTeams = ({ show }) => {
                             type="checkbox"
                             ref={checkbox}
                             name="check"
-                            value={course.course_title}
+                            value={course.title}
                             onChange={(e) => {
                               handleCheckChange(e);
                             }}
@@ -479,11 +489,11 @@ const AllTeams = ({ show }) => {
                           />
                         </div>
                       </td>
-                      <td>{course.course_title}</td>
+                      <td>{course.title}</td>
                       <td>{course.author}</td>
-                      <td>{course.duration}</td>
+                      <td>{course.description}</td>
                       <td>{course.users_enrolled}</td>
-                      <td>{course.last_updated}</td>
+                      <td>{course.created_at}</td>
                     </tr>
                   );
                 })}

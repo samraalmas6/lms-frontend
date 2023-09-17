@@ -15,8 +15,8 @@ const CreateCourse = ({  }) => {
   const [courseTitle, setCourseTitle] = useState("");
   const [courseImg, setCourseImg] = useState("");
   const [uploadImg, setUploadImg] = useState("");
-  const [unitData, setUnitData] = useState([]);
-  const [moduleData, setModuleData] = useState([]);
+  // const [unitData, setUnitData] = useState([]);
+  // const [moduleData, setModuleData] = useState([]);
 
 
   // const handleSave = (e) => {
@@ -44,10 +44,10 @@ const CreateCourse = ({  }) => {
       courseCategory={courseCategory} setCourseCategory={setCourseCategory}
       courseImg={courseImg} setCourseImg={setCourseImg}
       minDate={minDate}
-      unitData={unitData}
-      setUnitData= {setUnitData}
-      moduleData={moduleData}
-      setModuleData={setModuleData}
+      // unitData={unitData}
+      // setUnitData= {setUnitData}
+      // moduleData={moduleData}
+      // setModuleData={setModuleData}
       // handleSave={handleSave}
       />
     </div>

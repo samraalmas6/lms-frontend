@@ -1,6 +1,9 @@
+import { Editor } from '@tinymce/tinymce-react';
 import React, { useEffect, useRef, useState } from 'react'
 
 const UpdateUnit = ({setShowUnit, setUnitData, unitContent, minDate }) => {
+  const editorRef = useRef(null);
+
 
     const [unitTitle, setUnitTitle] = useState("");
     const [unitVideo, setUnitVideo] = useState("");
@@ -12,6 +15,8 @@ const UpdateUnit = ({setShowUnit, setUnitData, unitContent, minDate }) => {
     const [unitStart, setUnitStart] = useState("");
     const [unitEnd, setUnitEnd] = useState("");
     const [visibility, setVisibility] = useState(false);
+
+    const [showAssignmentContent, setShowAssignmentContent] = useState('')
   
   
     const pdfRef = useRef(null);
@@ -34,6 +39,11 @@ const UpdateUnit = ({setShowUnit, setUnitData, unitContent, minDate }) => {
     }
   },[unitContent])
  
+
+  const showAssignment = () => {
+    setShowAssignmentContent('show')
+  }
+
     const handleUnitTitle = (e) => {
       setUnitTitle(e.target.value);
     };
@@ -186,11 +196,11 @@ const UpdateUnit = ({setShowUnit, setUnitData, unitContent, minDate }) => {
             {/* {unitAssignment ? unitAssignment.name : "No Assignment Selected"} */}
             Upload Assignment
           </i>
-          <input
-            type="file"
+          <button
+            type="button"
             ref={assignmentRef}
             style={{ display: "none" }}
-            onChange={handleUnitAssingment}
+            onClick={showAssignment}
           />
         </div>
         <div className="unit-quiz">
@@ -231,6 +241,90 @@ const UpdateUnit = ({setShowUnit, setUnitData, unitContent, minDate }) => {
         </div>
         <button type="button" style={{ display: 'none'}} ref={unitForm}></button>
       </form>
+
+      <div
+        className={`offcanvas offcanvas-top module-list-show ${showAssignmentContent}`}
+        id="show-unit"
+        tabindex="-1"
+      >
+        <div className="module-content-section">
+          <div className="content">
+            <div
+              className={"styles.addBtnSection"}
+              style={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <h3>Add Assignment</h3>
+              <button
+                type="button"
+                onClick={() => setShowAssignmentContent("")}
+                className="btn btn-close text-danger"
+              ></button>
+            </div>
+            <form onSubmit={(e) => e.preventDefault()}>
+            <div className="unit-title">
+          <label className="course-unit-form-label">Unit Name </label>
+          <input
+            type="text"
+            placeholder="Assignment Title"
+            value={''}
+            onChange={''}
+            required
+          />
+        </div>
+        <div className="unit-start">
+          <label>Assignment Date</label>
+          <input
+            type="date"
+            placeholder="Start Date"
+            value={''}
+            min={minDate}
+            onChange={''}
+          />
+        </div>
+        <Editor
+                    apiKey={process.env.REACT_APP_API_KEY}
+                    onInit={(evt, editor) => (editorRef.current = editor)}
+                    initialValue=''
+                    value={'courseDes'}
+                    // onEditorChange={(value, evt) =>
+                    // }
+                    init={{
+                      height: 300,
+                      menubar: false,
+                      plugins: [
+                        "advlist",
+                        "autolink",
+                        "lists",
+                        "link",
+                        "image",
+                        "charmap",
+                        "preview",
+                        "anchor",
+                        "searchreplace",
+                        "visualblocks",
+                        "code",
+                        "fullscreen",
+                        "insertdatetime",
+                        "media",
+                        "table",
+                        "code",
+                        // "help",
+                        "wordcount",
+                      ],
+                      toolbar:
+                        "undo redo | blocks | " +
+                        "bold italic forecolor | alignleft aligncenter " +
+                        "alignright alignjustify | bullist numlist outdent indent | " +
+                        "removeformat",
+                      content_style:
+                        "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                    }}
+                  />
+            </form>
+          </div>
+        </div>
+      </div>
+
     </div>
   )
 }

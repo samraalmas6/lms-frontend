@@ -65,3 +65,8 @@
   margin-right: 5px;
   min-width: 10px;
 }
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+}

@@ -13,9 +13,35 @@ const AllCategory = ({ show }) => {
   const [checkedAll, setCheckAll] = useState(false);
 
   useEffect(() => {
-    const getCourse = () => {
-      setCoursesData(courseData);
+    const getCategory = () => {
+      fetch("http://127.0.0.1:8000/api/categories", {
+        method: "GET",
+        headers: {
+          Authorization: `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61`,
+        },
+      }).then((response) => {
+        response.json().then(function (result) {
+          console.log(result);
+          setCategoryData(result);
+        });
+      });
+      // setCoursesData(courseData);
     };
+    const getCourse = () => {
+      fetch("http://127.0.0.1:8000/api/courses", {
+        method: "GET",
+        headers: {
+          Authorization: `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61`,
+        },
+      }).then((response) => {
+        response.json().then(function (result) {
+          console.log(result);
+          setCoursesData(result);
+        });
+      });
+    };
+
+    getCategory();
     getCourse();
   }, []);
 
@@ -27,22 +53,43 @@ const AllCategory = ({ show }) => {
   };
 
   const handleDeleteCourse = (id) => {
-    const obj = categoryCourses.filter(course => {
-      return course.id !== id
-    })
-    setcategoryCourses(obj)
-  }
+    const obj = categoryCourses.filter((course) => {
+      return course.id !== id;
+    });
+    setcategoryCourses(obj);
+  };
 
   const handleAddCat = (e) => {
     const obj = {
-      id: categoryData.length + 1,
-      name: categoryName,
-      subCategory: parentCat,
+      title: categoryName,
+      description: "This is test cat",
+      parent: 1,
     };
-    setCategoryData(() => [...categoryData, obj]);
-    setCatgoryName("");
-    setParentCat("");
-    console.log(obj);
+
+    fetch("http://127.0.0.1:8000/api/categories/", {
+      method: "POST",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      if (response.status == 201) {
+        response.json().then(function (result) {
+          console.log(result);
+          setCatgoryName("");
+          setParentCat("");
+          window.location.reload();
+        });
+      } else {
+        console.log(response);
+      }
+    });
+
+    // setCategoryData(() => [...categoryData, obj]);
+    // setCatgoryName("");
+    // setParentCat("");
+    // console.log(obj);
   };
 
   const handlAllSelect = () => {
@@ -125,11 +172,19 @@ const AllCategory = ({ show }) => {
               <label className="mb-0 mt-1">Parent Category</label>
               <select onChange={handleParentCat} value={parentCat}>
                 <option value="">--Select Category--</option>
-                <option value="Category 1">Category 1</option>
+                {categoryData &&
+                  categoryData.map((category) => {
+                    return (
+                      <option value={category.title} key={category.id}>
+                        {category.title}
+                      </option>
+                    );
+                  })}
+                {/* <option value="Category 1">Category 1</option>
                 <option value="Category 2">Category 2</option>
                 <option value="Category 3">Category 3</option>
                 <option value="Category 4">Category 4</option>
-                <option value="Category 5">Category 5</option>
+                <option value="Category 5">Category 5</option> */}
               </select>
               <div className="category-save-btn">
                 <button
@@ -149,8 +204,9 @@ const AllCategory = ({ show }) => {
         <thead>
           <tr>
             <th scope="col">Names</th>
+            <th scope="col">Description</th>
             <th scope="col">Used In</th>
-            <th scope="col">Sub Category</th>
+            <th scope="col">Parent Category</th>
           </tr>
         </thead>
         <tbody>
@@ -161,8 +217,8 @@ const AllCategory = ({ show }) => {
                   key={category.id}
                   role="button"
                   onClick={() => {
-                    setCatgoryName(category.name);
-                    setParentCat(category.subCategory);
+                    setCatgoryName(category.title);
+                    setParentCat(category.parent);
                     setcategoryCourses(() => category.courses);
                     //   setTeamUser(team.Users);
                     //   setTeamCourses(team.Courses);
@@ -172,9 +228,10 @@ const AllCategory = ({ show }) => {
                   data-bs-target="#offcanvasCourse"
                   aria-controls="offcanvasRight"
                 >
-                  <td>{category.name}</td>
+                  <td>{category.title}</td>
+                  <td>{category.description}</td>
                   <td>{category.usedIn}</td>
-                  <td>{category.subCategory}</td>
+                  <td>{category.parent}</td>
                 </tr>
               );
             })}
@@ -191,7 +248,7 @@ const AllCategory = ({ show }) => {
         <div className="offcanvas-body">
           <div className="add-course-content">
             <div className="course-name-section">
-              <ul style={{ paddingLeft: '10px'}}>
+              <ul style={{ paddingLeft: "10px" }}>
                 {categoryData &&
                   categoryData.map((category) => {
                     return (
@@ -200,13 +257,13 @@ const AllCategory = ({ show }) => {
                           <a
                             role="button"
                             onClick={() => {
-                              setCatgoryName(category.name);
-                              setParentCat(category.subCategory);
+                              setCatgoryName(category.title);
+                              setParentCat(category.parent);
                               setcategoryCourses(() => category.courses);
                               // setTeamCourses(team.Courses);
                             }}
                           >
-                            {category.name}
+                            {category.title}
                           </a>
                         </li>
                       </div>
@@ -245,7 +302,6 @@ const AllCategory = ({ show }) => {
                         <th style={{ borderTop: "none" }}>Name</th>
                         <th style={{ borderTop: "none" }}>Parent Category</th>
                         <th style={{ borderTop: "none" }}>Courses</th>
-                        
                       </tr>
                     </thead>
                     <tbody>
@@ -258,25 +314,33 @@ const AllCategory = ({ show }) => {
                           <span>{parentCat}</span>
                         </td>
                         <td className={"borderLess"}>
-                        {categoryCourses &&
-                          categoryCourses.map((course, index) => {
-                            return (
-                              <tr key={course.id} className={"borderLess w-100"}>
-                                <td className={"borderLess"}>{index + 1}</td>
-                                <td className={"borderLess"}>
-                                  {course.course_title}
-                                </td>
-                                <td className={"borderLess"}>
-                                  <button
-                                    type="button"
-                                    className={'deleteBtn'}
-                                    onClick={() => handleDeleteCourse(course.id)}
-                                  > X </button>
-                                </td>
-                              </tr>
-                            );
-                          })}
-                          </td>
+                          {categoryCourses &&
+                            categoryCourses.map((course, index) => {
+                              return (
+                                <tr
+                                  key={course.id}
+                                  className={"borderLess w-100"}
+                                >
+                                  <td className={"borderLess"}>{index + 1}</td>
+                                  <td className={"borderLess"}>
+                                    {course.course_title}
+                                  </td>
+                                  <td className={"borderLess"}>
+                                    <button
+                                      type="button"
+                                      className={"deleteBtn"}
+                                      onClick={() =>
+                                        handleDeleteCourse(course.id)
+                                      }
+                                    >
+                                      {" "}
+                                      X{" "}
+                                    </button>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -304,7 +368,16 @@ const AllCategory = ({ show }) => {
         id="show-course-list"
         tabindex="-1"
       >
-        <h3>Courses</h3>
+        <div className="header-section">
+          <h3>Courses</h3>
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+          ></button>
+        </div>
+
         <div className={"addBtnSection"}>
           <input
             type="search"
@@ -335,7 +408,7 @@ const AllCategory = ({ show }) => {
               </th>
               <th scope="col">Course Title</th>
               <th scope="col">Author</th>
-              <th scope="col">Duration</th>
+              <th scope="col">Description</th>
               <th scope="col">Users Enrolled</th>
               <th scope="col">Last Update</th>
             </tr>
@@ -351,17 +424,17 @@ const AllCategory = ({ show }) => {
                           className="form-check-input course-check"
                           type="checkbox"
                           name="check"
-                          value={course.course_title}
+                          value={course.title}
                           onChange={(e) => {}}
                           id="flexCheckDefult"
                         />
                       </div>
                     </td>
-                    <td>{course.course_title}</td>
+                    <td>{course.title}</td>
                     <td>{course.author}</td>
-                    <td>{course.duration}</td>
+                    <td>{course.description}</td>
                     <td>{course.users_enrolled}</td>
-                    <td>{course.last_updated}</td>
+                    <td>{course.created_at}</td>
                   </tr>
                 );
               })}

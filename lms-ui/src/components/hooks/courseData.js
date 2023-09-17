@@ -41,47 +41,9 @@ const courseData = [
                     assignment: 'assignment1',
                     quiz: 'quiz',
                     visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
                  }
             ]
-            }
-        ],
-        modules: [
+            },
             {
             id: 2,
             title: 'Module 2',
@@ -150,9 +112,7 @@ const courseData = [
                     visibility: true
                  }
             ]
-            }
-        ],
-        modules: [
+            },
             {
             id: 3,
             title: 'Module 3',
@@ -221,9 +181,7 @@ const courseData = [
                     visibility: true
                  }
             ]
-            }
-        ],
-        modules: [
+            },
             {
             id: 4,
             title: 'Module 4',
@@ -292,9 +250,7 @@ const courseData = [
                     visibility: true
                  }
             ]
-            }
-        ],
-        modules: [
+            },
             {
             id: 5,
             title: 'Module 5',
@@ -376,362 +332,294 @@ const courseData = [
         visibility: true,
         last_updated: '1 hours ago',
         category: 'Cat 4',        
-        description: '',
+        description: 'This is description of the course',
         modules: [
-            {
-            id: 1,
-            title: 'Module 1',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
+         {
+         id: 1,
+         title: 'Module 1',
+         start_date: '20-06-2019',
+         end_date: '20-6-2020',
+         visibility: true,
+         units: [
+             {
+                id: 1,
+                title: 'Unit 1',
+                start_date: '20-06-2019',
+                end_date: '20-6-2020',
+                video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                ppt: 'ppt1.ppt',
+                pdf: 'pdf1.pdf',
+                assignment: 'assignment1',
+                quiz: 'quiz',
+                visibility: true
+             },
+             {
+                 id: 2,
+                 title: 'Unit 2',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 3,
+                 title: 'Unit 3',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              }
+         ]
+         },
+         {
+         id: 2,
+         title: 'Module 2',
+         start_date: '20-06-2019',
+         end_date: '20-6-2020',
+         visibility: true,
+         units: [
+             {
+                id: 1,
+                title: 'Unit 1',
+                start_date: '20-06-2019',
+                end_date: '20-6-2020',
+                video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                ppt: 'ppt1.ppt',
+                pdf: 'pdf1.pdf',
+                assignment: 'assignment1',
+                quiz: 'quiz',
+                visibility: true
+             },
+             {
+                 id: 2,
+                 title: 'Unit 2',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 3,
+                 title: 'Unit 3',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 4,
+                 title: 'Unit 4',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 5,
+                 title: 'Unit 5',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              }
+         ]
+         },
+         {
+         id: 3,
+         title: 'Module 3',
+         start_date: '20-06-2019',
+         end_date: '20-6-2020',
+         visibility: true,
+         units: [
+             {
+                id: 1,
+                title: 'Unit 1',
+                start_date: '20-06-2019',
+                end_date: '20-6-2020',
+                video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                ppt: 'ppt1.ppt',
+                pdf: 'pdf1.pdf',
+                assignment: 'assignment1',
+                quiz: 'quiz',
+                visibility: true
+             },
+             {
+                 id: 2,
+                 title: 'Unit 2',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 3,
+                 title: 'Unit 3',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 4,
+                 title: 'Unit 4',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 5,
+                 title: 'Unit 5',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              }
+         ]
+         },
+         {
+         id: 4,
+         title: 'Module 4',
+         start_date: '20-06-2019',
+         end_date: '20-6-2020',
+         visibility: true,
+         units: [
+             {
+                id: 1,
+                title: 'Unit 1',
+                start_date: '20-06-2019',
+                end_date: '20-6-2020',
+                video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                ppt: 'ppt1.ppt',
+                pdf: 'pdf1.pdf',
+                assignment: 'assignment1',
+                quiz: 'quiz',
+                visibility: true
+             },
+             {
+                 id: 2,
+                 title: 'Unit 2',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 3,
+                 title: 'Unit 3',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              }
+         ]
+         },
+         {
+         id: 5,
+         title: 'Module 5',
+         start_date: '20-06-2019',
+         end_date: '20-6-2020',
+         visibility: true,
+         units: [
+             {
+                id: 1,
+                title: 'Unit 1',
+                start_date: '20-06-2019',
+                end_date: '20-6-2020',
+                video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                ppt: 'ppt1.ppt',
+                pdf: 'pdf1.pdf',
+                assignment: 'assignment1',
+                quiz: 'quiz',
+                visibility: true
+             },
+             {
+                 id: 2,
+                 title: 'Unit 2',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 3,
+                 title: 'Unit 3',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 4,
+                 title: 'Unit 4',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              }
             ]
-            }
-        ],
-        modules: [
-            {
-            id: 2,
-            title: 'Module 2',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ],
-        modules: [
-            {
-            id: 3,
-            title: 'Module 3',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ],
-        modules: [
-            {
-            id: 4,
-            title: 'Module 4',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ],
-        modules: [
-            {
-            id: 5,
-            title: 'Module 5',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ]
+         }
+     ]
     },
     {
         id: 3,
@@ -745,360 +633,145 @@ const courseData = [
         category: 'Cat 3',
         description: '',
         modules: [
-            {
-            id: 1,
-            title: 'Module 1',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ],
-        modules: [
-            {
-            id: 2,
-            title: 'Module 2',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ],
-        modules: [
-            {
-            id: 3,
-            title: 'Module 3',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ],
-        modules: [
-            {
-            id: 4,
-            title: 'Module 4',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ],
-        modules: [
-            {
-            id: 5,
-            title: 'Module 5',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ]
+         {
+         id: 1,
+         title: 'Module 1',
+         start_date: '20-06-2019',
+         end_date: '20-6-2020',
+         visibility: true,
+         units: [
+             {
+                id: 1,
+                title: 'Unit 1',
+                start_date: '20-06-2019',
+                end_date: '20-6-2020',
+                video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                ppt: 'ppt1.ppt',
+                pdf: 'pdf1.pdf',
+                assignment: 'assignment1',
+                quiz: 'quiz',
+                visibility: true
+             },
+             {
+                 id: 2,
+                 title: 'Unit 2',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 3,
+                 title: 'Unit 3',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 4,
+                 title: 'Unit 4',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 5,
+                 title: 'Unit 5',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              }
+         ]
+         },
+         {
+         id: 2,
+         title: 'Module 2',
+         start_date: '20-06-2019',
+         end_date: '20-6-2020',
+         visibility: true,
+         units: [
+             {
+                id: 1,
+                title: 'Unit 1',
+                start_date: '20-06-2019',
+                end_date: '20-6-2020',
+                video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                ppt: 'ppt1.ppt',
+                pdf: 'pdf1.pdf',
+                assignment: 'assignment1',
+                quiz: 'quiz',
+                visibility: true
+             },
+             {
+                 id: 2,
+                 title: 'Unit 2',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 3,
+                 title: 'Unit 3',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 4,
+                 title: 'Unit 4',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 5,
+                 title: 'Unit 5',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              }
+         ]
+         }
+     ]
     },
     {
         id: 4,
@@ -1112,360 +785,214 @@ const courseData = [
         category: 'Cat 2',
         description: '',
         modules: [
-            {
-            id: 1,
-            title: 'Module 1',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ],
-        modules: [
-            {
-            id: 2,
-            title: 'Module 2',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ],
-        modules: [
-            {
-            id: 3,
-            title: 'Module 3',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ],
-        modules: [
-            {
-            id: 4,
-            title: 'Module 4',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ],
-        modules: [
-            {
-            id: 5,
-            title: 'Module 5',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ]
+         {
+         id: 1,
+         title: 'Module 1',
+         start_date: '20-06-2019',
+         end_date: '20-6-2020',
+         visibility: true,
+         units: [
+             {
+                id: 1,
+                title: 'Unit 1',
+                start_date: '20-06-2019',
+                end_date: '20-6-2020',
+                video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                ppt: 'ppt1.ppt',
+                pdf: 'pdf1.pdf',
+                assignment: 'assignment1',
+                quiz: 'quiz',
+                visibility: true
+             },
+             {
+                 id: 2,
+                 title: 'Unit 2',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 3,
+                 title: 'Unit 3',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 4,
+                 title: 'Unit 4',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 5,
+                 title: 'Unit 5',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              }
+         ]
+         },
+         {
+         id: 2,
+         title: 'Module 2',
+         start_date: '20-06-2019',
+         end_date: '20-6-2020',
+         visibility: true,
+         units: [
+             {
+                id: 1,
+                title: 'Unit 1',
+                start_date: '20-06-2019',
+                end_date: '20-6-2020',
+                video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                ppt: 'ppt1.ppt',
+                pdf: 'pdf1.pdf',
+                assignment: 'assignment1',
+                quiz: 'quiz',
+                visibility: true
+             },
+             {
+                 id: 2,
+                 title: 'Unit 2',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 3,
+                 title: 'Unit 3',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 4,
+                 title: 'Unit 4',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 5,
+                 title: 'Unit 5',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              }
+         ]
+         },
+         {
+         id: 3,
+         title: 'Module 3',
+         start_date: '20-06-2019',
+         end_date: '20-6-2020',
+         visibility: true,
+         units: [
+             {
+                id: 1,
+                title: 'Unit 1',
+                start_date: '20-06-2019',
+                end_date: '20-6-2020',
+                video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                ppt: 'ppt1.ppt',
+                pdf: 'pdf1.pdf',
+                assignment: 'assignment1',
+                quiz: 'quiz',
+                visibility: true
+             },
+             {
+                 id: 2,
+                 title: 'Unit 2',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 3,
+                 title: 'Unit 3',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 4,
+                 title: 'Unit 4',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 5,
+                 title: 'Unit 5',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              }
+         ]
+         }
+     ]
     },
     {
         id: 5,
@@ -1479,360 +1006,283 @@ const courseData = [
         category: 'Cat 1',
         description: '',
         modules: [
-            {
-            id: 1,
-            title: 'Module 1',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ],
-        modules: [
-            {
-            id: 2,
-            title: 'Module 2',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ],
-        modules: [
-            {
-            id: 3,
-            title: 'Module 3',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ],
-        modules: [
-            {
-            id: 4,
-            title: 'Module 4',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ],
-        modules: [
-            {
-            id: 5,
-            title: 'Module 5',
-            start_date: '20-06-2019',
-            end_date: '20-6-2020',
-            visibility: true,
-            units: [
-                {
-                   id: 1,
-                   title: 'Unit 1',
-                   start_date: '20-06-2019',
-                   end_date: '20-6-2020',
-                   video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                   ppt: 'ppt1.ppt',
-                   pdf: 'pdf1.pdf',
-                   assignment: 'assignment1',
-                   quiz: 'quiz',
-                   visibility: true
-                },
-                {
-                    id: 2,
-                    title: 'Unit 2',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 3,
-                    title: 'Unit 3',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 4,
-                    title: 'Unit 4',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 },
-                 {
-                    id: 5,
-                    title: 'Unit 5',
-                    start_date: '20-06-2019',
-                    end_date: '20-6-2020',
-                    video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
-                    ppt: 'ppt1.ppt',
-                    pdf: 'pdf1.pdf',
-                    assignment: 'assignment1',
-                    quiz: 'quiz',
-                    visibility: true
-                 }
-            ]
-            }
-        ]
+         {
+         id: 1,
+         title: 'Module 1',
+         start_date: '20-06-2019',
+         end_date: '20-6-2020',
+         visibility: true,
+         units: [
+             {
+                id: 1,
+                title: 'Unit 1',
+                start_date: '20-06-2019',
+                end_date: '20-6-2020',
+                video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                ppt: 'ppt1.ppt',
+                pdf: 'pdf1.pdf',
+                assignment: 'assignment1',
+                quiz: 'quiz',
+                visibility: true
+             },
+             {
+                 id: 2,
+                 title: 'Unit 2',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 3,
+                 title: 'Unit 3',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 4,
+                 title: 'Unit 4',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 5,
+                 title: 'Unit 5',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              }
+         ]
+         },
+         {
+         id: 2,
+         title: 'Module 2',
+         start_date: '20-06-2019',
+         end_date: '20-6-2020',
+         visibility: true,
+         units: [
+             {
+                id: 1,
+                title: 'Unit 1',
+                start_date: '20-06-2019',
+                end_date: '20-6-2020',
+                video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                ppt: 'ppt1.ppt',
+                pdf: 'pdf1.pdf',
+                assignment: 'assignment1',
+                quiz: 'quiz',
+                visibility: true
+             },
+             {
+                 id: 2,
+                 title: 'Unit 2',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 3,
+                 title: 'Unit 3',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 4,
+                 title: 'Unit 4',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 5,
+                 title: 'Unit 5',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              }
+         ]
+         },
+         {
+         id: 3,
+         title: 'Module 3',
+         start_date: '20-06-2019',
+         end_date: '20-6-2020',
+         visibility: true,
+         units: [
+             {
+                id: 1,
+                title: 'Unit 1',
+                start_date: '20-06-2019',
+                end_date: '20-6-2020',
+                video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                ppt: 'ppt1.ppt',
+                pdf: 'pdf1.pdf',
+                assignment: 'assignment1',
+                quiz: 'quiz',
+                visibility: true
+             },
+             {
+                 id: 2,
+                 title: 'Unit 2',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 3,
+                 title: 'Unit 3',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 4,
+                 title: 'Unit 4',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 5,
+                 title: 'Unit 5',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              }
+         ]
+         },
+         {
+         id: 4,
+         title: 'Module 4',
+         start_date: '20-06-2019',
+         end_date: '20-6-2020',
+         visibility: true,
+         units: [
+             {
+                id: 1,
+                title: 'Unit 1',
+                start_date: '20-06-2019',
+                end_date: '20-6-2020',
+                video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                ppt: 'ppt1.ppt',
+                pdf: 'pdf1.pdf',
+                assignment: 'assignment1',
+                quiz: 'quiz',
+                visibility: true
+             },
+             {
+                 id: 2,
+                 title: 'Unit 2',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 3,
+                 title: 'Unit 3',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 4,
+                 title: 'Unit 4',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              },
+              {
+                 id: 5,
+                 title: 'Unit 5',
+                 start_date: '20-06-2019',
+                 end_date: '20-6-2020',
+                 video: 'https://youtu.be/se9DDAwwGQY?si=nz86lMUJ_rp-2UxA',
+                 ppt: 'ppt1.ppt',
+                 pdf: 'pdf1.pdf',
+                 assignment: 'assignment1',
+                 quiz: 'quiz',
+                 visibility: true
+              }
+         ]
+         }
+     ]
     }
 ]
 export default courseData

@@ -219,8 +219,8 @@ const Module = ({
         <div className="module-content-section">
           <div className="navigation">
             <ul style={{ paddingLeft: "10px", listStyle: "none" }}>
-              {moduleContent.unit &&
-                moduleContent.unit.map((unit) => {
+              {moduleContent.units &&
+                moduleContent.units.map((unit) => {
                   return (
                     <div key={unit.id}>
                       <li>
