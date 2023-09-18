@@ -42,17 +42,17 @@ const AllCourse = ({
 
   useEffect(() => {
     const getCourseData = () => {
-      fetch('http://127.0.0.1:8000/api/courses',  {
+      fetch("http://127.0.0.1:8000/api/courses", {
         method: "GET",
         headers: {
-          "Authorization": `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61` ,
+          Authorization: `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61`,
         },
-      }).then((response) => { 
+      }).then((response) => {
         response.json().then(function (result) {
           console.log(result);
-          setCourseContent(result)
-        })
-      })
+          setCourseContent(result);
+        });
+      });
       // setCourseContent(courseData);
     };
 
@@ -92,17 +92,20 @@ const AllCourse = ({
   };
 
   const handleCourseContent = (course) => {
- 
-    // fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`).then((response) => {
-    //   response.json().then(function (result) {
-    //     console.log("Api result: ", result);
-    //     setModuleData(result);
-    //   });
-    // });
-
+    fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log("Api result: ", result);
+        setModuleData(result);
+      });
+    });
 
     setCourse(() => course);
-    setModuleData(() => course.modules);
+    // setModuleData(() => course.modules);
     setCourseTitle(() => course.course_title);
     setCourseDes(`<p>${course.description}</p>`);
     setCourseCategory(course.category);
@@ -110,19 +113,32 @@ const AllCourse = ({
     setVisibility(() => course.visibility);
   };
 
+  const handleModuleContent = (module) => {
+    fetch(`http://127.0.0.1:8000/api/modules/${module.id}/units`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log("Api result: ", result);
+        setUnitData(result);
+      });
+    });
+  };
   const handleSave = (e) => {
     e.preventDefault();
     if (courseTitle && courseCategory) {
       const obj = {
         title: courseTitle,
-        description: 'Test Description'
+        description: "Test Description",
         // categories: 1,
       };
       fetch("http://127.0.0.1:8000/api/courses/", {
         method: "POST",
         body: JSON.stringify(obj),
         headers: {
-          "Authorization": `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61` ,
+          Authorization: `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61`,
           "Content-type": "application/json; charset=UTF-8",
         },
       }).then((response) => {
@@ -198,7 +214,7 @@ const AllCourse = ({
     // setCourseContent(() => [...courseContent])
     // console.log(obj);
   };
-  console.log("module Content", moduleData);
+  // console.log("module Content", moduleData);
   // console.log('Course Content',course);
   // console.log('course Content',courseData);
   return (
@@ -308,7 +324,7 @@ const AllCourse = ({
                               // fun(course.id)
                             }}
                           >
-                            {course.course_title}
+                            {course.title}
                           </li>
                         </div>
                       );
@@ -450,36 +466,255 @@ const AllCourse = ({
                       {moduleData &&
                         moduleData.map((module) => {
                           return (
-                            <div key={module.moduleTitle}>
-                              <li>{module.moduleTitle}</li>
+                            <div key={module.title}>
+                              <li>{module.title}</li>
                             </div>
                           );
                         })}
                     </ul> */}
                     <div className="unitData-section">
-                      {moduleData.length === 0 ? (
-                        "No Module Added"
+                      <div
+                        class="accordion accordion-flush"
+                        id="accordionFlushExample"
+                      >
+                        {moduleData.length === 0 ||
+                        moduleData.detail == "No module found for this course."
+                          ? moduleData.detail
+                          : moduleData &&
+                            moduleData.map((module) => {
+                              return (
+                                <div
+                                  key={module.id}
+                                  type="button"
+                                  className="accordion-item"
+                                  role="button"
+                                  aria-expanded="false"
+                                  onClick={() => {
+                                    // showModuleList();
+                                    // setUnitContent(unit)
+                                    handleModuleContent(module);
+                                    setModuelContent(module);
+                                  }}
+                                >
+                                  <h2
+                                    class="accordion-header"
+                                    id={`flush-${module.id}`}
+                                  >
+                                    <button
+                                      class="accordion-button collapsed"
+                                      type="button"
+                                      data-bs-toggle="collapse"
+                                      data-bs-target={`#${module.id}`}
+                                      aria-expanded="false"
+                                      aria-controls={`flush-${module.id}`}
+                                    >
+                                      {module.title}
+                                    </button>
+                                  </h2>
+                                  <div
+                                    id={module.id}
+                                    class="accordion-collapse collapse"
+                                    aria-labelledby={`flush-${module.id}`}
+                                    data-bs-parent="#accordionFlushExample"
+                                  >
+                                    <div class="accordion-body">
+                                      <div
+                                        class="accordion accordion-flush"
+                                        id="unit-section"
+                                      >
+                                        {unitData.length === 0 ||
+                                        unitData.detail ==
+                                          "No module found for this course."
+                                          ? unitData.detail
+                                          : unitData &&
+                                            unitData.map((unit) => {
+                                              return (
+                                                <div
+                                                  key={unit.id}
+                                                  type="button"
+                                                  className="accordion-item"
+                                                  role="button"
+                                                  aria-expanded="true"
+                                                  onClick={() => {
+                                                    // showModuleList();
+                                                    // setUnitContent(unit)
+                                                    // handleModuleContent(module);
+                                                    // setModuelContent(module);
+                                                  }}
+                                                >
+                                                  <h2
+                                                    class="accordion-header"
+                                                    id={`flush-${unit.id}`}
+                                                  >
+                                                    <button
+                                                      class="accordion-button collapsed"
+                                                      type="button"
+                                                      data-bs-toggle="collapse"
+                                                      data-bs-target={`#${unit.id}`}
+                                                      aria-expanded="false"
+                                                      aria-controls={`flush-${unit.id}`}
+                                                    >
+                                                      {unit.title}
+                                                    </button>
+                                                  </h2>
+                                                  <div
+                                                    id={unit.id}
+                                                    class="accordion-collapse collapse"
+                                                    aria-labelledby={`flush-${unit.id}`}
+                                                    data-bs-parent="#accordionFlushExample"
+                                                  >
+                                                    <div class="accordion-body"></div>
+                                                  </div>
+                                                </div>
+                                              );
+                                            })}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+
+                        {/* <div class="accordion-item">
+                          <h2 class="accordion-header" id="flush-headingOne">
+                            <button
+                              class="accordion-button collapsed"
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#flush-collapseOne"
+                              aria-expanded="false"
+                              aria-controls="flush-collapseOne"
+                            >
+                              Accordion Item #1
+                            </button>
+                          </h2>
+                          <div
+                            id="flush-collapseOne"
+                            class="accordion-collapse collapse"
+                            aria-labelledby="flush-headingOne"
+                            data-bs-parent="#accordionFlushExample"
+                          >
+                            <div class="accordion-body">
+                              Placeholder content for this accordion, which is
+                              intended to demonstrate the{" "}
+                              <code>.accordion-flush</code> class. This is the
+                              first item's accordion body.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="flush-headingTwo">
+                            <button
+                              class="accordion-button collapsed"
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#flush-collapseTwo"
+                              aria-expanded="false"
+                              aria-controls="flush-collapseTwo"
+                            >
+                              Accordion Item #2
+                            </button>
+                          </h2>
+                          <div
+                            id="flush-collapseTwo"
+                            class="accordion-collapse collapse"
+                            aria-labelledby="flush-headingTwo"
+                            data-bs-parent="#accordionFlushExample"
+                          >
+                            <div class="accordion-body">
+                              Placeholder content for this accordion, which is
+                              intended to demonstrate the{" "}
+                              <code>.accordion-flush</code> class. This is the
+                              second item's accordion body. Let's imagine this
+                              being filled with some actual content.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="flush-headingThree">
+                            <button
+                              class="accordion-button collapsed"
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#flush-collapseThree"
+                              aria-expanded="false"
+                              aria-controls="flush-collapseThree"
+                            >
+                              Accordion Item #3
+                            </button>
+                          </h2>
+                          <div
+                            id="flush-collapseThree"
+                            class="accordion-collapse collapse"
+                            aria-labelledby="flush-headingThree"
+                            data-bs-parent="#accordionFlushExample"
+                          >
+                            <div class="accordion-body">
+                              Placeholder content for this accordion, which is
+                              intended to demonstrate the{" "}
+                              <code>.accordion-flush</code> class. This is the
+                              third item's accordion body. Nothing more exciting
+                              happening here in terms of content, but just
+                              filling up the space to make it look, at least at
+                              first glance, a bit more representative of how
+                              this would look in a real-world application.
+                            </div>
+                          </div>
+                        </div> */}
+                      </div>
+
+                      {/* {moduleData.length === 0 ||
+                      moduleData.detail ==
+                        "No module found for this course." ? (
+                        moduleData.detail
                       ) : (
                         <ul className="units d-grid gap-2 w-50">
-                          {moduleData.map((module) => {
-                            return (
-                              <li
-                                key={module.id}
-                                type="button"
-                                className="text-start ms-0 ps-2"
-                                onClick={() => {
-                                  showModuleList();
-                                  // setUnitContent(unit)
-                                  setModuelContent(module);
-                                }}
-                              >
-                                <span>{module.title}</span>
-                                <i class="fas fa-solid fa-caret-up"></i>
-                              </li>
-                            );
-                          })}
+                          {moduleData &&
+                            moduleData.map((module) => {
+                              return (
+                                <li
+                                  key={module.id}
+                                  type="button"
+                                  className="text-start ms-0 ps-2 nav-link dropdown-toggle"
+                                  id="navbarDropdown"
+                                  role="button"
+                                  data-bs-toggle="dropdown"
+                                  aria-expanded="false"
+                                  onClick={() => {
+                                    // showModuleList();
+                                    // setUnitContent(unit)
+                                    handleModuleContent(module);
+                                    setModuelContent(module);
+                                  }}
+                                >
+                                  <span>{module.title}</span>
+                                  <ul
+                                    class="dropdown-menu"
+                                    aria-labelledby="navbarDropdown"
+                                  >
+                                    {unitData &&
+                                      unitData.map((unit) => {
+                                        return (
+                                          <li
+                                            key={unit.id}
+                                            type="button"
+                                            className="text-start ms-0 ps-2"
+                                            onClick={() => {
+                                              // showUnitList();
+                                              // setUnitContent(unit);
+                                            }}
+                                          >
+                                            <span>{unit.title}</span>
+                                            <i class="fas fa-solid fa-caret-up"></i>
+                                          </li>
+                                        );
+                                      })}
+                                  </ul>
+                                </li>
+                              );
+                            })}
                         </ul>
-                      )}
+                      )} */}
                     </div>
                     <div>
                       {showModule && (
@@ -544,7 +779,7 @@ const AllCourse = ({
                     data-bs-target="#offcanvasCourse"
                     aria-controls="offcanvasRight"
                     onClick={() => {
-                      handleCourseContent(course)
+                      handleCourseContent(course);
                       // handleCourseContent(course.id);
                       // setCourseTitle(course.course_title);
                       // fun(course.id)
