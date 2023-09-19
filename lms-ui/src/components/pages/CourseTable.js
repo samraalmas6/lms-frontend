@@ -214,7 +214,6 @@ function CourseTable() {
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [videoCompleted, setVideoCompleted] = useState(false);
   const [expandedModule, setExpandedModule] = useState(null);
-  const [extendedView, setExtendedView] = useState(false);
   const [isCourseContentVisible, setIsCourseContentVisible] = useState(true);
   const [videoPaneState, setVideoPaneState] = useState('collapsed')
 
@@ -236,10 +235,6 @@ function CourseTable() {
     } else {
       setExpandedModule(index);
     }
-  };
-
-  const handleExtendedView = () => {
-    setExtendedView(!extendedView);
   };
 
   const toggleCourseContent = () => {
@@ -278,11 +273,6 @@ function CourseTable() {
               selectedLesson={selectedLesson}
               handleVideoProgress={handleVideoProgress}
             />
-
-            {/* <h1>video container</h1> */}
-            {/* <div className="video_player_container"> */}
-            {/* <VideoPlayer selectedLesson={selectedLesson} /> */}
-            {/* </div> */}
             {/* tabs below video */}
           </div>
           <div className="tabs-container">
@@ -352,11 +342,16 @@ function CourseTable() {
           </div>
         )}
         {!isCourseContentVisible && 
-        <button onClick={toggleCourseContent}>
-          return 
-          </button>}
+        // <button type="button" class="expand-view-btn" onClick={toggleCourseContent}>
+        //   <i class="fas fa-solid fa-arrow-right fa-rotate-180"></i> Course Content 
+        //   </button>
+           <button type="button" class="ud-btn ud-btn-large ud-btn-primary ud-heading-md course-content-toggle--button--RLfW6 btn-content" onClick={toggleCourseContent} >
+            <i class="fas fa-solid fa-arrow-right fa-rotate-180"></i>
+           <span  class="course-content-toggle--label--IP79B">Course content</span></button>
+          }
+
+         
       </div>
-      <div className="extended-view-container"></div>
     </>
   );
 }

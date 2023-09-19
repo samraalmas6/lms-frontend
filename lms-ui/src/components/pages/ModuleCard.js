@@ -17,7 +17,7 @@ const ModuleCard = ({ module, isExpanded, toggleModule, handleLessonSelect, sele
 
   useEffect(() => {
     if (!isExpanded) {
-      handleLessonSelect(null);
+      // handleLessonSelect(null);
       handleVideoCompleted(false);
     // } else if (module.lessons.length > 0) {
     //    first lesson as selected when the module is expanded

@@ -1,0 +1,27 @@
+
+.main-container{
+    display: flex;
+    padding: 15px;
+}
+
+.assignment-details{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 70%;
+    background-color: white;
+}
+
+.assignment-details input{
+    background-color: #e6e6e3;
+    width: 100%;
+    border: none;
+    border-color: #e6e6e3;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.side-container{
+    width: 30%;
+    background-color: gray;
+}

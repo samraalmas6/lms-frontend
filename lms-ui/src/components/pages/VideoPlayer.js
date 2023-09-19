@@ -10,7 +10,7 @@ const VideoPlayer = ({ selectedLesson,handleVideoProgress }) => {
           url={selectedLesson.url}
           controls={true}
           width="100%"
-          height="100%"
+          height="62vh"
           volume={3.5}
           onProgress={handleVideoProgress}
         />

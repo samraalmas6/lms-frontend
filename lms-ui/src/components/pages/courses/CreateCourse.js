@@ -107,7 +107,6 @@ const CreateCourse = () => {
             )}
             </div>
           </div>
-
           <div className="add-course-btn">
             <button type="button" className="btn btn-outline-primary">
               Create Course
