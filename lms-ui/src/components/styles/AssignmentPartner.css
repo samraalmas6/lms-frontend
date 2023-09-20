@@ -2,6 +2,9 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
   }
   .names_list input{
       /* width: 100%; */
@@ -12,19 +15,35 @@
       border-radius: 5px;
   }
   .names_list button{
-      margin-top: 5px;
+      margin-top: 20px;
       width: 50%;
       height: 30px;
       border-radius: 5px;
+      border: none;
       
   }
   .selected_names .create_button{
       width: 50%;
       height: 30px;
       border-radius: 5px;
+      border: none;
   }
   .names_list {
     display: flex;
     flex-direction: column;
   }
   
+  .name-icon{
+    background-color:cornflowerblue;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    border: 2px solid blue;
+    margin-bottom: 10px;
+  }
+
+  .group-name-list{
+    list-style: none;
+    display: flex;
+    gap: 10px;
+  }

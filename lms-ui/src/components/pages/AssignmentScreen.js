@@ -35,8 +35,6 @@ const AssignmentScreen = () => {
     setShowFileAttach(true);
   };
 
-
-
   return (
     <div>
       <div className="main-container">
@@ -45,6 +43,7 @@ const AssignmentScreen = () => {
           <p>description</p>
           <p>attach file</p> */}
           <form>
+          <i class='fas fa-pen'></i>
             <input type="text" placeholder="Title" />
           </form>
           <div className="editor">
@@ -60,6 +59,7 @@ const AssignmentScreen = () => {
 
             <div className="due-date-time">
               {/* <label>Due Date:</label> */}
+              <i class='fas fa-calendar-alt'></i>
               <input
                 type="date"
                 placeholder="Start Date"
@@ -71,6 +71,7 @@ const AssignmentScreen = () => {
             {/* <p>Due time</p> */}
             <div className="due-date-time">
               {/* <label>Due Time:</label> */}
+              <i class='far fa-clock'></i>
               <input
                 type="time"
                 // max="2030-12-30"
@@ -81,11 +82,12 @@ const AssignmentScreen = () => {
             </div>
           </div>
           <div className="marks">
-            <p>marks</p>
+          <i class="fas fa-thin fa-star fa-lg"></i>
+            <input type="text" placeholder="Enter Marks" />
           </div>
           <div className="assignment-partners">
             <div className="heading-container">
-            <h2>Assignment Partners</h2>
+            <h3>Assignment Partners</h3>
             {/* <button onClick={handleClick}> */}
                 {/* <i class=" fas fa-solid fa-plus"></i> */}
                 <div className="user-icon"  onClick={handleClick}>
