@@ -1,0 +1,30 @@
+.main_container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  .names_list input{
+      /* width: 100%; */
+      height: 30px;
+      border-radius: 5px;
+  }
+  .names_list select{
+      border-radius: 5px;
+  }
+  .names_list button{
+      margin-top: 5px;
+      width: 50%;
+      height: 30px;
+      border-radius: 5px;
+      
+  }
+  .selected_names .create_button{
+      width: 50%;
+      height: 30px;
+      border-radius: 5px;
+  }
+  .names_list {
+    display: flex;
+    flex-direction: column;
+  }
+  

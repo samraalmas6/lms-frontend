@@ -1,8 +1,10 @@
 import React from "react";
 import { useState } from "react";
+import '../styles/AssignmentPartner.css'
 
 const AssignmentPartners = () => {
   const [selectedNames, setSelectedNames] = useState([]);
+  // const [showTeam, setShowTeam] =useState(false)
   const [lastSelectedNames, setLastSelectedNames] = useState([]); // Track last selected names
   const [searchText, setSearchText] = useState("");
   const [groupMembers, setGroupMembers] = useState([]);
@@ -73,7 +75,7 @@ const AssignmentPartners = () => {
   return (
     <div>
       <div className="main_container">
-        <h1 className="heading">Create Group</h1>
+        {/* <h1 className="heading">Create Group</h1> */}
         <div className="names_list">
           <input
             type="text"

@@ -3,6 +3,8 @@ import AssignmentPartners from "../content/AssignmentPartners";
 import "../styles/AssignmentScreen.css";
 import { useState } from "react";
 import AssigDesc from "../content/AssigDesc";
+import UploadPicture from "./UploadPicture";
+import FileUploadComponent from "../content/FileUploadComponent";
 
 const AssignmentScreen = () => {
   const currentDate = new Date();
@@ -12,17 +14,28 @@ const AssignmentScreen = () => {
   const minDate = `${year}-${month}-${day}`;
 
   const [showComp, setShowComp] = useState(false);
-  const [courseEnd, setCourseEnd] = useState("2025-12-30");
-
+  const [courseStart, setCourseStart] = useState(minDate);
+  const [courseEnd, setCourseEnd] = useState("");
+  const [showAttachFile, setShowFileAttach] = useState(false);
 
   const handleClick = () => {
     console.log("button is pressed");
-    setShowComp(true);
+    setShowComp(!showComp);
+  };
+
+  const handleCourseStart = (e) => {
+    setCourseStart(e.target.value);
   };
 
   const handleCourseEnd = (e) => {
     setCourseEnd(e.target.value);
   };
+
+  const handleFileAttachment = () => {
+    setShowFileAttach(true);
+  };
+
+
 
   return (
     <div>
@@ -37,24 +50,27 @@ const AssignmentScreen = () => {
           <div className="editor">
             <AssigDesc />
           </div>
+          <div className="file">
+            <FileUploadComponent />
+          </div>
         </div>
         <div className="side-container">
           <div className="due-date-and-time">
             {/* <p>due date</p> */}
-            <div className="course-end">
-              <label>Due Date:</label>
+
+            <div className="due-date-time">
+              {/* <label>Due Date:</label> */}
               <input
                 type="date"
-                // max="2030-12-30"
-                // min={minDate}
-                // placeholder="Due Date"
-                value={courseEnd}
-                onChange={handleCourseEnd}
+                placeholder="Start Date"
+                min={minDate}
+                value={courseStart}
+                onChange={handleCourseStart}
               />
             </div>
             {/* <p>Due time</p> */}
-            <div className="course-end">
-              <label>Due Time:</label>
+            <div className="due-date-time">
+              {/* <label>Due Time:</label> */}
               <input
                 type="time"
                 // max="2030-12-30"
@@ -68,13 +84,19 @@ const AssignmentScreen = () => {
             <p>marks</p>
           </div>
           <div className="assignment-partners">
+            <div className="heading-container">
             <h2>Assignment Partners</h2>
-            <div>
-              <button onClick={handleClick}>
-                <i class=" fas fa-solid fa-plus"></i>
-              </button>
-              {showComp && <AssignmentPartners />}
+            {/* <button onClick={handleClick}> */}
+                {/* <i class=" fas fa-solid fa-plus"></i> */}
+                <div className="user-icon"  onClick={handleClick}>
+                <i class="fas fa-thin fa-user-plus"></i>
+              </div>
+              {/* </button> */}
             </div>
+            {showComp && 
+              <>
+             <AssignmentPartners />
+             </>}
           </div>
         </div>
       </div>
