@@ -45,6 +45,18 @@ const AssignmentPartners = () => {
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
   };
+  // const AddToGroup = () => {
+  //   if (selectedNames.length > 0) {
+  //     // Add selected names to the group members
+  //     setGroupMembers([...groupMembers, ...selectedNames]);
+
+  //     // Set last selected names
+  //     setLastSelectedNames([...selectedNames]);
+
+  //     // Clear selectedNames
+  //     setSelectedNames([]);
+  //   }
+  // };
 
   const handleAddToGroup = () => {
     if (selectedNames.length > 0) {
@@ -72,6 +84,24 @@ const AssignmentPartners = () => {
     }
   };
 
+  // const CreateGroup = () => {
+  //   if (lastSelectedNames.length > 0) {
+  //     // yahan prr hn ...selectedNames use krr rhy thy to ek to wo sb names leke aarha tha list se
+  //     // tou ek new state bnai jis me hmne last selected names ko manage kiya
+  //     const newGroup = [...lastSelectedNames];
+  //     setGroups([...groups, newGroup]);
+
+  //     // Clear lastSelectedNames
+  //     // or yahan aake us last selected names ko array se remove krr diya
+  //     setLastSelectedNames([]);
+  //   }
+  // };
+
+  // const handleCreateGroupButton = () => {
+  //   AddToGroup();
+  //   CreateGroup();
+  // }
+
   const handleRemoveSelected = (nameToRemove) => {
     console.log("svg clicked for functionality");
     const updatedSelectedNames = selectedNames.filter(
@@ -95,7 +125,7 @@ const AssignmentPartners = () => {
   };
 
   const handleFirstAndLastLetter = (name) => {
-    console.log("func call hua ha")
+    console.log("func call hua ha");
     // const fullName = "Samra Almas";
     // Split the name into parts
     const nameParts = name.split(" ");
@@ -107,39 +137,18 @@ const AssignmentPartners = () => {
         .charAt(0)
         .toUpperCase();
       // Display the first letters on the console
-      // console.log(`${firstNameFirstLetter}${lastNameFirstLetter}`);
-      return(
-        firstNameFirstLetter, lastNameFirstLetter
-      )
+      console.log(`${firstNameFirstLetter}${lastNameFirstLetter}`);
+      // return firstNameFirstLetter, lastNameFirstLetter;
     } else {
-      return(
-        "Invalid name format. Please provide a full name with a space in between."
-      );
+      return "Invalid name format. Please provide a full name with a space in between.";
     }
   };
 
   return (
     <div>
       <div className="main_container">
-        {/* <h1 className="heading">Create Group</h1> */}
-        <div className="names_list">
-          <input
-            type="text"
-            placeholder="Search Names"
-            value={searchText}
-            onChange={handleSearchChange}
-          />
-          <select multiple onChange={handleNameSelect} value={selectedNames}>
-            {filteredNames.map((name, index) => (
-              <option key={index} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
-          <button onClick={handleAddToGroup}>Add to Group</button>
-        </div>
         <div className="selected_names">
-          <h4>Selected Names</h4>
+          {/* <h4>Selected Names</h4> */}
           <ul>
             {selectedNames.map((name, index) => (
               <li key={index}>
@@ -165,10 +174,28 @@ const AssignmentPartners = () => {
               </li>
             ))}
           </ul>
-          <button className="create_button" onClick={handleCreateGroup}>
-            Create Group
-          </button>
         </div>
+        {/* <h1 className="heading">Create Group</h1> */}
+        <div className="names_list">
+          <input
+            type="text"
+            placeholder="Search Names"
+            value={searchText}
+            onChange={handleSearchChange}
+          />
+          <select multiple onChange={handleNameSelect} value={selectedNames}>
+            {filteredNames.map((name, index) => (
+              <option key={index} value={name}>
+                {name}
+              </option>
+            ))}
+          </select>
+          <button onClick={handleAddToGroup}>Add to Group</button>
+        </div>
+
+        <button className="create_button" onClick={handleCreateGroup}>
+          Create Group
+        </button>
         <div className="group_container">
           <h2>Created Groups</h2>
           <ul>
@@ -181,7 +208,10 @@ const AssignmentPartners = () => {
                   {group.map((name, nameIndex) => (
                     <li key={nameIndex} className="group-name-list">
                       <div className="name-icon">
-                        {handleFirstAndLastLetter('Ahmad Khan')}
+                        {allNames.forEach((name) => {
+                          handleFirstAndLastLetter(name);
+                        })}
+                        {/* {handleFirstAndLastLetter("Ahmad Khan")} */}
                         {/* {firstNameFirstLetter}{lastNameFirstLetter} */}
                       </div>
                       {name}
