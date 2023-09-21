@@ -10,6 +10,7 @@ const AssignmentPartners = () => {
   const [groupMembers, setGroupMembers] = useState([]);
   const [groups, setGroups] = useState([]); // Store all created groups here
   const [removedNames, setRemovedNames] = useState([]);
+  const [isClicked, setIsClicked] = useState(false);
 
   const allNames = [
     "John Martin",
@@ -18,9 +19,11 @@ const AssignmentPartners = () => {
     "Bob Williams",
     "Mark Butchar",
     "Bruce Wayne",
-    // Add more names here
   ];
 
+ 
+
+  
   const filteredNames = allNames.filter(
     (name) =>
       !groupMembers.includes(name) &&
@@ -45,6 +48,7 @@ const AssignmentPartners = () => {
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
   };
+
   // const AddToGroup = () => {
   //   if (selectedNames.length > 0) {
   //     // Add selected names to the group members
@@ -58,31 +62,50 @@ const AssignmentPartners = () => {
   //   }
   // };
 
+  // const handleAddToGroup = () => {
+  //   if (selectedNames.length > 0) {
+  //     Add selected names to the group members
+  //     setGroupMembers([...groupMembers, ...selectedNames]);
+
+  //     Set last selected names
+  //     setLastSelectedNames([...selectedNames]);
+
+  //     Clear selectedNames
+  //     setSelectedNames([]);
+  //   }
+  // };
+
   const handleAddToGroup = () => {
-    if (selectedNames.length > 0) {
-      // Add selected names to the group members
-      setGroupMembers([...groupMembers, ...selectedNames]);
+    return new Promise((resolve, reject) => {
+      if (selectedNames.length > 0) {
+        // Add selected names to the group members
+        setGroupMembers([...groupMembers, ...selectedNames]);
 
-      // Set last selected names
-      setLastSelectedNames([...selectedNames]);
+        // Set last selected names
+        setLastSelectedNames([...selectedNames]);
 
-      // Clear selectedNames
-      setSelectedNames([]);
-    }
+        // Clear selectedNames
+        setSelectedNames([]);
+      }
+      resolve();
+    });
   };
 
-  const handleCreateGroup = () => {
-    if (lastSelectedNames.length > 0) {
-      // yahan prr hn ...selectedNames use krr rhy thy to ek to wo sb names leke aarha tha list se
-      // tou ek new state bnai jis me hmne last selected names ko manage kiya
-      const newGroup = [...lastSelectedNames];
-      setGroups([...groups, newGroup]);
+  // const handleCreateGroup = () => {
+  //   return new Promise((resolve, reject) => {
+  //     if (lastSelectedNames.length > 0) {
+  //       // yahan prr hn ...selectedNames use krr rhy thy to ek to wo sb names leke aarha tha list se
+  //       // tou ek new state bnai jis me hmne last selected names ko manage kiya
+  //       const newGroup = [...lastSelectedNames];
+  //       setGroups([...groups, newGroup]);
 
-      // Clear lastSelectedNames
-      // or yahan aake us last selected names ko array se remove krr diya
-      setLastSelectedNames([]);
-    }
-  };
+  //       // Clear lastSelectedNames
+  //       // or yahan aake us last selected names ko array se remove krr diya
+  //       setLastSelectedNames([]);
+  //     }
+  //     resolve();
+  //   });
+  // };
 
   // const CreateGroup = () => {
   //   if (lastSelectedNames.length > 0) {
@@ -144,6 +167,31 @@ const AssignmentPartners = () => {
     }
   };
 
+  const handleCombinedFunctions = async() => {
+   await handleAddToGroup()
+   await handleCreateGroup()
+   console.log("ma execute hogaya successfully")
+  }
+
+  // const handleCombinedFunctions = () => {
+  //   if (!isClicked) {
+  //     setIsClicked(true);
+  //     handleAddToGroup();
+  //     handleCreateGroup();
+  //     console.log("ma execute hogaya successfully");
+  //   }
+  // };
+
+  const handleCreateGroup = () => {
+    if (lastSelectedNames.length > 0 || selectedNames.length > 0) {
+      const newGroup = [...lastSelectedNames, ...selectedNames];      
+      setGroups([...groups, newGroup]);
+      setGroupMembers([...groupMembers, ...newGroup]);
+      setLastSelectedNames([]);
+      setSelectedNames([]);
+    }
+  };
+
   return (
     <div>
       <div className="main_container">
@@ -190,7 +238,10 @@ const AssignmentPartners = () => {
               </option>
             ))}
           </select>
-          <button onClick={handleAddToGroup}>Add to Group</button>
+          {/* <button onClick={handleAddToGroup}>Add to Group</button> */}
+          {/* <button onClick={()=> handleCombinedFunctions()}>
+            add and create group
+          </button> */}
         </div>
 
         <button className="create_button" onClick={handleCreateGroup}>

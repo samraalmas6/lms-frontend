@@ -4,6 +4,7 @@ import "../styles/AssignmentScreen.css";
 import { useState } from "react";
 import AssigDesc from "../content/AssigDesc";
 import UploadPicture from "./UploadPicture";
+import paraIcon from "../content/Images/paragraph.svg"
 import FileUploadComponent from "../content/FileUploadComponent";
 
 const AssignmentScreen = () => {
@@ -46,8 +47,9 @@ const AssignmentScreen = () => {
           <i class='fas fa-pen'></i>
             <input type="text" placeholder="Title" />
           </form>
-          <div className="editor">
-            <AssigDesc />
+          <div className="editor-container">
+            <div><img src={paraIcon} alt="" /></div>
+            <div className="description-container"><AssigDesc /></div>
           </div>
           <div className="file">
             <FileUploadComponent />

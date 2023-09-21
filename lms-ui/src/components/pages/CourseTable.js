@@ -326,6 +326,7 @@ function CourseTable() {
               {coursesData.map((course) => (
                 <div key={course.id} className="course_card">
                   {/* <h2>{course.title}</h2> */}
+                  
                   {course.modules.map((module, index) => (
                     <ModuleCard
                       key={module.id}

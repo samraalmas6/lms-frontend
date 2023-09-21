@@ -47,3 +47,19 @@
     display: flex;
     gap: 10px;
   }
+
+  .main_container .selected_names ul{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-left: 0px;
+  }
+
+  .main_container .selected_names ul li{
+    display: flex;
+    justify-content: space-between;
+    background-color: #e6e6e3;
+    border: 1px solid #e6e6e3;
+    border-radius: 5px;
+  }
