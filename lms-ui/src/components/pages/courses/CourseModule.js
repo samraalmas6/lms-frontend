@@ -4,14 +4,10 @@ import UpdateUnit from "./UpdateUnit";
 
 const Module = ({
   moduleData,
-  setModuleData,
   setShowModule,
   minDate,
   unitData,
   setUnitData,
-  showModuleContent,
-  setShowModuleContent,
-  moduleContent,
 }) => {
   const [moduleTitle, setModuleTitle] = useState("");
   const [moduleStart, setModuleStart] = useState("");
@@ -50,17 +46,39 @@ const Module = ({
     e.preventDefault();
     if (moduleTitle) {
       const obj = {
-        id: Math.floor(Math.random() * 1000),
         title: moduleTitle,
         start_date: moduleStart,
         end_date: moduleEnd,
-        unit: unitData,
+        course: 2,
       };
-      setModuleData((pre) => [...pre, obj]);
-      setModuleTitle("");
-      setModuleStart("");
-      setModuleEnd("");
-      setShowModule((pre) => !pre);
+
+      fetch("http://127.0.0.1:8000/api/modules/", {
+        method: "POST",
+        body: JSON.stringify(obj),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem('user_token')}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status == 201) {
+          response.json().then(function (result) {
+            console.log(result);
+            setModuleTitle("");
+            setModuleStart("");
+            setModuleEnd("");
+            // window.location.reload();
+             setShowModule((pre) => !pre);
+          });
+        } else {
+          console.log(response);
+        }
+      });
+
+      // setModuleData((pre) => [...pre, obj]);
+      // setModuleTitle("");
+      // setModuleStart("");
+      // setModuleEnd("");
+      // setShowModule((pre) => !pre);
     } else {
       // alert('Moule title is required')
     }
@@ -68,31 +86,6 @@ const Module = ({
   console.log(moduleData);
   return (
     <div>
-      {/* <div className="unitData-section">
-        {moduleData.length === 0 ? (
-          "No Module Added"
-        ) : (
-          <ul className="units d-grid gap-2 w-50">
-            {moduleData.map((module) => {
-              return (
-                <li
-                  key={module.id}
-                  type="button"
-                  className="text-start ms-0 ps-2"
-                  onClick={() => {
-                    showModuleList();
-                    // setUnitContent(unit)
-                    setModuelContent(module);
-                  }}
-                >
-                  <span>{module.title}</span>
-                  <i class="fas fa-solid fa-caret-up"></i>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div> */}
 
       <div className="course-module">
         <form
@@ -150,32 +143,8 @@ const Module = ({
           ></button>
         </form>
         {/* <hr style={{ margin: "0px 5px 0px -7%", width: '65%' }} /> */}
-        <hr style={{ margin: "20px 0px 40px -7%", width: '107%' }} />
-        <div className="unitData-section ms-5" >
-          {unitData.length === 0 ? (
-            "No Unit Added"
-          ) : (
-            <ul className="units d-grid gap-2 w-50">
-              {unitData &&
-                unitData.map((unit) => {
-                  return (
-                    <li
-                      key={unit.id}
-                      type="button"
-                      className="text-start ms-0 ps-2"
-                      onClick={() => {
-                        showUnitList();
-                        setUnitContent(unit);
-                      }}
-                    >
-                      <span>{unit.title}</span>
-                      <i class="fas fa-solid fa-caret-up"></i>
-                    </li>
-                  );
-                })}
-            </ul>
-          )}
-        </div>
+        <hr style={{ margin: "20px 0px 40px -7%", width: "107%" }} />
+        <div className="unitData-section ms-5"></div>
         {showUnit && (
           <LeasonForm
             minDate={minDate}
@@ -209,99 +178,6 @@ const Module = ({
         >
           save Module
         </button>
-      </div>
-
-      <div
-        className={`offcanvas offcanvas-top module-list-show ${showModuleContent}`}
-        id="show-unit"
-        tabindex="-1"
-      >
-        <div className="module-content-section">
-          <div className="navigation">
-            <ul style={{ paddingLeft: "10px", listStyle: "none" }}>
-              {moduleContent.units &&
-                moduleContent.units.map((unit) => {
-                  return (
-                    <div key={unit.id}>
-                      <li>
-                        <a
-                          role="button"
-                          onClick={() => {
-                            setUnitContent(unit);
-                          }}
-                        >
-                          {unit.title}
-                        </a>
-                      </li>
-                    </div>
-                  );
-                })}
-            </ul>
-          </div>
-          <div className="content">
-            <div
-              className={"styles.addBtnSection"}
-              style={{ display: "flex", justifyContent: "space-between" }}
-            >
-              <h3>Update Module</h3>
-              <button
-                type="button"
-                onClick={() => setShowModuleContent("")}
-                className="btn btn-close text-danger"
-              ></button>
-            </div>
-            <form className="course-module-form">
-              <div className="module-title">
-                <label>Module Name</label>
-                <input
-                  type="text"
-                  placeholder="Module Title"
-                  value={moduleContent.title}
-                  onChange={handleModuleTitle}
-                />
-              </div>
-              <div className="module-start">
-                <label>Module Start Date</label>
-                <input
-                  type="date"
-                  placeholder="Start Date"
-                  value={moduleContent.start_date}
-                  min={minDate}
-                  onChange={handleModuleStart}
-                />
-              </div>
-              <div className="module-end">
-                <label>Module End Date</label>
-                <input
-                  type="date"
-                  placeholder="End Date"
-                  value={moduleContent.end_date}
-                  max="2030-12-30"
-                  min={minDate}
-                  onChange={handleModuleEnd}
-                />
-              </div>
-              <div className="form-check form-switch visibility">
-                <label htmlFor="IsActive" className=" course-unit-form-label">
-                  Module Visibility
-                </label>
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  role="switch"
-                  value={visibility}
-                  onChange={handleVisibility}
-                  id="flexSwitchCheckDefault"
-                />
-              </div>
-            </form>
-            <UpdateUnit
-              unitContent={unitContent}
-              minDate={minDate}
-              setUnitData={setUnitData}
-            />
-          </div>
-        </div>
       </div>
     </div>
   );

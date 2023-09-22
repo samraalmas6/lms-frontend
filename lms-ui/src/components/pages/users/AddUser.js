@@ -131,7 +131,7 @@ function AddUser() {
         body: JSON.stringify(userData),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
-          "Authorization": `Token bf57457f47fb84e4689ef7104e74eb2990a50984`
+          Authorization: `Token ${sessionStorage.getItem('user_token')}`,
         },
       }).then((response) => {
         if (response.status == 201) {

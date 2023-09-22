@@ -17,7 +17,7 @@ const AllCategory = ({ show }) => {
       fetch("http://127.0.0.1:8000/api/categories", {
         method: "GET",
         headers: {
-          Authorization: `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61`,
+          Authorization: `Token ${sessionStorage.getItem('user_token')}`,
         },
       }).then((response) => {
         response.json().then(function (result) {
@@ -31,7 +31,7 @@ const AllCategory = ({ show }) => {
       fetch("http://127.0.0.1:8000/api/courses", {
         method: "GET",
         headers: {
-          Authorization: `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61`,
+          Authorization: `Token ${sessionStorage.getItem('user_token')}`,
         },
       }).then((response) => {
         response.json().then(function (result) {
@@ -64,13 +64,14 @@ const AllCategory = ({ show }) => {
       title: categoryName,
       description: "This is test cat",
       parent: 1,
+      // updated_by: sessionStorage.getItem('name')
     };
 
     fetch("http://127.0.0.1:8000/api/categories/", {
       method: "POST",
       body: JSON.stringify(obj),
       headers: {
-        Authorization: `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61`,
+        Authorization: `Token ${sessionStorage.getItem('user_token')}`,
         "Content-type": "application/json; charset=UTF-8",
       },
     }).then((response) => {

@@ -5,6 +5,7 @@ import img from "../../content/Images/uploadImg.jpg";
 import { Editor } from "@tinymce/tinymce-react";
 import catData from "../../hooks/catData";
 import { useNavigate } from "react-router-dom";
+import UpdateUnit from "./UpdateUnit";
 
 const AllCourse = ({
   show,
@@ -15,15 +16,25 @@ const AllCourse = ({
   courseImg,
   setCourseImg,
   minDate,
-  // unitData,
-  // setUnitData,
-  // moduleData,
-  // setModuleData,
 }) => {
   //   Create Course Section
   const navigate = useNavigate();
   const inpRef = useRef("");
+  const startDateRef = useRef(null);
+  const endDateRef = useRef(null);
+  const startDatePickerRef = useRef(null);
+  const endDatePickerRef = useRef(null);
+  const startDateRefModule = useRef(null);
+  const endDateRefModule = useRef(null);
+  const startDatePickerRefModule = useRef(null);
+  const endDatePickerRefModule = useRef(null);
+  const startDateRefUnit = useRef(null);
+  const endDateRefUnit = useRef(null);
+  const startDatePickerRefUnit = useRef(null);
+  const endDatePickerRefUnit = useRef(null);
   const [showBlock, setShowBlock] = useState(false);
+  const [courseStart, setCourseStart] = useState("");
+  const [courseEnd, setCourseEnd] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
   const [courseDes, setCourseDes] = useState("");
   const [visibility, setVisibility] = useState(false);
@@ -34,8 +45,12 @@ const AllCourse = ({
   const [moduleContent, setModuelContent] = useState([]);
   const [showModuleContent, setShowModuleContent] = useState("");
 
+
   // const [moduleData, setModuleData] = useState([]);
   const [unitData, setUnitData] = useState([]);
+  const [unitStart, setUnitStart] = useState("");
+  const [unitEnd, setUnitEnd] = useState("");
+
   const [moduleData, setModuleData] = useState([]);
 
   const editorRef = useRef(null);
@@ -45,7 +60,7 @@ const AllCourse = ({
       fetch("http://127.0.0.1:8000/api/courses", {
         method: "GET",
         headers: {
-          Authorization: `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61`,
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
         response.json().then(function (result) {
@@ -67,9 +82,33 @@ const AllCourse = ({
     setCourseTitle(e.target.value);
   };
 
+  const handlCourseStart = (e) => {
+    startDateRef.current.removeAttribute("class", "course-start-field");
+    startDatePickerRef.current.setAttribute("class", "course-start-field");
+    setCourseStart(e.target.value);
+  };
+  const handlCourseEnd = (e) => {
+    endDateRef.current.removeAttribute("class", "course-end-field");
+    endDatePickerRef.current.setAttribute("class", "course-end-field");
+    setCourseEnd(e.target.value);
+  };
+
+  const handlUnitStart = (e) => {
+    startDateRefUnit.current.removeAttribute("class", "unit-start-field");
+    startDatePickerRefUnit.current.setAttribute("class", "unit-start-field");
+    setUnitStart(e.target.value);
+  };
+  const handlUnitEnd = (e) => {
+    endDateRefUnit.current.removeAttribute("class", "unit-end-field");
+    endDatePickerRefUnit.current.setAttribute("class", "unit-end-field");
+    setUnitEnd(e.target.value);
+  };
+
+
   const handlecourseCategory = (e) => {
     setCourseCategory(e.target.value);
   };
+  
 
   const handleDescription = (value, e) => {
     setCourseDes(value);
@@ -95,7 +134,7 @@ const AllCourse = ({
     fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
       method: "GET",
       headers: {
-        Authorization: `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61`,
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
       response.json().then(function (result) {
@@ -117,7 +156,7 @@ const AllCourse = ({
     fetch(`http://127.0.0.1:8000/api/modules/${module.id}/units`, {
       method: "GET",
       headers: {
-        Authorization: `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61`,
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
       response.json().then(function (result) {
@@ -138,7 +177,7 @@ const AllCourse = ({
         method: "POST",
         body: JSON.stringify(obj),
         headers: {
-          Authorization: `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61`,
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
           "Content-type": "application/json; charset=UTF-8",
         },
       }).then((response) => {
@@ -155,53 +194,8 @@ const AllCourse = ({
       });
     }
   };
-
-  // const fun = (id) => {
-  //   const particularCourse = courseContent.filter((course) => {
-  //     return course.id === id;
-  //   });
-  //   setCourse(() => particularCourse);
-  //   console.log(course[0]);
-  // };
-  const updatedCourse = {
-    id: 1, // Specify the ID of the course you want to update
-    course_title: courseTitle,
-    course_description: courseDescription,
-    picture: courseImg,
-    category: courseCategory,
-    visibility,
-    modules: [
-      //  ...course.modules, moduleData[0]
-    ],
-    // [
-    // moduleData.map((module) => {
-    //   return module.id === 1
-    //   ? { ...module, ...updatedCourse }
-    //   : module
-    // })
-    // {
-    //   id: 1, // Specify the ID of the module you want to update
-    //   title: "Updated Module Title",
-    // },
-    // ],
-    // units: [
-    //   {
-    //     id: 1, // Specify the ID of the unit you want to update
-    //     title: "Updated Unit Title",
-    //   },
-    // ],
-    // Add other fields you want to update
-  };
   const handleSaveCourse = (e) => {
     e.preventDefault();
-
-    setCourseContent((prevCourseData) => {
-      return prevCourseData.map((course) =>
-        course.id === updatedCourse.id
-          ? { ...course, ...updatedCourse }
-          : course
-      );
-    });
 
     // const obj = {
     //   course_title: courseTitle,
@@ -332,19 +326,98 @@ const AllCourse = ({
                 </ul>
               </div>
               <div className="course-form-section">
-                <div className="offcanvas-head">
-                  <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                    Add Course Content
-                  </h5>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    data-bs-dismiss="offcanvas"
-                    aria-label="Close"
-                  ></button>
+                {/* <div className="" style={{ display: 'flex', justifyContent: 'end'}}>
+                    <button
+                      type="button"
+                      className="btn-close ms-3"
+                      data-bs-dismiss="offcanvas"
+                      aria-label="Close"
+                    ></button>
+                  </div> */}
+                <div className="offcanvas-head course-heading">
+                  <div className="course-heading-section">
+                    <input
+                      type="text"
+                      value={courseTitle}
+                      onChange={handleCourseTitle}
+                      required
+                      className="courseTitle"
+                    />
+                    <label>Start Date:</label>
+                    <i
+                      class="bi bi-calendar-date date-picker"
+                      role="button"
+                      ref={startDatePickerRef}
+                      onClick={() => startDateRef.current.showPicker()}
+                    ></i>
+                    <input
+                      type="date"
+                      value={courseStart}
+                      className="course-start-field"
+                      ref={startDateRef}
+                      id="course-date-field"
+                      onChange={(e) => handlCourseStart(e)}
+                    />
+                    <label>End Date:</label>
+                    <i
+                      class="bi bi-calendar-date date-picker"
+                      role="button"
+                      ref={endDatePickerRef}
+                      onClick={() => endDateRef.current.showPicker()}
+                    ></i>
+                    <input
+                      type="date"
+                      value={courseEnd}
+                      onChange={(e) => handlCourseEnd(e)}
+                      className="course-end-field"
+                      id="course-date-field"
+                      ref={endDateRef}
+                    />
+                  </div>
+
+                  <div class="btn-group dropstart">
+                    <i
+                      className="bi bi-three-dots-vertical "
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      onClick={() => null}
+                    ></i>
+                    <button
+                      type="button"
+                      className="btn-close ms-3"
+                      data-bs-dismiss="offcanvas"
+                      aria-label="Close"
+                    ></button>
+                    <div className="dropdown-menu option-main-container">
+                      <ul class="option-ul" style={{ display: "flex" }}>
+                        <li>
+                          <div className="form-check form-switch visibility">
+                            <input
+                              className="form-check-input "
+                              type="checkbox"
+                              role="switch"
+                              value={visibility}
+                              onChange={handleVisibility}
+                              id="flexSwitchCheckDefault"
+                            />
+                          </div>
+                        </li>
+                        <li>
+                          <i
+                            className="bi bi-trash text-danger"
+                            onClick={() => null}
+                          ></i>
+                        </li>
+                        <li>
+                          <i class="bi bi-copy text-info"></i>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
                 <form>
-                  <label className="mb-0">
+                  {/* <label className="mb-0">
                     Title<span style={{ color: "red" }}>*</span>
                   </label>
                   <input
@@ -353,7 +426,7 @@ const AllCourse = ({
                     onChange={handleCourseTitle}
                     required
                     className="course-title"
-                  />
+                  /> */}
 
                   <div className="thumb-section">
                     <div className="editor">
@@ -459,23 +532,12 @@ const AllCourse = ({
                       id="flexSwitchCheckDefault"
                     />
                   </div>
-                  {/* <hr style={{ margin: '0px', width: '53%'}}/> */}
                   <hr style={{ margin: "20px 0px 20px 0px" }} />
                   <div className="course-module-section">
-                    {/* <ul>
-                      {moduleData &&
-                        moduleData.map((module) => {
-                          return (
-                            <div key={module.title}>
-                              <li>{module.title}</li>
-                            </div>
-                          );
-                        })}
-                    </ul> */}
                     <div className="unitData-section">
                       <div
-                        class="accordion accordion-flush"
-                        id="accordionFlushExample"
+                        className="accordion accordion-flush w-100"
+                        id="module-section"
                       >
                         {moduleData.length === 0 ||
                         moduleData.detail == "No module found for this course."
@@ -486,7 +548,7 @@ const AllCourse = ({
                                 <div
                                   key={module.id}
                                   type="button"
-                                  className="accordion-item"
+                                  className="accordion-item mb-1"
                                   role="button"
                                   aria-expanded="false"
                                   onClick={() => {
@@ -497,34 +559,122 @@ const AllCourse = ({
                                   }}
                                 >
                                   <h2
-                                    class="accordion-header"
-                                    id={`flush-${module.id}`}
+                                    className="accordion-header module-collapse-button"
+                                    id={`flush-module${module.id}`}
                                   >
-                                    <button
-                                      class="accordion-button collapsed"
+                                    <div
+                                      className="accordion-button collapsed module-button"
                                       type="button"
                                       data-bs-toggle="collapse"
-                                      data-bs-target={`#${module.id}`}
+                                      data-bs-target={`#module${module.id}`}
                                       aria-expanded="false"
-                                      aria-controls={`flush-${module.id}`}
+                                      aria-controls={`flush-module${module.id}`}
                                     >
-                                      {module.title}
-                                    </button>
+                                      <div className="module-heading-container">
+                                      <div className="">
+                                      <span className="me-3">MODULE</span>
+                                      <input
+                                        type="text"
+                                        placeholder="Module Title"
+                                        value={module.title}
+                                        className="moduleTitle"
+                                        // onChange={"handleModuleTitle"}
+                                        required
+                                      />
+                                      </div>
+                                      <div className="">
+                                      <label>Start Date:</label>
+                                      <i
+                                        class="bi bi-calendar-date date-picker"
+                                        role="button"
+                                        ref={startDatePickerRef}
+                                        onClick={() =>
+                                          startDateRef.current.showPicker()
+                                        }
+                                      ></i>
+                                      <input
+                                        type="date"
+                                        value={module.start_date}
+                                        className="course-start-field"
+                                        ref={startDateRef}
+                                        id="course-date-field"
+                                        onChange={(e) => handlCourseStart(e)}
+                                      />
+                                      <label>End Date:</label>
+                                      <i
+                                        class="bi bi-calendar-date date-picker"
+                                        role="button"
+                                        ref={endDatePickerRef}
+                                        onClick={() =>
+                                          endDateRef.current.showPicker()
+                                        }
+                                      ></i>
+                                      <input
+                                        type="date"
+                                        value={module.end_date}
+                                        onChange={(e) => handlCourseEnd(e)}
+                                        className="course-end-field"
+                                        id="course-date-field"
+                                        ref={endDateRef}
+                                      />
+                                      </div>
+ 
+                                      <div class="btn-group dropstart">
+                                      <i
+                                        className="bi bi-three-dots-vertical "
+                                        type="button"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false"
+                                        onClick={() => null}
+                                      ></i>
+                                      <div className="dropdown-menu option-main-container module-option">
+                                        <ul
+                                          class="option-ul"
+                                          style={{ display: "flex" }}
+                                        >
+                                          <li>
+                                            <div className="form-check form-switch visibility">
+                                              <input
+                                                className="form-check-input "
+                                                type="checkbox"
+                                                role="switch"
+                                                value={visibility}
+                                                onChange={handleVisibility}
+                                                id="flexSwitchCheckDefault"
+                                              />
+                                            </div>
+                                          </li>
+                                          <li>
+                                            <i
+                                              className="bi bi-trash text-danger"
+                                              onClick={() => null}
+                                            ></i>
+                                          </li>
+                                          <li>
+                                            <i class="bi bi-copy text-info"></i>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                      </div>
+                                      </div>
+                                  </div>
+
                                   </h2>
                                   <div
-                                    id={module.id}
-                                    class="accordion-collapse collapse"
-                                    aria-labelledby={`flush-${module.id}`}
-                                    data-bs-parent="#accordionFlushExample"
+                                    id={`module${module.id}`}
+                                    className="accordion-collapse collapse"
+                                    aria-labelledby={`flush-module${module.id}`}
+                                    data-bs-parent="#module-section"
                                   >
-                                    <div class="accordion-body">
+                                    <div className="accordion-body">
                                       <div
-                                        class="accordion accordion-flush"
+                                        className="accordion accordion-flush"
                                         id="unit-section"
                                       >
+                                        {/* <h1 className="text-center rounded unit-list-heading" >Units</h1> */}
                                         {unitData.length === 0 ||
                                         unitData.detail ==
-                                          "No module found for this course."
+                                          "No unit found for this module."
                                           ? unitData.detail
                                           : unitData &&
                                             unitData.map((unit) => {
@@ -532,9 +682,9 @@ const AllCourse = ({
                                                 <div
                                                   key={unit.id}
                                                   type="button"
-                                                  className="accordion-item"
+                                                  className="accordion-item mb-1 unitSection"
                                                   role="button"
-                                                  aria-expanded="true"
+                                                  aria-expanded="false"
                                                   onClick={() => {
                                                     // showModuleList();
                                                     // setUnitContent(unit)
@@ -543,27 +693,121 @@ const AllCourse = ({
                                                   }}
                                                 >
                                                   <h2
-                                                    class="accordion-header"
-                                                    id={`flush-${unit.id}`}
+                                                    className="accordion-header unit-collapse-button"
+                                                    id={`flush-unit${unit.id}`}
                                                   >
-                                                    <button
-                                                      class="accordion-button collapsed"
+                                                    <div
+                                                      className="accordion-button collapsed unit-button"
                                                       type="button"
                                                       data-bs-toggle="collapse"
-                                                      data-bs-target={`#${unit.id}`}
+                                                      data-bs-target={`#unit${unit.id}`}
                                                       aria-expanded="false"
-                                                      aria-controls={`flush-${unit.id}`}
+                                                      aria-controls={`flush-unit${unit.id}`}
                                                     >
-                                                      {unit.title}
-                                                    </button>
+ <div className="module-heading-container">
+                                      <div className="">
+                                      <span className="me-3">Unit</span>
+                                      <input
+                                        type="text"
+                                        placeholder="Unit Title"
+                                        value={unit.title}
+                                        className="unitTitle"
+                                        required
+                                      />
+                                      </div>
+                                      <div className="">
+                                      <label>Start Date:</label>
+                                      <i
+                                        class="bi bi-calendar-date date-picker"
+                                        role="button"
+                                        ref={startDatePickerRefUnit}
+                                        onClick={() =>
+                                          startDateRefUnit.current.showPicker()
+                                        }
+                                      ></i>
+                                      <input
+                                        type="date"
+                                        value={unitStart}
+                                        className="unit-start-field"
+                                        ref={startDateRefUnit}
+                                        id="unit-date-field"
+                                        onChange={(e) => handlUnitStart(e)}
+                                      />
+                                      <label>End Date:</label>
+                                      <i
+                                        class="bi bi-calendar-date date-picker"
+                                        role="button"
+                                        ref={endDatePickerRefUnit}
+                                        onClick={() =>
+                                          endDateRefUnit.current.showPicker()
+                                        }
+                                      ></i>
+                                      <input
+                                        type="date"
+                                        value={unitEnd}
+                                        onChange={(e) => handlUnitEnd(e)}
+                                        className="unit-end-field"
+                                        id="unit-date-field"
+                                        ref={endDateRefUnit}
+                                      />
+                                      </div>
+ 
+                                      <div class="btn-group dropstart">
+                                      <i
+                                        className="bi bi-three-dots-vertical "
+                                        type="button"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false"
+                                        onClick={() => null}
+                                      ></i>
+                                      <div className="dropdown-menu option-main-container module-option">
+                                        <ul
+                                          class="option-ul"
+                                          style={{ display: "flex" }}
+                                        >
+                                          <li>
+                                            <div className="form-check form-switch visibility">
+                                              <input
+                                                className="form-check-input "
+                                                type="checkbox"
+                                                role="switch"
+                                                value={visibility}
+                                                onChange={handleVisibility}
+                                                id="flexSwitchCheckDefault"
+                                              />
+                                            </div>
+                                          </li>
+                                          <li>
+                                            <i
+                                              className="bi bi-trash text-danger"
+                                              onClick={() => null}
+                                            ></i>
+                                          </li>
+                                          <li>
+                                            <i class="bi bi-copy text-info"></i>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                      </div>
+                                      </div>
+                                                    </div>
+                                                   
                                                   </h2>
                                                   <div
-                                                    id={unit.id}
-                                                    class="accordion-collapse collapse"
-                                                    aria-labelledby={`flush-${unit.id}`}
-                                                    data-bs-parent="#accordionFlushExample"
+                                                    id={`unit${unit.id}`}
+                                                    className="accordion- collapse"
+                                                    aria-labelledby={`flush-unit${unit.id}`}
+                                                    data-bs-parent="#unit-section"
                                                   >
-                                                    <div class="accordion-body"></div>
+                                                    <div className="accordion-body">
+                                                      {/* <UpdateUnit
+                                                        unitContent={unit}
+                                                        minDate={minDate}
+                                                        setUnitData={
+                                                          setUnitData
+                                                        }
+                                                      /> */}
+                                                    </div>
                                                   </div>
                                                 </div>
                                               );
@@ -574,147 +818,7 @@ const AllCourse = ({
                                 </div>
                               );
                             })}
-
-                        {/* <div class="accordion-item">
-                          <h2 class="accordion-header" id="flush-headingOne">
-                            <button
-                              class="accordion-button collapsed"
-                              type="button"
-                              data-bs-toggle="collapse"
-                              data-bs-target="#flush-collapseOne"
-                              aria-expanded="false"
-                              aria-controls="flush-collapseOne"
-                            >
-                              Accordion Item #1
-                            </button>
-                          </h2>
-                          <div
-                            id="flush-collapseOne"
-                            class="accordion-collapse collapse"
-                            aria-labelledby="flush-headingOne"
-                            data-bs-parent="#accordionFlushExample"
-                          >
-                            <div class="accordion-body">
-                              Placeholder content for this accordion, which is
-                              intended to demonstrate the{" "}
-                              <code>.accordion-flush</code> class. This is the
-                              first item's accordion body.
-                            </div>
-                          </div>
-                        </div>
-                        <div class="accordion-item">
-                          <h2 class="accordion-header" id="flush-headingTwo">
-                            <button
-                              class="accordion-button collapsed"
-                              type="button"
-                              data-bs-toggle="collapse"
-                              data-bs-target="#flush-collapseTwo"
-                              aria-expanded="false"
-                              aria-controls="flush-collapseTwo"
-                            >
-                              Accordion Item #2
-                            </button>
-                          </h2>
-                          <div
-                            id="flush-collapseTwo"
-                            class="accordion-collapse collapse"
-                            aria-labelledby="flush-headingTwo"
-                            data-bs-parent="#accordionFlushExample"
-                          >
-                            <div class="accordion-body">
-                              Placeholder content for this accordion, which is
-                              intended to demonstrate the{" "}
-                              <code>.accordion-flush</code> class. This is the
-                              second item's accordion body. Let's imagine this
-                              being filled with some actual content.
-                            </div>
-                          </div>
-                        </div>
-                        <div class="accordion-item">
-                          <h2 class="accordion-header" id="flush-headingThree">
-                            <button
-                              class="accordion-button collapsed"
-                              type="button"
-                              data-bs-toggle="collapse"
-                              data-bs-target="#flush-collapseThree"
-                              aria-expanded="false"
-                              aria-controls="flush-collapseThree"
-                            >
-                              Accordion Item #3
-                            </button>
-                          </h2>
-                          <div
-                            id="flush-collapseThree"
-                            class="accordion-collapse collapse"
-                            aria-labelledby="flush-headingThree"
-                            data-bs-parent="#accordionFlushExample"
-                          >
-                            <div class="accordion-body">
-                              Placeholder content for this accordion, which is
-                              intended to demonstrate the{" "}
-                              <code>.accordion-flush</code> class. This is the
-                              third item's accordion body. Nothing more exciting
-                              happening here in terms of content, but just
-                              filling up the space to make it look, at least at
-                              first glance, a bit more representative of how
-                              this would look in a real-world application.
-                            </div>
-                          </div>
-                        </div> */}
                       </div>
-
-                      {/* {moduleData.length === 0 ||
-                      moduleData.detail ==
-                        "No module found for this course." ? (
-                        moduleData.detail
-                      ) : (
-                        <ul className="units d-grid gap-2 w-50">
-                          {moduleData &&
-                            moduleData.map((module) => {
-                              return (
-                                <li
-                                  key={module.id}
-                                  type="button"
-                                  className="text-start ms-0 ps-2 nav-link dropdown-toggle"
-                                  id="navbarDropdown"
-                                  role="button"
-                                  data-bs-toggle="dropdown"
-                                  aria-expanded="false"
-                                  onClick={() => {
-                                    // showModuleList();
-                                    // setUnitContent(unit)
-                                    handleModuleContent(module);
-                                    setModuelContent(module);
-                                  }}
-                                >
-                                  <span>{module.title}</span>
-                                  <ul
-                                    class="dropdown-menu"
-                                    aria-labelledby="navbarDropdown"
-                                  >
-                                    {unitData &&
-                                      unitData.map((unit) => {
-                                        return (
-                                          <li
-                                            key={unit.id}
-                                            type="button"
-                                            className="text-start ms-0 ps-2"
-                                            onClick={() => {
-                                              // showUnitList();
-                                              // setUnitContent(unit);
-                                            }}
-                                          >
-                                            <span>{unit.title}</span>
-                                            <i class="fas fa-solid fa-caret-up"></i>
-                                          </li>
-                                        );
-                                      })}
-                                  </ul>
-                                </li>
-                              );
-                            })}
-                        </ul>
-                      )} */}
                     </div>
                     <div>
                       {showModule && (
@@ -781,7 +885,7 @@ const AllCourse = ({
                     onClick={() => {
                       handleCourseContent(course);
                       // handleCourseContent(course.id);
-                      // setCourseTitle(course.course_title);
+                      setCourseTitle(course.title);
                       // fun(course.id)
                     }}
                   >

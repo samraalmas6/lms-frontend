@@ -9,34 +9,8 @@ const LeasonForm = ({ minDate, setShowUnit, setUnitData, showUnitContent, setSho
   const [showForm, setShowForm] = useState(true);
   const [show, setShow] = useState("");
 
-  // const showUnitList = () => {
-  //   setShow("show");
-  // };
   return (
     <div className="ms-5">
-      {/* <div className="unitData-section">
-        {unitData.length === 0 ? (
-          "No Unit Added"
-        ) : (
-          <ul className="units d-grid gap-2 w-50">
-            {unitData && unitData.map((unit) => {
-              return (
-                <li
-                  key={unit.id}
-                  type="button"
-                  className="text-start ms-0 ps-2"
-                  onClick={() => {
-                    showUnitList()
-                    setUnitContent(unit)
-                  }}
-                >
-                  <span>{unit.title}</span><i class="fas fa-solid fa-caret-up"></i>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div> */}
       <UpdateUnit setShowUnit={setShowUnit} setUnitData={setUnitData} minDate={minDate}/>
       <div
         className={`offcanvas offcanvas-top unit-list-show ${showUnitContent}`}
