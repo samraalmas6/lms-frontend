@@ -45,13 +45,15 @@ const AllCourse = ({
   const [moduleContent, setModuelContent] = useState([]);
   const [showModuleContent, setShowModuleContent] = useState("");
 
-
   // const [moduleData, setModuleData] = useState([]);
   const [unitData, setUnitData] = useState([]);
   const [unitStart, setUnitStart] = useState("");
   const [unitEnd, setUnitEnd] = useState("");
+  const [unitFiles, setUnitFiles] = useState([]);
 
   const [moduleData, setModuleData] = useState([]);
+  const [moduleStart, setModuleStart] = useState("");
+  const [moduleEnd, setModuleEnd] = useState("");
 
   const editorRef = useRef(null);
 
@@ -93,6 +95,20 @@ const AllCourse = ({
     setCourseEnd(e.target.value);
   };
 
+  const handlModuleStart = (e) => {
+    startDateRefModule.current.removeAttribute("class", "module-start-field");
+    startDatePickerRefModule.current.setAttribute(
+      "class",
+      "module-start-field"
+    );
+    setModuleStart(e.target.value);
+  };
+  const handlModuleEnd = (e) => {
+    endDateRefModule.current.removeAttribute("class", "module-end-field");
+    endDatePickerRefModule.current.setAttribute("class", "module-end-field");
+    setModuleEnd(e.target.value);
+  };
+
   const handlUnitStart = (e) => {
     startDateRefUnit.current.removeAttribute("class", "unit-start-field");
     startDatePickerRefUnit.current.setAttribute("class", "unit-start-field");
@@ -104,11 +120,9 @@ const AllCourse = ({
     setUnitEnd(e.target.value);
   };
 
-
   const handlecourseCategory = (e) => {
     setCourseCategory(e.target.value);
   };
-  
 
   const handleDescription = (value, e) => {
     setCourseDes(value);
@@ -165,6 +179,21 @@ const AllCourse = ({
       });
     });
   };
+
+  const handleUnitContent = (unit) => {
+    fetch(`http://127.0.0.1:8000/api/units/${unit.id}/files`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log("Api result Files: ", result);
+        setUnitFiles(result);
+      });
+    });
+  };
+
   const handleSave = (e) => {
     e.preventDefault();
     if (courseTitle && courseCategory) {
@@ -571,94 +600,95 @@ const AllCourse = ({
                                       aria-controls={`flush-module${module.id}`}
                                     >
                                       <div className="module-heading-container">
-                                      <div className="">
-                                      <span className="me-3">MODULE</span>
-                                      <input
-                                        type="text"
-                                        placeholder="Module Title"
-                                        value={module.title}
-                                        className="moduleTitle"
-                                        // onChange={"handleModuleTitle"}
-                                        required
-                                      />
-                                      </div>
-                                      <div className="">
-                                      <label>Start Date:</label>
-                                      <i
-                                        class="bi bi-calendar-date date-picker"
-                                        role="button"
-                                        ref={startDatePickerRef}
-                                        onClick={() =>
-                                          startDateRef.current.showPicker()
-                                        }
-                                      ></i>
-                                      <input
-                                        type="date"
-                                        value={module.start_date}
-                                        className="course-start-field"
-                                        ref={startDateRef}
-                                        id="course-date-field"
-                                        onChange={(e) => handlCourseStart(e)}
-                                      />
-                                      <label>End Date:</label>
-                                      <i
-                                        class="bi bi-calendar-date date-picker"
-                                        role="button"
-                                        ref={endDatePickerRef}
-                                        onClick={() =>
-                                          endDateRef.current.showPicker()
-                                        }
-                                      ></i>
-                                      <input
-                                        type="date"
-                                        value={module.end_date}
-                                        onChange={(e) => handlCourseEnd(e)}
-                                        className="course-end-field"
-                                        id="course-date-field"
-                                        ref={endDateRef}
-                                      />
-                                      </div>
- 
-                                      <div class="btn-group dropstart">
-                                      <i
-                                        className="bi bi-three-dots-vertical "
-                                        type="button"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false"
-                                        onClick={() => null}
-                                      ></i>
-                                      <div className="dropdown-menu option-main-container module-option">
-                                        <ul
-                                          class="option-ul"
-                                          style={{ display: "flex" }}
-                                        >
-                                          <li>
-                                            <div className="form-check form-switch visibility">
-                                              <input
-                                                className="form-check-input "
-                                                type="checkbox"
-                                                role="switch"
-                                                value={visibility}
-                                                onChange={handleVisibility}
-                                                id="flexSwitchCheckDefault"
-                                              />
-                                            </div>
-                                          </li>
-                                          <li>
-                                            <i
-                                              className="bi bi-trash text-danger"
-                                              onClick={() => null}
-                                            ></i>
-                                          </li>
-                                          <li>
-                                            <i class="bi bi-copy text-info"></i>
-                                          </li>
-                                        </ul>
-                                      </div>
-                                      </div>
-                                      </div>
-                                  </div>
+                                        <div className="">
+                                          <span className="me-3">MODULE</span>
+                                          <input
+                                            type="text"
+                                            placeholder="Module Title"
+                                            value={module.title}
+                                            className="moduleTitle"
+                                            // onChange={"handleModuleTitle"}
+                                            required
+                                          />
+                                        </div>
+                                        <div className="">
+                                          <label>Start Date:</label>
+                                          <i
+                                            class="bi bi-calendar-date date-picker"
+                                            role="button"
+                                            ref={startDatePickerRefModule}
+                                            onClick={() =>
+                                              startDateRefModule.current.showPicker()
+                                            }
+                                          ></i>
+                                          <input
+                                            type="date"
+                                            value={moduleStart}
+                                            className="module-start-field"
+                                            ref={startDateRefModule}
+                                            id="module-date-field"
+                                            onChange={(e) =>
+                                              handlModuleStart(e)
+                                            }
+                                          />
+                                          <label>End Date:</label>
+                                          <i
+                                            class="bi bi-calendar-date date-picker"
+                                            role="button"
+                                            ref={endDatePickerRefModule}
+                                            onClick={() =>
+                                              endDateRefModule.current.showPicker()
+                                            }
+                                          ></i>
+                                          <input
+                                            type="date"
+                                            value={moduleEnd}
+                                            onChange={(e) => handlModuleEnd(e)}
+                                            className="module-end-field"
+                                            id="module-date-field"
+                                            ref={endDateRefModule}
+                                          />
+                                        </div>
 
+                                        <div class="btn-group dropstart">
+                                          <i
+                                            className="bi bi-three-dots-vertical "
+                                            type="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                            onClick={() => null}
+                                          ></i>
+                                          <div className="dropdown-menu option-main-container module-option">
+                                            <ul
+                                              class="option-ul"
+                                              style={{ display: "flex" }}
+                                            >
+                                              <li>
+                                                <div className="form-check form-switch visibility">
+                                                  <input
+                                                    className="form-check-input "
+                                                    type="checkbox"
+                                                    role="switch"
+                                                    value={visibility}
+                                                    onChange={handleVisibility}
+                                                    id="flexSwitchCheckDefault"
+                                                  />
+                                                </div>
+                                              </li>
+                                              <li>
+                                                <i
+                                                  className="bi bi-trash text-danger"
+                                                  onClick={() => null}
+                                                ></i>
+                                              </li>
+                                              <li>
+                                                <i class="bi bi-copy text-info"></i>
+                                              </li>
+                                            </ul>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
                                   </h2>
                                   <div
                                     id={`module${module.id}`}
@@ -668,7 +698,7 @@ const AllCourse = ({
                                   >
                                     <div className="accordion-body">
                                       <div
-                                        className="accordion accordion-flush"
+                                        className="accordion accordion-flush module-unit-section"
                                         id="unit-section"
                                       >
                                         {/* <h1 className="text-center rounded unit-list-heading" >Units</h1> */}
@@ -682,13 +712,13 @@ const AllCourse = ({
                                                 <div
                                                   key={unit.id}
                                                   type="button"
-                                                  className="accordion-item mb-1 unitSection"
+                                                  className="accordion-item mb-0 mt-1 unitSection"
                                                   role="button"
                                                   aria-expanded="false"
                                                   onClick={() => {
                                                     // showModuleList();
                                                     // setUnitContent(unit)
-                                                    // handleModuleContent(module);
+                                                    handleUnitContent(unit);
                                                     // setModuelContent(module);
                                                   }}
                                                 >
@@ -704,94 +734,117 @@ const AllCourse = ({
                                                       aria-expanded="false"
                                                       aria-controls={`flush-unit${unit.id}`}
                                                     >
- <div className="module-heading-container">
-                                      <div className="">
-                                      <span className="me-3">Unit</span>
-                                      <input
-                                        type="text"
-                                        placeholder="Unit Title"
-                                        value={unit.title}
-                                        className="unitTitle"
-                                        required
-                                      />
-                                      </div>
-                                      <div className="">
-                                      <label>Start Date:</label>
-                                      <i
-                                        class="bi bi-calendar-date date-picker"
-                                        role="button"
-                                        ref={startDatePickerRefUnit}
-                                        onClick={() =>
-                                          startDateRefUnit.current.showPicker()
-                                        }
-                                      ></i>
-                                      <input
-                                        type="date"
-                                        value={unitStart}
-                                        className="unit-start-field"
-                                        ref={startDateRefUnit}
-                                        id="unit-date-field"
-                                        onChange={(e) => handlUnitStart(e)}
-                                      />
-                                      <label>End Date:</label>
-                                      <i
-                                        class="bi bi-calendar-date date-picker"
-                                        role="button"
-                                        ref={endDatePickerRefUnit}
-                                        onClick={() =>
-                                          endDateRefUnit.current.showPicker()
-                                        }
-                                      ></i>
-                                      <input
-                                        type="date"
-                                        value={unitEnd}
-                                        onChange={(e) => handlUnitEnd(e)}
-                                        className="unit-end-field"
-                                        id="unit-date-field"
-                                        ref={endDateRefUnit}
-                                      />
-                                      </div>
- 
-                                      <div class="btn-group dropstart">
-                                      <i
-                                        className="bi bi-three-dots-vertical "
-                                        type="button"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false"
-                                        onClick={() => null}
-                                      ></i>
-                                      <div className="dropdown-menu option-main-container module-option">
-                                        <ul
-                                          class="option-ul"
-                                          style={{ display: "flex" }}
-                                        >
-                                          <li>
-                                            <div className="form-check form-switch visibility">
-                                              <input
-                                                className="form-check-input "
-                                                type="checkbox"
-                                                role="switch"
-                                                value={visibility}
-                                                onChange={handleVisibility}
-                                                id="flexSwitchCheckDefault"
-                                              />
-                                            </div>
-                                          </li>
-                                          <li>
-                                            <i
-                                              className="bi bi-trash text-danger"
-                                              onClick={() => null}
-                                            ></i>
-                                          </li>
-                                          <li>
-                                            <i class="bi bi-copy text-info"></i>
-                                          </li>
-                                        </ul>
-                                      </div>
-                                      </div>
-                                      </div>
+                                                      <div className="module-heading-container">
+                                                        <div className="">
+                                                          <span className="me-3">
+                                                            Unit
+                                                          </span>
+                                                          <input
+                                                            type="text"
+                                                            placeholder="Unit Title"
+                                                            value={unit.title}
+                                                            className="unitTitle"
+                                                            required
+                                                          />
+                                                        </div>
+                                                        <div className="">
+                                                          <label>
+                                                            Start Date:
+                                                          </label>
+                                                          <i
+                                                            class="bi bi-calendar-date date-picker"
+                                                            role="button"
+                                                            ref={
+                                                              startDatePickerRefUnit
+                                                            }
+                                                            onClick={() =>
+                                                              startDateRefUnit.current.showPicker()
+                                                            }
+                                                          ></i>
+                                                          <input
+                                                            type="date"
+                                                            value={unitStart}
+                                                            className="unit-start-field"
+                                                            ref={
+                                                              startDateRefUnit
+                                                            }
+                                                            id="unit-date-field"
+                                                            onChange={(e) =>
+                                                              handlUnitStart(e)
+                                                            }
+                                                          />
+                                                          <label>
+                                                            End Date:
+                                                          </label>
+                                                          <i
+                                                            class="bi bi-calendar-date date-picker"
+                                                            role="button"
+                                                            ref={
+                                                              endDatePickerRefUnit
+                                                            }
+                                                            onClick={() =>
+                                                              endDateRefUnit.current.showPicker()
+                                                            }
+                                                          ></i>
+                                                          <input
+                                                            type="date"
+                                                            value={unitEnd}
+                                                            onChange={(e) =>
+                                                              handlUnitEnd(e)
+                                                            }
+                                                            className="unit-end-field"
+                                                            id="unit-date-field"
+                                                            ref={endDateRefUnit}
+                                                          />
+                                                        </div>
+
+                                                        <div class="btn-group dropstart">
+                                                          <i
+                                                            className="bi bi-three-dots-vertical "
+                                                            type="button"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                            onClick={() => null}
+                                                          ></i>
+                                                          <div className="dropdown-menu option-main-container module-option">
+                                                            <ul
+                                                              class="option-ul"
+                                                              style={{
+                                                                display: "flex",
+                                                              }}
+                                                            >
+                                                              <li>
+                                                                <div className="form-check form-switch visibility">
+                                                                  <input
+                                                                    className="form-check-input "
+                                                                    type="checkbox"
+                                                                    role="switch"
+                                                                    value={
+                                                                      visibility
+                                                                    }
+                                                                    onChange={
+                                                                      handleVisibility
+                                                                    }
+                                                                    id="flexSwitchCheckDefault"
+                                                                  />
+                                                                </div>
+                                                              </li>
+                                                              <li>
+                                                                <i
+                                                                  className="bi bi-trash text-danger"
+                                                                  onClick={() =>
+                                                                    null
+                                                                  }
+                                                                ></i>
+                                                              </li>
+                                                              <li>
+                                                                <i class="bi bi-copy text-info"></i>
+                                                              </li>
+                                                            </ul>
+                                                          </div>
+                                                        </div>
+                                                      </div>
                                                     </div>
-                                                   
                                                   </h2>
                                                   <div
                                                     id={`unit${unit.id}`}
@@ -800,24 +853,129 @@ const AllCourse = ({
                                                     data-bs-parent="#unit-section"
                                                   >
                                                     <div className="accordion-body">
-                                                      {/* <UpdateUnit
-                                                        unitContent={unit}
-                                                        minDate={minDate}
-                                                        setUnitData={
-                                                          setUnitData
-                                                        }
-                                                      /> */}
+                                                      <div className="video-section">
+                                                        <div
+                                                          className=""
+                                                          style={{
+                                                            display: "flex",
+                                                            justifyContent:
+                                                              "space-between",
+                                                            width: "15%",
+                                                          }}
+                                                        >
+                                                          <h5>Add Content</h5>
+                                                          <i class="bi bi-plus-circle plus-icon"></i>
+                                                        </div>
+                                                        <div className="file-content">
+                                                          <ul className="outer-ul">
+                                                            {unitFiles.length ===
+                                                              0 ||
+                                                            unitFiles.detail ==
+                                                              "No files found for this unit."
+                                                              ? unitFiles.detail
+                                                              : unitFiles &&
+                                                                unitFiles.map(
+                                                                  (file) => {
+                                                                    return (
+                                                                      <li
+                                                                        key={
+                                                                          file.id
+                                                                        }
+                                                                      >
+                                                                        <a
+                                                                          className="w-50"
+                                                                          href={
+                                                                            file.url
+                                                                          }
+                                                                        >
+                                                                          {
+                                                                            file.title
+                                                                          }
+                                                                        </a>
+                                                                        <span className="w-50">
+                                                                          {file.created_at.substr(
+                                                                            0,
+                                                                            10
+                                                                          )}
+                                                                        </span>
+                                                                        <i
+                                                                          className="bi bi-three-dots-vertical"
+                                                                          type="button"
+                                                                          data-bs-toggle="dropdown"
+                                                                          aria-expanded="false"
+                                                                          onClick={() =>
+                                                                            null
+                                                                          }
+                                                                        ></i>
+                                                                        <div className="dropdown-menu file-content-options">
+                                                                          <ul
+                                                                            class="option-ul"
+                                                                            style={{
+                                                                              display:
+                                                                                "flex",
+                                                                            }}
+                                                                          >
+                                                                            <li>
+                                                                              <div className="form-check form-switch visibility">
+                                                                                <input
+                                                                                  className="form-check-input "
+                                                                                  type="checkbox"
+                                                                                  role="switch"
+                                                                                  value={
+                                                                                    visibility
+                                                                                  }
+                                                                                  onChange={
+                                                                                    handleVisibility
+                                                                                  }
+                                                                                  id="flexSwitchCheckDefault"
+                                                                                />
+                                                                              </div>
+                                                                            </li>
+                                                                            <li>
+                                                                              <i
+                                                                                className="bi bi-trash text-danger"
+                                                                                onClick={() =>
+                                                                                  null
+                                                                                }
+                                                                              ></i>
+                                                                            </li>
+                                                                            <li>
+                                                                              <i class="bi bi-copy text-info"></i>
+                                                                            </li>
+                                                                          </ul>
+                                                                        </div>
+                                                                      </li>
+                                                                    );
+                                                                  }
+                                                                )}
+                                                          </ul>
+                                                        </div>
+                                                      </div>
+                                                      <div className="slide-section"></div>
+                                                      <div className="pdf-section"></div>
                                                     </div>
                                                   </div>
                                                 </div>
                                               );
                                             })}
+                                        <div className="add-unit-btn">
+                                          <button type="button" className="btn">
+                                            Add Unit{" "}
+                                            <i class="bi bi-plus-circle plus-icon"></i>
+                                          </button>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               );
                             })}
+                        <div className="add-module-btn">
+                          <button type="button" className="btn">
+                            Add Module{" "}
+                            <i class="bi bi-plus-circle plus-icon"></i>
+                          </button>
+                        </div>
                       </div>
                     </div>
                     <div>
@@ -837,14 +995,15 @@ const AllCourse = ({
                         />
                       )}
                       {!showModule && (
-                        <button
-                          type="button"
-                          className="btn w-50 add-module-btn"
-                          onClick={() => setShowModule((pre) => !pre)}
-                        >
-                          Add Module
-                          <i className="fas fa-solid fa-plus ms-2"></i>
-                        </button>
+                        // <button
+                        //   type="button"
+                        //   className="btn w-50 add-module-btn"
+                        //   onClick={() => setShowModule((pre) => !pre)}
+                        // >
+                        //   Add Module
+                        //   <i className="fas fa-solid fa-plus ms-2"></i>
+                        // </button>
+                        ""
                       )}
                     </div>
                   </div>
