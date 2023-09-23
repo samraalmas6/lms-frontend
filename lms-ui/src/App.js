@@ -45,6 +45,7 @@ function App() {
         <Route path="/category/add" element={<PrivateRoute><AddCategory /></PrivateRoute>}></Route>
         <Route path="/category/all" element={<PrivateRoute><AllCategory /></PrivateRoute>}></Route>
       </Routes>
+      
 
       </BrowserRouter>
 
