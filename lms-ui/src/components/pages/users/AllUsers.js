@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import mockData from "../hooks/mockData";
-import userImg from "../content/Images/user.png";
-import "../styles/Users.css";
+import userImg from "../../content/Images/user.png";
+import "../../styles/Users.css";
 import { Link } from "react-router-dom";
 
 const AllUsers = () => {
@@ -13,7 +12,7 @@ const AllUsers = () => {
       fetch('http://127.0.0.1:8000/list_all_users/',  {
         method: "GET",
         headers: {
-          "Authorization": `Token ${sessionStorage.getItem('user_token')}` ,
+          Authorization: `Token ${sessionStorage.getItem('user_token')}`,
         },
       }).then((response) => { 
         response.json().then(function (result) {

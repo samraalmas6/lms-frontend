@@ -1,41 +1,245 @@
 import React, { useEffect, useRef, useState } from "react";
 import courseData from "../../hooks/courseData";
+import CourseModule from "./CourseModule";
+import img from "../../content/Images/uploadImg.jpg";
 import { Editor } from "@tinymce/tinymce-react";
+import catData from "../../hooks/catData";
+import { useNavigate } from "react-router-dom";
+import UpdateUnit from "./UpdateUnit";
 
-const AllCourse = () => {
+const AllCourse = ({
+  show,
+  courseTitle,
+  setCourseTitle,
+  courseCategory,
+  setCourseCategory,
+  courseImg,
+  setCourseImg,
+  minDate,
+}) => {
+  //   Create Course Section
+  const navigate = useNavigate();
+  const inpRef = useRef("");
+  const startDateRef = useRef(null);
+  const endDateRef = useRef(null);
+  const startDatePickerRef = useRef(null);
+  const endDatePickerRef = useRef(null);
+  const startDateRefModule = useRef(null);
+  const endDateRefModule = useRef(null);
+  const startDatePickerRefModule = useRef(null);
+  const endDatePickerRefModule = useRef(null);
+  const startDateRefUnit = useRef(null);
+  const endDateRefUnit = useRef(null);
+  const startDatePickerRefUnit = useRef(null);
+  const endDatePickerRefUnit = useRef(null);
   const [showBlock, setShowBlock] = useState(false);
-  const [categoryTitle, setCategoryTitle] = useState("");
-  const [category, setCategory] = useState("");
+  const [courseStart, setCourseStart] = useState("");
+  const [courseEnd, setCourseEnd] = useState("");
+  const [courseDescription, setCourseDescription] = useState("");
+  const [courseDes, setCourseDes] = useState("");
+  const [visibility, setVisibility] = useState(false);
+  const [courseContent, setCourseContent] = useState([]);
+  const [course, setCourse] = useState([courseData[0]]);
+
+  const [showModule, setShowModule] = useState(false);
+  const [moduleContent, setModuelContent] = useState([]);
+  const [showModuleContent, setShowModuleContent] = useState("");
+
+  // const [moduleData, setModuleData] = useState([]);
+  const [unitData, setUnitData] = useState([]);
+  const [unitStart, setUnitStart] = useState("");
+  const [unitEnd, setUnitEnd] = useState("");
+  const [unitFiles, setUnitFiles] = useState([]);
+
+  const [moduleData, setModuleData] = useState([]);
+  const [moduleStart, setModuleStart] = useState("");
+  const [moduleEnd, setModuleEnd] = useState("");
+
   const editorRef = useRef(null);
 
+  useEffect(() => {
+    const getCourseData = () => {
+      fetch("http://127.0.0.1:8000/api/courses", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        response.json().then(function (result) {
+          console.log(result);
+          setCourseContent(result);
+        });
+      });
+      // setCourseContent(courseData);
+    };
 
-  const handleCategoryTitle = (e) => {
-    setCategoryTitle(e.target.value);
+    getCourseData();
+  }, [0]);
+
+  const showModuleList = () => {
+    setShowModuleContent(() => "show");
   };
-  const handleCategory = (e) => {
-    setCategory(e.target.value);
+
+  const handleCourseTitle = (e) => {
+    setCourseTitle(e.target.value);
+  };
+
+  const handlCourseStart = (e) => {
+    startDateRef.current.removeAttribute("class", "course-start-field");
+    startDatePickerRef.current.setAttribute("class", "course-start-field");
+    setCourseStart(e.target.value);
+  };
+  const handlCourseEnd = (e) => {
+    endDateRef.current.removeAttribute("class", "course-end-field");
+    endDatePickerRef.current.setAttribute("class", "course-end-field");
+    setCourseEnd(e.target.value);
+  };
+
+  const handlModuleStart = (e) => {
+    startDateRefModule.current.removeAttribute("class", "module-start-field");
+    startDatePickerRefModule.current.setAttribute(
+      "class",
+      "module-start-field"
+    );
+    setModuleStart(e.target.value);
+  };
+  const handlModuleEnd = (e) => {
+    endDateRefModule.current.removeAttribute("class", "module-end-field");
+    endDatePickerRefModule.current.setAttribute("class", "module-end-field");
+    setModuleEnd(e.target.value);
+  };
+
+  const handlUnitStart = (e) => {
+    startDateRefUnit.current.removeAttribute("class", "unit-start-field");
+    startDatePickerRefUnit.current.setAttribute("class", "unit-start-field");
+    setUnitStart(e.target.value);
+  };
+  const handlUnitEnd = (e) => {
+    endDateRefUnit.current.removeAttribute("class", "unit-end-field");
+    endDatePickerRefUnit.current.setAttribute("class", "unit-end-field");
+    setUnitEnd(e.target.value);
+  };
+
+  const handlecourseCategory = (e) => {
+    setCourseCategory(e.target.value);
+  };
+
+  const handleDescription = (value, e) => {
+    setCourseDes(value);
+    setCourseDescription(e.getContent({ format: "text" }));
+    // console.log(courseDes)
+  };
+
+  const handlImgClick = () => {
+    inpRef.current.click();
+  };
+  const handleCourseImg = (e) => {
+    const file = e.target.files[0];
+    if (file !== "undefined") {
+      setCourseImg(file);
+    }
+    console.log(courseImg);
+  };
+  const handleVisibility = (e) => {
+    setVisibility(e.target.value);
+  };
+
+  const handleCourseContent = (course) => {
+    fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log("Api result: ", result);
+        setModuleData(result);
+      });
+    });
+
+    setCourse(() => course);
+    // setModuleData(() => course.modules);
+    setCourseTitle(() => course.course_title);
+    setCourseDes(`<p>${course.description}</p>`);
+    setCourseCategory(course.category);
+    // setCourseImg(course.picture)
+    setVisibility(() => course.visibility);
+  };
+
+  const handleModuleContent = (module) => {
+    fetch(`http://127.0.0.1:8000/api/modules/${module.id}/units`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log("Api result: ", result);
+        setUnitData(result);
+      });
+    });
+  };
+
+  const handleUnitContent = (unit) => {
+    fetch(`http://127.0.0.1:8000/api/units/${unit.id}/files`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log("Api result Files: ", result);
+        setUnitFiles(result);
+      });
+    });
   };
 
   const handleSave = (e) => {
     e.preventDefault();
-
-    if (categoryTitle) {
+    if (courseTitle && courseCategory) {
       const obj = {
-        id: courseData[courseData.length - 1].id + 1,
-        course_title: categoryTitle,
-        author: "",
-        duration: 25,
-        users_enrolled: 0,
-        last_updated: "3 hours ago",
+        title: courseTitle,
+        description: "Test Description",
+        // categories: 1,
       };
-      courseData.push(obj);
+      fetch("http://127.0.0.1:8000/api/courses/", {
+        method: "POST",
+        body: JSON.stringify(obj),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status == 201) {
+          response.json().then(function (result) {
+            console.log(result);
+            setCourseCategory("");
+            setCourseTitle("");
+            window.location.reload();
+          });
+        } else {
+          console.log(response);
+        }
+      });
     }
-    setCategory("");
-    setCategoryTitle("");
   };
+  const handleSaveCourse = (e) => {
+    e.preventDefault();
 
-  // console.log(process.env.REACT_APP_API_KEY);
-
+    // const obj = {
+    //   course_title: courseTitle,
+    //   course_description: courseDescription,
+    //   picture: courseImg,
+    //   category: courseCategory,
+    //   visibility,
+    //   modules: moduleData
+    // }
+    // setCourseContent(() => [...courseContent])
+    // console.log(obj);
+  };
+  // console.log("module Content", moduleData);
+  // console.log('Course Content',course);
+  // console.log('course Content',courseData);
   return (
     <div>
       <div className="all-course-content">
@@ -46,20 +250,25 @@ const AllCourse = () => {
             data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasRight"
             aria-controls="offcanvasRight"
+            onClick={() => {
+              setCourseTitle("");
+              setCourseCategory("");
+            }}
           >
-            <i className="fas fa-solid fa-plus"></i> Add Category
+            <i className="fas fa-solid fa-plus"></i> Add Course
           </button>
+
           {/* This is for Category panel */}
         </div>
         <div
-          className="offcanvas offcanvas-end"
+          className={`offcanvas offcanvas-end ${show}`}
           tabIndex="-1"
           id="offcanvasRight"
           aria-labelledby="offcanvasRightLabel"
         >
           <div className="offcanvas-header">
             <h5 className="offcanvas-title" id="offcanvasRightLabel">
-              Add Category
+              Add Course
             </h5>
             <button
               type="button"
@@ -70,30 +279,37 @@ const AllCourse = () => {
           </div>
           <div className="offcanvas-body">
             <div className="add-category-content">
-              <form>
+              <form onSubmit={(e) => e.preventDefault()}>
                 <label className="mb-0">
                   Title<span style={{ color: "red" }}>*</span>
                 </label>
                 <input
                   type="text"
-                  value={categoryTitle}
-                  onChange={handleCategoryTitle}
+                  value={courseTitle}
+                  onChange={handleCourseTitle}
                   required
                 />
                 <label className="mb-0 mt-1">Category</label>
-                <select onChange={handleCategory} value={category}>
+                <select
+                  onChange={handlecourseCategory}
+                  value={courseCategory}
+                  required
+                >
                   <option value="">--Select Category--</option>
-                  <option value="Category 1">Category 1</option>
-                  <option value="Category 2">Category 2</option>
-                  <option value="Category 3">Category 3</option>
-                  <option value="Category 4">Category 4</option>
-                  <option value="Category 5">Category 5</option>
+                  {catData &&
+                    catData.map((category) => {
+                      return (
+                        <option value={category.name} key={category.id}>
+                          {category.name}
+                        </option>
+                      );
+                    })}
                 </select>
                 <div className="category-save-btn">
                   <button
-                    type="submit"
+                    type="button"
                     className="btn btn-primary"
-                    onClick={handleSave}
+                    onClick={(e) => handleSave(e)}
                   >
                     Save
                   </button>
@@ -102,7 +318,9 @@ const AllCourse = () => {
             </div>
           </div>
         </div>
+
         {/* This is for Course Content */}
+
         <div
           className="offcanvas offcanvas-end"
           tabIndex="-1"
@@ -110,83 +328,692 @@ const AllCourse = () => {
           id="offcanvasCourse"
           aria-labelledby="offcanvasRightLabel"
         >
+          {/* <CreateCourse courseData={courseData} /> */}
+
           <div className="offcanvas-body">
             <div className="add-course-content">
               <div className="course-name-section">
-                <ul>
-                  {/* <li><button type="button" className="btn btn-secondary">Add Category</button></li> */}
-                  {courseData.map((course) => {
-                    return (
-                      <div key={course.id}>
-                        <li>
-                          <a role="button">{course.course_title}</a>
-                        </li>
-                      </div>
-                    );
-                  })}
+                <ul style={{ paddingLeft: "10px" }}>
+                  {courseContent &&
+                    courseContent.map((course) => {
+                      return (
+                        <div key={course.id}>
+                          <li
+                            role="button"
+                            onClick={() => {
+                              // handleCourseContent(course.id);
+                              handleCourseContent(course);
+                              // setCourseTitle(course.course_title);
+                              // fun(course.id)
+                            }}
+                          >
+                            {course.title}
+                          </li>
+                        </div>
+                      );
+                    })}
                 </ul>
               </div>
               <div className="course-form-section">
-                <div className="offcanvas-head">
-                  <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                    Add Course
-                  </h5>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    data-bs-dismiss="offcanvas"
-                    aria-label="Close"
-                  ></button>
+                {/* <div className="" style={{ display: 'flex', justifyContent: 'end'}}>
+                    <button
+                      type="button"
+                      className="btn-close ms-3"
+                      data-bs-dismiss="offcanvas"
+                      aria-label="Close"
+                    ></button>
+                  </div> */}
+                <div className="offcanvas-head course-heading">
+                  <div className="course-heading-section">
+                    <input
+                      type="text"
+                      value={courseTitle}
+                      onChange={handleCourseTitle}
+                      required
+                      className="courseTitle"
+                    />
+                    <label>Start Date:</label>
+                    <i
+                      class="bi bi-calendar-date date-picker"
+                      role="button"
+                      ref={startDatePickerRef}
+                      onClick={() => startDateRef.current.showPicker()}
+                    ></i>
+                    <input
+                      type="date"
+                      value={courseStart}
+                      className="course-start-field"
+                      ref={startDateRef}
+                      id="course-date-field"
+                      onChange={(e) => handlCourseStart(e)}
+                    />
+                    <label>End Date:</label>
+                    <i
+                      class="bi bi-calendar-date date-picker"
+                      role="button"
+                      ref={endDatePickerRef}
+                      onClick={() => endDateRef.current.showPicker()}
+                    ></i>
+                    <input
+                      type="date"
+                      value={courseEnd}
+                      onChange={(e) => handlCourseEnd(e)}
+                      className="course-end-field"
+                      id="course-date-field"
+                      ref={endDateRef}
+                    />
+                  </div>
+
+                  <div class="btn-group dropstart">
+                    <i
+                      className="bi bi-three-dots-vertical "
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      onClick={() => null}
+                    ></i>
+                    <button
+                      type="button"
+                      className="btn-close ms-3"
+                      data-bs-dismiss="offcanvas"
+                      aria-label="Close"
+                    ></button>
+                    <div className="dropdown-menu option-main-container">
+                      <ul class="option-ul" style={{ display: "flex" }}>
+                        <li>
+                          <div className="form-check form-switch visibility">
+                            <input
+                              className="form-check-input "
+                              type="checkbox"
+                              role="switch"
+                              value={visibility}
+                              onChange={handleVisibility}
+                              id="flexSwitchCheckDefault"
+                            />
+                          </div>
+                        </li>
+                        <li>
+                          <i
+                            className="bi bi-trash text-danger"
+                            onClick={() => null}
+                          ></i>
+                        </li>
+                        <li>
+                          <i class="bi bi-copy text-info"></i>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
                 <form>
-                  <label className="mb-0">
+                  {/* <label className="mb-0">
                     Title<span style={{ color: "red" }}>*</span>
                   </label>
-                  <input type="text" value={""} onChange={""} required />
-                  <label className="mb-0 mt-1">Description</label>
-                  <Editor
-                    apiKey={process.env.REACT_APP_API_KEY}
-                    onInit={(evt, editor) => (editorRef.current = editor)}
-                    initialValue=""
-                    init={{
-                      height: 300,
-                      menubar: false,
-                      plugins: [
-                        "advlist",
-                        "autolink",
-                        "lists",
-                        "link",
-                        "image",
-                        "charmap",
-                        "preview",
-                        "anchor",
-                        "searchreplace",
-                        "visualblocks",
-                        "code",
-                        "fullscreen",
-                        "insertdatetime",
-                        "media",
-                        "table",
-                        "code",
-                        // "help",
-                        "wordcount",
-                      ],
-                      toolbar:
-                        "undo redo | blocks | " +
-                        "bold italic forecolor | alignleft aligncenter " +
-                        "alignright alignjustify | bullist numlist outdent indent | " +
-                        "removeformat",
-                      content_style:
-                        "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                    }}
-                  />
+                  <input
+                    type="text"
+                    value={courseTitle}
+                    onChange={handleCourseTitle}
+                    required
+                    className="course-title"
+                  /> */}
+
+                  <div className="thumb-section">
+                    <div className="editor">
+                      <label className="mb-0 mt-1">Description</label>
+                      <Editor
+                        apiKey={process.env.REACT_APP_API_KEY}
+                        onInit={(evt, editor) => (editorRef.current = editor)}
+                        initialValue=""
+                        value={courseDes}
+                        onEditorChange={(value, evt) =>
+                          handleDescription(value, evt)
+                        }
+                        init={{
+                          height: 300,
+                          menubar: false,
+                          plugins: [
+                            "advlist",
+                            "autolink",
+                            "lists",
+                            "link",
+                            "image",
+                            "charmap",
+                            "preview",
+                            "anchor",
+                            "searchreplace",
+                            "visualblocks",
+                            "code",
+                            "fullscreen",
+                            "insertdatetime",
+                            "media",
+                            "table",
+                            "code",
+                            // "help",
+                            "wordcount",
+                          ],
+                          toolbar:
+                            "undo redo | blocks | " +
+                            "bold italic forecolor | alignleft aligncenter " +
+                            "alignright alignjustify | bullist numlist outdent indent | " +
+                            "removeformat",
+                          content_style:
+                            "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                        }}
+                      />
+                    </div>
+                    <div className="coverImage">
+                      <span className="choose-img">Upload Image</span>
+                      <div
+                        className="upload-image-section"
+                        onClick={handlImgClick}
+                      >
+                        {courseImg ? (
+                          <img
+                            src={URL.createObjectURL(courseImg)}
+                            alt=""
+                            width="300"
+                            height="300"
+                            className=""
+                          />
+                        ) : (
+                          <img src={img} />
+                        )}
+                      </div>
+                      <input
+                        type="file"
+                        ref={inpRef}
+                        accept="image/jpg, image/png, image/jpeg"
+                        onChange={handleCourseImg}
+                        style={{ display: "none" }}
+                      />
+                    </div>
+                  </div>
+                  <div className="category-section">
+                    <label className="mb-0 mt-1">Category</label>
+                    <select
+                      onChange={handlecourseCategory}
+                      value={courseCategory}
+                    >
+                      <option value="">--Select Category--</option>
+                      {catData &&
+                        catData.map((category) => {
+                          return (
+                            <option value={category.name} key={category.id}>
+                              {category.name}
+                            </option>
+                          );
+                        })}
+                    </select>
+                  </div>
+                  <div className="form-check form-switch visibility">
+                    <label
+                      htmlFor="IsActive"
+                      className=" course-unit-form-label"
+                    >
+                      Course Visibility
+                    </label>
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      role="switch"
+                      value={visibility}
+                      onChange={handleVisibility}
+                      id="flexSwitchCheckDefault"
+                    />
+                  </div>
+                  <hr style={{ margin: "20px 0px 20px 0px" }} />
+                  <div className="course-module-section">
+                    <div className="unitData-section">
+                      <div
+                        className="accordion accordion-flush w-100"
+                        id="module-section"
+                      >
+                        {moduleData.length === 0 ||
+                        moduleData.detail == "No module found for this course."
+                          ? moduleData.detail
+                          : moduleData &&
+                            moduleData.map((module) => {
+                              return (
+                                <div
+                                  key={module.id}
+                                  type="button"
+                                  className="accordion-item mb-1"
+                                  role="button"
+                                  aria-expanded="false"
+                                  onClick={() => {
+                                    // showModuleList();
+                                    // setUnitContent(unit)
+                                    handleModuleContent(module);
+                                    setModuelContent(module);
+                                  }}
+                                >
+                                  <h2
+                                    className="accordion-header module-collapse-button"
+                                    id={`flush-module${module.id}`}
+                                  >
+                                    <div
+                                      className="accordion-button collapsed module-button"
+                                      type="button"
+                                      data-bs-toggle="collapse"
+                                      data-bs-target={`#module${module.id}`}
+                                      aria-expanded="false"
+                                      aria-controls={`flush-module${module.id}`}
+                                    >
+                                      <div className="module-heading-container">
+                                        <div className="">
+                                          <span className="me-3">MODULE</span>
+                                          <input
+                                            type="text"
+                                            placeholder="Module Title"
+                                            value={module.title}
+                                            className="moduleTitle"
+                                            // onChange={"handleModuleTitle"}
+                                            required
+                                          />
+                                        </div>
+                                        <div className="">
+                                          <label>Start Date:</label>
+                                          <i
+                                            class="bi bi-calendar-date date-picker"
+                                            role="button"
+                                            ref={startDatePickerRefModule}
+                                            onClick={() =>
+                                              startDateRefModule.current.showPicker()
+                                            }
+                                          ></i>
+                                          <input
+                                            type="date"
+                                            value={moduleStart}
+                                            className="module-start-field"
+                                            ref={startDateRefModule}
+                                            id="module-date-field"
+                                            onChange={(e) =>
+                                              handlModuleStart(e)
+                                            }
+                                          />
+                                          <label>End Date:</label>
+                                          <i
+                                            class="bi bi-calendar-date date-picker"
+                                            role="button"
+                                            ref={endDatePickerRefModule}
+                                            onClick={() =>
+                                              endDateRefModule.current.showPicker()
+                                            }
+                                          ></i>
+                                          <input
+                                            type="date"
+                                            value={moduleEnd}
+                                            onChange={(e) => handlModuleEnd(e)}
+                                            className="module-end-field"
+                                            id="module-date-field"
+                                            ref={endDateRefModule}
+                                          />
+                                        </div>
+
+                                        <div class="btn-group dropstart">
+                                          <i
+                                            className="bi bi-three-dots-vertical "
+                                            type="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                            onClick={() => null}
+                                          ></i>
+                                          <div className="dropdown-menu option-main-container module-option">
+                                            <ul
+                                              class="option-ul"
+                                              style={{ display: "flex" }}
+                                            >
+                                              <li>
+                                                <div className="form-check form-switch visibility">
+                                                  <input
+                                                    className="form-check-input "
+                                                    type="checkbox"
+                                                    role="switch"
+                                                    value={visibility}
+                                                    onChange={handleVisibility}
+                                                    id="flexSwitchCheckDefault"
+                                                  />
+                                                </div>
+                                              </li>
+                                              <li>
+                                                <i
+                                                  className="bi bi-trash text-danger"
+                                                  onClick={() => null}
+                                                ></i>
+                                              </li>
+                                              <li>
+                                                <i class="bi bi-copy text-info"></i>
+                                              </li>
+                                            </ul>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </h2>
+                                  <div
+                                    id={`module${module.id}`}
+                                    className="accordion-collapse collapse"
+                                    aria-labelledby={`flush-module${module.id}`}
+                                    data-bs-parent="#module-section"
+                                  >
+                                    <div className="accordion-body">
+                                      <div
+                                        className="accordion accordion-flush module-unit-section"
+                                        id="unit-section"
+                                      >
+                                        {/* <h1 className="text-center rounded unit-list-heading" >Units</h1> */}
+                                        {unitData.length === 0 ||
+                                        unitData.detail ==
+                                          "No unit found for this module."
+                                          ? unitData.detail
+                                          : unitData &&
+                                            unitData.map((unit) => {
+                                              return (
+                                                <div
+                                                  key={unit.id}
+                                                  type="button"
+                                                  className="accordion-item mb-0 mt-1 unitSection"
+                                                  role="button"
+                                                  aria-expanded="false"
+                                                  onClick={() => {
+                                                    // showModuleList();
+                                                    // setUnitContent(unit)
+                                                    handleUnitContent(unit);
+                                                    // setModuelContent(module);
+                                                  }}
+                                                >
+                                                  <h2
+                                                    className="accordion-header unit-collapse-button"
+                                                    id={`flush-unit${unit.id}`}
+                                                  >
+                                                    <div
+                                                      className="accordion-button collapsed unit-button"
+                                                      type="button"
+                                                      data-bs-toggle="collapse"
+                                                      data-bs-target={`#unit${unit.id}`}
+                                                      aria-expanded="false"
+                                                      aria-controls={`flush-unit${unit.id}`}
+                                                    >
+                                                      <div className="module-heading-container">
+                                                        <div className="">
+                                                          <span className="me-3">
+                                                            Unit
+                                                          </span>
+                                                          <input
+                                                            type="text"
+                                                            placeholder="Unit Title"
+                                                            value={unit.title}
+                                                            className="unitTitle"
+                                                            required
+                                                          />
+                                                        </div>
+                                                        <div className="">
+                                                          <label>
+                                                            Start Date:
+                                                          </label>
+                                                          <i
+                                                            class="bi bi-calendar-date date-picker"
+                                                            role="button"
+                                                            ref={
+                                                              startDatePickerRefUnit
+                                                            }
+                                                            onClick={() =>
+                                                              startDateRefUnit.current.showPicker()
+                                                            }
+                                                          ></i>
+                                                          <input
+                                                            type="date"
+                                                            value={unitStart}
+                                                            className="unit-start-field"
+                                                            ref={
+                                                              startDateRefUnit
+                                                            }
+                                                            id="unit-date-field"
+                                                            onChange={(e) =>
+                                                              handlUnitStart(e)
+                                                            }
+                                                          />
+                                                          <label>
+                                                            End Date:
+                                                          </label>
+                                                          <i
+                                                            class="bi bi-calendar-date date-picker"
+                                                            role="button"
+                                                            ref={
+                                                              endDatePickerRefUnit
+                                                            }
+                                                            onClick={() =>
+                                                              endDateRefUnit.current.showPicker()
+                                                            }
+                                                          ></i>
+                                                          <input
+                                                            type="date"
+                                                            value={unitEnd}
+                                                            onChange={(e) =>
+                                                              handlUnitEnd(e)
+                                                            }
+                                                            className="unit-end-field"
+                                                            id="unit-date-field"
+                                                            ref={endDateRefUnit}
+                                                          />
+                                                        </div>
+
+                                                        <div class="btn-group dropstart">
+                                                          <i
+                                                            className="bi bi-three-dots-vertical "
+                                                            type="button"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                            onClick={() => null}
+                                                          ></i>
+                                                          <div className="dropdown-menu option-main-container module-option">
+                                                            <ul
+                                                              class="option-ul"
+                                                              style={{
+                                                                display: "flex",
+                                                              }}
+                                                            >
+                                                              <li>
+                                                                <div className="form-check form-switch visibility">
+                                                                  <input
+                                                                    className="form-check-input "
+                                                                    type="checkbox"
+                                                                    role="switch"
+                                                                    value={
+                                                                      visibility
+                                                                    }
+                                                                    onChange={
+                                                                      handleVisibility
+                                                                    }
+                                                                    id="flexSwitchCheckDefault"
+                                                                  />
+                                                                </div>
+                                                              </li>
+                                                              <li>
+                                                                <i
+                                                                  className="bi bi-trash text-danger"
+                                                                  onClick={() =>
+                                                                    null
+                                                                  }
+                                                                ></i>
+                                                              </li>
+                                                              <li>
+                                                                <i class="bi bi-copy text-info"></i>
+                                                              </li>
+                                                            </ul>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </h2>
+                                                  <div
+                                                    id={`unit${unit.id}`}
+                                                    className="accordion- collapse"
+                                                    aria-labelledby={`flush-unit${unit.id}`}
+                                                    data-bs-parent="#unit-section"
+                                                  >
+                                                    <div className="accordion-body">
+                                                      <div className="video-section">
+                                                        <div
+                                                          className=""
+                                                          style={{
+                                                            display: "flex",
+                                                            justifyContent:
+                                                              "space-between",
+                                                            width: "15%",
+                                                          }}
+                                                        >
+                                                          <h5>Add Content</h5>
+                                                          <i class="bi bi-plus-circle plus-icon"></i>
+                                                        </div>
+                                                        <div className="file-content">
+                                                          <ul className="outer-ul">
+                                                            {unitFiles.length ===
+                                                              0 ||
+                                                            unitFiles.detail ==
+                                                              "No files found for this unit."
+                                                              ? unitFiles.detail
+                                                              : unitFiles &&
+                                                                unitFiles.map(
+                                                                  (file) => {
+                                                                    return (
+                                                                      <li
+                                                                        key={
+                                                                          file.id
+                                                                        }
+                                                                      >
+                                                                        <a
+                                                                          className="w-50"
+                                                                          href={
+                                                                            file.url
+                                                                          }
+                                                                        >
+                                                                          {
+                                                                            file.title
+                                                                          }
+                                                                        </a>
+                                                                        <span className="w-50">
+                                                                          {file.created_at.substr(
+                                                                            0,
+                                                                            10
+                                                                          )}
+                                                                        </span>
+                                                                        <i
+                                                                          className="bi bi-three-dots-vertical"
+                                                                          type="button"
+                                                                          data-bs-toggle="dropdown"
+                                                                          aria-expanded="false"
+                                                                          onClick={() =>
+                                                                            null
+                                                                          }
+                                                                        ></i>
+                                                                        <div className="dropdown-menu file-content-options">
+                                                                          <ul
+                                                                            class="option-ul"
+                                                                            style={{
+                                                                              display:
+                                                                                "flex",
+                                                                            }}
+                                                                          >
+                                                                            <li>
+                                                                              <div className="form-check form-switch visibility">
+                                                                                <input
+                                                                                  className="form-check-input "
+                                                                                  type="checkbox"
+                                                                                  role="switch"
+                                                                                  value={
+                                                                                    visibility
+                                                                                  }
+                                                                                  onChange={
+                                                                                    handleVisibility
+                                                                                  }
+                                                                                  id="flexSwitchCheckDefault"
+                                                                                />
+                                                                              </div>
+                                                                            </li>
+                                                                            <li>
+                                                                              <i
+                                                                                className="bi bi-trash text-danger"
+                                                                                onClick={() =>
+                                                                                  null
+                                                                                }
+                                                                              ></i>
+                                                                            </li>
+                                                                            <li>
+                                                                              <i class="bi bi-copy text-info"></i>
+                                                                            </li>
+                                                                          </ul>
+                                                                        </div>
+                                                                      </li>
+                                                                    );
+                                                                  }
+                                                                )}
+                                                          </ul>
+                                                        </div>
+                                                      </div>
+                                                      <div className="slide-section"></div>
+                                                      <div className="pdf-section"></div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              );
+                                            })}
+                                        <div className="add-unit-btn">
+                                          <button type="button" className="btn">
+                                            Add Unit{" "}
+                                            <i class="bi bi-plus-circle plus-icon"></i>
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                        <div className="add-module-btn">
+                          <button type="button" className="btn">
+                            Add Module{" "}
+                            <i class="bi bi-plus-circle plus-icon"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      {showModule && (
+                        <CourseModule
+                          // setModuleData={setModuleData}
+                          setShowModule={setShowModule}
+                          minDate={minDate}
+                          unitData={unitData}
+                          setUnitData={setUnitData}
+                          moduleData={moduleData}
+                          setModuleData={setModuleData}
+                          showModuleContent={showModuleContent}
+                          setShowModuleContent={setShowModuleContent}
+                          moduleContent={moduleContent}
+                          setModuelContent={setModuelContent}
+                        />
+                      )}
+                      {!showModule && (
+                        // <button
+                        //   type="button"
+                        //   className="btn w-50 add-module-btn"
+                        //   onClick={() => setShowModule((pre) => !pre)}
+                        // >
+                        //   Add Module
+                        //   <i className="fas fa-solid fa-plus ms-2"></i>
+                        // </button>
+                        ""
+                      )}
+                    </div>
+                  </div>
                   <div className="category-save-btn">
                     <button
                       type="submit"
                       className="btn btn-primary"
-                      onClick={handleSave}
+                      onClick={handleSaveCourse}
                     >
-                      Save
+                      Save Course
                     </button>
                   </div>
                 </form>
@@ -199,14 +1026,14 @@ const AllCourse = () => {
             <thead>
               <tr>
                 <th scope="col">Course Title</th>
-                <th scope="col">Author</th>
+                <th scope="col">Description</th>
                 <th scope="col">Duration</th>
                 <th scope="col">Users Enrolled</th>
                 <th scope="col">Last Update</th>
               </tr>
             </thead>
             <tbody>
-              {courseData.map((course) => {
+              {courseContent.map((course) => {
                 return (
                   <tr
                     key={course.id}
@@ -214,12 +1041,18 @@ const AllCourse = () => {
                     data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasCourse"
                     aria-controls="offcanvasRight"
+                    onClick={() => {
+                      handleCourseContent(course);
+                      // handleCourseContent(course.id);
+                      setCourseTitle(course.title);
+                      // fun(course.id)
+                    }}
                   >
-                    <td >{course.course_title}</td>
-                    <td>{course.author}</td>
+                    <td>{course.title}</td>
+                    <td>{course.description}</td>
                     <td>{course.duration}</td>
                     <td>{course.users_enrolled}</td>
-                    <td>{course.last_updated}</td>
+                    <td>{course.created_at}</td>
                   </tr>
                 );
               })}
@@ -227,23 +1060,6 @@ const AllCourse = () => {
           </table>
         ) : (
           ""
-          // <div className="userCard">
-          //   {courseData.map((user) => {
-          //     return (
-          //       <div className="card userBlockCard" key={user.id}>
-          //         <img
-          //           src={userImg}
-          //           className="card-img-top userCardImg"
-          //           alt="LMS User"
-          //         />
-          //         <div className="card-body blockCardBody">
-          //           <p className="card-text p-0 m-0">{user.name}</p>
-          //           <p className="card-text p-0 m-0">{user.Role}</p>
-          //         </div>
-          //       </div>
-          //     );
-          //   })}
-          // </div>
         )}
       </div>
     </div>
