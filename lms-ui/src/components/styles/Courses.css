@@ -472,7 +472,7 @@ hr {
     align-items: center;
     width: 100%;
 }
-.file-content .outer-ul:only-child li {
+.file-content .outer-ul .outer-ul-list {
     display: flex;
     justify-content: space-between;
     list-style: none;
@@ -520,4 +520,18 @@ hr {
     border: 2px solid #f6c4f8;
     outline: none !important;
     box-shadow: none !important;
+}
+
+
+.add-new-unit-section {
+    margin: 26px 0px;
+    box-shadow: 0px 3px 5px -1px gray;
+}
+.new-unit-heading-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.add-new-unit-section .unit-form {
+    padding-left: 20px;
 }
