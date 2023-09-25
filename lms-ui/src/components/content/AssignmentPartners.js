@@ -4,26 +4,33 @@ import "../styles/AssignmentPartner.css";
 
 const AssignmentPartners = () => {
   const [selectedNames, setSelectedNames] = useState([]);
-  // const [showTeam, setShowTeam] =useState(false)
   const [lastSelectedNames, setLastSelectedNames] = useState([]); // Track last selected names
   const [searchText, setSearchText] = useState("");
   const [groupMembers, setGroupMembers] = useState([]);
   const [groups, setGroups] = useState([]); // Store all created groups here
   const [removedNames, setRemovedNames] = useState([]);
-  const [isClicked, setIsClicked] = useState(false);
 
-  const allNames = [
-    "John Martin",
-    "Jane Grek",
-    "Alice Shack",
-    "Bob Williams",
-    "Mark Butchar",
-    "Bruce Wayne",
+  // const allNames = [
+  //   "John Martin",
+  //   "Jane Grek",
+  //   "Alice Shack",
+  //   "Bob Williams",
+  //   "Mark Butchar",
+  //   "Bruce Wayne",
+  // ];
+
+  const mockData = [
+    { firstName: 'Abeera', lastName: 'Arshad', color: 'blue' },
+    { firstName: 'Samara', lastName: 'Mohsin', color: 'green' },
+    { firstName: 'Samra', lastName: 'Almas', color: 'red' },
+    { firstName: 'Hammad', lastName: 'Siddiqui', color: 'red' },
+    { firstName: 'Muhammad', lastName: 'Humza', color: 'red' },
+    { firstName: 'Mohsen', lastName: 'Ali', color: 'red' },
+
   ];
 
- 
+  const allNames = mockData.map((data) => `${data.firstName} ${data.lastName}`);
 
-  
   const filteredNames = allNames.filter(
     (name) =>
       !groupMembers.includes(name) &&
@@ -160,27 +167,12 @@ const AssignmentPartners = () => {
         .charAt(0)
         .toUpperCase();
       // Display the first letters on the console
-      console.log(`${firstNameFirstLetter}${lastNameFirstLetter}`);
-      // return firstNameFirstLetter, lastNameFirstLetter;
+      return `${firstNameFirstLetter}${lastNameFirstLetter}`;
     } else {
       return "Invalid name format. Please provide a full name with a space in between.";
     }
   };
 
-  const handleCombinedFunctions = async() => {
-   await handleAddToGroup()
-   await handleCreateGroup()
-   console.log("ma execute hogaya successfully")
-  }
-
-  // const handleCombinedFunctions = () => {
-  //   if (!isClicked) {
-  //     setIsClicked(true);
-  //     handleAddToGroup();
-  //     handleCreateGroup();
-  //     console.log("ma execute hogaya successfully");
-  //   }
-  // };
 
   const handleCreateGroup = () => {
     if (lastSelectedNames.length > 0 || selectedNames.length > 0) {
@@ -200,7 +192,11 @@ const AssignmentPartners = () => {
           <ul>
             {selectedNames.map((name, index) => (
               <li key={index}>
-                {name}
+                <div className="name-icon">
+                        {handleFirstAndLastLetter(name)}
+                      </div>
+                {/* {name} */}
+                
                 <div
                   className="remove_button"
                   onClick={() => handleRemoveSelected(name)}
@@ -210,8 +206,11 @@ const AssignmentPartners = () => {
                     height="1em"
                     viewBox="0 0 384 512"
                   >
+                  <style>{"color: #FFFFFF;"}</style>
                     <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
                   </svg>
+                  {/* <i class="fa-solid fa-xmark" style="color: #FFFFFF;"></i> */}
+
                 </div>
                 {/* <button
                   className="remove_button"
@@ -238,10 +237,7 @@ const AssignmentPartners = () => {
               </option>
             ))}
           </select>
-          {/* <button onClick={handleAddToGroup}>Add to Group</button> */}
-          {/* <button onClick={()=> handleCombinedFunctions()}>
-            add and create group
-          </button> */}
+          
         </div>
 
         <button className="create_button" onClick={handleCreateGroup}>
@@ -250,8 +246,6 @@ const AssignmentPartners = () => {
         <div className="group_container">
           <h2>Created Groups</h2>
           <ul>
-            {console.log(setGroups.length)}
-            {console.log(groups.length)}
             {groups.map((group, groupIndex) => (
               <li key={groupIndex}>
                 Group {groupIndex + 1}:
@@ -259,11 +253,7 @@ const AssignmentPartners = () => {
                   {group.map((name, nameIndex) => (
                     <li key={nameIndex} className="group-name-list">
                       <div className="name-icon">
-                        {allNames.forEach((name) => {
-                          handleFirstAndLastLetter(name);
-                        })}
-                        {/* {handleFirstAndLastLetter("Ahmad Khan")} */}
-                        {/* {firstNameFirstLetter}{lastNameFirstLetter} */}
+                        {handleFirstAndLastLetter(name)}
                       </div>
                       {name}
                       <div
@@ -278,9 +268,6 @@ const AssignmentPartners = () => {
                           <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
                         </svg>
                       </div>
-                      {/* <button className='remove_button' onClick={() => handleRemoveFromGroup(groupIndex, name)}>
-                      Remove
-                    </button> */}
                     </li>
                   ))}
                 </ul>
