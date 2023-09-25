@@ -2,6 +2,9 @@ import React from "react";
 import ReactPlayer from "react-player";
 
 const VideoPlayer = ({ selectedLesson,handleVideoProgress }) => {
+
+  
+
   return (
     <div className="video_player_container">
       <div>
@@ -10,7 +13,7 @@ const VideoPlayer = ({ selectedLesson,handleVideoProgress }) => {
           url={selectedLesson.url}
           controls={true}
           width="100%"
-          height="100%"
+          height="62vh"
           volume={3.5}
           onProgress={handleVideoProgress}
         />

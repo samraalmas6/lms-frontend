@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/CourseTable.css";
 import VideoPlayer from "./VideoPlayer";
 import Navbar from "../content/Navbar";
 
 import ModuleCard from "./ModuleCard";
+import AssignmentView from "./AssignmentView"; 
+
+
 
 const coursesData = [
   {
@@ -23,6 +26,16 @@ const coursesData = [
             duration: "7 min",
             doc_name: "extreme prog doc",
             doc: [{ uri: require("../content/files/MOMS.pdf") }],
+            assignments: [
+              {
+                id: 1,
+                title: "Assignment 1",
+                description: "Complete the first assignment.",
+                dueDate: "2023-09-30 14:00",
+                resourceFiles: ["file1.pdf", "file2.doc"],
+                submissionLinks: ["https://example.com", "https://anotherlink.com"],
+              },             
+            ]
             // fileType: "pdf",
             // fileName: "Min of meeting",
           },
@@ -51,6 +64,14 @@ const coursesData = [
             url: "https://youtu.be/gwWKnnCMQ5c?si=_av7yUDr5ZKqGbgt",
             duration: "7 min",
             doc: [{ uri: require("../content/files/third_lec.pdf") }],
+            assignments: [
+              {
+                id: 1,
+                title: 'Assignment 1',
+                description: 'Complete the first assignment.',
+                dueDate: '2023-09-30'
+              }
+            ]
           },
           {
             id: 4,
@@ -209,19 +230,47 @@ const coursesData = [
   // Add more courses and modules as needed
 ];
 
-function CourseTable() {
+function CourseTable({ modules, assignments }) {
   const [activeTab, setActiveTab] = useState("Overview");
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [videoCompleted, setVideoCompleted] = useState(false);
   const [expandedModule, setExpandedModule] = useState(null);
   const [extendedView, setExtendedView] = useState(false);
   const [isCourseContentVisible, setIsCourseContentVisible] = useState(true);
-  const [videoPaneState, setVideoPaneState] = useState('collapsed')
+  const [videoPaneState, setVideoPaneState] = useState('collapsed');
+  const [videoProgress, setVideoProgress] = useState({});
+  const [selectedAssignment, setSelectedAssignment] = useState(null);
+  const [showAssignmentDetail, setShowAssignmentDetail] = useState(false);
+
+  const [showAssignment, setShowAssignment] = useState(false)
+
+// Load video progress from localStorage when component mounts
+useEffect(() => {
+  const storedVideoProgress = JSON.parse(localStorage.getItem("videoProgress"));
+  if (storedVideoProgress) {
+    setVideoProgress(storedVideoProgress);
+  }
+}, []);
+
+// Save video progress to localStorage when it changes
+useEffect(() => {
+  localStorage.setItem("videoProgress", JSON.stringify(videoProgress));
+}, [videoProgress]);
+
 
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
   };
+  const handleAssignmentSelect = (assignment) => {
+    setSelectedAssignment(assignment);
+  };
 
+  const handleAssignmentClick = (assignment) => {
+    // Set the selected assignment and show the assignment detail screen
+    setSelectedAssignment(assignment);
+    setShowAssignmentDetail(true);
+  };
+  
   const handleLessonSelect = (lesson) => {
     setSelectedLesson(lesson);
   };
@@ -252,27 +301,45 @@ function CourseTable() {
     setIsCourseContentVisible(!isCourseContentVisible);
   };
 
+  // const handleVideoProgress = ({ played, playedSeconds }) => {
+  //   // Set a threshold value (e.g., 0.95) to consider the video as completed
+  //   if (played >= 0.95 && !videoCompleted) {
+  //     // Mark the video as completed
+  //     setVideoCompleted(true);
+
+  //     // Use the lesson id to select the corresponding checkbox
+  //     const checkboxId = `lesson-${selectedLesson.id}`;
+  //     const checkbox = document.getElementById(checkboxId);
+
+  //     // Check the checkbox
+  //     if (checkbox) {
+  //       checkbox.checked = true;
+  //     }
+  //   }
+  // };
   const handleVideoProgress = ({ played, playedSeconds }) => {
-    // Set a threshold value (e.g., 0.95) to consider the video as completed
-    if (played >= 0.95 && !videoCompleted) {
-      // Mark the video as completed
-      setVideoCompleted(true);
-
-      // Use the lesson id to select the corresponding checkbox
-      const checkboxId = `lesson-${selectedLesson.id}`;
-      const checkbox = document.getElementById(checkboxId);
-
-      // Check the checkbox
-      if (checkbox) {
-        checkbox.checked = true;
-      }
+    if (selectedLesson) {
+      setVideoProgress((prevProgress) => ({
+        ...prevProgress,
+        [selectedLesson.id]: {
+          played,
+          completed: played >= 0.95, // Mark as completed when played >= 0.95
+        },
+      }));
     }
   };
+
+  // Pass the video progress to the VideoPlayer component
+  const videoProgressData =
+    selectedLesson && videoProgress[selectedLesson.id];
 
   return (
     <>
       <div className="main-outer-container">
         <div className={`course-main ${videoPaneState}`}>
+        { showAssignment ? <div>
+           <AssignmentView selectedAssignments={selectedAssignment} />
+          </div> :
           <div className="video-section">
             <VideoPlayer
               selectedLesson={selectedLesson}
@@ -285,6 +352,7 @@ function CourseTable() {
             {/* </div> */}
             {/* tabs below video */}
           </div>
+  }
           <div className="tabs-container">
             <ul className="tabs">
               <li
@@ -344,6 +412,10 @@ function CourseTable() {
                       toggleModule={() => toggleModule(index)}
                       handleLessonSelect={handleLessonSelect}
                       handleVideoCompleted={handleVideoCompleted}
+                      assignments={assignments}
+                      videoProgressData={videoProgressData} 
+                      handleAssignmentClick={handleAssignmentClick}
+                      setShowAssignment={setShowAssignment}
                     />
                   ))}
                 </div>
@@ -351,12 +423,25 @@ function CourseTable() {
             </div>
           </div>
         )}
+        
+        
         {!isCourseContentVisible && 
         <button onClick={toggleCourseContent}>
           return 
           </button>}
       </div>
-      <div className="extended-view-container"></div>
+      <div className="extended-view-container">
+      
+        {/* Conditionally render the AssignmentView */}
+       {/* Conditionally render the AssignmentView */}
+       {selectedAssignment && (
+          <AssignmentView
+            assignment={selectedAssignment}
+            onClose={() => setSelectedAssignment(null)}
+          />
+        )}
+      </div>
+     
     </>
   );
 }
