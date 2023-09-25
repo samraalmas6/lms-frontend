@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "../../styles/MyCourses.css";
-import user from "../../content/Images/user.png";
-import cloudCourse from "../../content/Images/cloudCourse.png"
-import courseData from "../../hooks/courseData";
+import "../../../styles/MyCourses.css";
+import user from "../../../content/Images/user.png";
+import cloudCourse from "../../../content/Images/cloudCourse.png"
+import courseData from "../../../hooks/courseData";
 
 const MyCourses = () => {
   const [showBlock, setShowBlock] = useState(false);

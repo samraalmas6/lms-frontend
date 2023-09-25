@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import CourseContent from "./CourseContent";
-import catData from "../../hooks/catData";
+import catData from "../../../hooks/catData";
 
 const AllCourse = ({ show, minDate }) => {
   //   Create Course Section

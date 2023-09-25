@@ -1,8 +1,8 @@
 import { Editor } from "@tinymce/tinymce-react";
 import React, { useRef, useState } from "react";
 import CourseModule from "./CourseModule";
-import img from "../../content/Images/uploadImg.jpg";
-import catData from "../../hooks/catData";
+import img from "../../../content/Images/uploadImg.jpg";
+import catData from "../../../hooks/catData";
 import { useNavigate } from "react-router-dom";
 
 const CourseContent = ({

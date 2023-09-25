@@ -2,11 +2,9 @@ import React, { useState, useEffect } from "react";
 import Collapse from "react-collapse";
 
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
-import "../styles/CourseTable.css";
-import ReactPlayer from "react-player";
+import "../../../styles/CourseTable.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
-import AssignmentView from "./AssignmentView";
 
 const ModuleCard = ({
   module,
@@ -192,7 +190,7 @@ const ModuleCard = ({
                               <a
                                 className="pdf-btn"
                                 type="button"
-                                href={require("../content/files/third_lec.pdf")}
+                                href={require("../../../content/files/third_lec.pdf")}
                                 target="_blank"
                               >
                                 {lesson.doc_name}

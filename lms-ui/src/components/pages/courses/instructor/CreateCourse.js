@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import "../../styles/Courses.css";
+import "../../../styles/Courses.css";
 import AllCourse from "./AllCourses";
 
 const CreateCourse = ({  }) => {
@@ -10,29 +10,6 @@ const CreateCourse = ({  }) => {
   const minDate = `${year}-${month}-${day}`;
   
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // const [unitData, setUnitData] = useState([]);
-  // const [moduleData, setModuleData] = useState([]);
-
-
-
-
-
   return (
     <div>
       <AllCourse show={'show'} 
@@ -41,5 +18,4 @@ const CreateCourse = ({  }) => {
     </div>
   );
 };
-
 export default CreateCourse;

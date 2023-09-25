@@ -10,18 +10,23 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AddUser from "./components/pages/users/AddUser";
 import PrivateRoute from "./components/content/PrivateRoute";
 import AllUsers from "./components/pages/users/AllUsers";
-import CreateCourse from "./components/pages/courses/CreateCourse";
-import AllCourse from "./components/pages/courses/AllCourses";
+import CreateCourse from "./components/pages/courses/instructor/CreateCourse";
+import AllCourse from "./components/pages/courses/instructor/AllCourses";
 import VerificationPage from "./components/content/VerificationPage";
 import AddTeam from "./components/pages/teams/AddTeam";
 import AllTeams from "./components/pages/teams/AllTeams";
 import AddCategory from "./components/pages/category/AddCategory";
 import AllCategory from "./components/pages/category/AllCategory";
+import MyCourses from "./components/pages/courses/learner/MyCourses";
+import CourseTable from "./components/pages/courses/learner/CourseTable";
 
 function App() {
   const [showlogin, setShowLogin] = useState(false);
 
   return (
+    // <div className="">
+    //   <CourseTable />
+    // </div>
     <div>
        <BrowserRouter>
        <Routes>
@@ -38,6 +43,8 @@ function App() {
         <Route path="/allteams" element={<PrivateRoute><AllTeams /></PrivateRoute>}></Route>
         <Route path="/course/create" element={<PrivateRoute><CreateCourse /></PrivateRoute>}></Route>
         <Route path="/course/all" element={<PrivateRoute><AllCourse /></PrivateRoute>}></Route>
+        {/* <Route path="/course/my-courses" element={<PrivateRoute><MyCourses /></PrivateRoute>}></Route>
+        <Route path="/course/show" element={<PrivateRoute><CourseTable /></PrivateRoute>}></Route> */}
         <Route path="/category/add" element={<PrivateRoute><AddCategory /></PrivateRoute>}></Route>
         <Route path="/category/all" element={<PrivateRoute><AllCategory /></PrivateRoute>}></Route>
       </Routes>

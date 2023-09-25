@@ -1,11 +1,11 @@
 import React from "react";
-import AssignmentPartners from "../content/AssignmentPartners";
+import AssignmentPartners from "./AssignmentPartners";
 import "../styles/AssignmentScreen.css";
 import { useState } from "react";
-import AssigDesc from "../content/AssigDesc";
+import AssigDesc from "./AssigDesc";
 import UploadPicture from "./UploadPicture";
 import paraIcon from "../content/Images/paragraph.svg"
-import FileUploadComponent from "../content/FileUploadComponent";
+import FileUploadComponent from "../../../content/FileUploadComponent";
 
 const AssignmentScreen = () => {
   const currentDate = new Date();

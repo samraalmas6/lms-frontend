@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/AssignmentView.css";
+import "../../../styles/AssignmentView.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 

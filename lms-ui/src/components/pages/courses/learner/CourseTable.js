@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import "../styles/CourseTable.css";
+import "../../../styles/CourseTable.css";
 import VideoPlayer from "./VideoPlayer";
-import Navbar from "../content/Navbar";
+
 
 import ModuleCard from "./ModuleCard";
 import AssignmentView from "./AssignmentView"; 
@@ -25,7 +25,7 @@ const coursesData = [
             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
             duration: "7 min",
             doc_name: "extreme prog doc",
-            doc: [{ uri: require("../content/files/MOMS.pdf") }],
+            doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
             assignments: [
               {
                 id: 1,
@@ -47,7 +47,7 @@ const coursesData = [
             doc_name: "dummy doc",
             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
             duration: "1 hr",
-            doc: [{ uri: require("../content/files/MyProjects.pdf") }],
+            doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
           },
         ],
       },
@@ -63,7 +63,7 @@ const coursesData = [
             doc_name: "lecture 3 doc",
             url: "https://youtu.be/gwWKnnCMQ5c?si=_av7yUDr5ZKqGbgt",
             duration: "7 min",
-            doc: [{ uri: require("../content/files/third_lec.pdf") }],
+            doc: [{ uri: require("../../../content/files/third_lec.pdf") }],
             assignments: [
               {
                 id: 1,
@@ -81,7 +81,7 @@ const coursesData = [
             doc_name: "lecture 4 doc",
             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
             duration: "2 hr",
-            doc: [{ uri: require("../content/files/fourth_lec.pdf") }],
+            doc: [{ uri: require("../../../content/files/fourth_lec.pdf") }],
           },
         ],
       },
@@ -97,7 +97,7 @@ const coursesData = [
             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
             duration: "7 min",
             doc_name: "extreme prog doc",
-            doc: [{ uri: require("../content/files/MOMS.pdf") }],
+            doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
             // fileType: "pdf",
             // fileName: "Min of meeting",
           },
@@ -109,7 +109,7 @@ const coursesData = [
             doc_name: "dummy doc",
             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
             duration: "1 hr",
-            doc: [{ uri: require("../content/files/MyProjects.pdf") }],
+            doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
           },
         ],
       },
@@ -125,7 +125,7 @@ const coursesData = [
             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
             duration: "7 min",
             doc_name: "extreme prog doc",
-            doc: [{ uri: require("../content/files/MOMS.pdf") }],
+            doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
             // fileType: "pdf",
             // fileName: "Min of meeting",
           },
@@ -137,7 +137,7 @@ const coursesData = [
             doc_name: "dummy doc",
             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
             duration: "1 hr",
-            doc: [{ uri: require("../content/files/MyProjects.pdf") }],
+            doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
           },
         ],
       },
@@ -153,7 +153,7 @@ const coursesData = [
             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
             duration: "7 min",
             doc_name: "extreme prog doc",
-            doc: [{ uri: require("../content/files/MOMS.pdf") }],
+            doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
             // fileType: "pdf",
             // fileName: "Min of meeting",
           },
@@ -165,7 +165,7 @@ const coursesData = [
             doc_name: "dummy doc",
             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
             duration: "1 hr",
-            doc: [{ uri: require("../content/files/MyProjects.pdf") }],
+            doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
           },
         ],
       },
@@ -181,7 +181,7 @@ const coursesData = [
             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
             duration: "7 min",
             doc_name: "extreme prog doc",
-            doc: [{ uri: require("../content/files/MOMS.pdf") }],
+            doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
             // fileType: "pdf",
             // fileName: "Min of meeting",
           },
@@ -193,7 +193,7 @@ const coursesData = [
             doc_name: "dummy doc",
             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
             duration: "1 hr",
-            doc: [{ uri: require("../content/files/MyProjects.pdf") }],
+            doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
           },
         ],
       },
@@ -209,7 +209,7 @@ const coursesData = [
             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
             duration: "7 min",
             doc_name: "extreme prog doc",
-            doc: [{ uri: require("../content/files/MOMS.pdf") }],
+            doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
             // fileType: "pdf",
             // fileName: "Min of meeting",
           },
@@ -221,7 +221,7 @@ const coursesData = [
             doc_name: "dummy doc",
             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
             duration: "1 hr",
-            doc: [{ uri: require("../content/files/MyProjects.pdf") }],
+            doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
           },
         ],
       },

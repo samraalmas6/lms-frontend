@@ -376,19 +376,28 @@ input[type="file"] {
 .custom-button:hover {
   background-color: #448ddb;
 }
-ul {
+
+/* ****************************       Theses Css class should be change   ******************** */
+
+.ul {
   list-style-type: none; /* Remove default list bullet points */
   padding: 0;
   
 }
 
-li {
+.li {
   display: flex; /* Use flexbox for layout */
   align-items: center; /* Vertically center the content */
   justify-content: space-between; /* Space between items */
   margin-bottom: 10px; /* Add margin for spacing between list items */
   width: 300px;
 }
+
+
+/* *********************************************************************************** */
+
+
+
 
 /* Style for the file name */
 .file-name {
