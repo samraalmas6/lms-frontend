@@ -1,0 +1,589 @@
+.submit-section {
+  background-color: #ffff;
+  position: relative;
+  width: 277px;
+  margin-top: -287px;
+  box-shadow: 5px 8px 19px -3px rgb(177, 173, 173);
+  left: -159%;
+  border-radius: 5px;
+  border: 2px solid #0056b3;
+  height: auto;
+}
+/* 
+.toggle-submission-button{
+   margin-top: 10px;
+background-color: aqua;
+} */
+.submission-option {
+  display: none; /* Initially hide the submission options */
+  margin-top: 10px;
+  text-align: left;
+}
+
+/* Style for the Add File and Add Link buttons */
+.submission-option button {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.add-create{
+  display: inline-block;
+  margin: 29px;
+  background-color: white;
+  color: #0056b3;
+  width: 198px;
+  border: 1px solid #8e8b8b;
+  padding: 4px 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+  margin-left: 37px;
+}
+.lnk-optn{
+ 
+  margin: 19px;
+  background-color: white;
+  color: #0056b3;
+  width: 164px;
+  border: 1px solid #8e8b8b;
+  padding: 5px 20px;
+  border-radius: 5px;
+  margin-top: -7px;
+}
+.fas-fa-link{
+  margin-left: 22px;
+  background-color: #bf96b4;
+}
+
+element.style {
+  position: relative;
+  top: -1px;
+  left: -71px;
+}
+/* .toggle-submission-button {
+  display: inline-block;
+  margin: 20px;
+} */
+
+/* .toggle-submission-button button {
+  background-color: white;
+  color: #0056b3; */
+
+  /* padding: 10px 20px; */
+  /* cursor: pointer;
+  width: 260px;
+  border: 1px solid #8e8b8b;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-top: 30px;
+} */
+
+.submit-button {
+  cursor: pointer;
+  width: 122px;
+  border: 1px solid #8e8b8b;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  background-color: #0056b3;
+  color: #ffff;
+  height: 41px;
+  margin-left: 76px;
+  margin-top: 0px;
+  text-align: center;
+}
+/* Style for file and link input fields */
+/* .file-submission,
+  .link-submission {
+    display: none; Initially hide the input fields
+    margin-top: 10px;
+  } */
+
+/* .file-submission label, */
+/* .link-submission label { */
+  /* display: block;
+  margin-bottom: 5px;
+  background-color: #0056b3;
+  margin-right: 400px;
+  color: #fff;
+  width: 500px;
+} */
+
+/* .file-submission input[type="file"],
+  .link-submission input[type="text"] {
+    width: 100%;
+    padding: 5px;
+    margin-top: 5px;
+  } */
+/* .file-submission { */
+  /* width: 500px;
+  /* background-color: #2ecc71; */
+  /* margin-left: -500px;
+  height: 120px;
+  background-color: aqua;
+
+  margin-top: -200px; */ 
+/* } */
+/* .submission-option{
+    width: auto;
+  } */
+/* styles.css */
+
+.submission-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  background-color: #0056b3;
+  padding: 100px;
+}
+
+/* .submission-option button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  } */
+
+.submission-option button:hover {
+  background-color: #0056b3;
+}
+
+/* .file-submission {
+    display: none;
+    margin-top: 10px;
+  } */
+
+.file-submission label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+/* .file-submission [type="file"] {
+  display: block;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  background-color: aquamarine;
+}
+
+.file-submission [type="file"]:focus {
+  outline: none;
+  border-color: #0056b3; */
+/* } */
+.title {
+  font-size: 50px;
+  border-bottom: 2px solid #0056b3;
+}
+.detail {
+  width: 74%;;
+
+  margin-left: 10px;
+}
+.submit {
+  background-color: #fff;
+  width: 400px;
+  margin-left: 120%;
+  height: 100vh;
+}
+
+.detail-title {
+  font-size: 40px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+
+  color: #0056b3;
+}
+.detail-date {
+  margin-left: 75%;
+  /* border-bottom: 2px solid #0056b3; */
+}
+.title-date {
+  border-bottom: 2px solid #0056b3;
+}
+
+.detail-description {
+  border-bottom: 1px solid gray;
+}
+.uploaded-files {
+  background-color: rgb(22, 41, 35);
+  margin-top: 9px;
+}
+.select-assignment {
+  margin-top: 30px;
+  margin-left: 10px;
+}
+.custom-file-input {
+  position: relative;
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.custom-file-input input[type="file"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.custom-file-input span {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+.uploaded-files {
+  background-color: #fff;
+  position: relative;
+  margin-top: 9px;
+  padding-top: 10px;
+}
+.upload {
+  background-color: #d4dbe7;
+    width: 239px;
+    height: 48px;
+    margin-left: 16px;
+    border-radius: 5px;
+    text-align: center;
+    padding-top: 5px;
+    border: 2px solid #0056b3;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 5px 8px 19px -3px rgb(177, 173, 173);
+    font-family: 'Times New Roman', Times, serif;
+    text-align: end;
+
+}
+
+/* Add this CSS to your AssignmentView.css file or in a separate CSS file */
+ul.upload {
+  list-style: none; /* Remove default bullet points */
+  padding-left: 0; /* Remove left padding */
+}
+
+ul.upload li::before {
+  content: "\1F4C4"; /* Unicode for the 📄 Page Facing Up character */
+  display: inline-block;
+  font-size: 20px; /* Adjust the size as needed */
+  margin-right: 65px;
+}
+
+.resource-files {
+  background-color: #fdfefd;
+}
+
+ul.resources {
+  /* background-color: #2ecc71; */
+  width: 30px;
+  padding-top: 20px;
+  list-style: none;
+  text-align: center;
+}
+/* .res {
+  background-color: rgb(244, 250, 250);
+  width: 300px;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  border-left: 3px solid #0056b3 ;
+  padding-top: 40px;
+  margin-bottom: 10px; /* Space between elements */
+  /* padding: 10px; */
+  /* border-radius: 5px;
+  text-align: center;
+  position: relative;
+  box-shadow: 5px 8px 19px -3px rgb(177, 173, 173);
+} */ 
+.texeria {
+  margin-right: 72px;
+  margin-top: -26px;
+}
+
+
+
+
+.fas.fa-file {
+  /* Add your styling here */
+  font-size: 30px; /* Set the font size */
+  color: #0056b3; /* Set the color */
+  /* You can add more styles as needed */
+}
+.confirmation-dialog{
+  background-color: #dee2e6;
+  margin-left: -623px;
+  margin-top: -250px;
+  width: 361px;
+  border-radius: 10px;
+
+}
+
+.upload-link{
+  width: '100%';
+  padding: '200px';
+  font-size: '16px';
+  border-radius: '6px';
+  border: '1px solid #ccc';
+  box-shadow: '0 2px 4px rgba(0, 0, 0, 0.1)';
+  transition: 'border-color 0.3s ease';
+  outline: 'none';
+  background-color: '#f5f5f5';
+
+}
+
+.custom-file-input {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+input[type="file"] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.custom-button {
+  background-color: #0056b3;
+  color: #fff;
+  padding: 7px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 134px;
+  font-size: 15px;
+  margin-top: -148px;
+  margin-left: 66px;
+}
+
+.custom-button:hover {
+  background-color: #448ddb;
+}
+ul {
+  list-style-type: none; /* Remove default list bullet points */
+  padding: 0;
+  
+}
+
+li {
+  display: flex; /* Use flexbox for layout */
+  align-items: center; /* Vertically center the content */
+  justify-content: space-between; /* Space between items */
+  margin-bottom: 10px; /* Add margin for spacing between list items */
+  width: 300px;
+}
+
+/* Style for the file name */
+.file-name {
+  margin-left: 1px; /* Add space to the right of the file name */
+  width: 700px; /* Set the width of the file name */
+  padding: 5px; /* Add padding to the file name */
+  background-color: #35172d;
+}
+
+/* Style for the download link */
+.res {
+  text-decoration: none; /* Remove underlines from links */
+  width: 100px; /* Set the width of the download link */
+  padding: 5px; /* Add padding to the download link */
+  background-color: rgb(244, 250, 250);
+  width: 300px;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  border-left: 3px solid #0056b3 ;
+  padding-top: 40px;
+  margin-bottom: 10px; /* Space between elements */
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  box-shadow: 5px 8px 19px -3px rgb(177, 173, 173);
+}
+
+.submitted-status {
+  color: green;
+  margin-right: -63px;
+  font-family:'Times New Roman', Times, serif;
+  font-size: 18px;
+}
+
+.done-status {
+  color: blue;
+  margin-right: 17px;
+  font-family:'Times New Roman', Times, serif;
+  font-size: 18px;
+}
+
+.resubmitted-status {
+  color: orange;
+  margin-right: -63px;
+  font-family:'Times New Roman', Times, serif;
+  font-size: 18px;
+}
+
+.late-submission-status {
+  color: red;
+  margin-right: -63px;
+  font-family:'Times New Roman', Times, serif;
+  font-size: 18px;
+}
+
+.not-submitted-status {
+  color: gray;
+  margin-right: -63px;
+  font-family:'Times New Roman', Times, serif;
+  font-size: 18px;
+}
+
+.submission-status{
+  background-color: #fef8fc;
+  text-align:right;
+  width: 201px;
+  font-family:sans-serif;
+}
+
+.image-style{
+  width: 50px;
+  filter: brightness(1.2) saturate(100%) hue-rotate(21deg) contrast(1) grayscale(15%);
+  margin-left: 2px;
+  margin-bottom: 10px;
+}
+.link-place{
+  background-color: #dee2e6;
+  width: 270px;
+  margin-left: -359px;
+  margin-top: -75px;
+  height: 115px;
+  border-radius: 16px;
+}
+.link-btn{
+  width: 107px;
+  background-color: #0056b3;
+  margin-top: 5px;
+  margin-left: 74px;
+  border-radius: 4px;
+  color: white;
+  border: none;
+  height: 29px;
+}
+/* .load-img{
+  background-color: #dee2e6;
+  margin-left: -318px;
+  width: 293px;
+  margin-top: -157px;
+  height: 141px;
+  border-radius: 10px;
+} */
+.add-create-dropdown{
+  background-color: #fff;
+  
+    border-radius: 10px;
+    height: 164px;
+}
+
+.load-img .close-icon{
+  background-color: #2ecc71;
+  border-radius: 6px;
+  height: 20px;
+  margin-top: -137px;
+  width: 292px;}
+.close-icon2{
+  position: relative;
+  left: 237px;
+  top: -16px;
+}
+.lnk{
+  margin-left: 75px;
+}
+.fil{ 
+  margin-left: 15px;
+  margin-left: -133px;
+}
+.lnk-text{
+  margin-top: -8px;
+  margin-left: 47px;
+  width: 173px;
+  height: 36px;
+  border-radius: 4px;
+  border: 2px solid #adb5bd;
+  font-family: ui-sans-serif;
+}
+.submission-options-dropdown{
+  background-color: #fff;
+  width: 205px;
+  margin-left: 29px;
+  margin-top: -14px;
+  padding: 8px;
+}
+.upld-dlg{
+background-color: #35172d;
+}
+.close-icon
+{
+  width: 1px;
+  font-size: 14px;
+  height: 0px;
+  margin-left: 224px;
+}
+.confirm-btn{
+  cursor: pointer;
+  width: 97px;
+  border: 1px solid #8e8b8b;
+  padding: 6px 20px;
+  border-radius: 7px;
+  margin-bottom: 30px;
+  background-color: #0056b3;
+  color: #ffff;
+  height: 37px;
+  margin-left: 153px;
+  margin-top: 0px;
+  text-align: center;
+}
+.resubmit-btn{
+  
+  cursor: pointer;
+  width: 190px;
+  border: 1px solid #8e8b8b;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  background-color: #0056b3;
+  color: #ffff;
+  height: 41px;
+  margin-left: 40px;
+  margin-top: 0px;
+  text-align: center;
+}
+.cancel-btn{
+  cursor: pointer;
+  width: 97px;
+  border: 1px solid #8e8b8b;
+  padding: 6px 20px;
+  border-radius: 7px;
+  margin-bottom: 30px;
+  background-color: #0056b3;
+  color: #ffff;
+  height: 37px;
+  margin-left: 8px;
+  margin-top: 0px;
+  text-align: center;
+
+}

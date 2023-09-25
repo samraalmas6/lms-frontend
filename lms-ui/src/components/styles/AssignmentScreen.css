@@ -1,0 +1,151 @@
+.main-container {
+  display: flex;
+  padding: 15px;
+  gap: 15px;
+  height: 100vh;
+}
+
+.assignment-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 70%;
+  background-color: white;
+}
+
+.assignment-details form{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.assignment-details form input {
+  background-color: #e6e6e3;
+  width: 100%;
+  border: none;
+  border-color: #e6e6e3;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.assignment-details .editor-container{
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.assignment-details .editor-container .description-container{
+  width: 100%;
+}
+
+input {
+  background-color: #e6e6e3;
+  width: 100%;
+  border: none;
+  border-color: #e6e6e3;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.side-container {
+  width: 30%;
+  background-color: #fff;
+}
+
+.file-attach-div {
+  display: flex;
+}
+
+.user-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.fa-thin.fa-user-plus {
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  border-radius: 100%;
+  border: 2px dashed #9fabc1;
+  color: #9fabc1;
+  width: 50px;
+  height: 50px;
+}
+
+
+.due-date-and-time{
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: #fff;
+    border: 1 px solid #e6e6e3;
+    width: 80%;
+    justify-content: center;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+.due-date-time{
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.side-container{
+    background-color: #e6e6e3;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.side-container .due-date-and-time .due-date-time input{
+    background-color: #e6e6e3;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.side-container .marks{
+    background-color: #fff;
+    width: 80%;
+    padding: 15px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    border-radius: 5px;
+
+}
+
+.side-container .marks i{
+  color: #8f9eb7;
+  font-size: 20px;
+}
+
+.side-container .assignment-partners{
+    background-color: #fff;
+    width: 80%;
+    padding: 15px;
+    border-radius: 5px;
+
+}
+
+.side-container .assignment-partners .heading-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* background-color: #e6e6e3; */
+}
+
+.fa-calendar-alt, .fa-clock{
+  font-size: 20px;
+  color: #8f9eb7;
+}

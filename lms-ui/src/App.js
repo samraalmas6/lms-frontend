@@ -1,15 +1,12 @@
 import "./components/styles/App.css";
-import "./components/styles/HomePage.css"
-import "./components/styles/Responsive.css"
+import "./components/styles/HomePage.css";
+import "./components/styles/Responsive.css";
 
 import SigninPage from "./components/content/SigninPage";
-import HomePage from './components/content/HomePage'
+import HomePage from "./components/content/HomePage";
+import CourseTable from "./components/pages/CourseTable";
 import { useState } from "react";
-import {
-	BrowserRouter,
-	Routes,
-	Route
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import AddUser from "./components/pages/users/AddUser";
 import PrivateRoute from "./components/content/PrivateRoute";
@@ -21,9 +18,13 @@ import AddTeam from "./components/pages/teams/AddTeam";
 import AllTeams from "./components/pages/teams/AllTeams";
 import AddCategory from "./components/pages/category/AddCategory";
 import AllCategory from "./components/pages/category/AllCategory";
+import MyCourses from "./components/pages/courses/MyCourses";
+import AssignmentScreen from "./components/pages/AssignmentScreen";
+import AssignmentView from "./components/pages/AssignmentView";
+
 
 function App() {
-  const [showlogin, setShowLogin] = useState(false)
+  const [showlogin, setShowLogin] = useState(false);
 
   return (
     <div>
