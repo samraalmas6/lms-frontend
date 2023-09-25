@@ -24,7 +24,7 @@ function App() {
     <div>
       {/* <AssignmentScreen /> */}
       {/* <MyCourses /> */}
-      {/* <CourseTable /> */}
+      <CourseTable />
       {/* <BrowserRouter>
         <Routes>
           <Route element={<SigninPage />} path="/auth/login" />
