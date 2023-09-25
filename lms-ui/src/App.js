@@ -26,8 +26,8 @@ function App() {
     <div>
       {/* <AssignmentScreen /> */}
       {/* <MyCourses /> */}
-    <AssignmentView/>
-    {/* <CourseTable/> */}
+    {/* <AssignmentView/> */}
+    <CourseTable/>
     {/* <AddUser/> */}
       {/* <BrowserRouter>
         <Routes>
