@@ -126,6 +126,11 @@ const Sidebar = () => {
                 </Link>
               </li>
               <li className="nav-item mb-2 ">
+                <Link to="/course/my-courses" className="nav-link text-secondary">
+                  My Courses
+                </Link>
+              </li>
+              <li className="nav-item mb-2 ">
                 <a className="nav-link text-secondary" href='/category/add'>
                   Add Category
                 </a>
