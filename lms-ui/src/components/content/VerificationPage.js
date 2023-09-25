@@ -49,6 +49,7 @@ function VerificationPage() {
     setConfirmPassword(e.target.value);
   };
 
+  
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const userData = {

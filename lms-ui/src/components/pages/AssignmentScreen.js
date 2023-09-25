@@ -3,7 +3,7 @@ import AssignmentPartners from "../content/AssignmentPartners";
 import "../styles/AssignmentScreen.css";
 import { useState } from "react";
 import AssigDesc from "../content/AssigDesc";
-import UploadPicture from "./UploadPicture";
+// import UploadPicture from "./UploadPicture";
 import paraIcon from "../content/Images/paragraph.svg"
 import FileUploadComponent from "../content/FileUploadComponent";
 
