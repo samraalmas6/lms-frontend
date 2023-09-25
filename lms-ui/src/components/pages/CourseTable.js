@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import "../styles/CourseTable.css";
+import VideoPlayer from "./VideoPlayer";
 
 import ModuleCard from "./ModuleCard";
 
 const coursesData = [
   {
     id: 1,
-    title: "Course 1",
+    title: "Cloud Native",
     modules: [
       {
         id: 1,
@@ -15,7 +16,8 @@ const coursesData = [
           {
             id: 1,
             sno: "1.1",
-            title: "Lesson Title",
+            title: "Extreme Programming",
+            lecture_name: "Introduction",
             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
             duration: "7 min",
             file_uri: require("../content/files/MOMS.pdf"),
@@ -26,7 +28,8 @@ const coursesData = [
             id: 2,
             sno: "1.2",
             title: "Lesson Title",
-            url: "https://youtu.be/waGfV-IoOt8?si=1Th7Y9ZQ_GzC_h-B",
+            lecture_name: "Introduction",
+            url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
             duration: "1 hr",
             uri: require("../content/files/MOMS.pdf"),
             fileType: "pdf",
@@ -42,6 +45,7 @@ const coursesData = [
             id: 3,
             sno: "1.3",
             title: "Lesson Title",
+            lecture_name: "Introduction",
             url: "https://youtu.be/gwWKnnCMQ5c?si=_av7yUDr5ZKqGbgt",
             duration: "7 min",
             uri: require("../content/files/MOMS.pdf"),
@@ -52,6 +56,7 @@ const coursesData = [
             id: 4,
             sno: "1.4",
             title: "Lesson Title",
+            lecture_name: "Introduction",
             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
             duration: "2 hr",
             uri: require("../content/files/MOMS.pdf"),
@@ -119,8 +124,24 @@ const coursesData = [
 
 function CourseTable() {
   const [activeTab, setActiveTab] = useState("Course Content");
+  const [selectedLesson, setSelectedLesson] = useState(null);
+ const [expandedModule, setExpandedModule] = useState(null);
+
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
+  };
+  
+  const handleLessonSelect = (lesson) => {
+    setSelectedLesson(lesson);
+  };
+  
+  const toggleModule = (index) => {
+    if (expandedModule === index){
+      setExpandedModule(null);
+    }else{
+      setExpandedModule(index);
+    }
+
   };
 
   return (
@@ -131,25 +152,28 @@ function CourseTable() {
       <div className="main-outer-container">
         {/* sidebar div */}
         <div className="course-main">
-          <div className="video-section">
-            {/* <h1>video container</h1> */}
-            {/* tabs below video */}
-          </div>
-          <div className="tabs-container">
-            <ul className="tabs">
-              <li
-                className={activeTab === "Course Content" ? "active" : ""}
-                onClick={() => handleTabChange("Course Content")}
-              >
-                Course-Content
-              </li>
-              <li
-                className={activeTab === "Overview" ? "active" : ""}
-                onClick={() => handleTabChange("Overview")}
-              >
-                Overview
-              </li>
-            </ul>
+          <h1>video container</h1>
+          <div className="video_player_container">
+          <VideoPlayer selectedLesson={selectedLesson} />
+        </div>
+
+        
+          {/* tabs below video */}
+        <div className="try">
+          <ul className="tabs">
+            <li
+              className={activeTab === "Course Content" ? "active" : ""}
+              onClick={() => handleTabChange("Course Content")}
+            >
+              Course Content
+            </li>
+            <li
+              className={activeTab === "Overview" ? "active" : ""}
+              onClick={() => handleTabChange("Overview")}
+            >
+              Overview
+            </li>
+          </ul>
 
             <div className="tab-content">
               {activeTab === "Course Content" && (
@@ -177,8 +201,10 @@ function CourseTable() {
             {coursesData.map((course) => (
               <div key={course.id} className="course_card">
                 <h2>{course.title}</h2>
-                {course.modules.map((module) => (
-                  <ModuleCard key={module.id} module={module} />
+                {course.modules.map((module, index) => (
+                  <ModuleCard key={module.id} module={module}
+                  isExpanded={index === expandedModule}
+                  toggleModule={()=> toggleModule(index)} />
                 ))}
               </div>
             ))}
@@ -190,3 +216,5 @@ function CourseTable() {
 }
 
 export default CourseTable;
+
+
