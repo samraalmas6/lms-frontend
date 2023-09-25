@@ -4,7 +4,7 @@ import Sidebar from "./Sidebar";
 import { Navigate } from "react-router-dom";
 
 export default function PrivateRoute({ children }) {
-  if (sessionStorage.getItem('user_id') == null) {
+  if (sessionStorage.getItem('user_id') != null) {
       return <Navigate to="/auth/login" />
   }
   else {
