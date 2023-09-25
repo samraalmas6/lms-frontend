@@ -48,7 +48,7 @@ const AllCourse = ({ show, minDate }) => {
         start_date: "2023-12-25",
         end_date: "2023-12-25",
         author: 1,
-        updated_by: 2,
+        updated_by: 1,
         category: [1],
       };
       fetch("http://127.0.0.1:8000/api/courses/", {
@@ -201,7 +201,11 @@ const AllCourse = ({ show, minDate }) => {
             </tr>
           </thead>
           <tbody>
-            {courseContent.map((course) => {
+            {courseContent.length === 0 ||
+          courseContent.detail == "No objects found"
+            ? courseContent.detail
+            : courseContent &&
+            courseContent.map((course) => {
               return (
                 <tr
                   key={course.id}

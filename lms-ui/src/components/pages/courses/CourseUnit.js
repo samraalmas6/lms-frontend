@@ -11,6 +11,7 @@ const CourseUnit = ({ unitData }) => {
   const videoFieldRef = useRef(null)
   const pdfFieldRef = useRef(null)
   const slideFieldRef = useRef(null)
+  const videoSection = useRef(null)
 
   const [unitStart, setUnitStart] = useState("");
   const [unitEnd, setUnitEnd] = useState("");
@@ -41,7 +42,7 @@ const CourseUnit = ({ unitData }) => {
     videoFieldRef.current.removeAttribute('id', 'hide-field')
   }
   const hanldePDFUpload = () => {
-    pdfFieldRef.current.removeAttribute('id', 'hide-field')
+    
     pdfFieldRef.current.click()
   }
   const hanldeSlideUpload = () => {
@@ -54,6 +55,12 @@ const CourseUnit = ({ unitData }) => {
   }
   const handleUnitPDF = (e) => {
     let file = e.target.files[0];
+    if(file) {
+      videoSection.current.removeAttribute('id', 'hide-field')
+    }
+    else {
+      videoSection.current.setAttribute('id', 'hide-field')
+    }
     setUnitPDF(file);
   }
   const handleUnitSlide = (e) => {
@@ -230,7 +237,7 @@ const CourseUnit = ({ unitData }) => {
                                 unitFiles.map((file) => {
                                   return (
                                     <li key={file.id} className="outer-ul-list">
-                                      <a className="w-50" href={file.url}>
+                                      <a className="w-50" href={file.file} target="_blank">
                                         {file.title}
                                       </a>
                                       <span className="w-50">
@@ -394,7 +401,7 @@ const CourseUnit = ({ unitData }) => {
                     <span className="unit-form-span-title">Slide</span>
                     <i class="bi bi-plus-circle plus-icon unit-form-i-title"  onClick={() => hanldeSlideUpload()}></i>
                     </div>
-                    <div className="unit-field-section" id="hide-field">
+                    <div className="unit-field-section" id="hide-field" >
                     <input type="file" className="slide-field" ref={slideFieldRef} onChange={handleUnitSlide}  style={ { display: 'none'}} />
                     <span>{unitSlide && unitSlide.name}</span>
                     <i class="bi bi-check-lg check-unit-content text-success"></i>
@@ -406,7 +413,7 @@ const CourseUnit = ({ unitData }) => {
                     <span className="unit-form-span-title">PDF</span>
                     <i class="bi bi-plus-circle plus-icon unit-form-i-title" onClick={() => hanldePDFUpload()}></i>
                     </div>
-                    <div className="unit-field-section" >
+                    <div className="unit-field-section" id="hide-field" ref={videoSection}>
                     <input type="file" className="pdf-field" onChange={handleUnitPDF} ref={pdfFieldRef}  style={ { display: 'none'}} />
                     <span>{unitPDF && unitPDF.name}</span>
                     <i class="bi bi-check-lg check-unit-content text-success"></i>

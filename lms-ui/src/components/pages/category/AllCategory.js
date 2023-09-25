@@ -415,8 +415,11 @@ const AllCategory = ({ show }) => {
             </tr>
           </thead>
           <tbody>
-            {coursesData &&
-              coursesData.map((course) => {
+            {courseData.length === 0 ||
+          courseData.detail == "No objects found"
+            ? courseData.detail
+            : courseData &&
+            courseData.map((course) => {
                 return (
                   <tr key={course.id}>
                     <td>
