@@ -8,11 +8,17 @@ const CourseUnit = ({ unitData }) => {
   const endDateRefUnit = useRef(null);
   const startDatePickerRefUnit = useRef(null);
   const endDatePickerRefUnit = useRef(null);
+  const videoFieldRef = useRef(null)
+  const pdfFieldRef = useRef(null)
+  const slideFieldRef = useRef(null)
 
   const [unitStart, setUnitStart] = useState("");
   const [unitEnd, setUnitEnd] = useState("");
   const [visibility, setVisibility] = useState("");
   const [unitFiles, setUnitFiles] = useState([]);
+  const [videoUrl, setVidoUrl] = useState("")
+  const [unitPDF, setUnitPDF] = useState("")
+  const [unitSlide, setUnitSlide] = useState("")
 
   const [showAddUnit, setShowAddUnit] = useState(false) 
 
@@ -30,6 +36,30 @@ const CourseUnit = ({ unitData }) => {
   const handleVisibility = (e) => {
     setVisibility(e.target.value);
   };
+
+  const hanldeVideoUpload = () => {
+    videoFieldRef.current.removeAttribute('id', 'hide-field')
+  }
+  const hanldePDFUpload = () => {
+    pdfFieldRef.current.removeAttribute('id', 'hide-field')
+    pdfFieldRef.current.click()
+  }
+  const hanldeSlideUpload = () => {
+    slideFieldRef.current.removeAttribute('id', 'hide-field')
+    slideFieldRef.current.click()
+  }
+
+  const hanldeVido = (e) => {
+    setVidoUrl(e.target.value)
+  }
+  const handleUnitPDF = (e) => {
+    let file = e.target.files[0];
+    setUnitPDF(file);
+  }
+  const handleUnitSlide = (e) => {
+    let file = e.target.files[0];
+    setUnitSlide(file);
+  }
 
   const handleShowAddUnit = () => {
     setShowAddUnit(!showAddUnit)
@@ -257,7 +287,7 @@ const CourseUnit = ({ unitData }) => {
               );
             })}
             {
-              showAddUnit &&         <div className="add-new-unit-section">
+              showAddUnit && <div className="add-new-unit-section">
               <div className="new-unit-heading-section">
                   <div className="">
                     <span className="me-3">Unit</span>
@@ -348,20 +378,49 @@ const CourseUnit = ({ unitData }) => {
               <div className="unit-form-section">
                 <form className="unit-form">
                   <div className="video-section">
-                    <span>Video</span>
-                    <i class="bi bi-plus-circle plus-icon"></i>
+                    <div className="unit-selection-section">
+                    <span className="unit-form-span-title">Video</span>
+                    <i class="bi bi-plus-circle plus-icon unit-form-i-title" onClick={() => hanldeVideoUpload()}></i>
+                    </div>
+                    <div className="unit-field-section" id="hide-field" ref={videoFieldRef}>
+                    <input type="url" className="video-url"  value={videoUrl} onChange={(e) => hanldeVido(e)} placeholder="Video Link" />
+                    <i class="bi bi-check-lg check-unit-content text-success"></i>
+                    <i class="bi bi-x check-unit-content text-danger"></i>
+
+                    </div>
                   </div>
                   <div className="slides-section">
-                    <span>Slide</span>
-                    <i class="bi bi-plus-circle plus-icon"></i>
+                  <div className="unit-selection-section">
+                    <span className="unit-form-span-title">Slide</span>
+                    <i class="bi bi-plus-circle plus-icon unit-form-i-title"  onClick={() => hanldeSlideUpload()}></i>
+                    </div>
+                    <div className="unit-field-section" id="hide-field">
+                    <input type="file" className="slide-field" ref={slideFieldRef} onChange={handleUnitSlide}  style={ { display: 'none'}} />
+                    <span>{unitSlide && unitSlide.name}</span>
+                    <i class="bi bi-check-lg check-unit-content text-success"></i>
+                    <i class="bi bi-x check-unit-content text-danger"></i>
+                    </div>
                   </div>
                   <div className="pdf-section">
-                    <span>PDF</span>
-                    <i class="bi bi-plus-circle plus-icon"></i>
+                  <div className="unit-selection-section" >
+                    <span className="unit-form-span-title">PDF</span>
+                    <i class="bi bi-plus-circle plus-icon unit-form-i-title" onClick={() => hanldePDFUpload()}></i>
+                    </div>
+                    <div className="unit-field-section" >
+                    <input type="file" className="pdf-field" onChange={handleUnitPDF} ref={pdfFieldRef}  style={ { display: 'none'}} />
+                    <span>{unitPDF && unitPDF.name}</span>
+                    <i class="bi bi-check-lg check-unit-content text-success"></i>
+                    <i class="bi bi-x check-unit-content text-danger"></i>
+                    </div>
                   </div>
                   <div className="assignment-section">
-                    <span>Assignment</span>
-                    <i class="bi bi-plus-circle plus-icon"></i>
+                  <div className="unit-selection-section">
+                    <span className="unit-form-span-title">Assignment</span>
+                    <i class="bi bi-plus-circle plus-icon unit-form-i-title"></i>
+                    </div>
+                    <div className="unit-field-section">
+                   
+                    </div>
                   </div>
                 </form>
               </div>

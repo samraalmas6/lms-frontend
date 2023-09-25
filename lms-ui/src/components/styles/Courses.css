@@ -524,14 +524,78 @@ hr {
 
 
 .add-new-unit-section {
-    margin: 26px 0px;
+    margin: 26px 0px 10px;
     box-shadow: 0px 3px 5px -1px gray;
 }
 .new-unit-heading-section {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #f6ecec;
+    padding: 13px 8px;
+    margin-bottom: 20px;
 }
 .add-new-unit-section .unit-form {
     padding-left: 20px;
+    margin-left: 40px;
+    padding-bottom: 25px;
+}
+.add-new-unit-section .unit-form .video-section, .slides-section, .pdf-section, .assignment-section{
+    width: 15%;
+    min-width: 50%;
+    min-height: 40px;
+    max-width: 50%;
+    max-height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.unit-selection-section {
+    min-width: 25%;
+    min-height: 40px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.unit-form-span-title {
+    font-weight: 500;
+    font-size: 20px;
+    font-style: italic;
+    text-transform: capitalize;
+}
+.unit-form-i-title {
+    font-size: 22px;
+    color: #f10385;
+    font-weight: 600;
+}
+.unit-form-i-title:hover, .unit-form-i-title:focus, .unit-form-i-title:active {
+    font-size: 24px;
+    color: #8b6dd6;
+}
+.video-url, .slide-field, .pdf-field {
+    padding: 5px 12px;
+    margin: 6px 2px 3px;
+    border-radius: 6px;
+    border-style: solid;
+    border-color: #eee;
+    font-size: 17px;
+    width: 70%;
+}
+.video-url:hover, .video-url:focus, .video-url:active {
+    outline: none;
+    box-shadow: 2px 2px 11px -8px #000;
+    border-color: #e3e3e3;
+}
+.unit-field-section {
+    min-width: 70%;
+}
+.check-unit-content {
+    font-size: 25px;
+    padding-left: 7px;
+}
+.check-unit-content:hover, .check-unit-content:focus, .check-unit-content:active {
+    font-size: 26px;
+}
+#hide-field {
+    display: none;
 }
