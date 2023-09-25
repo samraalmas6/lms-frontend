@@ -155,7 +155,7 @@ const AssignmentPartners = () => {
   };
 
   const handleFirstAndLastLetter = (name) => {
-    console.log("func call hua ha");
+    // console.log("func call hua ha");
     // const fullName = "Samra Almas";
     // Split the name into parts
     const nameParts = name.split(" ");
@@ -183,6 +183,8 @@ const AssignmentPartners = () => {
       setSelectedNames([]);
     }
   };
+  const randomDecimal = Math.random();
+
 
   return (
     <div>
@@ -192,7 +194,7 @@ const AssignmentPartners = () => {
           <ul>
             {selectedNames.map((name, index) => (
               <li key={index}>
-                <div className="name-icon">
+                <div className={`name-icon name-icon${index}`}>
                         {handleFirstAndLastLetter(name)}
                       </div>
                 {/* {name} */}
@@ -249,13 +251,14 @@ const AssignmentPartners = () => {
             {groups.map((group, groupIndex) => (
               <li key={groupIndex}>
                 Group {groupIndex + 1}:
-                <ul>
-                  {group.map((name, nameIndex) => (
+                <ul className="group-members-container">
+                  {
+                  group.map((name, nameIndex) => (
                     <li key={nameIndex} className="group-name-list">
-                      <div className="name-icon">
+                      <div className={`name-icon name-icon${nameIndex}`}>
                         {handleFirstAndLastLetter(name)}
                       </div>
-                      {name}
+                      {/* {name} */}
                       <div
                         className="remove_button"
                         onClick={() => handleRemoveFromGroup(groupIndex, name)}

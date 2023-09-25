@@ -66,10 +66,34 @@
   align-items: center;
 }
 
+.name-icon1 {
+  background-color: black;
+}
+
+.name-icon2 {
+  background-color: green;
+}
+
+.name-icon3 {
+  background-color: purple;
+}
+
+.name-icon4 {
+  background-color: orange;
+}
+
+.name-icon5 {
+  background-color: yellow;
+  color: black;
+}
+
+
 .group-name-list {
   list-style: none;
   display: flex;
-  gap: 10px;
+  /* gap: 10px; */
+  /* margin-left: -20px; */
+  margin-left: -10px;
 }
 
 .main_container .selected_names ul {
@@ -97,4 +121,15 @@
   /* background-color: red; */
   position: absolute;
   margin-left: -15px;
+}
+
+.group_container .group-members-container .remove_button {
+  position: absolute;
+  margin-left: 30px;
+  margin-top: -10px;
+}
+
+.group_container .group-members-container {
+  display: flex;
+  margin-left: -10px;
 }
