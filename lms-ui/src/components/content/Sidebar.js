@@ -45,7 +45,6 @@ const Sidebar = () => {
             <ul
               className="list-unstyled flex-column pl-3 collapse sidebar-nav-sub show"
               id="submenu1"
-              aria-expanded="true"
             >
               <li className="nav-item mb-2 ">
                 <a className="nav-link text-secondary" href="">
@@ -79,6 +78,16 @@ const Sidebar = () => {
                 </Link>
               </li>
               <li className="nav-item mb-2 ">
+                <a className="nav-link text-secondary" href='/addteam'>
+                  Add Team
+                </a>
+              </li>
+              <li className="nav-item mb-2 ">
+                <a className="nav-link text-secondary" href="/allteams">
+                  All Teams
+                </a>
+              </li>
+              <li className="nav-item mb-2 ">
                 <a className="nav-link text-secondary" href="">
                   Add Type
                 </a>
@@ -107,9 +116,9 @@ const Sidebar = () => {
                 </a>
               </li>
               <li className="nav-item mb-2 ">
-                <Link className="nav-link text-secondary" to="/course/create">
+                <a className="nav-link text-secondary" href="/course/create">
                   Create Course
-                </Link>
+                </a>
               </li>
               <li className="nav-item mb-2 ">
                 <Link to="/course/all" className="nav-link text-secondary">
@@ -122,9 +131,15 @@ const Sidebar = () => {
                 </Link>
               </li>
               <li className="nav-item mb-2 ">
-                <a className="nav-link text-secondary" href="">
+                <a className="nav-link text-secondary" href='/category/add'>
                   Add Category
                 </a>
+
+              </li>
+              <li className="nav-item mb-2 ">
+                <Link className="nav-link text-secondary" to='/category/all'>
+                  All Category
+                </Link>
               </li>
             </ul>
           </li>

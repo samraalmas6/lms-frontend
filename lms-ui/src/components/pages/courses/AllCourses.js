@@ -1,40 +1,91 @@
 import React, { useEffect, useRef, useState } from "react";
-import courseData from "../../hooks/courseData";
-import { Editor } from "@tinymce/tinymce-react";
+import CourseContent from "./CourseContent";
+import catData from "../../hooks/catData";
 
-const AllCourse = () => {
-  const [showBlock, setShowBlock] = useState(false);
-  const [categoryTitle, setCategoryTitle] = useState("");
-  const [category, setCategory] = useState("");
-  const editorRef = useRef(null);
+const AllCourse = ({ show, minDate }) => {
+  //   Create Course Section
+  const [courseContent, setCourseContent] = useState([]);
 
+  const [moduleData, setModuleData] = useState([]);
 
-  const handleCategoryTitle = (e) => {
-    setCategoryTitle(e.target.value);
+  const [courseCategory, setCourseCategory] = useState("");
+  const [courseTitle, setCourseTitle] = useState("");
+  const [courseImg, setCourseImg] = useState("");
+  const [uploadImg, setUploadImg] = useState("");
+
+  useEffect(() => {
+    const getCourseData = () => {
+      fetch("http://127.0.0.1:8000/api/courses", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        response.json().then(function (result) {
+          console.log(result);
+          setCourseContent(result);
+        });
+      });
+    };
+
+    getCourseData();
+  }, [0]);
+
+  const handleCourseTitle = (e) => {
+    setCourseTitle(e.target.value);
   };
-  const handleCategory = (e) => {
-    setCategory(e.target.value);
+
+  const handlecourseCategory = (e) => {
+    setCourseCategory(e.target.value);
   };
 
   const handleSave = (e) => {
     e.preventDefault();
-
-    if (categoryTitle) {
+    if (courseTitle && courseCategory) {
       const obj = {
-        id: courseData[courseData.length - 1].id + 1,
-        course_title: categoryTitle,
-        author: "",
-        duration: 25,
-        users_enrolled: 0,
-        last_updated: "3 hours ago",
+        title: courseTitle,
+        description: "Test Description",
+        start_date: "2023-12-25",
+        end_date: "2023-12-25",
+        author: 1,
+        updated_by: 1,
+        category: [1],
       };
-      courseData.push(obj);
+      fetch("http://127.0.0.1:8000/api/courses/", {
+        method: "POST",
+        body: JSON.stringify(obj),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status == 201) {
+          response.json().then(function (result) {
+            console.log(result);
+            setCourseCategory("");
+            setCourseTitle("");
+            window.location.reload();
+          });
+        } else {
+          console.log(response);
+        }
+      });
     }
-    setCategory("");
-    setCategoryTitle("");
   };
 
-  // console.log(process.env.REACT_APP_API_KEY);
+  const handleCourseContentData = (course) => {
+    fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log("Api result: ", result);
+        setModuleData(result);
+      });
+    });
+  };
 
   return (
     <div>
@@ -46,59 +97,74 @@ const AllCourse = () => {
             data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasRight"
             aria-controls="offcanvasRight"
+            onClick={() => {
+              setCourseTitle("");
+              setCourseCategory("");
+            }}
           >
-            <i className="fas fa-solid fa-plus"></i> Add Category
+            <i className="fas fa-solid fa-plus"></i> Add Course
           </button>
+
           {/* This is for Category panel */}
-        </div>
-        <div
-          className="offcanvas offcanvas-end"
-          tabIndex="-1"
-          id="offcanvasRight"
-          aria-labelledby="offcanvasRightLabel"
-        >
-          <div className="offcanvas-header">
-            <h5 className="offcanvas-title" id="offcanvasRightLabel">
-              Add Category
-            </h5>
-            <button
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div className="offcanvas-body">
-            <div className="add-category-content">
-              <form>
-                <label className="mb-0">
-                  Title<span style={{ color: "red" }}>*</span>
-                </label>
-                <input
-                  type="text"
-                  value={categoryTitle}
-                  onChange={handleCategoryTitle}
-                  required
-                />
-                <label className="mb-0 mt-1">Category</label>
-                <select onChange={handleCategory} value={category}>
-                  <option value="">--Select Category--</option>
-                  <option value="Category 1">Category 1</option>
-                  <option value="Category 2">Category 2</option>
-                  <option value="Category 3">Category 3</option>
-                  <option value="Category 4">Category 4</option>
-                  <option value="Category 5">Category 5</option>
-                </select>
-                <div className="category-save-btn">
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    onClick={handleSave}
-                  >
-                    Save
-                  </button>
+
+          <div className="create-course">
+            <div
+              className={`offcanvas offcanvas-end ${show}`}
+              tabIndex="-1"
+              id="offcanvasRight"
+              aria-labelledby="offcanvasRightLabel"
+            >
+              <div className="offcanvas-header">
+                <h5 className="offcanvas-title" id="offcanvasRightLabel">
+                  Add Course
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="offcanvas"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="offcanvas-body">
+                <div className="add-category-content">
+                  <form onSubmit={(e) => e.preventDefault()}>
+                    <label className="mb-0">
+                      Title<span style={{ color: "red" }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={courseTitle}
+                      onChange={handleCourseTitle}
+                      required
+                    />
+                    <label className="mb-0 mt-1">Category</label>
+                    <select
+                      onChange={handlecourseCategory}
+                      value={courseCategory}
+                      required
+                    >
+                      <option value="">--Select Category--</option>
+                      {catData &&
+                        catData.map((category) => {
+                          return (
+                            <option value={category.name} key={category.id}>
+                              {category.name}
+                            </option>
+                          );
+                        })}
+                    </select>
+                    <div className="category-save-btn">
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={(e) => handleSave(e)}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </form>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
@@ -111,140 +177,57 @@ const AllCourse = () => {
           aria-labelledby="offcanvasRightLabel"
         >
           <div className="offcanvas-body">
-            <div className="add-course-content">
-              <div className="course-name-section">
-                <ul>
-                  {/* <li><button type="button" className="btn btn-secondary">Add Category</button></li> */}
-                  {courseData.map((course) => {
-                    return (
-                      <div key={course.id}>
-                        <li>
-                          <a role="button">{course.course_title}</a>
-                        </li>
-                      </div>
-                    );
-                  })}
-                </ul>
-              </div>
-              <div className="course-form-section">
-                <div className="offcanvas-head">
-                  <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                    Add Course
-                  </h5>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    data-bs-dismiss="offcanvas"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <form>
-                  <label className="mb-0">
-                    Title<span style={{ color: "red" }}>*</span>
-                  </label>
-                  <input type="text" value={""} onChange={""} required />
-                  <label className="mb-0 mt-1">Description</label>
-                  <Editor
-                    apiKey={process.env.REACT_APP_API_KEY}
-                    onInit={(evt, editor) => (editorRef.current = editor)}
-                    initialValue=""
-                    init={{
-                      height: 300,
-                      menubar: false,
-                      plugins: [
-                        "advlist",
-                        "autolink",
-                        "lists",
-                        "link",
-                        "image",
-                        "charmap",
-                        "preview",
-                        "anchor",
-                        "searchreplace",
-                        "visualblocks",
-                        "code",
-                        "fullscreen",
-                        "insertdatetime",
-                        "media",
-                        "table",
-                        "code",
-                        // "help",
-                        "wordcount",
-                      ],
-                      toolbar:
-                        "undo redo | blocks | " +
-                        "bold italic forecolor | alignleft aligncenter " +
-                        "alignright alignjustify | bullist numlist outdent indent | " +
-                        "removeformat",
-                      content_style:
-                        "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                    }}
-                  />
-                  <div className="category-save-btn">
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      onClick={handleSave}
-                    >
-                      Save
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
+            <CourseContent
+              courseTitle={courseTitle}
+              setCourseTitle={setCourseTitle}
+              courseCategory={courseCategory}
+              setCourseCategory={setCourseCategory}
+              courseImg={courseImg}
+              setCourseImg={setCourseImg}
+              moduleData={moduleData}
+              setModuleData={setModuleData}
+              courseContent={courseContent}
+            />
           </div>
         </div>
-        {!showBlock ? (
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">Course Title</th>
-                <th scope="col">Author</th>
-                <th scope="col">Duration</th>
-                <th scope="col">Users Enrolled</th>
-                <th scope="col">Last Update</th>
-              </tr>
-            </thead>
-            <tbody>
-              {courseData.map((course) => {
-                return (
-                  <tr
-                    key={course.id}
-                    role="button"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasCourse"
-                    aria-controls="offcanvasRight"
-                  >
-                    <td >{course.course_title}</td>
-                    <td>{course.author}</td>
-                    <td>{course.duration}</td>
-                    <td>{course.users_enrolled}</td>
-                    <td>{course.last_updated}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        ) : (
-          ""
-          // <div className="userCard">
-          //   {courseData.map((user) => {
-          //     return (
-          //       <div className="card userBlockCard" key={user.id}>
-          //         <img
-          //           src={userImg}
-          //           className="card-img-top userCardImg"
-          //           alt="LMS User"
-          //         />
-          //         <div className="card-body blockCardBody">
-          //           <p className="card-text p-0 m-0">{user.name}</p>
-          //           <p className="card-text p-0 m-0">{user.Role}</p>
-          //         </div>
-          //       </div>
-          //     );
-          //   })}
-          // </div>
-        )}
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">Course Title</th>
+              <th scope="col">Description</th>
+              <th scope="col">Duration</th>
+              <th scope="col">Users Enrolled</th>
+              <th scope="col">Last Update</th>
+            </tr>
+          </thead>
+          <tbody>
+            {courseContent.length === 0 ||
+          courseContent.detail == "No objects found"
+            ? courseContent.detail
+            : courseContent &&
+            courseContent.map((course) => {
+              return (
+                <tr
+                  key={course.id}
+                  role="button"
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasCourse"
+                  aria-controls="offcanvasRight"
+                  onClick={() => {
+                    handleCourseContentData(course);
+                    setCourseTitle(course.title);
+                  }}
+                >
+                  <td>{course.title}</td>
+                  <td>{course.description}</td>
+                  <td>{course.duration}</td>
+                  <td>{course.users_enrolled}</td>
+                  <td>{course.created_at}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );
