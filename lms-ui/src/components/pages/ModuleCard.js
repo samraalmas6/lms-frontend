@@ -1,50 +1,69 @@
 import React, { useState, useEffect } from "react";
 import Collapse from "react-collapse";
-import styles from "../styles/CourseTable.module.css";
-import VideoPlayer from "./VideoPlayer";
+
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import "../styles/CourseTable.css";
 import ReactPlayer from "react-player";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
+import AssignmentView from "./AssignmentView";
 
-const ModuleCard = ({ module, isExpanded, toggleModule, handleLessonSelect, selectedLesson, handleVideoCompleted }) => {
+const ModuleCard = ({
+  module,
+  isExpanded,
+  toggleModule,
+  handleLessonSelect,
+  selectedLesson,
+  handleVideoCompleted,
+  assignments,
+  handleAssignmentClick,
+  setShowAssignment
+}) => {
   // const [selectedLesson, setSelectedLesson] = useState(null);
   const [showPDF, setShowPdf] = useState(false);
   const [doc, setDoc] = useState([]);
   const [isCourseContentVisible, setIsCourseContentVisible] = useState(true);
+  const [selectedAssignment, setSelectedAssignment] = useState(null);
   // const[selectModule,setSelectedModule] = useState(null);
+
+  // const [showAssignment, setShowAssignment] = useState(false)
+
 
   useEffect(() => {
     if (!isExpanded) {
       // handleLessonSelect(null);
       handleVideoCompleted(false);
-    // } else if (module.lessons.length > 0) {
-    //    first lesson as selected when the module is expanded
-    //   setSelectedLesson(module.lessons[0]);
+      // } else if (module.lessons.length > 0) {
+      //    first lesson as selected when the module is expanded
+      //   setSelectedLesson(module.lessons[0]);
     }
   }, [isExpanded, module]);
 
   // Check if this is Module 1 and set the default selected lesson
   useEffect(() => {
-    console.log('hi')
+    console.log("hi");
     if (module.title === "Module 1" && module.lessons.length > 0) {
-      console.log(module.lessons[0])
+      console.log(module.lessons[0]);
       handleLessonSelect(module.lessons[0]);
     }
   }, [module]);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
- 
-
   const toggleLesson = (lesson) => {
     handleLessonSelect(lesson);
   };
 
-    const toggleCourseContent = () => {
+  const toggleCourseContent = () => {
     setIsCourseContentVisible(!isCourseContentVisible);
   };
-
+  // const handleAssignmentClick = (assignment) => {
+  //   // Handle assignment click here
+  //   console.log("Clicked Assignment:", assignment);
+  
+  //   // Use the handleAssignmentSelect function passed from CourseTable
+  //   setSelectedAssignment(assignment);
+  // };
+  
   // const selectModule = ({ module }) => {
   //   setSelectedModule(module);
   // };
@@ -101,6 +120,7 @@ const ModuleCard = ({ module, isExpanded, toggleModule, handleLessonSelect, sele
         <div className="module-list">
           <ul className="module-content">
             {module.lessons.map((lesson) => {
+              const lessonAssignments = lesson.assignments || [];
               return (
                 <div className="module-content-container" key={lesson.id}>
                   <div className="check-box-div">
@@ -131,8 +151,11 @@ const ModuleCard = ({ module, isExpanded, toggleModule, handleLessonSelect, sele
                             isExpanded ? "fa-rotate-180" : ""
                           } arrow`}
                         ></i> */}
-                        <i className={`fas fa-thin fa-chevron-down ${isExpanded ?  "fa-rotate-180" : ""}arrow`}></i>
-                        
+                        <i
+                          className={`fas fa-thin fa-chevron-down ${
+                            isExpanded ? "fa-rotate-180" : ""
+                          }arrow`}
+                        ></i>
                       </li>
                     </li>
                     <div
@@ -176,7 +199,30 @@ const ModuleCard = ({ module, isExpanded, toggleModule, handleLessonSelect, sele
                               </a>
                             </li>
                           </div>
+                          <div onClick={() => setShowAssignment((pre) => !pre)}>
+                          {lesson.assignments && lesson.assignments.map(assignment =>  {
+                              return <span onClick={() => handleAssignmentClick(assignment)}>{assignment.title}</span>
+                            })}                           
+                             </div>
                         </div>
+                      </li>
+                      <li>
+                      {/* {Array.isArray(assignments) && assignments.length > 0 ? (
+            assignments.map((assignment) => (
+    <div
+      key={assignment.id}
+      className={`assignment-item ${
+        selectedAssignment === assignment ? "selected" : ""
+      }`}
+      onClick={() => handleAssignmentClick(assignment)}
+    >
+      {assignment.title}
+    </div>
+  ))
+) : (
+  <p>No assignments available.</p>
+)} */}
+
                       </li>
                       <li>
                         {/* <DocViewer
@@ -213,6 +259,7 @@ const ModuleCard = ({ module, isExpanded, toggleModule, handleLessonSelect, sele
 
       {/* ------------ */}
       <div className="document-container">
+
         {/* {console.log(module.lessons[0].doc)} */}
         {/* {module.lessons.filter((lesson) => { */}
         {/* return ( */}
