@@ -41,7 +41,7 @@ const AllTeams = ({ show }) => {
       fetch("http://127.0.0.1:8000/api/courses", {
         method: "GET",
         headers: {
-          Authorization: `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61`,
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
         response.json().then(function (result) {
@@ -463,8 +463,11 @@ const AllTeams = ({ show }) => {
               </tr>
             </thead>
             <tbody>
-              {coursesData &&
-                coursesData.map((course) => {
+              {coursesData.length === 0 ||
+            coursesData.detail == "No objects found"
+              ? coursesData.detail
+              : coursesData &&
+              coursesData.map((course) => {
                   return (
                     <tr
                       key={course.id}
