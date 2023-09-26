@@ -22,7 +22,7 @@ function App() {
 
   return (
     <div>
-      {/* <AssignmentScreen /> */}
+      <AssignmentScreen />
       {/* <MyCourses /> */}
       {/* <CourseTable /> */}
       {/* <BrowserRouter>
