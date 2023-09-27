@@ -24,6 +24,8 @@ const CourseModule = ({ moduleData, courseId }) => {
 
   const [moduleContent, setModuelContent] = useState([]);
 
+  const [increment, setIncrement] = useState(0)
+  const [listModule, setListModule] = useState([])
   const [unitData, setUnitData] = useState([]);
 
   const handleModuleTitle = (e) => {
@@ -52,7 +54,7 @@ const CourseModule = ({ moduleData, courseId }) => {
   };
 
   const handleCreateNewModule = () => {
-    setShowAddModule(!showAddModule);
+    setShowAddModule(true);
   };
 
   const handleModuleContent = (module) => {
@@ -131,7 +133,7 @@ const CourseModule = ({ moduleData, courseId }) => {
                       id={`flush-module${module.id}`}
                     >
                       <div
-                        className="accordion-button collapsed module-button"
+                        className="accordion-button collapsed module-button w-100"
                         type="button"
                         data-bs-toggle="collapse"
                         data-bs-target={`#module${module.id}`}
@@ -233,6 +235,8 @@ const CourseModule = ({ moduleData, courseId }) => {
                       <div className="accordion-body">
                         <CourseUnit unitData={unitData}
                           moduleId={moduleId}
+                          showUnit={true}
+                          
                         />
                       </div>
                     </div>
@@ -243,7 +247,8 @@ const CourseModule = ({ moduleData, courseId }) => {
           {/* Create New Module Section */}
 
           {showAddModule && (
-            <div className="add-new-module-section">
+            listModule.length !== 0 && listModule.map((element) => {
+              return  <div className="add-new-module-section">
               <div className="new-module-heading-section">
                 <div className="">
                   <span className="me-3">Module</span>
@@ -298,7 +303,12 @@ const CourseModule = ({ moduleData, courseId }) => {
                     aria-expanded="false"
                     onClick={() => null}
                   ></i>
-                  <button type="button" className="btn btn-close" onClick={() => setShowAddModule(false)}></button>
+                  <button type="button" className="btn btn-close" 
+                  onClick={() => {
+                    setListModule(() => listModule.filter(module => {
+                      return module !== element
+                    }))
+                  }}></button>
                   <div className="dropdown-menu option-main-container module-option">
                     <ul
                       class="option-ul"
@@ -333,7 +343,25 @@ const CourseModule = ({ moduleData, courseId }) => {
               </div>
 
               <div className="module-form-section">
-                <form className="module-form">
+              <form className="module-form">
+
+                      <CourseUnit
+                       unitData={unitData}
+                       moduleId={moduleId}
+                       showUnit={false}
+                        />
+                 <div className="saveModule-button-section">
+                    <button
+                      type="button"
+                      onClick={(e) => handleSaveModule(e)}
+                      className="btn btn-secondary saveModule-button"
+                    >
+                      Save Module
+                    </button>
+                  </div>
+              </form>
+
+                {/* <form className="module-form">
                   <div className="module-title">
                     <label className="moduleDescription-label">
                       Module Description
@@ -348,25 +376,24 @@ const CourseModule = ({ moduleData, courseId }) => {
                     />
                   </div>
 
-                  <div className="saveModule-button-section">
-                    <button
-                      type="button"
-                      onClick={(e) => handleSaveModule(e)}
-                      className="btn btn-secondary saveModule-button"
-                    >
-                      Save
-                    </button>
-                  </div>
-                </form>
+                 
+                </form> */}
               </div>
             </div>
+            })
+           
           )}
 
           <div className="add-module-btn">
             <button
               type="button"
               className="btn"
-              onClick={() => handleCreateNewModule()}
+              onClick={() => {
+                handleCreateNewModule()
+                setIncrement((pre) => pre+1)
+                setListModule(pre => [...pre, increment+1])
+              }
+              }
             >
               Add Module <i class="bi bi-plus-circle plus-icon"></i>
             </button>

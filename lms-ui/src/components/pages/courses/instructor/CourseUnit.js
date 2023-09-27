@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import UpdateUnit from "./UpdateUnit";
 
-const CourseUnit = ({ unitData, moduleId }) => {
+const CourseUnit = ({ unitData, moduleId, showUnit }) => {
   //  ************************* Unit Ref Hooks  ********************
   // ***************************************************************
   const startDateRefUnit = useRef(null);
@@ -9,9 +9,12 @@ const CourseUnit = ({ unitData, moduleId }) => {
   const startDatePickerRefUnit = useRef(null);
   const endDatePickerRefUnit = useRef(null);
   const videoFieldRef = useRef(null);
+  const videoAddRef = useRef(null);
   const pdfFieldRef = useRef(null);
   const slideFieldRef = useRef(null);
   const videoSection = useRef(null);
+  const pdfSelector = useRef(null);
+
 
   const [unitTitle, setUnitTitle] = useState("");
   const [unitStart, setUnitStart] = useState("");
@@ -23,7 +26,11 @@ const CourseUnit = ({ unitData, moduleId }) => {
   const [unitPDF, setUnitPDF] = useState("");
   const [unitSlide, setUnitSlide] = useState("");
 
-  const [showAddUnit, setShowAddUnit] = useState(false);
+  const [increment, setIncrement] = useState(0)
+  const [listUnit, setListUnit] = useState([0])
+
+  const [showAddUnit, setShowAddUnit] = useState(!showUnit);
+  const [showUnitList, setShoshowUnitList] = useState(showUnit);
 
   useEffect(() => {}, [0]);
 
@@ -48,7 +55,14 @@ const CourseUnit = ({ unitData, moduleId }) => {
 
   const hanldeVideoUpload = () => {
     videoFieldRef.current.removeAttribute("id", "hide-field");
+    videoAddRef.current.setAttribute("id", "hide-field");
   };
+  const handleAddVido = () => {
+    videoAddRef.current.removeAttribute("id", "hide-field");
+    videoFieldRef.current.setAttribute("id", "hide-field");
+  };
+
+  
   const hanldePDFUpload = () => {
     pdfFieldRef.current.click();
   };
@@ -67,6 +81,8 @@ const CourseUnit = ({ unitData, moduleId }) => {
     let file = e.target.files[0];
     if (file) {
       videoSection.current.removeAttribute("id", "hide-field");
+      pdfSelector.current.setAttribute("id", "hide-field");
+
     } else {
       videoSection.current.setAttribute("id", "hide-field");
     }
@@ -78,7 +94,7 @@ const CourseUnit = ({ unitData, moduleId }) => {
   };
 
   const handleShowAddUnit = () => {
-    setShowAddUnit(!showAddUnit);
+    setShowAddUnit(true);
   };
 
   const handleUnitContent = (unit) => {
@@ -101,14 +117,12 @@ const CourseUnit = ({ unitData, moduleId }) => {
     e.preventDefault();
     if (videoUrl) {
       const obj = {
-        title: unitTitle,
-        description: "Unit Test Description",
-        start_date: "2023-12-25",
-        end_date: "2023-12-25",
-        module: moduleId,
+        title: videoTitle,
+        url: videoUrl,
+        unit: 5,
         updated_by: 1,
       };
-      fetch("http://127.0.0.1:8000/api/units/", {
+      fetch("http://127.0.0.1:8000/api/videos/", {
         method: "POST",
         body: JSON.stringify(obj),
         headers: {
@@ -119,7 +133,40 @@ const CourseUnit = ({ unitData, moduleId }) => {
         if (response.status == 201) {
           response.json().then(function (result) {
             console.log(result);
-            setUnitTitle("");
+            setVideoTitle("");
+            setVidoUrl("");
+            // setModuleDescription("");
+            // window.location.reload();
+          });
+        } else {
+          console.log(response);
+        }
+      });
+    }
+  };
+
+  const handleUploadFile = (e) => {
+    e.preventDefault();
+    if (videoUrl) {
+      const obj = {
+        title: videoTitle,
+        url: videoUrl,
+        unit: 5,
+        updated_by: 1,
+      };
+      fetch("http://127.0.0.1:8000/api/files/", {
+        method: "POST",
+        body: JSON.stringify(obj),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status == 201) {
+          response.json().then(function (result) {
+            console.log(result);
+            setVideoTitle("");
+            setVidoUrl("");
             // setModuleDescription("");
             // window.location.reload();
           });
@@ -165,6 +212,7 @@ const CourseUnit = ({ unitData, moduleId }) => {
 
   return (
     <div className="">
+      { showUnitList &&
       <div
         className="accordion accordion-flush module-unit-section"
         id="unit-section"
@@ -195,7 +243,7 @@ const CourseUnit = ({ unitData, moduleId }) => {
                     id={`flush-unit${unit.id}`}
                   >
                     <div
-                      className="accordion-button collapsed unit-button"
+                      className="accordion-button collapsed unit-button w-100"
                       type="button"
                       data-bs-toggle="collapse"
                       data-bs-target={`#unit${unit.id}`}
@@ -365,8 +413,16 @@ const CourseUnit = ({ unitData, moduleId }) => {
                 </div>
               );
             })}
-        {showAddUnit && (
-          <div className="add-new-unit-section">
+      </div>
+      }
+      <div className="">
+      {showAddUnit && (
+          listUnit.length !== 0 && listUnit.map((element) => {
+            if (element==0) {
+              return null
+            }
+            else{
+            return  <div className="add-new-unit-section">
             <div className="new-unit-heading-section">
               <div className="">
                 <span className="me-3">Unit</span>
@@ -420,6 +476,12 @@ const CourseUnit = ({ unitData, moduleId }) => {
                   aria-expanded="false"
                   onClick={() => null}
                 ></i>
+                <button type="button" className="btn btn-close" 
+                  onClick={() => {
+                    setListUnit(() => listUnit.filter(module => {
+                      return module !== element
+                    }))
+                  }}></button>
                 <div className="dropdown-menu option-main-container module-option">
                   <ul
                     class="option-ul"
@@ -452,7 +514,7 @@ const CourseUnit = ({ unitData, moduleId }) => {
                 </div>
               </div>
             </div>
-
+          
             <div className="unit-form-section">
               <form className="unit-form">
                 <div className="video-section">
@@ -460,6 +522,7 @@ const CourseUnit = ({ unitData, moduleId }) => {
                     <span className="unit-form-span-title">Video</span>
                     <i
                       class="bi bi-plus-circle plus-icon unit-form-i-title"
+                      ref={videoAddRef}
                       onClick={() => hanldeVideoUpload()}
                     ></i>
                   </div>
@@ -475,7 +538,7 @@ const CourseUnit = ({ unitData, moduleId }) => {
                       <input
                         type="text"
                         className="video-title-field"
-                        value={videoUrl}
+                        value={videoTitle}
                         onChange={(e) => hanldeVidoTitle(e)}
                         placeholder="Enter Video Title"
                       />
@@ -492,7 +555,9 @@ const CourseUnit = ({ unitData, moduleId }) => {
                         class="bi bi-check-lg check-unit-content text-success"
                         onClick={(e) => handleUploadVideo(e)}
                       ></i>
-                      <i class="bi bi-x check-unit-content text-danger"></i>
+                      <i class="bi bi-x check-unit-content text-danger"
+                        onClick={() => handleAddVido()}
+                      ></i>
                     </div>
                   </div>
                 </div>
@@ -522,6 +587,7 @@ const CourseUnit = ({ unitData, moduleId }) => {
                     <span className="unit-form-span-title">PDF</span>
                     <i
                       class="bi bi-plus-circle plus-icon unit-form-i-title"
+                      ref={pdfSelector}
                       onClick={() => hanldePDFUpload()}
                     ></i>
                   </div>
@@ -538,7 +604,9 @@ const CourseUnit = ({ unitData, moduleId }) => {
                       style={{ display: "none" }}
                     />
                     <span>{unitPDF && unitPDF.name}</span>
-                    <i class="bi bi-check-lg check-unit-content text-success"></i>
+                    <i class="bi bi-check-lg check-unit-content text-success"
+                      onClick={() => handleUploadFile()}
+                    ></i>
                     <i class="bi bi-x check-unit-content text-danger"></i>
                   </div>
                 </div>
@@ -554,18 +622,26 @@ const CourseUnit = ({ unitData, moduleId }) => {
                   <button
                     type="button"
                     onClick={(e) => handleSaveUnit(e)}
-                    className="btn btn-secondary saveModule-button"
+                    className="btn btn-secondary saveUnit-button"
                   >
-                    Save
+                    Save Unit
                   </button>
                 </div>
               </form>
             </div>
           </div>
+            }
+         
+          })
         )}
 
         <div className="add-unit-btn">
-          <button type="button" className="btn" onClick={handleShowAddUnit}>
+          <button type="button" className="btn" onClick={() => {
+            handleShowAddUnit()
+            setIncrement((pre) => pre+1)
+            setListUnit(pre => [...pre, increment+1])
+            }
+            }>
             Add Unit <i class="bi bi-plus-circle plus-icon"></i>
           </button>
         </div>
