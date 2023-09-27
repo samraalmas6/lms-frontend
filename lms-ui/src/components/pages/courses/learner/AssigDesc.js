@@ -1,6 +1,6 @@
 import React from 'react'
 import { Editor } from '@tinymce/tinymce-react';
-import '../styles/editor.css'
+import '../../../styles/editor.css'
 
 
 const AssigDesc = () => {

@@ -13,6 +13,9 @@ const AllCourse = ({ show, minDate }) => {
   const [courseImg, setCourseImg] = useState("");
   const [uploadImg, setUploadImg] = useState("");
 
+
+  const [courseId, setCourseId] = useState(null)
+
   useEffect(() => {
     const getCourseData = () => {
       fetch("http://127.0.0.1:8000/api/courses", {
@@ -74,6 +77,9 @@ const AllCourse = ({ show, minDate }) => {
   };
 
   const handleCourseContentData = (course) => {
+
+    setCourseId(course.id)
+
     fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
       method: "GET",
       headers: {
@@ -187,6 +193,7 @@ const AllCourse = ({ show, minDate }) => {
               moduleData={moduleData}
               setModuleData={setModuleData}
               courseContent={courseContent}
+              courseId={courseId}
             />
           </div>
         </div>

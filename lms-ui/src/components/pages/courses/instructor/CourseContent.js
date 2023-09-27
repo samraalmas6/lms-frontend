@@ -15,6 +15,7 @@ const CourseContent = ({
   moduleData,
   setModuleData,
   courseContent,
+  courseId
 }) => {
   const navigate = useNavigate();
   const inpRef = useRef("");
@@ -328,7 +329,7 @@ const CourseContent = ({
             </div>
             <hr style={{ margin: "20px 0px 20px 0px" }} />
             <div className="course-module-section">
-              <CourseModule moduleData={moduleData} />
+              <CourseModule moduleData={moduleData} courseId={courseId} />
             </div>
             <div className="category-save-btn">
               <button

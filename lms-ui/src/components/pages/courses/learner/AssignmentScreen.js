@@ -1,10 +1,10 @@
 import React from "react";
 import AssignmentPartners from "./AssignmentPartners";
-import "../styles/AssignmentScreen.css";
+import "../../../styles/AssignmentScreen.css";
 import { useState } from "react";
 import AssigDesc from "./AssigDesc";
-import UploadPicture from "./UploadPicture";
-import paraIcon from "../content/Images/paragraph.svg"
+// import UploadPicture from "./UploadPicture";
+import paraIcon from "../../../content/Images/paragraph.svg"
 import FileUploadComponent from "../../../content/FileUploadComponent";
 
 const AssignmentScreen = () => {
@@ -51,9 +51,15 @@ const AssignmentScreen = () => {
             <div><img src={paraIcon} alt="" /></div>
             <div className="description-container"><AssigDesc /></div>
           </div>
-          <div className="file">
+
+          {/* ***************   There is an issue with selecting a file   *************** */}
+
+          {/* <div className="file">
             <FileUploadComponent />
-          </div>
+          </div> */}
+
+          {/* ***************   There is an issue with selecting a file   *************** */}
+
         </div>
         <div className="side-container">
           <div className="due-date-and-time">

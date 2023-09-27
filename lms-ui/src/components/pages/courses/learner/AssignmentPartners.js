@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import "../styles/AssignmentPartner.css";
+import "../../../styles/AssignmentPartner.css";
 
 const AssignmentPartners = () => {
   const [selectedNames, setSelectedNames] = useState([]);

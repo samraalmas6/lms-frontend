@@ -2,11 +2,8 @@ import React, { useState, useEffect } from "react";
 import "../../../styles/CourseTable.css";
 import VideoPlayer from "./VideoPlayer";
 
-
 import ModuleCard from "./ModuleCard";
-import AssignmentView from "./AssignmentView"; 
-
-
+import AssignmentView from "./AssignmentView";
 
 const coursesData = [
   {
@@ -33,9 +30,12 @@ const coursesData = [
                 description: "Complete the first assignment.",
                 dueDate: "2023-09-30 14:00",
                 resourceFiles: ["file1.pdf", "file2.doc"],
-                submissionLinks: ["https://example.com", "https://anotherlink.com"],
-              },             
-            ]
+                submissionLinks: [
+                  "https://example.com",
+                  "https://anotherlink.com",
+                ],
+              },
+            ],
             // fileType: "pdf",
             // fileName: "Min of meeting",
           },
@@ -67,11 +67,11 @@ const coursesData = [
             assignments: [
               {
                 id: 1,
-                title: 'Assignment 1',
-                description: 'Complete the first assignment.',
-                dueDate: '2023-09-30'
-              }
-            ]
+                title: "Assignment 1",
+                description: "Complete the first assignment.",
+                dueDate: "2023-09-30",
+              },
+            ],
           },
           {
             id: 4,
@@ -236,26 +236,59 @@ function CourseTable({ modules, assignments }) {
   const [videoCompleted, setVideoCompleted] = useState(false);
   const [expandedModule, setExpandedModule] = useState(null);
   const [isCourseContentVisible, setIsCourseContentVisible] = useState(true);
-  const [videoPaneState, setVideoPaneState] = useState('collapsed');
+  const [videoPaneState, setVideoPaneState] = useState("collapsed");
   const [videoProgress, setVideoProgress] = useState({});
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [showAssignmentDetail, setShowAssignmentDetail] = useState(false);
 
-  const [showAssignment, setShowAssignment] = useState(false)
+  const [showAssignment, setShowAssignment] = useState(false);
+  const [courseContent, setCourseContent] = useState([]);
+  const [moduleContent, setModuleContent] = useState([]);
 
-// Load video progress from localStorage when component mounts
-useEffect(() => {
-  const storedVideoProgress = JSON.parse(localStorage.getItem("videoProgress"));
-  if (storedVideoProgress) {
-    setVideoProgress(storedVideoProgress);
-  }
-}, []);
+  // Load video progress from localStorage when component mounts
+  useEffect(() => {
+    const storedVideoProgress = JSON.parse(
+      localStorage.getItem("videoProgress")
+    );
+    if (storedVideoProgress) {
+      setVideoProgress(storedVideoProgress);
+    }
 
-// Save video progress to localStorage when it changes
-useEffect(() => {
-  localStorage.setItem("videoProgress", JSON.stringify(videoProgress));
-}, [videoProgress]);
+    const getCourseData = () => {
+      fetch("http://127.0.0.1:8000/api/courses", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        response.json().then(function (result) {
+          console.log(result);
+          setCourseContent(result);
+        });
+      });
+    };
+    const getModuleData = () => {
+      fetch("http://127.0.0.1:8000/api/modules/", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        response.json().then(function (result) {
+          console.log(result);
+          setModuleContent(result);
+        });
+      });
+    };
 
+    getModuleData();
+    getCourseData();
+  }, [0]);
+
+  // Save video progress to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem("videoProgress", JSON.stringify(videoProgress));
+  }, [videoProgress]);
 
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
@@ -269,7 +302,7 @@ useEffect(() => {
     setSelectedAssignment(assignment);
     setShowAssignmentDetail(true);
   };
-  
+
   const handleLessonSelect = (lesson) => {
     setSelectedLesson(lesson);
   };
@@ -287,11 +320,10 @@ useEffect(() => {
   };
 
   const toggleCourseContent = () => {
-    if(isCourseContentVisible) {
-      setVideoPaneState('expanded')
-    }
-    else {
-      setVideoPaneState('collapsed')
+    if (isCourseContentVisible) {
+      setVideoPaneState("expanded");
+    } else {
+      setVideoPaneState("collapsed");
     }
     setIsCourseContentVisible(!isCourseContentVisible);
   };
@@ -325,24 +357,25 @@ useEffect(() => {
   };
 
   // Pass the video progress to the VideoPlayer component
-  const videoProgressData =
-    selectedLesson && videoProgress[selectedLesson.id];
+  const videoProgressData = selectedLesson && videoProgress[selectedLesson.id];
 
   return (
     <>
       <div className="main-outer-container">
         <div className={`course-main ${videoPaneState}`}>
-        { showAssignment ? <div>
-           <AssignmentView selectedAssignments={selectedAssignment} />
-          </div> :
-          <div className="video-section">
-            <VideoPlayer
-              selectedLesson={selectedLesson}
-              handleVideoProgress={handleVideoProgress}
-            />
-            {/* tabs below video */}
-          </div>
-  }
+          {showAssignment ? (
+            <div>
+              <AssignmentView selectedAssignments={selectedAssignment} />
+            </div>
+          ) : (
+            <div className="videos-section">
+              <VideoPlayer
+                selectedLesson={selectedLesson}
+                handleVideoProgress={handleVideoProgress}
+              />
+              {/* tabs below video */}
+            </div>
+          )}
           <div className="tabs-container">
             <ul className="tabs">
               <li
@@ -391,54 +424,66 @@ useEffect(() => {
               ></i>
             </header>
             <div className="course_list">
-              {coursesData.map((course) => (
-                <div key={course.id} className="course_card">
-                  {/* <h2>{course.title}</h2> */}
-                  
-                  {course.modules.map((module, index) => (
-                    <ModuleCard
-                      key={module.id}
-                      module={module}
-                      isExpanded={index === expandedModule}
-                      toggleModule={() => toggleModule(index)}
-                      handleLessonSelect={handleLessonSelect}
-                      handleVideoCompleted={handleVideoCompleted}
-                      assignments={assignments}
-                      videoProgressData={videoProgressData} 
-                      handleAssignmentClick={handleAssignmentClick}
-                      setShowAssignment={setShowAssignment}
-                    />
-                  ))}
-                </div>
-              ))}
+              {/* {coursesData.map((course) => ( */}
+              {/* {courseContent.length === 0 ||
+          courseContent.detail == "No objects found"
+            ? courseContent.detail
+            : courseContent &&
+            courseContent.map((course) => ( */}
+              <div key={"course.id"} className="course_card">
+                {/* <h2>{course.title}</h2> */}
+
+                {moduleContent.length === 0 ||
+                moduleContent.detail == "No objects found"
+                  ? moduleContent.detail
+                  : moduleContent &&
+                    moduleContent.map((module, index) => (
+                      <ModuleCard
+                        key={module.id}
+                        module={module}
+                        isExpanded={index === expandedModule}
+                        toggleModule={() => toggleModule(index)}
+                        handleLessonSelect={handleLessonSelect}
+                        handleVideoCompleted={handleVideoCompleted}
+                        assignments={assignments}
+                        videoProgressData={videoProgressData}
+                        // selectedLesson={selectedLesson}
+                        handleAssignmentClick={handleAssignmentClick}
+                        setShowAssignment={setShowAssignment}
+                      />
+                    ))}
+              </div>
+              {/* ))} */}
             </div>
           </div>
         )}
-        
-        
-        {!isCourseContentVisible && 
-        // <button type="button" class="expand-view-btn" onClick={toggleCourseContent}>
-        //   <i class="fas fa-solid fa-arrow-right fa-rotate-180"></i> Course Content 
-        //   </button>
-           <button type="button" class="ud-btn ud-btn-large ud-btn-primary ud-heading-md course-content-toggle--button--RLfW6 btn-content" onClick={toggleCourseContent} >
-            <i class="fas fa-solid fa-arrow-right fa-rotate-180"></i>
-           <span  class="course-content-toggle--label--IP79B">Course content</span></button>
-          }
 
-         
+        {!isCourseContentVisible && (
+          // <button type="button" class="expand-view-btn" onClick={toggleCourseContent}>
+          //   <i class="fas fa-solid fa-arrow-right fa-rotate-180"></i> Course Content
+          //   </button>
+          <button
+            type="button"
+            class="ud-btn ud-btn-large ud-btn-primary ud-heading-md course-content-toggle--button--RLfW6 btn-content"
+            onClick={toggleCourseContent}
+          >
+            <i class="fas fa-solid fa-arrow-right fa-rotate-180"></i>
+            <span class="course-content-toggle--label--IP79B">
+              Course content
+            </span>
+          </button>
+        )}
       </div>
       <div className="extended-view-container">
-      
         {/* Conditionally render the AssignmentView */}
-       {/* Conditionally render the AssignmentView */}
-       {selectedAssignment && (
+        {/* Conditionally render the AssignmentView */}
+        {selectedAssignment && (
           <AssignmentView
             assignment={selectedAssignment}
             onClose={() => setSelectedAssignment(null)}
           />
         )}
       </div>
-     
     </>
   );
 }

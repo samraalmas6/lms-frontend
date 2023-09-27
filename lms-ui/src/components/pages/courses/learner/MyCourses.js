@@ -1,15 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../../styles/MyCourses.css";
 import user from "../../../content/Images/user.png";
 import cloudCourse from "../../../content/Images/cloudCourse.png"
 import courseData from "../../../hooks/courseData";
+import { useNavigate } from "react-router-dom";
 
 const MyCourses = () => {
+  const navigation = useNavigate();
   const [showBlock, setShowBlock] = useState(false);
+  const [courseContent, setCourseContent] = useState([]);
+
+
+  useEffect(() => {
+    const getCourseData = () => {
+      fetch("http://127.0.0.1:8000/api/courses", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        response.json().then(function (result) {
+          console.log(result);
+          setCourseContent(result);
+        });
+      });
+    };
+
+    getCourseData();
+  }, [0]);
 
   const handleViewToggle = () => {
     setShowBlock((prev) => !prev);
   };
+
+  const handlLunchCourse = () => {
+    navigation('/my-courses/show')
+  }
+
   return (
     <>
       <div>
@@ -28,18 +55,23 @@ const MyCourses = () => {
         {/* Courses Block view */}
         {showBlock ? (
           <div className="main-cards-container">
-            {courseData.map((course) => {
+            {courseContent.length === 0 ||
+          courseContent.detail == "No objects found"
+            ? courseContent.detail
+            : courseContent &&
+            courseContent.map((course) => {
               return (
                 <div
                   className="card-container"
                   data-bs-toggle="offcanvas"
                   data-bs-target="#offcanvasExample"
+                  key={course.id}
                 >
                   <div className="upper-half">
                     <div>
-                      <h5>{course.course_title}</h5>
+                      <h5>{course.title}</h5>
                       <p>Current Unit</p>
-                      <h6>Instructor Name</h6>
+                      <h6>{'Course Author'}</h6>
                     </div>
                     <div>
                       <img
@@ -54,13 +86,13 @@ const MyCourses = () => {
                     <p>tagline</p>
                     <div className="progress-main-div block-view">
                       {/* progress % */}
-                      {`${course.progress}%`}
+                      {`${course.id+20}%`}
                       {/* progress bar */}
                       <div class="progress">
                         <div
                           class="progress-bar bg-success"
                           role="progressbar"
-                          style={{ width: `${course.progress}%` }}
+                          style={{ width: `${course.id+20}%` }}
                           aria-valuenow="25"
                           aria-valuemin="0"
                           aria-valuemax="100"
@@ -69,9 +101,9 @@ const MyCourses = () => {
                       {/* status */}
                       <div>
                         <p className="progress-tag">
-                          {course.progress < 1
+                          {course.id+20 < 1
                             ? "not started"
-                            : course.progress < 100
+                            : course.id+20 < 100
                             ? "in progress"
                             : "completed"}
                         </p>
@@ -240,41 +272,41 @@ const MyCourses = () => {
           </div>
         ) : (
           <div className="main-listView-Container">  
-            {courseData.map((course) => {
+            {courseContent.map((course) => {
               return (
                 <div className="list-container">
                   <div className="image-div">
                   <img
                         className=""
-                        src={cloudCourse}
+                        src={course.course_image}
                         width={"100%"}
                         alt=""
                       />
                   </div>
                   <div className="course-div">
-                    <h5>Course Name</h5>
+                    <h5>{course.title}</h5>
                     <p>last accessed two weeks ago</p>
                   </div>
                   <div className="progress-main-div">
                     {/* status */}
                     <div>
                       <p className="progress-tag">
-                        {course.progress < 1
+                        {course.id < 1
                           ? "not started"
-                          : course.progress < 100
+                          : course.id < 100
                           ? "in progress"
                           : "completed"}
                       </p>
                     </div>
                     <div className="progress-statics-div">
                        {/* progress % */}
-                    <div>{`${course.progress}%`}</div>
+                    <div>{`${course.id+20}%`}</div>
                     {/* progress bar */}
                     <div class="progress">
                       <div
                         class="progress-bar bg-success"
                         role="progressbar"
-                        style={{ width: `${course.progress}%` }}
+                        style={{ width: `${course.id+20}%` }}
                         aria-valuenow="25"
                         aria-valuemin="0"
                         aria-valuemax="100"
@@ -284,7 +316,7 @@ const MyCourses = () => {
                    
                   </div>
                   <div className="button-div">
-                    <button className="btn btn-primary launch-btn">
+                    <button className="btn btn-primary launch-btn" type="button" onClick={handlLunchCourse}>
                       <i class="fas fa-solid fa-play"></i>Launch Course
                     </button>
                   </div>

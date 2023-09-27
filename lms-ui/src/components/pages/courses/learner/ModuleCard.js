@@ -15,7 +15,7 @@ const ModuleCard = ({
   handleVideoCompleted,
   assignments,
   handleAssignmentClick,
-  setShowAssignment
+  setShowAssignment,
 }) => {
   // const [selectedLesson, setSelectedLesson] = useState(null);
   const [showPDF, setShowPdf] = useState(false);
@@ -26,7 +26,6 @@ const ModuleCard = ({
 
   // const [showAssignment, setShowAssignment] = useState(false)
 
-
   useEffect(() => {
     if (!isExpanded) {
       // handleLessonSelect(null);
@@ -36,32 +35,100 @@ const ModuleCard = ({
       //   setSelectedLesson(module.lessons[0]);
     }
   }, [isExpanded, module]);
+  const [moduleUnit, setModuleUnit] = useState([]);
+  const [unitPDF, setUnitPDF] = useState([]);
+  const [unitAssignment, setUnitAssignment] = useState([])
+
+  useEffect(() => {
+    const getCourseData = () => {
+      fetch(`http://127.0.0.1:8000/api/modules/${module.id}/units/`, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if(response.status == 200){
+        response.json().then(function (result) {
+          console.log("Units", result);
+          setModuleUnit(result);
+        });
+      }
+      });
+    };
+
+    getCourseData();
+  }, [0]);
+
+  const handleUnitPDF = (unit) => {
+    fetch(`http://127.0.0.1:8000/api/units/${unit.id}/files/`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log("Units", result);
+        setUnitPDF(result);
+      });
+    });
+    fetch(`http://127.0.0.1:8000/api/units/${unit.id}/assignments/`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log("Units", result);
+        setUnitAssignment(result);
+      });
+    });
+  };
 
   // Check if this is Module 1 and set the default selected lesson
-  useEffect(() => {
-    console.log("hi");
-    if (module.title === "Module 1" && module.lessons.length > 0) {
-      console.log(module.lessons[0]);
-      handleLessonSelect(module.lessons[0]);
-    }
-  }, [module]);
+
+  // ***************************** Need changes   ****************************************
+
+  // this function will not be true because module.lessons.length is undefined so it needs to
+  // fix.
+
+  // useEffect(() => {
+  //   console.log("hi");
+  //   if (module.title === "Module 1" && module.lessons.length > 0) {
+  //     console.log(module.lessons[0]);
+  //     handleLessonSelect(module.lessons[0]);
+  //   }
+  // }, [module]);
+
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   const toggleLesson = (lesson) => {
-    handleLessonSelect(lesson);
+    fetch(`http://127.0.0.1:8000/api/units/${lesson.id}/videos/`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      if (response.status === 200)
+      {
+      response.json().then(function (result) {
+        console.log("Api result: ", result[0].url);
+        handleLessonSelect(result[0]);
+      });
+    }
+    });
+    
   };
-
   const toggleCourseContent = () => {
     setIsCourseContentVisible(!isCourseContentVisible);
   };
   // const handleAssignmentClick = (assignment) => {
   //   // Handle assignment click here
   //   console.log("Clicked Assignment:", assignment);
-  
+
   //   // Use the handleAssignmentSelect function passed from CourseTable
   //   setSelectedAssignment(assignment);
   // };
-  
+
   // const selectModule = ({ module }) => {
   //   setSelectedModule(module);
   // };
@@ -84,14 +151,15 @@ const ModuleCard = ({
     setIsFullScreen(!isFullScreen);
   };
 
-  const handleViewPdf = (id, uri) => {
-    const obj = module.lessons.filter((lesson) => {
-      return lesson.id === id;
-    });
+  const handleViewPdf = (file) => {
+    console.log("pdf url", file);
+    // const obj = moduleUnit.filter((unit) => {
+    //   return unit.id === id;
+    // });
     // console.log('handleViewPdf ka obj',obj)
-    setDoc(() => obj);
+    setDoc(() => file);
     setShowPdf(!showPDF);
-    window.open(uri, "_blank");
+    window.open(file, "_blank");
   };
 
   const videoUrl = "https://youtu.be/apGV9Kg7ics?si=yP2oeVUi684WxZyg";
@@ -117,95 +185,122 @@ const ModuleCard = ({
       <Collapse isOpened={isExpanded}>
         <div className="module-list">
           <ul className="module-content">
-            {module.lessons.map((lesson) => {
-              const lessonAssignments = lesson.assignments || [];
-              return (
-                <div className="module-content-container" key={lesson.id}>
-                  <div className="check-box-div">
-                    <form action="">
-                      <input
-                        className="checkbox"
-                        type="checkbox"
-                        id={`lesson-${lesson.id}`}
-                        name="lesson"
-                        value={`lesson-${lesson.id}`}
-                      />
-                    </form>
-                  </div>
-                  <div className="content-inside-container">
-                    <li
-                      data-bs-toggle="collapse"
-                      data-bs-target={`#${lesson.id}`}
-                      className={`lesson-item ${
-                        selectedLesson === lesson ? "active" : ""
-                      } upper-row`}
-                    >
-                      <li className="lecture-sno">{lesson.sno}</li>
-                      <li className="lecture-name"> {lesson.title}</li>
-                      <li>
-                        {" "}
-                        {/* <i
+            {/* {module.lessons.map((lesson) => { */}
+            {moduleUnit.length === 0 || moduleUnit.detail == "No objects found"
+              ? moduleUnit.detail
+              : moduleUnit &&
+                moduleUnit.map((unit, index) => {
+                  const lessonAssignments = unit.assignments || [];
+                  return (
+                    <div className="module-content-container" key={unit.id}>
+                      <div className="check-box-div">
+                        <form onSubmit={(e) => e.preventDefault()}>
+                          <input
+                            className="checkbox"
+                            type="checkbox"
+                            id={`lesson-${unit.id}`}
+                            name="lesson"
+                            value={`lesson-${unit.id}`}
+                          />
+                        </form>
+                      </div>
+                      <div className="content-inside-container">
+                        <li
+                          data-bs-toggle="collapse"
+                          data-bs-target={`#${unit.id}`}
+                          className={`lesson-item ${
+                            selectedLesson === unit ? "active" : ""
+                          } upper-row`}
+                        >
+                          <li className="lecture-sno">{index + 1}</li>
+                          <li
+                            className="lecture-name"
+                            onClick={() => handleUnitPDF(unit)}
+                          >
+                            {" "}
+                            {unit.title}
+                          </li>
+                          <li>
+                            {" "}
+                            {/* <i
                           className={`fas fa-caret-up ${
                             isExpanded ? "fa-rotate-180" : ""
                           } arrow`}
                         ></i> */}
-                        <i
-                          className={`fas fa-thin fa-chevron-down ${
-                            isExpanded ? "fa-rotate-180" : ""
-                          }arrow`}
-                        ></i>
-                      </li>
-                    </li>
-                    <div
-                      className={`video-player-icon collapse ${
-                        selectedLesson === lesson ? "active" : ""
-                      }`}
-                      id={lesson.id}
-                    >
-                      <li
-                        key={lesson.id}
-                        onClick={() => {
-                          toggleLesson(lesson);
-                        }}
-                        data-bs-toggle="collapse"
-                        data-bs-target={`#${lesson.id}`}
-                        className={`lesson-item upper-row`}
-                      >
-                        <div className="lesson-content-container">
-                          <div className="lesson-title">
-                            <FontAwesomeIcon
-                              icon={faCirclePlay}
-                              className="my-icon"
-                              style={{ marginTop: "3px" }}
-                            />
-                            <li>{lesson.lecture_name}</li>
-                          </div>
-                          <div className="lecture-pdf">
-                            <i class="fas fa-solid fa-file-pdf"></i>
-                            <li
-                              onClick={() => {
-                                handleViewPdf(lesson.id, lesson.doc[0].uri);
-                              }}
-                            >
-                              <a
-                                className="pdf-btn"
-                                type="button"
-                                href={require("../../../content/files/third_lec.pdf")}
-                                target="_blank"
+                            <i
+                              className={`fas fa-thin fa-chevron-down ${
+                                isExpanded ? "fa-rotate-180" : ""
+                              }arrow`}
+                            ></i>
+                          </li>
+                        </li>
+                        <div
+                          className={`video-player-icon collapse ${
+                            selectedLesson === unit ? "active" : ""
+                          }`}
+                          id={unit.id}
+                        >
+                          <li
+                            key={unit.id}
+                            onClick={() => {
+                              toggleLesson(unit);
+                            }}
+                            data-bs-toggle="collapse"
+                            data-bs-target={`#${unit.id}`}
+                            className={`lesson-item upper-row`}
+                          >
+                            <div className="lesson-content-container">
+                              <div className="lesson-title">
+                                <FontAwesomeIcon
+                                  icon={faCirclePlay}
+                                  className="my-icon"
+                                  style={{ marginTop: "3px" }}
+                                />
+                                <li>{unit.title}</li>
+                              </div>
+                              <div className="lecture-pdf">
+                                {unitPDF.length === 0 ||
+                                unitPDF.detail == "No files found for this unit."
+                                  ? unitPDF.detail
+                                  : unitPDF &&
+                                    unitPDF.map((pdf) => {
+                                      return (
+                                        <div
+                                          className=""
+                                          onClick={() => {
+                                            handleViewPdf(pdf.file);
+                                            console.log("pdf url ", pdf.file);
+                                          }}
+                                        >
+                                          <i class="fas fa-solid fa-file-pdf"></i>
+                                          <li>{pdf.title}</li>
+                                        </div>
+                                      );
+                                    })}
+                              </div>
+                              <div
+                                onClick={() => setShowAssignment((pre) => !pre)}
                               >
-                                {lesson.doc_name}
-                              </a>
-                            </li>
-                          </div>
-                          <div onClick={() => setShowAssignment((pre) => !pre)}>
-                          {lesson.assignments && lesson.assignments.map(assignment =>  {
-                              return <span onClick={() => handleAssignmentClick(assignment)}>{assignment.title}</span>
-                            })}                           
-                             </div>
-                        </div>
-                      </li>
-                      <li>
-                      {/* {Array.isArray(assignments) && assignments.length > 0 ? (
+                                {unitAssignment.length === 0 ||
+                                unitAssignment.detail == "No Assignment found for this unit."
+                                  ? unitAssignment.detail
+                                  : unitAssignment &&
+                                  unitAssignment.map((assignment) => {
+                                    return (
+                                      <span
+                                        onClick={() =>
+                                          handleAssignmentClick(assignment)
+                                        }
+                                      >
+                                        {assignment.title}
+                                      </span>
+                                    );
+                                  })}
+                              </div>
+                            </div>
+                          </li>
+                          <li>
+                            {/* {Array.isArray(assignments) && assignments.length > 0 ? (
             assignments.map((assignment) => (
     <div
       key={assignment.id}
@@ -220,20 +315,19 @@ const ModuleCard = ({
 ) : (
   <p>No assignments available.</p>
 )} */}
-
-                      </li>
-                      <li>
-                        {/* <DocViewer
+                          </li>
+                          <li>
+                            {/* <DocViewer
                           documents={lesson.file_uri}
                           pluginRenderers={DocViewerRenderers}
                           style={{ height: 1000 }}
                         /> */}
-                      </li>
+                          </li>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              );
-            })}
+                  );
+                })}
           </ul>
         </div>
       </Collapse>
@@ -257,7 +351,6 @@ const ModuleCard = ({
 
       {/* ------------ */}
       <div className="document-container">
-
         {/* {console.log(module.lessons[0].doc)} */}
         {/* {module.lessons.filter((lesson) => { */}
         {/* return ( */}

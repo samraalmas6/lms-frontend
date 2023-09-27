@@ -134,7 +134,16 @@ const Sidebar = () => {
                 <a className="nav-link text-secondary" href='/category/add'>
                   Add Category
                 </a>
-
+              </li>
+              <li className="nav-item mb-2 ">
+              <Link to="/course/create-assignment" className="nav-link text-secondary">
+                  Create Assignment
+                </Link>
+              </li>
+              <li className="nav-item mb-2 ">
+              <Link to="/course/my-assignments" className="nav-link text-secondary">
+                  My Assignments
+                </Link>
               </li>
               <li className="nav-item mb-2 ">
                 <Link className="nav-link text-secondary" to='/category/all'>

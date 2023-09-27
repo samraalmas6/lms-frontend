@@ -38,14 +38,14 @@
   width: 100%;
 }
 
-input {
+/* input {
   background-color: #e6e6e3;
   width: 100%;
   border: none;
   border-color: #e6e6e3;
   padding: 10px;
   border-radius: 5px;
-}
+} */
 
 .side-container {
   width: 30%;

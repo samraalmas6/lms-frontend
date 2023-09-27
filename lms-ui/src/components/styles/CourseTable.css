@@ -115,9 +115,9 @@
   transition: opacity 400ms linear;
 }
 
-button, input {
+/* button, input {
   background-image: none;
-}
+} */
 
 .btn-content{
   display: flex;
@@ -155,7 +155,7 @@ button, input {
 .tab-content {
 }
 
-.video-section {
+.videos-section {
   display: flex;
   flex-direction: column;
   gap: 20px;
