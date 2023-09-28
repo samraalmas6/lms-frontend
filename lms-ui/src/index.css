@@ -7,7 +7,22 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* .tox .tox-edit-area__iframe {
+  background-color: #e6e6e3 !important;
+} */
+
+/* .tox:not(.tox-tinymce-inline) .tox-editor-header {
+  background-color: #e6e6e3 !important;
+} */
+
+.tox .tox-toolbar-overlord .tox-toolbar:not(.tox-toolbar--scrolling):first-child, .tox .tox-toolbar-overlord .tox-toolbar__primary {
+  background-color: #e6e6e3 !important;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+.tox .tox-toolbar-overlord .tox-toolbar:not(.tox-toolbar--scrolling):first-child, .tox .tox-toolbar-overlord .tox-toolbar__primary{
+  background-color: white !important;
 }
