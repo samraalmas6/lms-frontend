@@ -11,6 +11,7 @@
   gap: 10px;
   width: 70%;
   background-color: white;
+  /* box-shadow: 0px 0px 5px -2px gray; */
 }
 
 .assignment-details form{
@@ -20,12 +21,14 @@
 }
 
 .assignment-details form input {
-  background-color: #e6e6e3;
+  /* background-color: #e6e6e3; */
   width: 100%;
   border: none;
-  border-color: #e6e6e3;
+  /* border-color: #e6e6e3; */
   padding: 10px;
   border-radius: 5px;
+  box-shadow: 0px 0px 5px -2px gray;
+  color: black;
 }
 
 .assignment-details .editor-container{
@@ -39,12 +42,13 @@
 }
 
 input {
-  background-color: #e6e6e3;
+  /* background-color: #e6e6e3; */
   width: 100%;
   border: none;
   border-color: #e6e6e3;
   padding: 10px;
   border-radius: 5px;
+  box-shadow: 0px 0px 5px -2px gray;
 }
 
 .side-container {
@@ -97,17 +101,19 @@ input {
 }
 
 .side-container{
-    background-color: #e6e6e3;
+    /* background-color: #e6e6e3; */
     border-radius: 5px;
     display: flex;
     flex-direction: column;
     gap: 30px;
     /* justify-content: center; */
     align-items: center;
+    box-shadow: 0px 0px 5px -2px gray;
 }
 
 .side-container .due-date-and-time .due-date-time input{
-    background-color: #e6e6e3;
+    /* background-color: #e6e6e3; */
+    box-shadow: 0px 0px 5px -2px gray;
     border: none;
     padding: 10px;
     width: 100%;

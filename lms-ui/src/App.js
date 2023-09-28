@@ -24,7 +24,7 @@ function App() {
 
   return (
     <div>
-      {/* <AssignmentScreen /> */}
+      <AssignmentScreen />
       {/* <MyCourses /> */}
     {/* <AssignmentView/> */}
     <CourseTable/>
