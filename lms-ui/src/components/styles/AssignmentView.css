@@ -203,8 +203,11 @@ element.style {
   color: #0056b3;
 }
 .detail-date {
-  margin-left: 75%;
+  margin-left: 69%;
   /* border-bottom: 2px solid #0056b3; */
+}
+.detail-points{
+  margin-left: 5%;
 }
 .title-date {
   border-bottom: 2px solid #0056b3;
@@ -327,8 +330,8 @@ ul.resources {
 }
 .confirmation-dialog{
   background-color: #dee2e6;
-  margin-left: -623px;
-  margin-top: -250px;
+  margin-left: -431px;
+  margin-top: -125px;
   width: 361px;
   border-radius: 10px;
 
@@ -586,4 +589,57 @@ background-color: #35172d;
   margin-top: 0px;
   text-align: center;
 
+}
+
+
+.pass{
+  color: green;
+}
+.fail{
+  color: red;
+ 
+}
+.font{
+  width: 38px;
+  margin-left: 1px;
+}
+.fil-text{
+  font-size: 16px;
+  margin-right: 82px;
+}
+.head{
+filter: brightness(1.2) saturate(328%) hue-rotate(400deg) contrast(1) grayscale(28%);
+width: 50px;
+margin-left: 1px;
+}
+.detail-points-and-date {
+  display: flex; /* Use flexbox to place the elements in a row */
+  align-items: center; /* Vertically align the content */
+}
+
+.detail-points-and-date strong {
+  margin-right: 10px; /* Add spacing between the strong elements */
+}
+.submitted-links{
+  font-size: 17px;
+  margin-left: 22px;
+  background-color: #dee2e6;
+  width: 227px;
+  border-radius: 5px;
+  font-family: ui-serif;
+}
+.feedback-and-grade{
+  background-color: #f9fcff;
+  margin-top: 61px;
+  width: 277px;
+  padding: 28px;
+  border: 2px solid #0056b3;
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  box-shadow: 5px 8px 19px -3px rgb(177, 173, 173);
+  border-radius: 5px;
+}
+.feedback{
+  color:#35172d
 }

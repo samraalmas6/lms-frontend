@@ -16,6 +16,7 @@ import AllCourse from "./components/pages/courses/AllCourses";
 import VerificationPage from "./components/pages/VerificationPage";
 import MyCourses from "./components/pages/courses/MyCourses";
 import AssignmentView from "./components/pages/AssignmentView";
+import AssignmentPage from "./components/pages/AssignmentPage";
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
     <div>
       {/* <MyCourses /> */}
     <AssignmentView/>
+    {/* <AssignmentPage/> */}
     {/* <CourseTable/> */}
     {/* <AddUser/> */}
       {/* <BrowserRouter>
