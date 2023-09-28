@@ -19,6 +19,7 @@ function calculateSubmissionStatus(
     return <span className="done-status">Done</span>;
   } else if (isResubmit) {
     return <span className="resubmitted-status">Resubmitted</span>;
+    
   } else if (currentDate > formattedDueDate) {
     return <span className="late-submission-status">Late Submission</span>;
   } else {
@@ -48,12 +49,8 @@ function AssignmentView({ selectedAssignments }) {
       description: "Complete the first assignment.",
       dueDate: "2023-09-30 14:00",
       points: 90,
-      resourceFiles: [
-        "https://example.com/your-pdf-file.pdf",
-        "file2.doc",
-        "https://example.com/your-file-url",
-        "https://anotherlink.com",
-      ],
+      resourceFiles: ["https://example.com/your-pdf-file.pdf" , "file2.doc"],
+      submissionLinks: ["https://example.com/your-file-url", "https://anotherlink.com"],
       feedback: "", // Add feedback property
       grade: null, // Add grade property
     },
@@ -118,7 +115,7 @@ function AssignmentView({ selectedAssignments }) {
     setIsFileInputVisible(!isFileInputVisible);
   }
 
-  function handleFileChange(event) {
+  function handleFileChange(event) { 
     const selectedFiles = event.target.files;
     setFiles([...files, ...selectedFiles]);
     setIsFileInputVisible(false);
@@ -186,22 +183,13 @@ function AssignmentView({ selectedAssignments }) {
                       <ul className="resources">
                         {selectedAssignment.resourceFiles.map((file, index) => (
                           <li key={index}>
-                            {file.endsWith('.pdf') || file.endsWith('.doc') || file.endsWith('.docx') ? (
-                              <a className="res" href={file} download>
-                                <i className="fas fa-file" style={{ marginRight: "5px" }}></i>
-                                {file}
-                              </a>
-                            ) : (
-                              <a
-                                className="res"
-                                href={file}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <i className="fas fa-external-link-alt" style={{ marginRight: "5px" }}></i>
-                                {file}
-                              </a>
-                            )}
+                            <a className="res" href={file} download>
+                              <i
+                                className="fas fa-file"
+                                style={{ marginRight: "5px" }}
+                              ></i>
+                              {file}
+                            </a>
                           </li>
                         ))}
                       </ul>
@@ -412,25 +400,25 @@ function AssignmentView({ selectedAssignments }) {
                     {instructorFeedback}
                   </div>
                 </div>
-              ) */}
+              )} */}
                 {/* Display Feedback and Grade */}
                 <>
-                  {isSubmitClicked && (
-                    <div className="feedback-and-grade">
-                      <div className="feedback-and-grad">
-                        <div className="feedback">
-                          <strong>Feedback:</strong>{" "}
-                          {selectedAssignment.feedback || "No feedback yet"}
-                        </div>
-                        <div className="grade">
-                          <strong>Grade:</strong>{" "}
-                          {selectedAssignment.grade !== null
-                            ? `${selectedAssignment.grade} / ${selectedAssignment.points}`
-                            : "Not graded yet"}
-                        </div>
+                {isSubmitClicked && (
+                  <div className="feedback-and-grade">
+                    <div className="feedback-and-grad">
+                      <div className="feedback">
+                        <strong>Feedback:</strong>{" "}
+                        {selectedAssignment.feedback || "No feedback yet"}
+                      </div>
+                      <div className="grade">
+                        <strong>Grade:</strong>{" "}
+                        {selectedAssignment.grade !== null
+                          ? `${selectedAssignment.grade} / ${selectedAssignment.points}`
+                          : "Not graded yet"}
                       </div>
                     </div>
-                  )}
+                  </div>
+                )}
                 </>
               </div>
             </div>
