@@ -548,7 +548,11 @@ hr {
     margin-right: 30px;
     padding-bottom: 25px;
 }
-.add-new-unit-section .unit-form .video-section, .slides-section, .pdf-section, .assignment-section{
+.unit-video-section {
+    display: flex;
+    justify-content: start;
+}
+.add-new-unit-section .unit-form .unit-video-section, .slides-section, .pdf-section, .assignment-section{
     width: 15%;
     min-width: 75%;
     min-height: 40px;
@@ -560,11 +564,15 @@ hr {
 }
 .unit-selection-section {
     min-width: 20%;
+    max-width: 20%;
     min-height: 40px;
     display: flex;
     justify-content: space-between;
 }
-
+.unit-selection-section-video {
+    min-width: 15%;
+    max-width: 15%;
+}
 .unit-form-span-title {
     font-weight: 500;
     font-size: 20px;

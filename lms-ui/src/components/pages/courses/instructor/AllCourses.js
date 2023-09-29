@@ -91,6 +91,7 @@ const AllCourse = ({ show, minDate }) => {
         setModuleData(result);
       });
     });
+
   };
 
   return (
