@@ -18,6 +18,7 @@ import MyCourses from "./components/pages/courses/MyCourses";
 import AssignmentScreen from "./components/pages/AssignmentScreen";
 import AssignmentView from "./components/pages/AssignmentView";
 import AssignmentPage from "./components/pages/AssignmentPage";
+import AssignmentTable from "./components/pages/AssignmentTable";
 
 
 function App() {
@@ -25,11 +26,12 @@ function App() {
 
   return (
     <div>
-      <AssignmentScreen />
+      <AssignmentTable/>
+      {/* <AssignmentScreen /> */}
       {/* <MyCourses /> */}
     {/* <AssignmentView/> */}
     {/* <AssignmentPage/> */}
-    <CourseTable/>
+    {/* <CourseTable/> */}
     {/* <AddUser/> */}
       {/* <BrowserRouter>
         <Routes>
