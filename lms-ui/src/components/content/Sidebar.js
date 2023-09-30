@@ -136,6 +136,11 @@ const Sidebar = () => {
                 </a>
               </li>
               <li className="nav-item mb-2 ">
+                <Link className="nav-link text-secondary" to='/category/all'>
+                  All Category
+                </Link>
+              </li>
+              <li className="nav-item mb-2 ">
               <Link to="/course/create-assignment" className="nav-link text-secondary">
                   Create Assignment
                 </Link>
@@ -145,11 +150,7 @@ const Sidebar = () => {
                   My Assignments
                 </Link>
               </li>
-              <li className="nav-item mb-2 ">
-                <Link className="nav-link text-secondary" to='/category/all'>
-                  All Category
-                </Link>
-              </li>
+             
             </ul>
           </li>
           <li className="nav-item mb-2 ">

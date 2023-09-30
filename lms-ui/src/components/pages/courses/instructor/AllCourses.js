@@ -1,20 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
 import CourseContent from "./CourseContent";
-import catData from "../../../hooks/catData";
 
 const AllCourse = ({ show, minDate }) => {
   //   Create Course Section
   const [courseContent, setCourseContent] = useState([]);
+  const [categoryData, setCategoryData] = useState([]);
+  const [teamData, setTeamData] = useState([]);
 
   const [moduleData, setModuleData] = useState([]);
 
   const [courseCategory, setCourseCategory] = useState("");
   const [courseTitle, setCourseTitle] = useState("");
+  const [courseStart, setCourseStart] = useState('2023-09-08T00:00:00Z')
+  const [courseEnd, setCourseEnd] = useState('2023-10-08T00:00:00Z')
   const [courseImg, setCourseImg] = useState("");
   const [uploadImg, setUploadImg] = useState("");
 
-
-  const [courseId, setCourseId] = useState(null)
+  const [courseId, setCourseId] = useState(null);
 
   useEffect(() => {
     const getCourseData = () => {
@@ -30,9 +32,25 @@ const AllCourse = ({ show, minDate }) => {
         });
       });
     };
+    const getCategoryData = () => {
+      fetch("http://127.0.0.1:8000/api/categories", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        response.json().then(function (result) {
+          console.log(result);
+          setCategoryData(result);
+        });
+      });
+    };
 
     getCourseData();
+    getCategoryData();
   }, [0]);
+
+  console.log("Team Data", teamData);
 
   const handleCourseTitle = (e) => {
     setCourseTitle(e.target.value);
@@ -48,11 +66,11 @@ const AllCourse = ({ show, minDate }) => {
       const obj = {
         title: courseTitle,
         description: "Test Description",
-        start_date: "2023-12-25",
-        end_date: "2023-12-25",
-        author: 1,
-        updated_by: 1,
-        category: [1],
+        start_date: courseStart,
+        end_date: courseEnd,
+        author: sessionStorage.getItem('user_id'),
+        updated_by: sessionStorage.getItem('user_id'),
+        category: [courseCategory],
       };
       fetch("http://127.0.0.1:8000/api/courses/", {
         method: "POST",
@@ -77,8 +95,7 @@ const AllCourse = ({ show, minDate }) => {
   };
 
   const handleCourseContentData = (course) => {
-
-    setCourseId(course.id)
+    setCourseId(course.id);
 
     fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
       method: "GET",
@@ -91,7 +108,6 @@ const AllCourse = ({ show, minDate }) => {
         setModuleData(result);
       });
     });
-
   };
 
   return (
@@ -144,21 +160,26 @@ const AllCourse = ({ show, minDate }) => {
                       onChange={handleCourseTitle}
                       required
                     />
-                    <label className="mb-0 mt-1">Category</label>
+                    <label className="mb-0 mt-1">
+                      Category<span style={{ color: "red" }}>*</span>
+                    </label>
                     <select
-                      onChange={handlecourseCategory}
+                      onChange={(e) => handlecourseCategory(e)}
                       value={courseCategory}
                       required
                     >
                       <option value="">--Select Category--</option>
-                      {catData &&
-                        catData.map((category) => {
-                          return (
-                            <option value={category.name} key={category.id}>
-                              {category.name}
-                            </option>
-                          );
-                        })}
+                      {categoryData.length === 0 ||
+                      categoryData.detail == "No objects found"
+                        ? categoryData.detail
+                        : categoryData &&
+                        categoryData.map((category) => {
+                            return (
+                              <option value={category.id} key={category.id}>
+                                {category.title}
+                              </option>
+                            );
+                          })}
                     </select>
                     <div className="category-save-btn">
                       <button
@@ -192,6 +213,7 @@ const AllCourse = ({ show, minDate }) => {
               courseImg={courseImg}
               setCourseImg={setCourseImg}
               moduleData={moduleData}
+              categoryData={categoryData}
               setModuleData={setModuleData}
               courseContent={courseContent}
               courseId={courseId}
@@ -210,30 +232,30 @@ const AllCourse = ({ show, minDate }) => {
           </thead>
           <tbody>
             {courseContent.length === 0 ||
-          courseContent.detail == "No objects found"
-            ? courseContent.detail
-            : courseContent &&
-            courseContent.map((course) => {
-              return (
-                <tr
-                  key={course.id}
-                  role="button"
-                  data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasCourse"
-                  aria-controls="offcanvasRight"
-                  onClick={() => {
-                    handleCourseContentData(course);
-                    setCourseTitle(course.title);
-                  }}
-                >
-                  <td>{course.title}</td>
-                  <td>{course.description}</td>
-                  <td>{course.duration}</td>
-                  <td>{course.users_enrolled}</td>
-                  <td>{course.created_at}</td>
-                </tr>
-              );
-            })}
+            courseContent.detail == "No objects found"
+              ? courseContent.detail
+              : courseContent &&
+                courseContent.map((course) => {
+                  return (
+                    <tr
+                      key={course.id}
+                      role="button"
+                      data-bs-toggle="offcanvas"
+                      data-bs-target="#offcanvasCourse"
+                      aria-controls="offcanvasRight"
+                      onClick={() => {
+                        handleCourseContentData(course);
+                        setCourseTitle(course.title);
+                      }}
+                    >
+                      <td>{course.title}</td>
+                      <td>{course.description}</td>
+                      <td>{course.duration}</td>
+                      <td>{course.users_enrolled}</td>
+                      <td>{course.created_at}</td>
+                    </tr>
+                  );
+                })}
           </tbody>
         </table>
       </div>

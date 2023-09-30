@@ -185,17 +185,61 @@ const AllTeams = ({ show }) => {
   };
 
   const handleDeleteCourse = (id) => {
-    const obj = teamCourses.filter((course) => {
-      return course.id !== id;
+    const obj = {
+        team_id: teamId,
+        course_ids: [id]
+  }
+
+  fetch("http://127.0.0.1:8000/remove_courses_from_team/", {
+    method: "POST",
+    body: JSON.stringify(obj),
+    headers: {
+      Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  }).then((response) => {
+    response.json().then(function (result) {
+      console.log(result);
+      window.location.reload();
+      // setTeamData(result);
     });
-    setTeamCourses(obj);
+  });
+
+    // const obj = teamCourses.filter((course) => {
+    //   return course.id !== id;
+    // });
+    // setTeamCourses(obj);
   };
 
-  const handleDeleteUser = (id) => {
-    const obj = teamUsers.filter((user) => {
-      return user.id !== id;
+  const handleDeleteUser = (user) => {
+    const userEmail = userData.filter((users) => {
+        return users.id === user;
+      });
+console.log('team name' , teamName);
+    const obj = {
+        team_name: teamName,
+        user_emails: [userEmail[0].email]
+    }
+
+    fetch("http://127.0.0.1:8000/remove_users_from_team/", {
+      method: "POST",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log(result);
+        window.location.reload();
+        // setTeamData(result);
+      });
     });
-    setTeamUser(obj);
+
+    // const obj = teamUsers.filter((users) => {
+    //   return users.id !== user;
+    // });
+    // setTeamUser(obj);
   };
 
   const handleAddCourse = (e) => {
@@ -203,12 +247,17 @@ const AllTeams = ({ show }) => {
     const selectItems = document.getElementsByClassName("course-check");
     for (let item of selectItems) {
       if (item.checked) {
-        const newObj = coursesData.filter((course) => {
-          return course.title === item.value;
-        });
-        console.log(" obj  =", newObj);
 
         if (typeof teamCourses !== "undefined") {
+
+
+          for (let i = 0; i < addTeamCoursesId.length; i++) {
+            const element = addTeamCoursesId[i];
+            if (teamCourses.includes(element)) {
+              addTeamCoursesId.splice(i, 1);
+              i--; 
+            }
+          }
 
           const obj = {
             team_id: teamId,
@@ -226,7 +275,7 @@ const AllTeams = ({ show }) => {
             response.json().then(function (result) {
               console.log(result);
 
-              // window.location.reload();
+              window.location.reload();
               // setTeamData(result);
             });
           });
@@ -244,8 +293,10 @@ const AllTeams = ({ show }) => {
   };
 
   const getUSerFullName = (user) => {
+    if (user) {
     const name = userData.filter((users) => users.id === user)
     return `${name[0].first_name} ${name[0].last_name}`
+    }
   } 
 
   const getTeamCourseName = (course) => {
@@ -258,11 +309,15 @@ const AllTeams = ({ show }) => {
     const selectItems = document.getElementsByClassName("user-check");
     for (let item of selectItems) {
       if (item.checked) {
-        const newObj = userData.filter((user) => {
-          return user.email === item.value;
-        });
-        console.log(" obj  =", newObj);
         if (typeof teamUsers !== "undefined") {
+
+          for (let i = 0; i < addTeamUsersId.length; i++) {
+            const element = addTeamUsersId[i];
+            if (teamUsers.includes(element)) {
+              addTeamUsersId.splice(i, 1);
+              i--; 
+            }
+          }
 
           const obj = {
             team_name: teamName,
@@ -281,15 +336,15 @@ const AllTeams = ({ show }) => {
             response.json().then(function (result) {
               console.log(result);
 
-              // window.location.reload();
+              window.location.reload();
               // setTeamData(result);
             });
           });
 
 
-          setTeamUser(() => [...teamUsers, newObj[0]]);
+          // setTeamUser(() => [...teamUsers, newObj[0]]);
         } else {
-          setTeamUser([newObj[0]]);
+          // setTeamUser([newObj[0]]);
         }
       }
 
@@ -298,6 +353,27 @@ const AllTeams = ({ show }) => {
 
     console.log(teamUsers);
   };
+
+  const handleDeleteTeam = (id) => {
+
+    fetch("http://127.0.0.1:8000/delete_team/", {
+      method: "DELETE",
+      body: JSON.stringify({team_id: id}),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log(result);
+
+        window.location.reload();
+        // setTeamData(result);
+      });
+    });
+
+  }
+
   const handleSave = (e) => {};
 
   // console.log(process.env.REACT_APP_API_KEY);
@@ -400,6 +476,7 @@ const AllTeams = ({ show }) => {
                               onClick={() => {
                                 setTeamName(team.name);
                                 setTeamUser(team.users);
+                                setTeamId(team.id)
                                 setTeamCourses(team.courses);
                               }}
                             >
@@ -474,18 +551,18 @@ const AllTeams = ({ show }) => {
                                     <button
                                       type="button"
                                       className={styles.deleteBtn}
-                                      onClick={() => handleDeleteUser(user.id)}
+                                      onClick={() => handleDeleteUser(user)}
                                     >
-                                      X
+                                      <i className="bi bi-trash"></i>
                                     </button>
                                   ) : (
                                     <button
                                       type="button"
                                       style={{ color: "white" }}
-                                      onClick={() => handleDeleteUser(user.id)}
+                                      onClick={() => handleDeleteUser(user)}
                                       className={styles.deleteBtn}
                                     >
-                                      X
+                                      <i className="bi bi-trash"></i>
                                     </button>
                                   )}
                                 </td>
@@ -507,13 +584,12 @@ const AllTeams = ({ show }) => {
                           teamCourses.map((course) => {
                             return (
                               <tr
-                                key={course.id}
+                                key={course}
                                 onMouseEnter={() => setShowCourseDelete(true)}
                                 onMouseLeave={() => setShowCourseDelete(false)}
                               >
                                 <td className={styles.borderLess}>
                                   { getTeamCourseName(course)}
-                                  {course.title}
                                 </td>
                                 <td className={styles.borderLess}>
                                   {showCourseDelete ? (
@@ -521,19 +597,21 @@ const AllTeams = ({ show }) => {
                                       type="button"
                                       className={styles.deleteBtn}
                                       onClick={() =>
-                                        handleDeleteCourse(course.id)
+                                        handleDeleteCourse(course)
                                       }
-                                    ></button>
+                                    >
+                                      <i className="bi bi-trash"></i>
+                                    </button>
                                   ) : (
                                     <button
                                       type="button"
                                       style={{ color: "white" }}
                                       onClick={() =>
-                                        handleDeleteCourse(course.id)
+                                        handleDeleteCourse(course)
                                       }
                                       className={styles.deleteBtn}
                                     >
-                                      X
+                                      <i className="bi bi-trash"></i>
                                     </button>
                                   )}
                                 </td>
@@ -587,7 +665,7 @@ const AllTeams = ({ show }) => {
             <button
               type="button"
               className="text-bg-primary add-new-user"
-              onClick={handleAddCourse}
+              onClick={(e) => handleAddCourse(e)}
               data-bs-toggle="offcanvas"
               data-bs-target="#offcanvasCourse"
             >
@@ -759,6 +837,7 @@ const AllTeams = ({ show }) => {
                 <th scope="col">Names</th>
                 <th scope="col">Users</th>
                 <th scope="col">Courses</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -787,7 +866,9 @@ const AllTeams = ({ show }) => {
                             {team.users.length}
                           </span>
                         ) : (
-                          "0"
+                          <span className={styles.text_with_background}>
+                          {"0"}
+                        </span>
                         )
                         // team.Users.map((user) => {
                         //   return (
@@ -805,7 +886,9 @@ const AllTeams = ({ show }) => {
                             {team.courses.length}
                           </span>
                         ) : (
-                          "0"
+                          <span className={styles.text_with_background}>
+                          {"0"}
+                        </span>
                         )
                         // team.Courses.map((course) => {
                         //   return (
@@ -816,6 +899,10 @@ const AllTeams = ({ show }) => {
                         // })
                       }
                     </td>
+                    <td><i className="bi bi-trash text-danger" onClick={(e) => {
+                       e.stopPropagation();
+                      handleDeleteTeam(team.id)
+                    }}></i></td>
                   </tr>
                 );
               })}

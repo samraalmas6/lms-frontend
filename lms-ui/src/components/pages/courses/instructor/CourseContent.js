@@ -13,9 +13,10 @@ const CourseContent = ({
   courseImg,
   setCourseImg,
   moduleData,
+  categoryData,
   setModuleData,
   courseContent,
-  courseId
+  courseId,
 }) => {
   const navigate = useNavigate();
   const inpRef = useRef("");
@@ -304,17 +305,20 @@ const CourseContent = ({
               <label className="mb-0 mt-1">Category</label>
               <select onChange={handlecourseCategory} value={courseCategory}>
                 <option value="">--Select Category--</option>
-                {catData &&
-                  catData.map((category) => {
-                    return (
-                      <option value={category.name} key={category.id}>
-                        {category.name}
-                      </option>
-                    );
-                  })}
+                {categoryData.length === 0 ||
+                categoryData.detail == "No objects found"
+                  ? categoryData.detail
+                  : categoryData &&
+                  categoryData.map((category) => {
+                      return (
+                        <option value={category.id} key={category.id}>
+                          {category.title}
+                        </option>
+                      );
+                    })}
               </select>
             </div>
-            <div className="form-check form-switch visibility">
+            {/* <div className="form-check form-switch visibility">
               <label htmlFor="IsActive" className=" course-unit-form-label">
                 Course Visibility
               </label>
@@ -326,7 +330,7 @@ const CourseContent = ({
                 onChange={handleVisibility}
                 id="flexSwitchCheckDefault"
               />
-            </div>
+            </div> */}
             <hr style={{ margin: "20px 0px 20px 0px" }} />
             <div className="course-module-section">
               <CourseModule moduleData={moduleData} courseId={courseId} />
