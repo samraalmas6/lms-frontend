@@ -18,16 +18,18 @@ import MyCourses from "./components/pages/courses/MyCourses";
 import AssignmentScreen from "./components/pages/AssignmentScreen";
 import AssignmentView from "./components/pages/AssignmentView";
 
+import AssignmentGrading from "./components/pages/AssignmentGrading";
+
 
 function App() {
   const [showlogin, setShowLogin] = useState(false);
 
   return (
     <div>
-      <AssignmentScreen />
+      <AssignmentGrading/>
+      {/* <AssignmentScreen /> */}
       {/* <MyCourses /> */}
-    {/* <AssignmentView/> */}
-    <CourseTable/>
+    {/* <CourseTable/> */}
     {/* <AddUser/> */}
       {/* <BrowserRouter>
         <Routes>
