@@ -260,7 +260,6 @@ function CourseTable({ modules, assignments }) {
   const [videoProgress, setVideoProgress] = useState({});
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [showAssignmentDetail, setShowAssignmentDetail] = useState(false);
-
   const [showAssignment, setShowAssignment] = useState(false)
 
 // Load video progress from localStorage when component mounts
