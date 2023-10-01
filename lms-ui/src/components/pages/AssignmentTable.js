@@ -1,30 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import assignmentData from "../content/Data/assignmentData";
-import '../styles/AssignmentTable.css'; // Import the CSS file
+import "../styles/AssignmentTable.css"; // Import the CSS file
 
 function AssignmentTable() {
   const [selectedAssignment, setSelectedAssignment] = useState(null);
-  const [feedback, setFeedback] = useState('');
-  const [grade, setGrade] = useState('');
+  const [feedback, setFeedback] = useState("");
+  const [grade, setGrade] = useState("");
   const [userFeedbackMap, setUserFeedbackMap] = useState({});
   const [userStatusMap, setUserStatusMap] = useState({});
- 
+  const [filterOption, setFilterOption] = useState("All"); 
+
   useEffect(() => {
     // Initialize userStatusMap with "Pending" for each assignment
     const initialStatusMap = {};
     assignmentData.forEach((item) => {
-      initialStatusMap[item.id] = 'Pending';
+      initialStatusMap[item.id] = "Pending";
     });
     setUserStatusMap(initialStatusMap);
   }, []);
- 
- 
+
   const openPopup = (assignmentId) => {
     setSelectedAssignment(assignmentId);
-    setFeedback(userFeedbackMap[assignmentId]?.feedback || ''); // Load existing feedback if available
-    setGrade(userFeedbackMap[assignmentId]?.grade || ''); // Load existing grade if available
+    setFeedback(userFeedbackMap[assignmentId]?.feedback || ""); // Load existing feedback if available
+    setGrade(userFeedbackMap[assignmentId]?.grade || ""); // Load existing grade if available
   };
- 
+
   const closePopup = () => {
     setSelectedAssignment(null);
   };
@@ -38,17 +38,17 @@ function AssignmentTable() {
   };
 
   const calculateStatus = (assignmentId, inputGrade) => {
-    const selectedAssignmentData = assignmentData.find((item) => item.id === assignmentId);
+    const selectedAssignmentData = assignmentData.find(
+      (item) => item.id === assignmentId
+    );
     if (selectedAssignmentData) {
       const totalMarks = parseInt(selectedAssignmentData.Grade, 10); // Parse as integer
       const inputGradeValue = parseInt(inputGrade, 10); // Parse inputGrade as integer
       const halfMarks = totalMarks / 2;
-      return inputGradeValue < halfMarks ? 'Not-Passed' : 'Passed';
+      return inputGradeValue < halfMarks ? "Not-Passed" : "Passed";
     }
-    return 'Pending'; // Default to 'Pending' if assignment data not found
+    return "Pending"; // Default to 'Pending' if assignment data not found
   };
-  
-  
 
   const handleSubmit = () => {
     // Update the userFeedbackMap with the submitted feedback and grade
@@ -70,13 +70,59 @@ function AssignmentTable() {
     closePopup();
   };
 
-  // Retrieve the selected assignment's data
-  const selectedAssignmentData = assignmentData.find((item) => item.id === selectedAssignment);
+  // Filter assignments based on the selected filter option
+  const filteredAssignments = assignmentData.filter((item) => {
+    if (filterOption === "All") {
+      return true; // Show all assignments
+    } else if (filterOption === "Passed") {
+      return userStatusMap[item.id] === "Passed";
+    } else if (filterOption === "NotPassed") {
+      return userStatusMap[item.id] === "Not-Passed";
+    } else if (filterOption === "Pending") {
+      return userStatusMap[item.id] === "Pending";
+    }
+    return true; 
+  });
 
   return (
     <div>
+    
+      <div className="filter-container">
+        <label>Filter by:</label>
+        <button
+          className={`filter-button ${filterOption === "All" ? "active" : ""}`}
+          onClick={() => setFilterOption("All")}
+        >
+          All
+        </button>
+        <button
+          className={`filter-button ${
+            filterOption === "Passed" ? "active" : ""
+          }`}
+          onClick={() => setFilterOption("Passed")}
+        >
+          Passed
+        </button>
+        <button
+          className={`filter-button ${
+            filterOption === "NotPassed" ? "active" : ""
+          }`}
+          onClick={() => setFilterOption("NotPassed")}
+        >
+          Not Passed
+        </button>
+        <button
+          className={`filter-button ${
+            filterOption === "Pending" ? "active" : ""
+          }`}
+          onClick={() => setFilterOption("Pending")}
+        >
+          Pending
+        </button>
+      </div>
+
       <table className="assignment-table">
-        <thead className='head-row'>
+        <thead className="head-row">
           <tr>
             <th scope="col">ID</th>
             <th scope="col">Submitted By</th>
@@ -90,9 +136,9 @@ function AssignmentTable() {
             <th scope="col">Actions</th>
           </tr>
         </thead>
-        <tbody className='assign-lin'>
-          {assignmentData.map((item) => (
-            <tr key={item.id} className='assign-col'>
+        <tbody className="assign-lin">
+          {filteredAssignments.map((item) => (
+            <tr key={item.id} className="assign-col">
               <td>{item.id}</td>
               <td>{item.submitted_by}</td>
               <td>{item.assignment}</td>
@@ -100,10 +146,23 @@ function AssignmentTable() {
               <td>{item.Due_Date}</td>
               <td>{item.Partners}</td>
               <td>{item.Graders_Name}</td>
-              <td className="grade-column">{userFeedbackMap[item.id]?.grade || '-'}/{item.Grade}</td> {/* Display user-specific grade or a dash if not available */}
-              <td className={`status-column ${userStatusMap[item.id]?.toLowerCase()}-status`}>{userStatusMap[item.id]}</td>
+              <td className="grade-column">
+                {userFeedbackMap[item.id]?.grade || "-"}/{item.Grade}
+              </td>
+              <td
+                className={`status-column ${userStatusMap[
+                  item.id
+                ]?.toLowerCase()}-status`}
+              >
+                {userStatusMap[item.id]}
+              </td>
               <td>
-                <button className="view-button" onClick={() => openPopup(item.id)}>View</button>
+                <button
+                  className="view-button"
+                  onClick={() => openPopup(item.id)}
+                >
+                  View
+                </button>
               </td>
             </tr>
           ))}
@@ -117,9 +176,19 @@ function AssignmentTable() {
               X
             </button>
             <p>Assignment Content</p>
-            <p className='content'>
-              <a href={selectedAssignmentData?.content} target="_blank" rel="noopener noreferrer">
-                {selectedAssignmentData?.content}
+            <p className="content">
+              <a
+                href={
+                  assignmentData.find((item) => item.id === selectedAssignment)
+                    ?.content
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {
+                  assignmentData.find((item) => item.id === selectedAssignment)
+                    ?.content
+                }
               </a>
             </p>
 
@@ -142,15 +211,21 @@ function AssignmentTable() {
                 value={grade}
                 onChange={handleGradeChange}
                 className="grade-input"
-                max={selectedAssignmentData?.Grade || 100}
+                max={
+                  assignmentData.find((item) => item.id === selectedAssignment)
+                    ?.Grade || 100
+                }
               />
               <span className="grade-text">
-                out of {selectedAssignmentData?.Grade || 100}
+                out of{" "}
+                {assignmentData.find((item) => item.id === selectedAssignment)
+                  ?.Grade || 100}
               </span>
             </div>
 
-            {/* Add a "Submit" button */}
-            <button onClick={handleSubmit} className="submit-button">Submit</button>
+            <button onClick={handleSubmit} className="submit-button">
+              Submit
+            </button>
           </div>
         </div>
       )}
@@ -159,5 +234,3 @@ function AssignmentTable() {
 }
 
 export default AssignmentTable;
-
-
