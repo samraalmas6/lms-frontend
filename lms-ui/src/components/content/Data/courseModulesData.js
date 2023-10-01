@@ -1,7 +1,7 @@
 const courseModuleData = [
     {
       "id": 1,
-      "title": "Presentation Slides updated",
+      "title": "module 1",
       "created_at": "2023-09-25T11:13:47.442342Z",
       "is_updated": false,
       "start_date": "2023-12-25T00:00:00Z",
@@ -86,29 +86,8 @@ const courseModuleData = [
       "is_active": false,
       "is_delete": false,
       "course": 2
-    },
-    {
-      "id": 9,
-      "title": "Module 1",
-      "created_at": "2023-09-27T11:26:36.113955Z",
-      "is_updated": false,
-      "start_date": "2023-12-25T00:00:00Z",
-      "end_date": "2023-12-25T00:00:00Z",
-      "is_active": false,
-      "is_delete": false,
-      "course": 8
-    },
-    {
-      "id": 10,
-      "title": "module 2",
-      "created_at": "2023-09-27T11:38:36.399964Z",
-      "is_updated": false,
-      "start_date": "2023-12-25T00:00:00Z",
-      "end_date": "2023-12-25T00:00:00Z",
-      "is_active": false,
-      "is_delete": false,
-      "course": 8
     }
+
   ]
 
   export default courseModuleData;

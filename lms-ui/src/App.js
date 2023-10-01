@@ -16,15 +16,19 @@ import AllCourse from "./components/pages/courses/AllCourses";
 import VerificationPage from "./components/pages/VerificationPage";
 import MyCourses from "./components/pages/courses/MyCourses";
 import AssignmentScreen from "./components/pages/AssignmentScreen";
+import AssignmentGrading from "./components/pages/AssignmentGrading";
+
 
 function App() {
   const [showlogin, setShowLogin] = useState(false);
 
   return (
     <div>
-      <AssignmentScreen />
+      <AssignmentGrading/>
+      {/* <AssignmentScreen /> */}
       {/* <MyCourses /> */}
-      {/* <CourseTable /> */}
+    {/* <CourseTable/> */}
+    {/* <AddUser/> */}
       {/* <BrowserRouter>
         <Routes>
           <Route element={<SigninPage />} path="/auth/login" />

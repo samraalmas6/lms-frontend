@@ -1,0 +1,12 @@
+.grading-screen-main-container{
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.filters-container{
+    border: 1px solid black;
+}
+
+.search-menu{
+    width: 15%;
+}

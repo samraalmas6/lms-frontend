@@ -65,7 +65,7 @@ const courseData = [
     },
     {
       "id": 5,
-      "title": "Module 2",
+      "title": "Vue JS",
       "description": null,
       "created_at": "2023-09-25T11:13:47.442342Z",
       "is_updated": false,
@@ -81,7 +81,7 @@ const courseData = [
     },
     {
       "id": 6,
-      "title": "Module 3",
+      "title": "Salesforce",
       "description": null,
       "created_at": "2023-09-25T11:13:47.442342Z",
       "is_updated": false,
@@ -97,7 +97,7 @@ const courseData = [
     },
     {
       "id": 7,
-      "title": "Module 4",
+      "title": "AWS",
       "description": null,
       "created_at": "2023-09-25T11:13:47.442342Z",
       "is_updated": false,
