@@ -26,6 +26,16 @@ const coursesData = [
             duration: "7 min",
             doc_name: "extreme prog doc",
             doc: [{ uri: require("../content/files/MOMS.pdf") }],
+            resources: [
+              {
+                title: "Resource 1",
+                url: "https://example.com/resource1",
+              },
+              {
+                title: "Resource 2",
+                url: "https://example.com/resource2",
+              },
+            ],
             assignments: [
               {
                 id: 1,
@@ -48,6 +58,16 @@ const coursesData = [
             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
             duration: "1 hr",
             doc: [{ uri: require("../content/files/MyProjects.pdf") }],
+            resources: [
+              {
+                title: "Resource 1",
+                url: "https://example.com/resource1",
+              },
+              {
+                title: "Resource 2",
+                url: "https://example.com/resource2",
+              },
+            ],
           },
         ],
       },
@@ -296,33 +316,34 @@ useEffect(() => {
     setIsCourseContentVisible(!isCourseContentVisible);
   };
 
-  // const handleVideoProgress = ({ played, playedSeconds }) => {
-  //   // Set a threshold value (e.g., 0.95) to consider the video as completed
-  //   if (played >= 0.95 && !videoCompleted) {
-  //     // Mark the video as completed
-  //     setVideoCompleted(true);
-
-  //     // Use the lesson id to select the corresponding checkbox
-  //     const checkboxId = `lesson-${selectedLesson.id}`;
-  //     const checkbox = document.getElementById(checkboxId);
-
-  //     // Check the checkbox
-  //     if (checkbox) {
-  //       checkbox.checked = true;
-  //     }
-  //   }
-  // };
   const handleVideoProgress = ({ played, playedSeconds }) => {
-    if (selectedLesson) {
-      setVideoProgress((prevProgress) => ({
-        ...prevProgress,
-        [selectedLesson.id]: {
-          played,
-          completed: played >= 0.95, // Mark as completed when played >= 0.95
-        },
-      }));
+    // Set a threshold value (e.g., 0.95) to consider the video as completed
+    if (played >= 0.95 && !videoCompleted) {
+      // Mark the video as completed
+      setVideoCompleted(true);
+
+      // Use the lesson id to select the corresponding checkbox
+      const checkboxId = `lesson-${selectedLesson.id}`;
+      const checkbox = document.getElementById(checkboxId);
+
+      // Check the checkbox
+      if (checkbox) {
+        checkbox.checked = true;
+      }
     }
   };
+  // const handleVideoProgress = ({ played, playedSeconds }) => {
+  //   if (selectedLesson) {
+  //     setVideoProgress((prevProgress) => ({
+  //       ...prevProgress,
+  //       [selectedLesson.id]: {
+  //         played,
+  //         completed: played >= 0.95, // Mark as completed when played >= 0.95
+  //       },
+  
+  //     }));
+  //   }
+  // };
 
   // Pass the video progress to the VideoPlayer component
   const videoProgressData =
