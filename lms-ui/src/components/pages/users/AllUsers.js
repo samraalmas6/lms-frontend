@@ -71,6 +71,7 @@ const AllUsers = () => {
                 return (
                   <tr key={user.email}>
                     <td scope="row" className="allusers-name-container">
+                      
                       <div>
                         <img src={userImg} alt="" className="allusers-image" />
                       </div>
