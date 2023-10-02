@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../../../styles/AssignmentView.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
-import fil from "../content/Images/fil.png";
+import fil from "../../../content/Images/fil.png";
 
 function calculateSubmissionStatus(
   dueDate,

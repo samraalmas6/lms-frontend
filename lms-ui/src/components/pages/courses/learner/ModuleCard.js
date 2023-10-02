@@ -18,13 +18,15 @@ const ModuleCard = ({
   handleAssignmentClick,
   setShowAssignment,
 }) => {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   // const [selectedLesson, setSelectedLesson] = useState(null);
   const [showPDF, setShowPdf] = useState(false);
   const [doc, setDoc] = useState([]);
   const [isCourseContentVisible, setIsCourseContentVisible] = useState(true);
   const [selectedAssignment, setSelectedAssignment] = useState(null);
+
+  const [lessonResources, setLessonResources] = useState({});
+
   // const[selectModule,setSelectedModule] = useState(null);
 
   // const [showAssignment, setShowAssignment] = useState(false)
@@ -40,7 +42,7 @@ const ModuleCard = ({
   }, [isExpanded, module]);
   const [moduleUnit, setModuleUnit] = useState([]);
   const [unitPDF, setUnitPDF] = useState([]);
-  const [unitAssignment, setUnitAssignment] = useState([])
+  const [unitAssignment, setUnitAssignment] = useState([]);
 
   useEffect(() => {
     const getCourseData = () => {
@@ -50,12 +52,12 @@ const ModuleCard = ({
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
-        if(response.status == 200){
-        response.json().then(function (result) {
-          console.log("Units", result);
-          setModuleUnit(result);
-        });
-      }
+        if (response.status == 200) {
+          response.json().then(function (result) {
+            console.log("Units", result);
+            setModuleUnit(result);
+          });
+        }
       });
     };
 
@@ -111,15 +113,13 @@ const ModuleCard = ({
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if (response.status === 200)
-      {
-      response.json().then(function (result) {
-        console.log("Api result: ", result[0].url);
-        handleLessonSelect(result[0]);
-      });
-    }
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log("Api result: ", result[0].url);
+          handleLessonSelect(result[0]);
+        });
+      }
     });
-    
   };
   const toggleCourseContent = () => {
     setIsCourseContentVisible(!isCourseContentVisible);
@@ -163,6 +163,13 @@ const ModuleCard = ({
     setDoc(() => file);
     setShowPdf(!showPDF);
     window.open(file, "_blank");
+  };
+
+  const toggleResources = (lessonId, lessonResources) => {
+    setLessonResources((prevResources) => ({
+      ...prevResources,
+      [lessonId]: !prevResources[lessonId],
+    }));
   };
 
   const videoUrl = "https://youtu.be/apGV9Kg7ics?si=yP2oeVUi684WxZyg";
@@ -263,7 +270,8 @@ const ModuleCard = ({
                               </div>
                               <div className="lecture-pdf">
                                 {unitPDF.length === 0 ||
-                                unitPDF.detail == "No files found for this unit."
+                                unitPDF.detail ==
+                                  "No files found for this unit."
                                   ? unitPDF.detail
                                   : unitPDF &&
                                     unitPDF.map((pdf) => {
@@ -285,21 +293,22 @@ const ModuleCard = ({
                                 onClick={() => setShowAssignment((pre) => !pre)}
                               >
                                 {unitAssignment.length === 0 ||
-                                unitAssignment.detail == "No Assignment found for this unit."
+                                unitAssignment.detail ==
+                                  "No Assignment found for this unit."
                                   ? unitAssignment.detail
                                   : unitAssignment &&
-                                  unitAssignment.map((assignment) => {
-                                    return (
-                                      <span
-                                        onClick={() =>
-                                          // navigate("/course/my-assignments")
-                                          handleAssignmentClick(assignment)
-                                        }
-                                      >
-                                        {assignment.title}
-                                      </span>
-                                    );
-                                  })}
+                                    unitAssignment.map((assignment) => {
+                                      return (
+                                        <span
+                                          onClick={() =>
+                                            // navigate("/course/my-assignments")
+                                            handleAssignmentClick(assignment)
+                                          }
+                                        >
+                                          {assignment.title}
+                                        </span>
+                                      );
+                                    })}
                               </div>
                             </div>
                           </li>
@@ -327,7 +336,41 @@ const ModuleCard = ({
                           style={{ height: 1000 }}
                         /> */}
                           </li>
+
+
                         </div>
+
+                        <div className="lesson-resources">
+                      <button
+                        onClick={() => toggleResources('lesson.id, lesson.resources')}
+                        className="resource-button"
+                      >
+                         Resources
+                      </button>
+                    </div>
+
+                    {lessonResources['lesson.id'] && (
+                      <div className="resources-popup">
+                        
+                        <div className="resources-list">
+                          {/* {lesson.resources.map((resource, index) => (
+                            <div
+                              key={index}
+                              className="resource-item"
+                            >
+                              <a
+                                href={resource.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {resource.title}
+                              </a>
+                            </div>
+                          ))} */}
+                        </div>
+                      </div>
+                    )}
+
                       </div>
                     </div>
                   );
