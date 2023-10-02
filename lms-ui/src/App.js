@@ -12,6 +12,7 @@ import PrivateRoute from "./components/content/PrivateRoute";
 import AllUsers from "./components/pages/users/AllUsers";
 import CreateCourse from "./components/pages/courses/instructor/CreateCourse";
 import AllCourse from "./components/pages/courses/instructor/AllCourses";
+// import VerificationPage from "./components/content/VerificationPage";
 import VerificationPage from "./components/content/VerificationPage";
 import AddTeam from "./components/pages/teams/AddTeam";
 import AllTeams from "./components/pages/teams/AllTeams";
@@ -21,6 +22,7 @@ import MyCourses from "./components/pages/courses/learner/MyCourses";
 import CourseTable from "./components/pages/courses/learner/CourseTable";
 import AssignmentView from "./components/pages/courses/learner/AssignmentView";
 import AssignmentScreen from "./components/pages/courses/learner/AssignmentScreen";
+import AssignmentGrading from "./components/pages/AssignmentGrading";
 
 function App() {
   const [showlogin, setShowLogin] = useState(false);
@@ -48,6 +50,7 @@ function App() {
         <Route path="/course/my-courses" element={<PrivateRoute><MyCourses /></PrivateRoute>}></Route>
         <Route path="/course/create-assignment" element={<PrivateRoute><AssignmentScreen /></PrivateRoute>}></Route>
         <Route path="/course/my-assignments" element={<PrivateRoute><AssignmentView /></PrivateRoute>}></Route>
+        <Route path="/course/assignment-hub" element={<PrivateRoute><AssignmentGrading /></PrivateRoute>}></Route>
         <Route path="/my-courses/show" element={<PrivateRoute><CourseTable /></PrivateRoute>}></Route>
         <Route path="/category/add" element={<PrivateRoute><AddCategory /></PrivateRoute>}></Route>
         <Route path="/category/all" element={<PrivateRoute><AllCategory /></PrivateRoute>}></Route>

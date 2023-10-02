@@ -97,7 +97,7 @@ const AllTeams = ({ show }) => {
     }).then((response) => {
       response.json().then(function (result) {
         console.log(result);
-        window.location.reload();
+        // window.location.reload();
         // setTeamData(result);
       });
     });

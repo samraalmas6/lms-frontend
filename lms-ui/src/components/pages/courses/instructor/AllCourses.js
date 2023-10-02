@@ -19,7 +19,10 @@ const AllCourse = ({ show, minDate }) => {
   const [courseId, setCourseId] = useState(null);
 
   useEffect(() => {
+
     const getCourseData = () => {
+
+
       fetch("http://127.0.0.1:8000/api/courses", {
         method: "GET",
         headers: {
@@ -32,6 +35,8 @@ const AllCourse = ({ show, minDate }) => {
         });
       });
     };
+
+
     const getCategoryData = () => {
       fetch("http://127.0.0.1:8000/api/categories", {
         method: "GET",
@@ -72,6 +77,8 @@ const AllCourse = ({ show, minDate }) => {
         updated_by: sessionStorage.getItem('user_id'),
         category: [courseCategory],
       };
+
+
       fetch("http://127.0.0.1:8000/api/courses/", {
         method: "POST",
         body: JSON.stringify(obj),
@@ -92,6 +99,8 @@ const AllCourse = ({ show, minDate }) => {
         }
       });
     }
+
+    
   };
 
   const handleCourseContentData = (course) => {

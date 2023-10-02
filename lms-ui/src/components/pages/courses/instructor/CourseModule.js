@@ -61,6 +61,9 @@ const CourseModule = ({ moduleData, courseId }) => {
 
   const handleModuleContent = (module) => {
     setModuleId(module.id)
+
+
+    
     fetch(`http://127.0.0.1:8000/api/modules/${module.id}/units`, {
       method: "GET",
       headers: {

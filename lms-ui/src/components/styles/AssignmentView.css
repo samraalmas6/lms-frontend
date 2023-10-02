@@ -277,14 +277,14 @@ element.style {
 
 /* Add this CSS to your AssignmentView.css file or in a separate CSS file */
 ul.upload {
-  list-style: none; /* Remove default bullet points */
-  padding-left: 0; /* Remove left padding */
+  list-style: none;
+  padding-left: 0; 
 }
 
-ul.upload li::before {
-  content: "\1F4C4"; /* Unicode for the 📄 Page Facing Up character */
+/* ul.upload li::before {
+  content: "\1F4C4"; 
   display: inline-block;
-  font-size: 20px; /* Adjust the size as needed */
+  font-size: 20px; 
   margin-right: 65px;
 }
 
@@ -293,12 +293,11 @@ ul.upload li::before {
 }
 
 ul.resources {
-  /* background-color: #2ecc71; */
   width: 30px;
   padding-top: 20px;
   list-style: none;
   text-align: center;
-}
+} */
 /* .res {
   background-color: rgb(244, 250, 250);
   width: 300px;
