@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import UpdateUnit from "./UpdateUnit";
 import { useNavigate } from "react-router-dom";
 
-const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, handleSaveUnit }) => {
+const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle }) => {
   //  ************************* Unit Ref Hooks  ********************
   // ***************************************************************
 
@@ -20,7 +20,7 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
   const slideSection = useRef(null);
   const pdfSelector = useRef(null);
   const slideSelector = useRef(null);
-
+  const [initUnitName, setInitUnitName] = useState(unitData.length === 'undefined' ?  Number(1) : Number(unitData.length) )
   const [unitId, setUnitId] = useState(null)
 
   const [unitStart, setUnitStart] = useState("");
@@ -40,8 +40,8 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
   const [showUnitContent, setShowUnitContent] = useState(false)
 
   useEffect(() => {
-
-  }, [0]);
+    setInitUnitName(unitData.length === 'undefined' || unitData.detail == "No unit found for this module." ?  Number(1) : Number(unitData.length+1))
+  },[unitData])
 
   const handlUnitStart = (e) => {
     // startDateRefUnit.current.removeAttribute("class", "unit-start-field");
@@ -108,7 +108,7 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
       pdfSection.current.setAttribute("id", "hide-field");
     }
     setUnitPDF(file);
-    console.log(file.name);
+
   };
   const handleUnitSlide = (e) => {
     let file = e.target.files[0];
@@ -138,7 +138,7 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
       },
     }).then((response) => {
       response.json().then(function (result) {
-        console.log("Api result Files: ", result);
+      
         setUnitFiles(result);
         // setUnitEnd(unit.end_date.substr(0,10))
         // setUnitStart(unit.start_date.substr(0,10))
@@ -165,7 +165,7 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
       }).then((response) => {
         if (response.status == 201) {
           response.json().then(function (result) {
-            console.log(result);
+          
             setVideoTitle("");
             setVidoUrl("");
             // setModuleDescription("");
@@ -202,7 +202,7 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
     }).then((response) => {
       if (response.status == 201) {
         response.json().then(function (result) {
-          console.log(result);
+       
           setUnitPDF(null);
           setUnitSlide(null);
           // setVidoUrl("");
@@ -216,38 +216,41 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
   };
 
 
-  // const handleSaveUnit = () => {
-  //   // e.preventDefault();
-  //   if (unitTitle) {
-  //     const obj = {
-  //       title: unitTitle,
-  //       description: "Unit Test Description",
-  //       start_date: "2023-12-25T00:00:00Z",
-  //       end_date: "2023-12-25T00:00:00Z",
-  //       module: moduleId,
-  //       updated_by: 1,
-  //     };
-  //     fetch("http://127.0.0.1:8000/api/units/", {
-  //       method: "POST",
-  //       body: JSON.stringify(obj),
-  //       headers: {
-  //         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-  //         "Content-type": "application/json; charset=UTF-8",
-  //       },
-  //     }).then((response) => {
-  //       if (response.status == 201) {
-  //         response.json().then(function (result) {
-  //           console.log(result);
-  //           setUnitTitle("");
-  //           // setModuleDescription("");
-  //           // window.location.reload();
-  //         });
-  //       } else {
-  //         console.log(response);
-  //       }
-  //     });
-  //   }
-  // };
+  const handleSaveUnit = (unitTitle) => {
+    setUnitTitle(unitTitle)
+    // e.preventDefault();
+    if (unitTitle) {
+      const obj = {
+        title: unitTitle,
+        description: "Unit Test Description",
+        start_date: "2023-12-25T00:00:00Z",
+        end_date: "2023-12-25T00:00:00Z",
+        module: moduleId,
+        updated_by: 1,
+      };
+      fetch("http://127.0.0.1:8000/api/units/", {
+        method: "POST",
+        body: JSON.stringify(obj),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status == 201) {
+          response.json().then(function (result) {
+       
+            setInitUnitName((pre) => Number(pre+1))
+            // setUnitTitle("");
+            setUnitId(() => result.id)
+            // setModuleDescription("");
+            // window.location.reload();
+          });
+        } else {
+          console.log(response);
+        }
+      });
+    }
+  };
 
   return (
     <div className="">
@@ -828,13 +831,13 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
                       </div>
 
                       <div className="saveModule-button-section">
-                        <button
+                        {/* <button
                           type="button"
-                          onClick={(e) => handleSaveUnit(moduleId)}
+                          // onClick={(e) => handleSaveUnit(moduleId)}
                           className="btn btn-secondary saveUnit-button"
                         >
                           Save Unit
-                        </button>
+                        </button> */}
                       </div>
                     </form>
                   </div>
@@ -849,6 +852,7 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
             className="btn"
             onClick={() => {
               handleShowAddUnit();
+              handleSaveUnit('Unit '+(initUnitName))
               setIncrement((pre) => pre + 1);
               setListUnit((pre) => [...pre, increment + 1]);
             }}

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CourseUnit from "./CourseUnit";
 
 const CourseModule = ({ moduleData, courseId }) => {
@@ -12,6 +12,8 @@ const CourseModule = ({ moduleData, courseId }) => {
   const startDatePickerRefModule = useRef(null);
   const endDatePickerRefModule = useRef(null);
 
+  
+  const [initModuleName, setInitModuleName] = useState(moduleData.length === 'undefined' || moduleData.detail === "No module found for this course." ?  Number(1) : Number(moduleData.length + 1))
   const [moduleId, setModuleId] = useState(null)
 
   const [showAddModule, setShowAddModule] = useState(false);
@@ -29,6 +31,11 @@ const CourseModule = ({ moduleData, courseId }) => {
   const [listModule, setListModule] = useState([])
   const [unitData, setUnitData] = useState([]);
   const [unitTitle, setUnitTitle] = useState("");
+
+
+  useEffect(() => {
+    setInitModuleName(moduleData.length === 'undefined' || moduleData.detail === "No module found for this course." ?  Number(1) : Number(moduleData.length))
+  },[moduleData])
 
   const handleModuleTitle = (e) => {
     setModuleTitle(e.target.value);
@@ -68,52 +75,22 @@ const CourseModule = ({ moduleData, courseId }) => {
       },
     }).then((response) => {
       response.json().then(function (result) {
-        console.log("Api result: ", result);
+      
         setUnitData(result);
       });
     });
   };
 
 
-  const handleSaveUnit = (moduleId) => {
-    // e.preventDefault();
-    if (unitTitle) {
-      const obj = {
-        title: unitTitle,
-        description: "Unit Test Description",
-        start_date: "2023-12-25T00:00:00Z",
-        end_date: "2023-12-25T00:00:00Z",
-        module: moduleId,
-        updated_by: 1,
-      };
-      fetch("http://127.0.0.1:8000/api/units/", {
-        method: "POST",
-        body: JSON.stringify(obj),
-        headers: {
-          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      }).then((response) => {
-        if (response.status == 201) {
-          response.json().then(function (result) {
-            console.log(result);
-            setUnitTitle("");
-            // setModuleDescription("");
-            // window.location.reload();
-          });
-        } else {
-          console.log(response);
-        }
-      });
-    }
-  };
 
-  const handleSaveModule = (e) => {
-    e.preventDefault();
-    if (moduleTitle) {
+
+  const handleSaveModule = (moduleTitle) => {
+    // e.preventDefault();
+    setModuleTitle(moduleTitle)
+
       const obj = {
         title: moduleTitle,
-        description: moduleDescription,
+        description: 'module Description',
         start_date: "2023-12-25T00:00:00Z",
         end_date: "2023-12-25T00:00:00Z",
         course: courseId,
@@ -129,10 +106,10 @@ const CourseModule = ({ moduleData, courseId }) => {
       }).then((response) => {
         if (response.status === 201) {
           response.json().then(function (result) {
-            console.log(result);
+     
+            setInitModuleName((pre) => Number(pre+1))
             setModuleId(() => result.id)
-           handleSaveUnit(result.id);
-            setModuleTitle("");
+            // setModuleTitle("");
             setModuleDescription("");
             // window.location.reload();
           });
@@ -140,7 +117,7 @@ const CourseModule = ({ moduleData, courseId }) => {
           console.log(response);
         }
       });
-    }
+
   };
 
   return (
@@ -276,7 +253,7 @@ const CourseModule = ({ moduleData, courseId }) => {
                           showUnit={true}
                           unitTitle={unitTitle}
                         setUnitTitle={setUnitTitle}
-                        handleSaveUnit= {handleSaveUnit}
+                      
 
                         />
                       </div>
@@ -392,16 +369,19 @@ const CourseModule = ({ moduleData, courseId }) => {
                        showUnit={false}
                         unitTitle={unitTitle}
                         setUnitTitle={setUnitTitle}
-                        handleSaveUnit= {handleSaveUnit}
+                       
                         />
                  <div className="saveModule-button-section">
-                    <button
+                    {/* <button
                       type="button"
-                      onClick={(e) => handleSaveModule(e)}
+                      onClick={(e) => {
+                          e.preventDefault()
+                        // handleSaveModule()
+                      }}
                       className="btn btn-secondary saveModule-button"
                     >
                       Save Module
-                    </button>
+                    </button> */}
                   </div>
               </form>
 
@@ -432,7 +412,9 @@ const CourseModule = ({ moduleData, courseId }) => {
             <button
               type="button"
               className="btn"
-              onClick={() => {
+              onClick={(e) => {
+                // setModuleTitle(() => 'Module '+increment)
+                handleSaveModule('Module '+Number(initModuleName))
                 handleCreateNewModule()
                 setIncrement((pre) => pre+1)
                 setListModule(pre => [...pre, increment+1])

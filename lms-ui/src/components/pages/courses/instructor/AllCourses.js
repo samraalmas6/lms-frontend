@@ -27,7 +27,7 @@ const AllCourse = ({ show, minDate }) => {
         },
       }).then((response) => {
         response.json().then(function (result) {
-          console.log(result);
+        
           setCourseContent(result);
         });
       });
@@ -40,7 +40,7 @@ const AllCourse = ({ show, minDate }) => {
         },
       }).then((response) => {
         response.json().then(function (result) {
-          console.log(result);
+         
           setCategoryData(result);
         });
       });
@@ -50,7 +50,7 @@ const AllCourse = ({ show, minDate }) => {
     getCategoryData();
   }, [0]);
 
-  console.log("Team Data", teamData);
+ 
 
   const handleCourseTitle = (e) => {
     setCourseTitle(e.target.value);
@@ -82,7 +82,7 @@ const AllCourse = ({ show, minDate }) => {
       }).then((response) => {
         if (response.status == 201) {
           response.json().then(function (result) {
-            console.log(result);
+          
             setCourseCategory("");
             setCourseTitle("");
             window.location.reload();
@@ -109,7 +109,7 @@ const AllCourse = ({ show, minDate }) => {
       },
     }).then((response) => {
       response.json().then(function (result) {
-        console.log("Api result: ", result);
+     
         setModuleData(result);
       });
     });

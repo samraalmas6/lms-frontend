@@ -4,8 +4,8 @@ import "../styles/HomePage.css";
 import { Link } from "react-router-dom";
 
 export const Navbar = () => {
-  const name = "Mohsen Ali";
-  const role = "Admin";
+  const name = `${sessionStorage.getItem('first_name')} ${sessionStorage.getItem("last_name")}`
+  const role = sessionStorage.getItem('role');
   return (
     <nav className="navbar navbar-expand-md mb-0 nav-bar">
       <div className="container-fluid">
