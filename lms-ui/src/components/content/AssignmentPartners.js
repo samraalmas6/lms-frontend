@@ -897,7 +897,7 @@ const AssignmentPartners = () => {
     setGroups(updatedGroups);
 
     // Add the names from the deleted group back to the selected names list
-    setSelectedNames([...selectedNames, ...deletedGroup]);
+    // setSelectedNames([...selectedNames, ...deletedGroup]);
   };
 
   // Update the handleDeleteGroup function to add names back to the list
