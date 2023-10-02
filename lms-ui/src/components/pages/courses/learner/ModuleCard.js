@@ -5,6 +5,7 @@ import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import "../../../styles/CourseTable.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const ModuleCard = ({
   module,
@@ -17,6 +18,8 @@ const ModuleCard = ({
   handleAssignmentClick,
   setShowAssignment,
 }) => {
+
+  const navigate = useNavigate()
   // const [selectedLesson, setSelectedLesson] = useState(null);
   const [showPDF, setShowPdf] = useState(false);
   const [doc, setDoc] = useState([]);
@@ -289,6 +292,7 @@ const ModuleCard = ({
                                     return (
                                       <span
                                         onClick={() =>
+                                          // navigate("/course/my-assignments")
                                           handleAssignmentClick(assignment)
                                         }
                                       >

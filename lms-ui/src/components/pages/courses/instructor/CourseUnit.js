@@ -21,6 +21,7 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
   const pdfSelector = useRef(null);
   const slideSelector = useRef(null);
 
+  const [unitId, setUnitId] = useState(null)
 
   const [unitStart, setUnitStart] = useState("");
   const [unitEnd, setUnitEnd] = useState("");
@@ -62,7 +63,7 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
   };
 
   const hanldeVideoUpload = (e) => {
-    e.stopPropagation();
+    // e.stopPropagation();
     videoFieldRef.current.removeAttribute("id", "hide-field");
     videoAddRef.current.setAttribute("id", "hide-field");
   };
@@ -129,6 +130,7 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
   };
 
   const handleUnitContent = (unit) => {
+    setUnitId(unit.id)
     fetch(`http://127.0.0.1:8000/api/units/${unit.id}/files`, {
       method: "GET",
       headers: {
@@ -150,7 +152,7 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
       const obj = {
         title: videoTitle,
         url: videoUrl,
-        unit: 5,
+        unit: unitId,
         updated_by: 1,
       };
       fetch("http://127.0.0.1:8000/api/videos/", {
@@ -828,7 +830,7 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
                       <div className="saveModule-button-section">
                         <button
                           type="button"
-                          onClick={(e) => handleSaveUnit(e)}
+                          onClick={(e) => handleSaveUnit(moduleId)}
                           className="btn btn-secondary saveUnit-button"
                         >
                           Save Unit

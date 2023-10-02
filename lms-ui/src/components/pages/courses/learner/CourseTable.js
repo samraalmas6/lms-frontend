@@ -361,128 +361,133 @@ function CourseTable({ modules, assignments }) {
 
   return (
     <>
-      <div className="main-outer-container">
-        <div className={`course-main ${videoPaneState}`}>
-          {showAssignment ? (
-            <div>
-              <AssignmentView selectedAssignments={selectedAssignment} />
-            </div>
-          ) : (
-            <div className="videos-section">
-              <VideoPlayer
-                selectedLesson={selectedLesson}
-                handleVideoProgress={handleVideoProgress}
-              />
-              {/* tabs below video */}
-            </div>
-          )}
-          <div className="tabs-container">
-            <ul className="tabs">
-              <li
-                className={activeTab === "Course Content" ? "active" : ""}
-                onClick={() => handleTabChange("Course Content")}
-              >
-                <p
-                // onClick={toggleCourseContent}
-                >
-                  Course-Content
-                </p>
-              </li>
-              <li
-                className={activeTab === "Overview" ? "active" : ""}
-                onClick={() => handleTabChange("Overview")}
-              >
-                Overview
-              </li>
-            </ul>
-
-            <div className="tab-content">
-              {activeTab === "Course Content" && (
-                <div>
-                  {/* Add content for Course Content tab */}
-                  <p>Course Content tab.</p>
-                </div>
-              )}
-
-              {activeTab === "Overview" && (
-                <div>
-                  {/* Add content for Overview tab */}
-                  <p>Overview tab.</p>
-                </div>
-              )}
-            </div>
-          </div>
+      {showAssignment ? (
+        <div>
+          <AssignmentView 
+          selectedAssignments={selectedAssignment} />
         </div>
-        {isCourseContentVisible && (
-          <div className="App">
-            <header className="App_header">
-              <h1>Course Content</h1>
-              <i
-                className="fa fa-times close-icon"
-                aria-hidden="true"
-                onClick={toggleCourseContent}
-              ></i>
-            </header>
-            <div className="course_list">
-              {/* {coursesData.map((course) => ( */}
-              {/* {courseContent.length === 0 ||
+      ) : (
+        <div className="">
+          <div className="main-outer-container">
+            <div className={`course-main ${videoPaneState}`}>
+              <div className="videos-section">
+                <VideoPlayer
+                  selectedLesson={selectedLesson}
+                  handleVideoProgress={handleVideoProgress}
+                />
+                {/* tabs below video */}
+              </div>
+
+              <div className="tabs-container">
+                <ul className="tabs">
+                  <li
+                    className={activeTab === "Course Content" ? "active" : ""}
+                    onClick={() => handleTabChange("Course Content")}
+                  >
+                    <p
+                    // onClick={toggleCourseContent}
+                    >
+                      Course-Content
+                    </p>
+                  </li>
+                  <li
+                    className={activeTab === "Overview" ? "active" : ""}
+                    onClick={() => handleTabChange("Overview")}
+                  >
+                    Overview
+                  </li>
+                </ul>
+
+                <div className="tab-content">
+                  {activeTab === "Course Content" && (
+                    <div>
+                      {/* Add content for Course Content tab */}
+                      <p>Course Content tab.</p>
+                    </div>
+                  )}
+
+                  {activeTab === "Overview" && (
+                    <div>
+                      {/* Add content for Overview tab */}
+                      <p>Overview tab.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            {isCourseContentVisible && (
+              <div className="App">
+                <header className="App_header">
+                  <h1>Course Content</h1>
+                  <i
+                    className="fa fa-times close-icon"
+                    aria-hidden="true"
+                    onClick={toggleCourseContent}
+                  ></i>
+                </header>
+                <div className="course_list">
+                  {/* {coursesData.map((course) => ( */}
+                  {/* {courseContent.length === 0 ||
           courseContent.detail == "No objects found"
             ? courseContent.detail
             : courseContent &&
             courseContent.map((course) => ( */}
-              <div key={"course.id"} className="course_card">
-                {/* <h2>{course.title}</h2> */}
+                  <div key={"course.id"} className="course_card">
+                    {/* <h2>{course.title}</h2> */}
 
-                {moduleContent.length === 0 ||
-                moduleContent.detail == "No objects found"
-                  ? moduleContent.detail
-                  : moduleContent &&
-                    moduleContent.map((module, index) => (
-                      <ModuleCard
-                        key={module.id}
-                        module={module}
-                        isExpanded={index === expandedModule}
-                        toggleModule={() => toggleModule(index)}
-                        handleLessonSelect={handleLessonSelect}
-                        handleVideoCompleted={handleVideoCompleted}
-                        assignments={assignments}
-                        videoProgressData={videoProgressData}
-                        // selectedLesson={selectedLesson}
-                        handleAssignmentClick={handleAssignmentClick}
-                        setShowAssignment={setShowAssignment}
-                      />
-                    ))}
+                    {moduleContent.length === 0 ||
+                    moduleContent.detail == "No objects found"
+                      ? moduleContent.detail
+                      : moduleContent &&
+                        moduleContent.map((module, index) => (
+                          <ModuleCard
+                            key={module.id}
+                            module={module}
+                            isExpanded={index === expandedModule}
+                            toggleModule={() => toggleModule(index)}
+                            handleLessonSelect={handleLessonSelect}
+                            handleVideoCompleted={handleVideoCompleted}
+                            assignments={assignments}
+                            videoProgressData={videoProgressData}
+                            // selectedLesson={selectedLesson}
+                            handleAssignmentClick={handleAssignmentClick}
+                            setShowAssignment={setShowAssignment}
+                          />
+                        ))}
+                  </div>
+                  {/* ))} */}
+                </div>
               </div>
-              {/* ))} */}
-            </div>
-          </div>
-        )}
+            )}
 
-        {!isCourseContentVisible && (
-          // <button type="button" class="expand-view-btn" onClick={toggleCourseContent}>
-          //   <i class="fas fa-solid fa-arrow-right fa-rotate-180"></i> Course Content
-          //   </button>
-          <button
-            type="button"
-            class="ud-btn ud-btn-large ud-btn-primary ud-heading-md course-content-toggle--button--RLfW6 btn-content"
-            onClick={toggleCourseContent}
-          >
-            <i class="fas fa-solid fa-arrow-right fa-rotate-180"></i>
-            <span class="course-content-toggle--label--IP79B">
-              Course content
-            </span>
-          </button>
-        )}
-      </div>
+            {!isCourseContentVisible && (
+              // <button type="button" class="expand-view-btn" onClick={toggleCourseContent}>
+              //   <i class="fas fa-solid fa-arrow-right fa-rotate-180"></i> Course Content
+              //   </button>
+              <button
+                type="button"
+                class="ud-btn ud-btn-large ud-btn-primary ud-heading-md course-content-toggle--button--RLfW6 btn-content"
+                onClick={toggleCourseContent}
+              >
+                <i class="fas fa-solid fa-arrow-right fa-rotate-180"></i>
+                <span class="course-content-toggle--label--IP79B">
+                  Course content
+                </span>
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="extended-view-container">
         {/* Conditionally render the AssignmentView */}
         {/* Conditionally render the AssignmentView */}
-        {selectedAssignment && (
+        {/* {selectedAssignment && (
           <AssignmentView
             assignment={selectedAssignment}
             onClose={() => setSelectedAssignment(null)}
           />
-        )}
+        )} */}
       </div>
     </>
   );

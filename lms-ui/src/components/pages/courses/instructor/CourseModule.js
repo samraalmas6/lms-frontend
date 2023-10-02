@@ -274,7 +274,10 @@ const CourseModule = ({ moduleData, courseId }) => {
                         <CourseUnit unitData={unitData}
                           moduleId={moduleId}
                           showUnit={true}
-                          saveUnit={saveUnit}
+                          unitTitle={unitTitle}
+                        setUnitTitle={setUnitTitle}
+                        handleSaveUnit= {handleSaveUnit}
+
                         />
                       </div>
                     </div>
