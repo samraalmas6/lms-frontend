@@ -17,6 +17,7 @@ const CourseContent = ({
   setModuleData,
   courseContent,
   courseId,
+  setCourseId
 }) => {
   const navigate = useNavigate();
   const inpRef = useRef("");
@@ -83,6 +84,15 @@ const CourseContent = ({
   };
 
   const handleCourseContent = (course) => {
+    setCourseId(course.id);
+    setCourseTitle(course.title);
+    setCourseCategory(course.category)
+    setCourseStart(course.start_date.substr(0,10))
+    setCourseEnd(course.end_date.substr(0,10))
+    setCourseImg(course.course_image)
+    setCourseDes(`<p>${course.description}</p>`);
+    setVisibility(() => course.visibility);
+
     fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
       method: "GET",
       headers: {
@@ -94,29 +104,52 @@ const CourseContent = ({
         setModuleData(result);
       });
     });
-
-    // setCourse(() => course);
-    // setModuleData(() => course.modules);
-    setCourseTitle(() => course.course_title);
-    setCourseDes(`<p>${course.description}</p>`);
-    setCourseCategory(course.category);
-    // setCourseImg(course.picture)
-    setVisibility(() => course.visibility);
+    
   };
+  const handleSaveCourse = () => {
 
-  //   const handleModuleContent = (module) => {
-  //     fetch(`http://127.0.0.1:8000/api/modules/${module.id}/units`, {
-  //       method: "GET",
-  //       headers: {
-  //         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-  //       },
-  //     }).then((response) => {
-  //       response.json().then(function (result) {
-  //         console.log("Api result: ", result);
-  //         setUnitData(result);
-  //       });
-  //     });
-  //   };
+    if (courseTitle && courseCategory) {
+      const formData = new FormData();
+      if(typeof(courseImg) === 'object'){
+        formData.append("course_image", courseImg);
+      }
+      formData.append("title", courseTitle);
+      formData.append("description", courseDescription);
+      formData.append("start_date", courseStart+'T00:00:00Z');
+      formData.append("end_date", courseEnd+'T00:00:00Z');
+      formData.append("category", [courseCategory]);
+      formData.append("author",sessionStorage.getItem('user_id'));
+      formData.append("updated_by", sessionStorage.getItem('user_id'));
+      // const obj = {
+      //   title: courseTitle,
+      //   description: courseDescription,
+      //   start_date: courseStart,
+      //   end_date: courseEnd,
+      //   author: sessionStorage.getItem('user_id'),
+      //   updated_by: sessionStorage.getItem('user_id'),
+      //   category: [courseCategory],
+      // };
+      fetch(`http://127.0.0.1:8000/api/courses/${courseId}/`, {
+        method: "PUT",
+        body: formData,
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          // "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log(result);
+            setCourseCategory("");
+            setCourseTitle("");
+            window.location.reload();
+          });
+        } else {
+          console.log(response);
+        }
+      });
+    }
+  }
 
   return (
     <div>
@@ -282,7 +315,8 @@ const CourseContent = ({
                 <div className="upload-image-section" onClick={handlImgClick}>
                   {courseImg ? (
                     <img
-                      src={URL.createObjectURL(courseImg)}
+                      // src={URL.createObjectURL(courseImg)}
+                      src={courseImg}
                       alt=""
                       width="300"
                       height="300"
@@ -337,9 +371,9 @@ const CourseContent = ({
             </div>
             <div className="category-save-btn">
               <button
-                type="submit"
+                type="button"
                 className="btn btn-primary"
-                //   onClick={handleSaveCourse}
+                  onClick={() => handleSaveCourse()}
               >
                 Save Course
               </button>

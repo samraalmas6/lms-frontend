@@ -15,6 +15,7 @@ const CourseModule = ({ moduleData, courseId }) => {
   const [moduleId, setModuleId] = useState(null)
 
   const [showAddModule, setShowAddModule] = useState(false);
+  const [saveUnit, setSaveUnit] = useState(false)
 
   const [moduleTitle, setModuleTitle] = useState("");
   const [moduleStart, setModuleStart] = useState("");
@@ -27,6 +28,7 @@ const CourseModule = ({ moduleData, courseId }) => {
   const [increment, setIncrement] = useState(0)
   const [listModule, setListModule] = useState([])
   const [unitData, setUnitData] = useState([]);
+  const [unitTitle, setUnitTitle] = useState("");
 
   const handleModuleTitle = (e) => {
     setModuleTitle(e.target.value);
@@ -72,14 +74,48 @@ const CourseModule = ({ moduleData, courseId }) => {
     });
   };
 
+
+  const handleSaveUnit = (moduleId) => {
+    // e.preventDefault();
+    if (unitTitle) {
+      const obj = {
+        title: unitTitle,
+        description: "Unit Test Description",
+        start_date: "2023-12-25T00:00:00Z",
+        end_date: "2023-12-25T00:00:00Z",
+        module: moduleId,
+        updated_by: 1,
+      };
+      fetch("http://127.0.0.1:8000/api/units/", {
+        method: "POST",
+        body: JSON.stringify(obj),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status == 201) {
+          response.json().then(function (result) {
+            console.log(result);
+            setUnitTitle("");
+            // setModuleDescription("");
+            // window.location.reload();
+          });
+        } else {
+          console.log(response);
+        }
+      });
+    }
+  };
+
   const handleSaveModule = (e) => {
     e.preventDefault();
     if (moduleTitle) {
       const obj = {
         title: moduleTitle,
         description: moduleDescription,
-        start_date: "2023-12-25",
-        end_date: "2023-12-25",
+        start_date: "2023-12-25T00:00:00Z",
+        end_date: "2023-12-25T00:00:00Z",
         course: courseId,
         updated_by: 1,
       };
@@ -91,9 +127,11 @@ const CourseModule = ({ moduleData, courseId }) => {
           "Content-type": "application/json; charset=UTF-8",
         },
       }).then((response) => {
-        if (response.status == 201) {
+        if (response.status === 201) {
           response.json().then(function (result) {
             console.log(result);
+            setModuleId(() => result.id)
+           handleSaveUnit(result.id);
             setModuleTitle("");
             setModuleDescription("");
             // window.location.reload();
@@ -236,7 +274,7 @@ const CourseModule = ({ moduleData, courseId }) => {
                         <CourseUnit unitData={unitData}
                           moduleId={moduleId}
                           showUnit={true}
-                          
+                          saveUnit={saveUnit}
                         />
                       </div>
                     </div>
@@ -349,6 +387,9 @@ const CourseModule = ({ moduleData, courseId }) => {
                        unitData={unitData}
                        moduleId={moduleId}
                        showUnit={false}
+                        unitTitle={unitTitle}
+                        setUnitTitle={setUnitTitle}
+                        handleSaveUnit= {handleSaveUnit}
                         />
                  <div className="saveModule-button-section">
                     <button

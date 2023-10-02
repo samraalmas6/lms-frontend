@@ -12,7 +12,7 @@ const AllTeams = ({ show }) => {
   const [checkedAllUser, setCheckAllUser] = useState(false);
 
   const checkbox = useRef("");
-  const [teamId, setTeamId] = useState(null)
+  const [teamId, setTeamId] = useState(null);
   const [teamName, setTeamName] = useState("");
   const [teamDes, setTeamDes] = useState("");
   const [teamData, setTeamData] = useState([]);
@@ -109,101 +109,95 @@ const AllTeams = ({ show }) => {
 
   const handleCourseCheckChange = (e) => {
     const title = e.target.value;
-    console.log('user title', title);
+    console.log("user title", title);
     const newObj = coursesData.filter((course) => {
       return course.title === title;
     });
 
     if (e.target.checked && title !== "undefined") {
       setAddTeamCoursesId((pre) => [...pre, newObj[0].id]);
-    }
-    else if (!e.target.checked) {
+    } else if (!e.target.checked) {
       const coursesId = addTeamCoursesId.filter((course) => {
-        return newObj[0].id !== course
-      })
-      setAddTeamCoursesId(coursesId)
+        return newObj[0].id !== course;
+      });
+      setAddTeamCoursesId(coursesId);
     }
   };
 
-  console.log('team courses Id' , addTeamUsersId);
+  console.log("team courses Id", addTeamUsersId);
 
   const handleUserCheckChange = (e) => {
     const email = e.target.value;
-    console.log('user title', email);
+    console.log("user title", email);
     const newObj = userData.filter((user) => {
       return user.email === email;
     });
 
     if (e.target.checked && email !== "undefined") {
       setAddTeamUsersId((pre) => [...pre, newObj[0].id]);
-    }
-    else if (!e.target.checked) {
+    } else if (!e.target.checked) {
       const usersId = addTeamUsersId.filter((user) => {
         console.log(user);
-        return newObj[0].id !== user
-      })
-      console.log('This is user id after filter ', usersId);
-      setAddTeamUsersId(usersId)
+        return newObj[0].id !== user;
+      });
+      console.log("This is user id after filter ", usersId);
+      setAddTeamUsersId(usersId);
     }
-    
   };
-
 
   const handlCourseAllSelect = () => {
     const selectItems = document.getElementsByClassName("course-check");
     if (checkedAllCourse) {
-      setAddTeamCoursesId([])
+      setAddTeamCoursesId([]);
       for (let item of selectItems) {
         item.checked = false;
       }
     } else {
-       coursesData.forEach(course =>{
-          setAddTeamCoursesId((pre) => [...pre, course.id])
-        })
+      coursesData.forEach((course) => {
+        setAddTeamCoursesId((pre) => [...pre, course.id]);
+      });
       for (let item of selectItems) {
         item.checked = true;
-       
       }
     }
   };
   const handlUserAllSelect = () => {
     const selectItems = document.getElementsByClassName("user-check");
     if (checkedAllUser) {
-      setAddTeamUsersId([])
+      setAddTeamUsersId([]);
       for (let item of selectItems) {
         item.checked = false;
       }
     } else {
-      userData.forEach(user =>{
-        setAddTeamUsersId((pre) => [...pre, user.id])
-      })
+      userData.forEach((user) => {
+        setAddTeamUsersId((pre) => [...pre, user.id]);
+      });
       for (let item of selectItems) {
         item.checked = true;
-
       }
     }
   };
 
   const handleDeleteCourse = (id) => {
     const obj = {
-        team_id: teamId,
-        course_ids: [id]
-  }
+      team_id: teamId,
+      course_ids: [id],
+    };
 
-  fetch("http://127.0.0.1:8000/remove_courses_from_team/", {
-    method: "POST",
-    body: JSON.stringify(obj),
-    headers: {
-      Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-      "Content-type": "application/json; charset=UTF-8",
-    },
-  }).then((response) => {
-    response.json().then(function (result) {
-      console.log(result);
-      window.location.reload();
-      // setTeamData(result);
+    fetch("http://127.0.0.1:8000/remove_courses_from_team/", {
+      method: "POST",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log(result);
+        window.location.reload();
+        // setTeamData(result);
+      });
     });
-  });
 
     // const obj = teamCourses.filter((course) => {
     //   return course.id !== id;
@@ -213,13 +207,13 @@ const AllTeams = ({ show }) => {
 
   const handleDeleteUser = (user) => {
     const userEmail = userData.filter((users) => {
-        return users.id === user;
-      });
-console.log('team name' , teamName);
+      return users.id === user;
+    });
+    console.log("team name", teamName);
     const obj = {
-        team_name: teamName,
-        user_emails: [userEmail[0].email]
-    }
+      team_name: teamName,
+      user_emails: [userEmail[0].email],
+    };
 
     fetch("http://127.0.0.1:8000/remove_users_from_team/", {
       method: "POST",
@@ -247,15 +241,12 @@ console.log('team name' , teamName);
     const selectItems = document.getElementsByClassName("course-check");
     for (let item of selectItems) {
       if (item.checked) {
-
         if (typeof teamCourses !== "undefined") {
-
-
           for (let i = 0; i < addTeamCoursesId.length; i++) {
             const element = addTeamCoursesId[i];
             if (teamCourses.includes(element)) {
               addTeamCoursesId.splice(i, 1);
-              i--; 
+              i--;
             }
           }
 
@@ -294,15 +285,15 @@ console.log('team name' , teamName);
 
   const getUSerFullName = (user) => {
     if (user) {
-    const name = userData.filter((users) => users.id === user)
-    return `${name[0].first_name} ${name[0].last_name}`
+      const name = userData.filter((users) => users.id === user);
+      return `${name[0].first_name} ${name[0].last_name}`;
     }
-  } 
+  };
 
   const getTeamCourseName = (course) => {
-    const title = coursesData.filter((courses) => courses.id === course)
-    return `${title[0].title}`
-  }
+    const title = coursesData.filter((courses) => courses.id === course);
+    return `${title[0].title}`;
+  };
 
   const handleAddUser = (e) => {
     e.preventDefault();
@@ -310,19 +301,18 @@ console.log('team name' , teamName);
     for (let item of selectItems) {
       if (item.checked) {
         if (typeof teamUsers !== "undefined") {
-
           for (let i = 0; i < addTeamUsersId.length; i++) {
             const element = addTeamUsersId[i];
             if (teamUsers.includes(element)) {
               addTeamUsersId.splice(i, 1);
-              i--; 
+              i--;
             }
           }
 
           const obj = {
             team_name: teamName,
             // user_emails: ["hammad@example.com"],
-            user_ids: addTeamUsersId
+            user_ids: addTeamUsersId,
           };
 
           fetch("http://127.0.0.1:8000/add_users_to_team/", {
@@ -341,7 +331,6 @@ console.log('team name' , teamName);
             });
           });
 
-
           // setTeamUser(() => [...teamUsers, newObj[0]]);
         } else {
           // setTeamUser([newObj[0]]);
@@ -355,10 +344,9 @@ console.log('team name' , teamName);
   };
 
   const handleDeleteTeam = (id) => {
-
     fetch("http://127.0.0.1:8000/delete_team/", {
       method: "DELETE",
-      body: JSON.stringify({team_id: id}),
+      body: JSON.stringify({ team_id: id }),
       headers: {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         "Content-type": "application/json; charset=UTF-8",
@@ -371,10 +359,11 @@ console.log('team name' , teamName);
         // setTeamData(result);
       });
     });
+  };
 
-  }
-
-  const handleSave = (e) => {};
+  const handleTeamUpdate = () => {
+    
+  };
 
   // console.log(process.env.REACT_APP_API_KEY);
 
@@ -476,7 +465,7 @@ console.log('team name' , teamName);
                               onClick={() => {
                                 setTeamName(team.name);
                                 setTeamUser(team.users);
-                                setTeamId(team.id)
+                                setTeamId(team.id);
                                 setTeamCourses(team.courses);
                               }}
                             >
@@ -507,7 +496,7 @@ console.log('team name' , teamName);
                   <input
                     type="text"
                     value={teamName}
-                    onChange={handleTeamName}
+                    onChange={(e) => handleTeamName(e)}
                     required
                     className="course-title"
                   />
@@ -538,8 +527,8 @@ console.log('team name' , teamName);
                                   //   className="allusers-name-container"
                                 >
                                   <span>
-                                    { getUSerFullName(user) }
-                                  {/* { userData.filter((users) => {
+                                    {getUSerFullName(user)}
+                                    {/* { userData.filter((users) => {
                                     if( users.id === user){
                                       return users.first_name
                                     }
@@ -589,16 +578,14 @@ console.log('team name' , teamName);
                                 onMouseLeave={() => setShowCourseDelete(false)}
                               >
                                 <td className={styles.borderLess}>
-                                  { getTeamCourseName(course)}
+                                  {getTeamCourseName(course)}
                                 </td>
                                 <td className={styles.borderLess}>
                                   {showCourseDelete ? (
                                     <button
                                       type="button"
                                       className={styles.deleteBtn}
-                                      onClick={() =>
-                                        handleDeleteCourse(course)
-                                      }
+                                      onClick={() => handleDeleteCourse(course)}
                                     >
                                       <i className="bi bi-trash"></i>
                                     </button>
@@ -606,9 +593,7 @@ console.log('team name' , teamName);
                                     <button
                                       type="button"
                                       style={{ color: "white" }}
-                                      onClick={() =>
-                                        handleDeleteCourse(course)
-                                      }
+                                      onClick={() => handleDeleteCourse(course)}
                                       className={styles.deleteBtn}
                                     >
                                       <i className="bi bi-trash"></i>
@@ -644,7 +629,9 @@ console.log('team name' , teamName);
                     </button>
                   </div>
 
-                  <div className="category-save-btn"></div>
+                  <div className="save-team-btn-section">
+                    <button type="button" onClick={() => handleTeamUpdate()}>Update Team</button>
+                  </div>
                 </form>
               </div>
             </div>
@@ -849,7 +836,7 @@ console.log('team name' , teamName);
                     onClick={() => {
                       setTeamName(team.name);
                       setTeamUser(team.users);
-                      setTeamId(team.id)
+                      setTeamId(team.id);
                       setTeamCourses(team.courses);
                       // setTeamDetail([team.Users, team.Courses]);
                     }}
@@ -867,8 +854,8 @@ console.log('team name' , teamName);
                           </span>
                         ) : (
                           <span className={styles.text_with_background}>
-                          {"0"}
-                        </span>
+                            {"0"}
+                          </span>
                         )
                         // team.Users.map((user) => {
                         //   return (
@@ -887,8 +874,8 @@ console.log('team name' , teamName);
                           </span>
                         ) : (
                           <span className={styles.text_with_background}>
-                          {"0"}
-                        </span>
+                            {"0"}
+                          </span>
                         )
                         // team.Courses.map((course) => {
                         //   return (
@@ -899,10 +886,15 @@ console.log('team name' , teamName);
                         // })
                       }
                     </td>
-                    <td><i className="bi bi-trash text-danger" onClick={(e) => {
-                       e.stopPropagation();
-                      handleDeleteTeam(team.id)
-                    }}></i></td>
+                    <td>
+                      <i
+                        className="bi bi-trash text-danger"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteTeam(team.id);
+                        }}
+                      ></i>
+                    </td>
                   </tr>
                 );
               })}

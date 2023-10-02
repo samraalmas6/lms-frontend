@@ -96,6 +96,11 @@ const AllCourse = ({ show, minDate }) => {
 
   const handleCourseContentData = (course) => {
     setCourseId(course.id);
+    setCourseTitle(course.title);
+    setCourseCategory(course.category)
+    setCourseStart(course.start_date)
+    setCourseEnd(course.end_date)
+    setCourseImg(course.course_image)
 
     fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
       method: "GET",
@@ -217,6 +222,7 @@ const AllCourse = ({ show, minDate }) => {
               setModuleData={setModuleData}
               courseContent={courseContent}
               courseId={courseId}
+              setCourseId={setCourseId}
             />
           </div>
         </div>
@@ -245,7 +251,7 @@ const AllCourse = ({ show, minDate }) => {
                       aria-controls="offcanvasRight"
                       onClick={() => {
                         handleCourseContentData(course);
-                        setCourseTitle(course.title);
+
                       }}
                     >
                       <td>{course.title}</td>

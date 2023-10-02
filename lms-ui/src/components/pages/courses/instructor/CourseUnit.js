@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import UpdateUnit from "./UpdateUnit";
 import { useNavigate } from "react-router-dom";
 
-const CourseUnit = ({ unitData, moduleId, showUnit }) => {
+const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, handleSaveUnit }) => {
   //  ************************* Unit Ref Hooks  ********************
   // ***************************************************************
 
@@ -21,7 +21,7 @@ const CourseUnit = ({ unitData, moduleId, showUnit }) => {
   const pdfSelector = useRef(null);
   const slideSelector = useRef(null);
 
-  const [unitTitle, setUnitTitle] = useState("");
+
   const [unitStart, setUnitStart] = useState("");
   const [unitEnd, setUnitEnd] = useState("");
   const [visibility, setVisibility] = useState("");
@@ -38,7 +38,9 @@ const CourseUnit = ({ unitData, moduleId, showUnit }) => {
   const [showUnitList, setShoshowUnitList] = useState(showUnit);
   const [showUnitContent, setShowUnitContent] = useState(false)
 
-  useEffect(() => {}, [0]);
+  useEffect(() => {
+
+  }, [0]);
 
   const handlUnitStart = (e) => {
     // startDateRefUnit.current.removeAttribute("class", "unit-start-field");
@@ -211,38 +213,39 @@ const CourseUnit = ({ unitData, moduleId, showUnit }) => {
     });
   };
 
-  const handleSaveUnit = (e) => {
-    e.preventDefault();
-    if (unitTitle) {
-      const obj = {
-        title: unitTitle,
-        description: "Unit Test Description",
-        start_date: "2023-12-25",
-        end_date: "2023-12-25",
-        module: moduleId,
-        updated_by: 1,
-      };
-      fetch("http://127.0.0.1:8000/api/units/", {
-        method: "POST",
-        body: JSON.stringify(obj),
-        headers: {
-          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      }).then((response) => {
-        if (response.status == 201) {
-          response.json().then(function (result) {
-            console.log(result);
-            setUnitTitle("");
-            // setModuleDescription("");
-            // window.location.reload();
-          });
-        } else {
-          console.log(response);
-        }
-      });
-    }
-  };
+
+  // const handleSaveUnit = () => {
+  //   // e.preventDefault();
+  //   if (unitTitle) {
+  //     const obj = {
+  //       title: unitTitle,
+  //       description: "Unit Test Description",
+  //       start_date: "2023-12-25T00:00:00Z",
+  //       end_date: "2023-12-25T00:00:00Z",
+  //       module: moduleId,
+  //       updated_by: 1,
+  //     };
+  //     fetch("http://127.0.0.1:8000/api/units/", {
+  //       method: "POST",
+  //       body: JSON.stringify(obj),
+  //       headers: {
+  //         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+  //         "Content-type": "application/json; charset=UTF-8",
+  //       },
+  //     }).then((response) => {
+  //       if (response.status == 201) {
+  //         response.json().then(function (result) {
+  //           console.log(result);
+  //           setUnitTitle("");
+  //           // setModuleDescription("");
+  //           // window.location.reload();
+  //         });
+  //       } else {
+  //         console.log(response);
+  //       }
+  //     });
+  //   }
+  // };
 
   return (
     <div className="">
@@ -698,7 +701,7 @@ const CourseUnit = ({ unitData, moduleId, showUnit }) => {
                     </div>
                   </div>
 
-                  {/* <div className="unit-form-section">
+                  <div className="unit-form-section">
                     <form className="unit-form">
                       <div className="video-section">
                         <div className="unit-selection-section  unit-selection-section-video">
@@ -832,7 +835,7 @@ const CourseUnit = ({ unitData, moduleId, showUnit }) => {
                         </button>
                       </div>
                     </form>
-                  </div> */}
+                  </div>
                 </div>
               );
             }
