@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../../styles/AssignmentView.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -19,7 +19,6 @@ function calculateSubmissionStatus(
     return <span className="done-status">Done</span>;
   } else if (isResubmit) {
     return <span className="resubmitted-status">Resubmitted</span>;
-    
   } else if (currentDate > formattedDueDate) {
     return <span className="late-submission-status">Late Submission</span>;
   } else {
@@ -41,6 +40,9 @@ function AssignmentView({ selectedAssignments }) {
   const [isFileInputVisible, setIsFileInputVisible] = useState(false);
   const [isConfirmButtonVisible, setIsConfirmButtonVisible] = useState(true);
   const [instructorFeedback, setInstructorFeedback] = useState(null);
+  const [apiData, setApiData] = useState([]);
+  const [message, setMessage] = useState("");
+  const  [assignmentid, setAssignmentid]= useState("");
 
   const assignments = [
     {
@@ -49,13 +51,38 @@ function AssignmentView({ selectedAssignments }) {
       description: "Complete the first assignment.",
       dueDate: "2023-09-30 14:00",
       points: 90,
-      resourceFiles: ["https://example.com/your-pdf-file.pdf" , "file2.doc"],
-      submissionLinks: ["https://example.com/your-file-url", "https://anotherlink.com"],
+      resourceFiles: ["https://example.com/your-pdf-file.pdf", "file2.doc"],
+      submissionLinks: [
+        "https://example.com/your-file-url",
+        "https://anotherlink.com",
+      ],
       feedback: "", // Add feedback property
       grade: null, // Add grade property
     },
     // Add more assignments here.
   ];
+
+  useEffect(() => {
+    const getAssignmentData = () => {
+      // Replace 'https://your-api-url.com/assignments' with your actual API endpoint
+      fetch("http://127.0.0.1:8000/api/assignments", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        response.json().then(function (result) {
+          console.log(result);
+          setApiData(result);
+        });
+      });
+    };
+    getAssignmentData();
+  }, [0]);
+  
+
+    
+    
 
   const simulateSubmission = () => {
     setTimeout(() => {
@@ -87,6 +114,7 @@ function AssignmentView({ selectedAssignments }) {
     setIsResubmit(false);
     setIsConfirmButtonVisible(true);
     setInstructorFeedback(null); // Reset feedback when changing assignments
+    setAssignmentid(assignment.id)
   }
 
   function handleToggleResubmit() {
@@ -107,7 +135,7 @@ function AssignmentView({ selectedAssignments }) {
   function handleLinkChange() {
     if (link.trim() !== "") {
       setLinks([...links, link]);
-      setLink("");
+      // setLink("");
     }
   }
 
@@ -115,7 +143,7 @@ function AssignmentView({ selectedAssignments }) {
     setIsFileInputVisible(!isFileInputVisible);
   }
 
-  function handleFileChange(event) { 
+  function handleFileChange(event) {
     const selectedFiles = event.target.files;
     setFiles([...files, ...selectedFiles]);
     setIsFileInputVisible(false);
@@ -123,8 +151,40 @@ function AssignmentView({ selectedAssignments }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    setShowConfirmationDialog(true);
-  }
+   
+      const obj = {
+        submitted_by: 1,
+        assignment:assignmentid,
+        submission_date: "2014-10-03T10:00:00Z",
+        content: link,
+        // Add other data properties as needed
+      };
+    
+      fetch("http://127.0.0.1:8000/api/assignment_submissions/", {
+        method: "POST",
+        body: JSON.stringify(obj),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status == 201) {
+          response.json().then(function (result) {
+            console.log(result);
+            setLink("");
+          
+            
+            
+          });
+        } else {
+          console.log(response);
+        }
+      });
+      setShowConfirmationDialog(true);
+    }
+  
+    
+  
 
   function handleConfirmSubmit() {
     setIsSubmitClicked(true);
@@ -134,14 +194,16 @@ function AssignmentView({ selectedAssignments }) {
 
   function handleCloseConfirmationDialog() {
     setShowConfirmationDialog(false);
-  }
+
+  } 
 
   return (
     <>
       <div className="app">
         <div className="assignment-view">
           <div className="assignment-list">
-            {assignments.map((assignment) => (
+           
+            {apiData.map((assignment) => (
               <div
                 key={assignment.id}
                 className={`assignment-item ${
@@ -164,11 +226,15 @@ function AssignmentView({ selectedAssignments }) {
                 <div className="detail-points-and-date">
                   <div className="detail-points">
                     <strong>Marks:</strong>
-                    {selectedAssignment.points}
+                    {selectedAssignment.marks}
                   </div>
                   <div className="detail-date">
                     <strong>Due date:</strong>
-                    {selectedAssignment.dueDate}
+                    {selectedAssignment.due_date.substr(0, 10)}
+                  </div>
+                  <div className="">
+                    <strong>Created At:</strong>
+                    {selectedAssignment.created_at.substr(0, 10)}
                   </div>
                 </div>
               </div>
@@ -230,7 +296,7 @@ function AssignmentView({ selectedAssignments }) {
                     <>
                       <ul>
                         {links.map((link, index) => (
-                          <li key={index}>
+                          <li key={index} className="lnk-upld">
                             <a
                               href={link}
                               target="_blank"
@@ -308,6 +374,8 @@ function AssignmentView({ selectedAssignments }) {
                               onChange={(e) => setLink(e.target.value)}
                               placeholder="Enter link URL"
                               className="lnk-text"
+
+
                             />
                             <button
                               type="button"
@@ -351,7 +419,7 @@ function AssignmentView({ selectedAssignments }) {
                                   <button
                                     type="button"
                                     onClick={handleSubmit}
-                                    className="submit-button"
+                                    className="save-btn"
                                     disabled={!selectedAssignment}
                                   >
                                     Submit
@@ -403,22 +471,22 @@ function AssignmentView({ selectedAssignments }) {
               )} */}
                 {/* Display Feedback and Grade */}
                 <>
-                {isSubmitClicked && (
-                  <div className="feedback-and-grade">
-                    <div className="feedback-and-grad">
-                      <div className="feedback">
-                        <strong>Feedback:</strong>{" "}
-                        {selectedAssignment.feedback || "No feedback yet"}
-                      </div>
-                      <div className="grade">
-                        <strong>Grade:</strong>{" "}
-                        {selectedAssignment.grade !== null
-                          ? `${selectedAssignment.grade} / ${selectedAssignment.points}`
-                          : "Not graded yet"}
+                  {isSubmitClicked && (
+                    <div className="feedback-and-grade">
+                      <div className="feedback-and-grad">
+                        <div className="feedback">
+                          <strong>Feedback:</strong>{" "}
+                          {selectedAssignment.feedback || "No feedback yet"}
+                        </div>
+                        <div className="grade">
+                          <strong>Grade:</strong>{" "}
+                          {selectedAssignment.grade !== null
+                            ? `${selectedAssignment.grade} / ${selectedAssignment.points}`
+                            : "Not graded yet"}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
                 </>
               </div>
             </div>
