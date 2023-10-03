@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import assignmentData from "../content/Data/assignmentData";
-import courseData from "../content/Data/courseData";
-import courseModuleData from "../content/Data/courseModulesData";
-import courseUnitData from "../content/Data/courseUnitData";
+// import assignmentData from "../content/Data/assignmentData";
+// import courseData from "../content/Data/courseData";
+// import courseModuleData from "../content/Data/courseModulesData";
+// import courseUnitData from "../content/Data/courseUnitData";
 import userData from "../content/Data//userData";
 import Collapse from "react-collapse";
 import Filters from "../hooks/Filters";
@@ -36,11 +36,16 @@ const AssignmentGrading = () => {
   const [activeFilter, setActiveFilter] = useState("All");
   const [module, setModule] = useState([]);
   const [unit, setUnit] = useState([]);
+  const [courseContent, setCourseContent] = useState([]);
+  const [moduleContent, setModuleContent] = useState([]);
+  const [unitContent, setUnitContent] = useState([]);
+  const [assignmentContent, setAssignmentContent] = useState([]);
+  const [moduleId, setModuleId] = useState(null);
   const [isItemOpen, setIsItemOpen] = useState(
-    Array(courseData.length).fill(false)
+    Array(courseContent.length).fill(false)
   );
   const [isSubItemOpen, setIsSubItemOpen] = useState(
-    Array(courseData.length).fill(false)
+    Array(courseContent.length).fill(false)
   );
 
   // useEffect(() => {
@@ -49,10 +54,10 @@ const AssignmentGrading = () => {
   // console.log("I am course data", courseData);
 
   const minLength = Math.min(
-    courseData.length,
-    courseModuleData.length,
-    courseUnitData.length,
-    assignmentData.length
+    courseContent.length,
+    moduleContent.length,
+    unitContent.length,
+    assignmentContent.length
   );
 
   const elements = [];
@@ -61,12 +66,12 @@ const AssignmentGrading = () => {
     elements.push(
       <h6 key={i}>
         {/* Course: */}
-        {courseData[i].title},{/* Module:  */}
-        {courseModuleData[i].title} /,
+        {courseContent[i].title},{/* Module:  */}
+        {moduleContent[i].title} /,
         {/* Unit: */}
-        {courseUnitData[i].title}/,
+        {unitContent[i].title}/,
         {/* assignment :  */}
-        {assignmentData[i].assignment}
+        {assignmentContent[i].assignment}
       </h6>
     );
   }
@@ -116,11 +121,11 @@ const AssignmentGrading = () => {
   useEffect(() => {
     // Initialize userStatusMap with "Pending" for each assignment
     const initialStatusMap = {};
-    assignmentData.forEach((item) => {
+    assignmentContent.forEach((item) => {
       initialStatusMap[item.id] = "Pending";
     });
     setUserStatusMap(initialStatusMap);
-  }, []);
+  }, [0]);
 
   const openPopup = (assignmentId) => {
     setSelectedAssignment(assignmentId);
@@ -141,7 +146,7 @@ const AssignmentGrading = () => {
   };
 
   const calculateStatus = (assignmentId, inputGrade) => {
-    const selectedAssignmentData = assignmentData.find(
+    const selectedAssignmentData = assignmentContent.find(
       (item) => item.id === assignmentId
     );
     if (selectedAssignmentData) {
@@ -174,7 +179,7 @@ const AssignmentGrading = () => {
   };
 
   // Filter assignments based on the selected filter option
-  const filteredAssignments = assignmentData.filter((item) => {
+  const filteredAssignments = assignmentContent.filter((item) => {
     if (filterOption === "All") {
       return true; // Show all assignments
     } else if (filterOption === "Passed") {
@@ -187,6 +192,77 @@ const AssignmentGrading = () => {
     return true;
   });
 
+  useEffect(() => {
+    const getCourseData = () => {
+      fetch("http://127.0.0.1:8000/api/courses", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        response.json().then(function (result) {
+          console.log(result);
+          setCourseContent(result);
+        });
+      });
+    };
+    const getModuleData = () => {
+      fetch("http://127.0.0.1:8000/api/modules/", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        response.json().then(function (result) {
+          console.log(result);
+          setModuleContent(result);
+        });
+      });
+    };
+    const getUnitData = () => {};
+    const getAssignmentData = () => {
+      fetch("http://127.0.0.1:8000/api/units/", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        response.json().then(function (result) {
+          console.log(result);
+          setAssignmentContent(result);
+        });
+      });
+    };
+    getCourseData();
+    getModuleData();
+    getUnitData();
+    getAssignmentData();
+  }, [0]);
+
+  const handleCourseModule = (id) => {
+    fetch(`http://127.0.0.1:8000/api/courses/${id}/modules/`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log(result);
+        setModuleContent(result);
+      });
+    });
+    fetch("http://127.0.0.1:8000/api/modules/", {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log(result);
+        setUnitContent(result);
+      });
+    });
+  };
   return (
     <div className="grading-screen-main-container">
       <div className="filters-main-container">
@@ -254,11 +330,16 @@ const AssignmentGrading = () => {
       <div className="course-title">
         {/* <h6>Course Data</h6> */}
         <ul>
-          {courseData.map((course, index) => (
+          {courseContent.map((course, index) => (
             <li key={course.id}>
-              <button onClick={() => toggleItem(index)}>
+              <button
+                onClick={() => {
+                  toggleItem(index);
+                  handleCourseModule(course.id);
+                }}
+              >
                 {course.title}
-                <i class='fas fa-angle-double-down'></i>
+                <i class="fas fa-angle-double-down"></i>
               </button>
               <Collapse isOpened={isItemOpen[index]}>
                 <ul>
@@ -340,7 +421,7 @@ const AssignmentGrading = () => {
                                 <p className="content">
                                   <a
                                     href={
-                                      assignmentData.find(
+                                      assignmentContent.find(
                                         (item) => item.id === selectedAssignment
                                       )?.content
                                     }
@@ -348,7 +429,7 @@ const AssignmentGrading = () => {
                                     rel="noopener noreferrer"
                                   >
                                     {
-                                      assignmentData.find(
+                                      assignmentContent.find(
                                         (item) => item.id === selectedAssignment
                                       )?.content
                                     }
@@ -375,14 +456,14 @@ const AssignmentGrading = () => {
                                     onChange={handleGradeChange}
                                     className="grade-input"
                                     max={
-                                      assignmentData.find(
+                                      assignmentContent.find(
                                         (item) => item.id === selectedAssignment
                                       )?.Grade || 100
                                     }
                                   />
                                   <span className="grade-text">
                                     out of{" "}
-                                    {assignmentData.find(
+                                    {assignmentContent.find(
                                       (item) => item.id === selectedAssignment
                                     )?.Grade || 100}
                                   </span>
