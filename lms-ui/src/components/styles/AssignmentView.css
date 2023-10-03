@@ -2,9 +2,9 @@
   background-color: #ffff;
   position: relative;
   width: 277px;
-  margin-top: -287px;
+  margin-top: -120px;
   box-shadow: 5px 8px 19px -3px rgb(177, 173, 173);
-  left: -159%;
+  left: -132%;
   border-radius: 5px;
   border: 2px solid #0056b3;
   height: auto;
@@ -81,7 +81,7 @@ element.style {
   margin-top: 30px;
 } */
 
-.submit-button {
+.save-btn {
   cursor: pointer;
   width: 122px;
   border: 1px solid #8e8b8b;
@@ -263,7 +263,7 @@ element.style {
   background-color: #d4dbe7;
     width: 239px;
     height: 48px;
-    margin-left: 16px;
+    margin-left: -15px;
     border-radius: 5px;
     text-align: center;
     padding-top: 5px;
@@ -276,7 +276,11 @@ element.style {
 }
 
 /* Add this CSS to your AssignmentView.css file or in a separate CSS file */
-ul.upload {
+.upload {
+  list-style: none;
+  padding-left: 0; 
+}
+.resources{
   list-style: none;
   padding-left: 0; 
 }
@@ -380,20 +384,20 @@ input[type="file"] {
 }
 
 /* ****************************       Theses Css class should be change   ******************** */
-
-.ul {
+/* 
+/* .ul {
   list-style-type: none; /* Remove default list bullet points */
-  padding: 0;
+  /* padding: 0; */
   
-}
+/* } */
 
-.li {
+/* .li {
   display: flex; /* Use flexbox for layout */
-  align-items: center; /* Vertically center the content */
-  justify-content: space-between; /* Space between items */
-  margin-bottom: 10px; /* Add margin for spacing between list items */
-  width: 300px;
-}
+  /* align-items: center; /* Vertically center the content */
+  /* justify-content: space-between; /* Space between items */
+  /* margin-bottom: 10px; /* Add margin for spacing between list items */
+  /* width: 300px;
+} */ 
 
 
 /* *********************************************************************************** */
@@ -614,6 +618,7 @@ background-color: #35172d;
 .fil-text{
   font-size: 16px;
   margin-right: 82px;
+  margin-top: -32px;
 }
 .head{
 filter: brightness(1.2) saturate(328%) hue-rotate(400deg) contrast(1) grayscale(28%);
@@ -635,7 +640,15 @@ margin-left: 1px;
   width: 227px;
   border-radius: 5px;
   font-family: ui-serif;
+  
 }
+ 
+.lnk-upld{
+  list-style: none;
+  padding-left: 0; 
+}
+
+
 .feedback-and-grade{
   background-color: #f9fcff;
   margin-top: 61px;
