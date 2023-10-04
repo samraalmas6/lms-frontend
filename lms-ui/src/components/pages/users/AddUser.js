@@ -153,11 +153,6 @@ function AddUser() {
           sendEmail()
         }
         
-        // else if (response.status == 404) {
-        //   response.json().then(function (res) {
-        //     setInvalidUser(res)
-        //   });
-        // }
         else {
           console.log(response);
         }
@@ -178,28 +173,28 @@ function AddUser() {
         }
       }
      
-
-    //   setFirstName("");
-    //   setLastName("");
-    //   setPassword("");
-    //   setEmail("");
-    //   setGender('')
-    //   setCity("");
-    //   setPhoneNumber("");
-    //   setIsActive(false);
-    //   setUserType("");
     }
-    // if (firstName === "" || lastName === "" || email === "") {
-    //   alert("Fill in the required fields");
-    //   return;
-    // } else {
-    //   alert("user created successfully");
-    // }
   };
 
   // Excel Import Functionality
 
   const handleExcelFile = (e) => {
+
+    const sendEmail = async () => {
+      const serviceId = "service_x39w5wk";
+      const templateId = "template_yakcx3c";
+      try {
+        await emailjs.send(serviceId, templateId, {
+          name: `${firstName} ${lastName}`,
+          recipient: email,
+          message: "Verify Account",
+          sender: "LMS",
+        });
+        alert("email successfully sent check inbox");
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
     const requestAPI = (user) => {
       fetch(`${"http://127.0.0.1:8000/register/"}`, {
@@ -215,7 +210,7 @@ function AddUser() {
             setFirstName(result.first_name)
             setLastName(result.last_name)
             setEmail(result.email)
-            
+            sendEmail()
             console.log(result);
           });
         }
@@ -238,14 +233,6 @@ function AddUser() {
       const keys = Object.keys(obj[0]);
       console.log(keys);
       const newObj = parseData.map(function (obj) {
-        // obj["firstName"] = obj["first Name"];
-        // obj["lastName"] = obj["last Name"];
-        // obj["phoneNumber"] = obj["phone number"];
-        // obj["userType"] = obj["user type"];
-        // delete obj["first Name"];
-        // delete obj["last Name"];
-        // delete obj["phone number"];
-        // delete obj["user type"];
         return obj;
       });
       console.log('new obj',newObj);
