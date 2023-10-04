@@ -670,3 +670,17 @@ hr {
     display: flex;
     align-items: center;
 }
+
+.add-content-unit{
+    width: 15%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.unit-content-file-vidoe-options{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+
+}

@@ -30,7 +30,7 @@ const AllCourse = ({ show, minDate }) => {
         },
       }).then((response) => {
         response.json().then(function (result) {
-          console.log(result);
+        
           setCourseContent(result);
         });
       });
@@ -45,7 +45,7 @@ const AllCourse = ({ show, minDate }) => {
         },
       }).then((response) => {
         response.json().then(function (result) {
-          console.log(result);
+         
           setCategoryData(result);
         });
       });
@@ -55,7 +55,7 @@ const AllCourse = ({ show, minDate }) => {
     getCategoryData();
   }, [0]);
 
-  console.log("Team Data", teamData);
+ 
 
   const handleCourseTitle = (e) => {
     setCourseTitle(e.target.value);
@@ -89,10 +89,10 @@ const AllCourse = ({ show, minDate }) => {
       }).then((response) => {
         if (response.status == 201) {
           response.json().then(function (result) {
-            console.log(result);
+            setCourseContent((pre) => [...pre, result])
             setCourseCategory("");
             setCourseTitle("");
-            window.location.reload();
+            // window.location.reload();
           });
         } else {
           console.log(response);
@@ -117,12 +117,25 @@ const AllCourse = ({ show, minDate }) => {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      response.json().then(function (result) {
-        console.log("Api result: ", result);
-        setModuleData(result);
-      });
+      if(response.status === 404 ){
+        response.json().then(function (result) {
+          console.log("Api result: ", result);
+          setModuleData(result);
+        });
+      }
+      else if(response.status === 200) {
+        response.json().then(function (result) {
+          console.log("Api result: ", result);
+          setModuleData(result);
+        });
+      }
+      else {
+        console.log(response);
+      }
     });
   };
+  console.log('Module Data', moduleData);
+
 
   return (
     <div>
@@ -235,8 +248,9 @@ const AllCourse = ({ show, minDate }) => {
             />
           </div>
         </div>
-        <table className="table">
-          <thead>
+        <table class="table table-striped ">
+
+          <thead class="table-info">
             <tr>
               <th scope="col">Course Title</th>
               <th scope="col">Description</th>

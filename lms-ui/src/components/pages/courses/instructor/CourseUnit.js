@@ -2,7 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import UpdateUnit from "./UpdateUnit";
 import { useNavigate } from "react-router-dom";
 
-const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, handleSaveUnit }) => {
+const CourseUnit = ({
+  unitData,
+  moduleId,
+  showUnit,
+  unitTitle,
+  setUnitTitle,
+}) => {
   //  ************************* Unit Ref Hooks  ********************
   // ***************************************************************
 
@@ -20,13 +26,16 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
   const slideSection = useRef(null);
   const pdfSelector = useRef(null);
   const slideSelector = useRef(null);
-
-  const [unitId, setUnitId] = useState(null)
+  const [initUnitName, setInitUnitName] = useState(
+    unitData.length === 0 ? Number(1) : Number(unitData.length)
+  );
+  const [unitId, setUnitId] = useState(null);
 
   const [unitStart, setUnitStart] = useState("");
   const [unitEnd, setUnitEnd] = useState("");
   const [visibility, setVisibility] = useState("");
   const [unitFiles, setUnitFiles] = useState([]);
+  const [unitVideos, setUnitVideos] = useState([]);
   const [videoUrl, setVidoUrl] = useState("");
   const [videoTitle, setVideoTitle] = useState("");
   const [unitPDF, setUnitPDF] = useState("");
@@ -37,11 +46,13 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
 
   const [showAddUnit, setShowAddUnit] = useState(!showUnit);
   const [showUnitList, setShoshowUnitList] = useState(showUnit);
-  const [showUnitContent, setShowUnitContent] = useState(false)
+  const [showUnitContent, setShowUnitContent] = useState(false);
 
   useEffect(() => {
-
-  }, [0]);
+    setInitUnitName(
+      unitData.length === 0 ? Number(1) : Number(unitData.length + 1)
+    );
+  }, [unitData]);
 
   const handlUnitStart = (e) => {
     // startDateRefUnit.current.removeAttribute("class", "unit-start-field");
@@ -108,7 +119,6 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
       pdfSection.current.setAttribute("id", "hide-field");
     }
     setUnitPDF(file);
-    console.log(file.name);
   };
   const handleUnitSlide = (e) => {
     let file = e.target.files[0];
@@ -130,7 +140,9 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
   };
 
   const handleUnitContent = (unit) => {
-    setUnitId(unit.id)
+    setUnitId(unit.id);
+
+      //      Unit File API 
     fetch(`http://127.0.0.1:8000/api/units/${unit.id}/files`, {
       method: "GET",
       headers: {
@@ -138,15 +150,25 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
       },
     }).then((response) => {
       response.json().then(function (result) {
-        console.log("Api result Files: ", result);
         setUnitFiles(result);
-        // setUnitEnd(unit.end_date.substr(0,10))
-        // setUnitStart(unit.start_date.substr(0,10))
+      });
+    });
+
+       //      Unit Video API 
+    fetch(`http://127.0.0.1:8000/api/units/${unit.id}/videos`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        setUnitVideos(result);
       });
     });
   };
 
   const handleUploadVideo = (e) => {
+    console.log("unit id ", unitId);
     e.preventDefault();
     if (videoUrl) {
       const obj = {
@@ -179,17 +201,22 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
   };
 
   const handleUploadFile = (e) => {
+    console.log("unit id ", unitId);
+
     e.preventDefault();
     const formData = new FormData();
     if (unitSlide) {
       formData.append("file", unitSlide);
-      formData.append("title", "Anonymous" + unitData[0].id);
-      formData.append("unit", 5);
+      formData.append(
+        "title",
+        unitSlide.name.split(".").slice(0, 1).toString()
+      );
+      formData.append("unit", unitId);
       formData.append("updated_by", 1);
     } else {
       formData.append("file", unitPDF);
-      formData.append("title", "Anonymous" + unitData[0].id);
-      formData.append("unit", 5);
+      formData.append("title", unitPDF.name.split(".").slice(0, 1).toString());
+      formData.append("unit", unitId);
       formData.append("updated_by", 1);
     }
     fetch("http://127.0.0.1:8000/api/files/", {
@@ -202,7 +229,6 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
     }).then((response) => {
       if (response.status == 201) {
         response.json().then(function (result) {
-          console.log(result);
           setUnitPDF(null);
           setUnitSlide(null);
           // setVidoUrl("");
@@ -215,39 +241,40 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
     });
   };
 
-
-  // const handleSaveUnit = () => {
-  //   // e.preventDefault();
-  //   if (unitTitle) {
-  //     const obj = {
-  //       title: unitTitle,
-  //       description: "Unit Test Description",
-  //       start_date: "2023-12-25T00:00:00Z",
-  //       end_date: "2023-12-25T00:00:00Z",
-  //       module: moduleId,
-  //       updated_by: 1,
-  //     };
-  //     fetch("http://127.0.0.1:8000/api/units/", {
-  //       method: "POST",
-  //       body: JSON.stringify(obj),
-  //       headers: {
-  //         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-  //         "Content-type": "application/json; charset=UTF-8",
-  //       },
-  //     }).then((response) => {
-  //       if (response.status == 201) {
-  //         response.json().then(function (result) {
-  //           console.log(result);
-  //           setUnitTitle("");
-  //           // setModuleDescription("");
-  //           // window.location.reload();
-  //         });
-  //       } else {
-  //         console.log(response);
-  //       }
-  //     });
-  //   }
-  // };
+  const handleSaveUnit = (unitTitle) => {
+    setUnitTitle(unitTitle);
+    // e.preventDefault();
+    if (unitTitle) {
+      const obj = {
+        title: unitTitle,
+        description: "Unit Test Description",
+        start_date: "2023-12-25T00:00:00Z",
+        end_date: "2023-12-25T00:00:00Z",
+        module: moduleId,
+        updated_by: 1,
+      };
+      fetch("http://127.0.0.1:8000/api/units/", {
+        method: "POST",
+        body: JSON.stringify(obj),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status == 201) {
+          response.json().then(function (result) {
+            setInitUnitName((pre) => Number(pre + 1));
+            // setUnitTitle("");
+            setUnitId(() => result.id);
+            // setModuleDescription("");
+            // window.location.reload();
+          });
+        } else {
+          console.log(response);
+        }
+      });
+    }
+  };
 
   return (
     <div className="">
@@ -258,7 +285,7 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
         >
           {/* <h1 className="text-center rounded unit-list-heading" >Units</h1> */}
           {unitData.length === 0 ||
-          unitData.detail == "No unit found for this module."
+          unitData.detail === "No unit found for this module."
             ? unitData.detail
             : unitData &&
               unitData.map((unit) => {
@@ -269,22 +296,21 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
                     className="accordion-item mb-0 mt-1 unitSection"
                     role="button"
                     aria-expanded="false"
-                    onClick={() => {
+                    onClick={(e) => {
                       handleUnitContent(unit);
+                      e.stopPropagation()
                     }}
                   >
-                    {/* {(function() {
-                setUnitEnd(unit.end_date.substr(0,10))
-                setUnitStart(unit.start_date.substr(0,10))
-              }())} */}
                     <h2
                       className="accordion-header unit-collapse-button"
                       id={`flush-unit${unit.id}`}
+       
                     >
                       <div
                         className="accordion-button collapsed unit-button w-100"
                         type="button"
                         data-bs-toggle="collapse"
+                      
                         data-bs-target={`#unit${unit.id}`}
                         aria-expanded="false"
                         aria-controls={`flush-unit${unit.id}`}
@@ -328,7 +354,7 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
                               type="button"
                               data-bs-toggle="dropdown"
                               aria-expanded="false"
-                              onClick={() => null}
+                              onClick={(e) => e.stopPropagation()}
                             ></i>
                             <div className="dropdown-menu option-main-container module-option">
                               <ul
@@ -379,15 +405,149 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
                               justifyContent: "space-between",
                               width: "15%",
                             }}
-                          >
-                            <h5>Add Content</h5>
-                            <i
-                              class="bi bi-plus-circle plus-icon"
-                              onClick={() => setShowUnitContent(true)}
-                            ></i>
-                          </div>
+                          ></div>
                           <div className="file-content">
-                            <ul className="outer-ul">
+                    
+                            <table class="table table-striped ">
+                            <caption className="caption-top mb-0 text-success"><strong>Unit Files</strong></caption>
+                            {
+                              unitFiles.length === 0 ||
+                              unitFiles.detail ===
+                                "No files found for this unit." ? unitFiles.detail :(
+                                  <>
+                                  <thead class="table-light">
+                                <tr>
+                                  <th scope="col">#</th>
+                                  <th scope="col">Title</th>
+                                  <th scope="col">type</th>
+                                  <th scope="col">File</th>
+                                  <th scope="col">Created At</th>
+                                  <th scope="col">Action</th>
+                                  <th scope="col"></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                { unitFiles &&
+                                  unitFiles.map((file, index) => {
+                                    return (
+                                      <tr key={file.id}>
+                                        <td>{index + 1}</td>
+                                        <td>{file.title.slice(0, 20)}...</td>
+                                        <td>
+                                          {file.file.split(".").slice(-1)}
+                                        </td>
+                                        <td>
+                                          <a href={file.file} target="_blank">
+                                            {file.file.substr(34)}
+                                          </a>
+                                        </td>
+                                        <td>{file.created_at.substr(0, 10)}</td>
+                                        <td colspan="2">
+                                          {/* {String(file.is_active).toUpperCase()} */}
+                                          <ul className="unit-content-file-vidoe-options">
+                                            <li>
+                                              <div className="form-check form-switch visibility">
+                                                <input
+                                                  className="form-check-input "
+                                                  type="checkbox"
+                                                  role="switch"
+                                                  value={visibility}
+                                                  onChange={handleVisibility}
+                                                  id="flexSwitchCheckDefault"
+                                                />
+                                              </div>
+                                            </li>
+                                            <li>
+                                              <i
+                                                className="bi bi-trash text-danger"
+                                                onClick={() => null}
+                                              ></i>
+                                            </li>
+                                            <li>
+                                              <i class="bi bi-copy text-info"></i>
+                                            </li>
+                                          </ul>
+                                        </td>
+                                      </tr>
+                                    );
+                                  })
+                                }
+                              </tbody>
+                                  </>
+                                )
+                            }
+
+                            </table>
+                            <hr />
+
+                            <table class="table table-striped ">
+                            <caption className="caption-top mb-0 text-warning"><strong>Unit Videos</strong></caption>
+                            {
+                              unitVideos.length === 0 ||
+                              unitVideos.detail ===
+                                "No video found for this unit." ? unitVideos.detail : (
+                                <> 
+                                <thead class="table-light">
+                                <tr>
+                                  <th scope="col">#</th>
+                                  <th scope="col">Title</th>
+                                  <th scope="col">Video</th>
+                                  <th scope="col">Created At</th>
+                                  <th scope="col">Action</th>
+                                  <th scope="col"></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                { unitVideos &&
+                                  unitVideos.map((video, index) => {
+                                    return (
+                                      <tr key={video.id}>
+                                        <td>{index + 1}</td>
+                                        <td>{video.title.slice(0, 20)}...</td>
+                                        <td>
+                                          <a href={video.url} target="_blank">
+                                            {video.url}
+                                          </a>
+                                        </td>
+                                        <td>{video.created_at.substr(0, 10)}</td>
+                                        <td colspan="2">
+                                          {/* {String(file.is_active).toUpperCase()} */}
+                                          <ul className="unit-content-file-vidoe-options">
+                                            <li>
+                                              <div className="form-check form-switch visibility">
+                                                <input
+                                                  className="form-check-input "
+                                                  type="checkbox"
+                                                  role="switch"
+                                                  value={visibility}
+                                                  onChange={handleVisibility}
+                                                  id="flexSwitchCheckDefault"
+                                                />
+                                              </div>
+                                            </li>
+                                            <li>
+                                              <i
+                                                className="bi bi-trash text-danger"
+                                                onClick={() => null}
+                                              ></i>
+                                            </li>
+                                            <li>
+                                              <i class="bi bi-copy text-info"></i>
+                                            </li>
+                                          </ul>
+                                        </td>
+                                      </tr>
+                                    );
+                                  })
+                                }
+                              </tbody>
+                                </>
+                              )
+                            }
+
+                            </table>
+
+                            {/* <ul className="outer-ul">
                               {unitFiles.length === 0 ||
                               unitFiles.detail ==
                                 "No files found for this unit."
@@ -449,144 +609,151 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
                                       </li>
                                     );
                                   })}
-                            </ul>
+                            </ul> */}
                           </div>
-                          {
-                            showUnitContent && <div className="unit-form-section">
-                            <form className="unit-form">
-                              <div className="unit-video-section">
-                                <div className="unit-selection-section unit-selection-section-video">
-                                  <span className="unit-form-span-title">
-                                    Video
-                                  </span>
-                                  <i
-                                    class="bi bi-plus-circle plus-icon unit-form-i-title"
-                                    ref={videoAddRef}
-                                    onClick={(e) => hanldeVideoUpload(e)}
-                                  ></i>
-                                </div>
-                                <div
-                                  className="unit-field-section unit-video-main-container"
-                                  id="hide-field"
-                                  ref={videoFieldRef}
-                                >
+                          <div className="add-content-unit">
+                            <h5>Add Content</h5>
+                            <i
+                              class="bi bi-plus-circle plus-icon"
+                              onClick={() => setShowUnitContent((pre) => !pre)}
+                            ></i>
+                          </div>
+
+                          {showUnitContent && (
+                            <div className="unit-form-section">
+                              <form className="unit-form">
+                                <div className="unit-video-section">
+                                  <div className="unit-selection-section unit-selection-section-video">
+                                    <span className="unit-form-span-title">
+                                      Video
+                                    </span>
+                                    <i
+                                      class="bi bi-plus-circle plus-icon unit-form-i-title"
+                                      ref={videoAddRef}
+                                      onClick={(e) => hanldeVideoUpload(e)}
+                                    ></i>
+                                  </div>
                                   <div
-                                    className="unit-video-fields"
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                    }}
+                                    className="unit-field-section unit-video-main-container"
+                                    id="hide-field"
+                                    ref={videoFieldRef}
+                                  >
+                                    <div
+                                      className="unit-video-fields"
+                                      style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                      }}
+                                    >
+                                      <input
+                                        type="text"
+                                        className="video-title-field"
+                                        value={videoTitle}
+                                        onChange={(e) => hanldeVidoTitle(e)}
+                                        placeholder="Enter Video Title"
+                                      />
+                                      <input
+                                        type="url"
+                                        className="video-url"
+                                        value={videoUrl}
+                                        onChange={(e) => hanldeVido(e)}
+                                        placeholder="Video Link"
+                                      />
+                                    </div>
+                                    <div className="unit-video-icon-section">
+                                      <i
+                                        class="bi bi-check-lg check-unit-content text-success"
+                                        onClick={(e) => handleUploadVideo(e)}
+                                      ></i>
+                                      <i
+                                        class="bi bi-x check-unit-content text-danger"
+                                        onClick={() => handleAddVido()}
+                                      ></i>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="slides-section">
+                                  <div className="unit-selection-section">
+                                    <span className="unit-form-span-title">
+                                      Slide
+                                    </span>
+                                    <i
+                                      class="bi bi-plus-circle plus-icon unit-form-i-title"
+                                      ref={slideSelector}
+                                      onClick={() => hanldeSlideUpload()}
+                                    ></i>
+                                  </div>
+                                  <div
+                                    className="unit-field-section"
+                                    ref={slideSection}
+                                    id="hide-field"
                                   >
                                     <input
-                                      type="text"
-                                      className="video-title-field"
-                                      value={videoTitle}
-                                      onChange={(e) => hanldeVidoTitle(e)}
-                                      placeholder="Enter Video Title"
+                                      type="file"
+                                      className="slide-field"
+                                      ref={slideFieldRef}
+                                      onChange={handleUnitSlide}
+                                      style={{ display: "none" }}
                                     />
-                                    <input
-                                      type="url"
-                                      className="video-url"
-                                      value={videoUrl}
-                                      onChange={(e) => hanldeVido(e)}
-                                      placeholder="Video Link"
-                                    />
-                                  </div>
-                                  <div className="unit-video-icon-section">
+                                    <span>{unitSlide && unitSlide.name}</span>
                                     <i
                                       class="bi bi-check-lg check-unit-content text-success"
-                                      onClick={(e) => handleUploadVideo(e)}
+                                      onClick={(e) => handleUploadFile(e)}
                                     ></i>
                                     <i
                                       class="bi bi-x check-unit-content text-danger"
-                                      onClick={() => handleAddVido()}
+                                      onClick={() => handleRemoveSlide()}
                                     ></i>
                                   </div>
                                 </div>
-                              </div>
-                              <div className="slides-section">
-                                <div className="unit-selection-section">
-                                  <span className="unit-form-span-title">
-                                    Slide
-                                  </span>
-                                  <i
-                                    class="bi bi-plus-circle plus-icon unit-form-i-title"
-                                    ref={slideSelector}
-                                    onClick={() => hanldeSlideUpload()}
-                                  ></i>
+                                <div className="pdf-section">
+                                  <div className="unit-selection-section">
+                                    <span className="unit-form-span-title">
+                                      PDF
+                                    </span>
+                                    <i
+                                      class="bi bi-plus-circle plus-icon unit-form-i-title"
+                                      ref={pdfSelector}
+                                      onClick={() => hanldePDFUpload()}
+                                    ></i>
+                                  </div>
+                                  <div
+                                    className="unit-field-section"
+                                    id="hide-field"
+                                    ref={pdfSection}
+                                  >
+                                    <input
+                                      type="file"
+                                      className="pdf-field"
+                                      onChange={(e) => handleUnitPDF(e)}
+                                      ref={pdfFieldRef}
+                                      style={{ display: "none" }}
+                                    />
+                                    <span>{unitPDF && unitPDF.name}</span>
+                                    <i
+                                      class="bi bi-check-lg check-unit-content text-success"
+                                      onClick={(e) => handleUploadFile(e)}
+                                    ></i>
+                                    <i
+                                      class="bi bi-x check-unit-content text-danger"
+                                      onClick={() => handleRemovePDF()}
+                                    ></i>
+                                  </div>
                                 </div>
-                                <div
-                                  className="unit-field-section"
-                                  ref={slideSection}
-                                  id="hide-field"
-                                >
-                                  <input
-                                    type="file"
-                                    className="slide-field"
-                                    ref={slideFieldRef}
-                                    onChange={handleUnitSlide}
-                                    style={{ display: "none" }}
-                                  />
-                                  <span>{unitSlide && unitSlide.name}</span>
-                                  <i
-                                    class="bi bi-check-lg check-unit-content text-success"
-                                    onClick={(e) => handleUploadFile(e)}
-                                  ></i>
-                                  <i
-                                    class="bi bi-x check-unit-content text-danger"
-                                    onClick={() => handleRemoveSlide()}
-                                  ></i>
+                                <div className="assignment-section">
+                                  <div className="unit-selection-section">
+                                    <span className="unit-form-span-title">
+                                      Assignment
+                                    </span>
+                                    <i
+                                      class="bi bi-plus-circle plus-icon unit-form-i-title"
+                                      onClick={() => handleAssignment()}
+                                    ></i>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="pdf-section">
-                                <div className="unit-selection-section">
-                                  <span className="unit-form-span-title">
-                                    PDF
-                                  </span>
-                                  <i
-                                    class="bi bi-plus-circle plus-icon unit-form-i-title"
-                                    ref={pdfSelector}
-                                    onClick={() => hanldePDFUpload()}
-                                  ></i>
-                                </div>
-                                <div
-                                  className="unit-field-section"
-                                  id="hide-field"
-                                  ref={pdfSection}
-                                >
-                                  <input
-                                    type="file"
-                                    className="pdf-field"
-                                    onChange={(e) => handleUnitPDF(e)}
-                                    ref={pdfFieldRef}
-                                    style={{ display: "none" }}
-                                  />
-                                  <span>{unitPDF && unitPDF.name}</span>
-                                  <i
-                                    class="bi bi-check-lg check-unit-content text-success"
-                                    onClick={(e) => handleUploadFile(e)}
-                                  ></i>
-                                  <i
-                                    class="bi bi-x check-unit-content text-danger"
-                                    onClick={() => handleRemovePDF()}
-                                  ></i>
-                                </div>
-                              </div>
-                              <div className="assignment-section">
-                                <div className="unit-selection-section">
-                                  <span className="unit-form-span-title">
-                                    Assignment
-                                  </span>
-                                  <i
-                                    class="bi bi-plus-circle plus-icon unit-form-i-title"
-                                    onClick={() => handleAssignment()}
-                                  ></i>
-                                </div>
-                              </div>
-                            </form>
-                          </div>
-                          }
-
+                              </form>
+                            </div>
+                          )}
                         </div>
                         <div className="slide-section"></div>
                         <div className="pdf-section"></div>
@@ -828,13 +995,13 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
                       </div>
 
                       <div className="saveModule-button-section">
-                        <button
+                        {/* <button
                           type="button"
-                          onClick={(e) => handleSaveUnit(moduleId)}
+                          // onClick={(e) => handleSaveUnit(moduleId)}
                           className="btn btn-secondary saveUnit-button"
                         >
                           Save Unit
-                        </button>
+                        </button> */}
                       </div>
                     </form>
                   </div>
@@ -849,6 +1016,7 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
             className="btn"
             onClick={() => {
               handleShowAddUnit();
+              handleSaveUnit("Unit " + initUnitName);
               setIncrement((pre) => pre + 1);
               setListUnit((pre) => [...pre, increment + 1]);
             }}
@@ -858,31 +1026,6 @@ const CourseUnit = ({ unitData, moduleId, showUnit, unitTitle, setUnitTitle, han
         </div>
       </div>
     </div>
-
-    // *********************  Old Unit design   *******************
-    // ************************************************************
-
-    // <div className="ms-5">
-    //   <UpdateUnit setShowUnit={setShowUnit} setUnitData={setUnitData} minDate={minDate}/>
-    //   <div
-    //     className={`offcanvas offcanvas-top unit-list-show ${showUnitContent}`}
-    //     id="show-unit"
-    //     tabindex="-1"
-    //   >
-    //     <div
-    //       className={"styles.addBtnSection"}
-    //       style={{ display: "flex", justifyContent: "space-between" }}
-    //     >
-    //       <h3>Update Unit</h3>
-    //       <button
-    //         type="button"
-    //         onClick={() => setShowUnitContent("")}
-    //         className="btn btn-close text-danger"
-    //       ></button>
-    //     </div>
-    //     <UpdateUnit setShowUnit={setShowUnit} unitContent={unitContent}  minDate={minDate} setUnitData={setUnitData}/>
-    //   </div>
-    // </div>
   );
 };
 

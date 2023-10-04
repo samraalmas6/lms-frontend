@@ -69,7 +69,7 @@ const AllUsers = () => {
             <tbody>
               {userData && userData.map((user) => {
                 return (
-                  <tr key={user.email}>
+                  <tr key={user.id}>
                     <td scope="row" className="allusers-name-container">
                       
                       <div>

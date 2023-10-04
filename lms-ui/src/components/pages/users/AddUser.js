@@ -27,6 +27,7 @@ function AddUser() {
   const options = useMemo(() => countryList().getData(), []);
   const [errors, setErros] = useState({});
 
+  const [exelObj, setExcelObj] = useState(null)
   useEffect(() => emailjs.init("739xGz6oDs9E1tq_w"), []);
 
   const handleFirstNameChange = (e) => {
@@ -199,8 +200,34 @@ function AddUser() {
   // Excel Import Functionality
 
   const handleExcelFile = (e) => {
+
+    const requestAPI = (user) => {
+      fetch(`${"http://127.0.0.1:8000/register/"}`, {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Token ${sessionStorage.getItem('user_token')}`,
+        },
+      }).then((response) => {
+        if (response.status == 201) {
+          response.json().then(function (result) {
+            setFirstName(result.first_name)
+            setLastName(result.last_name)
+            setEmail(result.email)
+            
+            console.log(result);
+          });
+        }
+        else {
+          console.log(response);
+        }
+      });
+    }
+
     const reader = new FileReader();
     reader.readAsBinaryString(e.target.files[0]);
+    console.log(reader);
     reader.onload = (e) => {
       const data = e.target.result;
       const workbook = XLSX.read(data, { type: "binary" });
@@ -211,21 +238,27 @@ function AddUser() {
       const keys = Object.keys(obj[0]);
       console.log(keys);
       const newObj = parseData.map(function (obj) {
-        obj["firstName"] = obj["first Name"];
-        obj["lastName"] = obj["last Name"];
-        obj["phoneNumber"] = obj["phone number"];
-        obj["userType"] = obj["user type"];
-        delete obj["first Name"];
-        delete obj["last Name"];
-        delete obj["phone number"];
-        delete obj["user type"];
+        // obj["firstName"] = obj["first Name"];
+        // obj["lastName"] = obj["last Name"];
+        // obj["phoneNumber"] = obj["phone number"];
+        // obj["userType"] = obj["user type"];
+        // delete obj["first Name"];
+        // delete obj["last Name"];
+        // delete obj["phone number"];
+        // delete obj["user type"];
         return obj;
       });
-      console.log(newObj);
-      excelFile.current.value = null;
-      alert("Users created");
-    };
+      console.log('new obj',newObj);
+      setExcelObj(obj)
+
+      newObj.forEach((user) => {
+        requestAPI(user)
+      })
+
+     
+   
   };
+}
   return (
     <div className="col">
       <div className={styles.container}>
@@ -245,7 +278,7 @@ function AddUser() {
               <input
                 type="file"
                 accept=".xlsx, xls"
-                onChange={handleExcelFile}
+                onChange={(e) => handleExcelFile(e)}
                 ref={excelFile}
               />
             </label>
