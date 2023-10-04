@@ -3,7 +3,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import '../../../styles/editor.css'
 
 
-const AssigDesc = () => {
+const AssigDesc = ({content}) => {
     const handleEditorChange = (content, editor) => {
         console.log('Content was updated:', content);
       };
