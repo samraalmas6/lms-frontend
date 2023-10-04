@@ -324,8 +324,12 @@ const AllTeams = ({ show }) => {
             },
           }).then((response) => {
             response.json().then(function (result) {
-              console.log(result);
+              console.log('API result ',result);
+              // setTeamUser(pre => [...pre, result])
 
+              // conuserData.filter((user, index) => {
+              //   return result.added_users[index] === user.id
+              // })
               window.location.reload();
               // setTeamData(result);
             });

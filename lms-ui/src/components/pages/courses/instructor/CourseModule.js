@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import CourseUnit from "./CourseUnit";
 
-const CourseModule = ({ moduleData, courseId }) => {
+const CourseModule = ({ moduleData,setModuleData, courseId }) => {
  
 
   // ****************   Module Refs   *********************
@@ -13,7 +13,7 @@ const CourseModule = ({ moduleData, courseId }) => {
   const endDatePickerRefModule = useRef(null);
 
   
-  const [initModuleName, setInitModuleName] = useState(moduleData.length === 'undefined' || moduleData.detail === "No module found for this course." ?  Number(1) : Number(moduleData.length + 1))
+  const [initModuleName, setInitModuleName] = useState(moduleData.length === 0  ?  Number(1) : Number(moduleData.length+1))
   const [moduleId, setModuleId] = useState(null)
 
   const [showAddModule, setShowAddModule] = useState(false);
@@ -34,7 +34,7 @@ const CourseModule = ({ moduleData, courseId }) => {
 
 
   useEffect(() => {
-    setInitModuleName(moduleData.length === 'undefined' || moduleData.detail === "No module found for this course." ?  Number(1) : Number(moduleData.length))
+    setInitModuleName(moduleData.length === 0 ?  Number(1) : Number(moduleData.length+1))
   },[moduleData])
 
   const handleModuleTitle = (e) => {
@@ -94,7 +94,7 @@ const CourseModule = ({ moduleData, courseId }) => {
         start_date: "2023-12-25T00:00:00Z",
         end_date: "2023-12-25T00:00:00Z",
         course: courseId,
-        updated_by: 1,
+        updated_by: sessionStorage.getItem('user_id'),
       };
       fetch("http://127.0.0.1:8000/api/modules/", {
         method: "POST",
@@ -106,7 +106,7 @@ const CourseModule = ({ moduleData, courseId }) => {
       }).then((response) => {
         if (response.status === 201) {
           response.json().then(function (result) {
-     
+            // setModuleData((pre) => [...pre, result])
             setInitModuleName((pre) => Number(pre+1))
             setModuleId(() => result.id)
             // setModuleTitle("");

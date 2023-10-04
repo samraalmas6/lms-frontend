@@ -99,10 +99,22 @@ const CourseContent = ({
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      response.json().then(function (result) {
-        console.log("Api result: ", result);
-        setModuleData(result);
-      });
+      if(response.status === 404 ){
+        response.json().then(function (result) {
+          console.log("Api result: ", result);
+          setModuleData([result]);
+        });
+      }
+      else if(response.status === 200) {
+        response.json().then(function (result) {
+          console.log("Api result: ", result);
+          setModuleData(result);
+        });
+      }
+      else {
+        console.log(response);
+      }
+
     });
     
   };
@@ -367,7 +379,7 @@ const CourseContent = ({
             </div> */}
             <hr style={{ margin: "20px 0px 20px 0px" }} />
             <div className="course-module-section">
-              <CourseModule moduleData={moduleData} courseId={courseId} />
+              <CourseModule moduleData={moduleData} setModuleData={setModuleData} courseId={courseId} />
             </div>
             <div className="category-save-btn">
               <button
