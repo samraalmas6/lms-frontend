@@ -36,6 +36,7 @@ const AssignmentScreen = () => {
     setShowFileAttach(true);
   };
 
+
   return (
     <div>
       <div className="main-container">
@@ -52,13 +53,9 @@ const AssignmentScreen = () => {
             <div className="description-container"><AssigDesc /></div>
           </div>
 
-          {/* ***************   There is an issue with selecting a file   *************** */}
-
-          {/* <div className="file">
+          {/* <div className="">
             <FileUploadComponent />
           </div> */}
-
-          {/* ***************   There is an issue with selecting a file   *************** */}
 
         </div>
         <div className="side-container">
@@ -115,3 +112,4 @@ const AssignmentScreen = () => {
 };
 
 export default AssignmentScreen;
+

@@ -4,6 +4,7 @@ import VideoPlayer from "./VideoPlayer";
 
 import ModuleCard from "./ModuleCard";
 import AssignmentView from "./AssignmentView";
+import { useLocation } from "react-router-dom";
 
 const coursesData = [
   {
@@ -231,6 +232,8 @@ const coursesData = [
 ];
 
 function CourseTable({ modules, assignments }) {
+  const {state} = useLocation();
+  
   const [activeTab, setActiveTab] = useState("Overview");
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [videoCompleted, setVideoCompleted] = useState(false);
@@ -268,7 +271,7 @@ function CourseTable({ modules, assignments }) {
       });
     };
     const getModuleData = () => {
-      fetch("http://127.0.0.1:8000/api/modules/", {
+      fetch(`http://127.0.0.1:8000/api/courses/${state.courseId}/modules`, {
         method: "GET",
         headers: {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,

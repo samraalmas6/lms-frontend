@@ -46,11 +46,11 @@ const Sidebar = () => {
               className="list-unstyled flex-column pl-3 collapse sidebar-nav-sub show"
               id="submenu1"
             >
-              <li className="nav-item mb-2 ">
+              {/* <li className="nav-item mb-2 ">
                 <a className="nav-link text-secondary" href="">
                   Overview
                 </a>
-              </li>
+              </li> */}
               <li className="nav-item mb-2 ">
                 <Link
                   to="/adduser"
@@ -87,11 +87,11 @@ const Sidebar = () => {
                   All Teams
                 </a>
               </li>
-              <li className="nav-item mb-2 ">
+              {/* <li className="nav-item mb-2 ">
                 <a className="nav-link text-secondary" href="">
                   Add Type
                 </a>
-              </li>
+              </li> */}
             </ul>
           </li>
 
@@ -110,11 +110,11 @@ const Sidebar = () => {
               className="list-unstyled flex-column pl-3 collapse sidebar-nav-sub show"
               id="submenu2"
             >
-              <li className="nav-item mb-2 ">
+              {/* <li className="nav-item mb-2 ">
                 <a className="nav-link text-secondary" href="">
                   Overview
                 </a>
-              </li>
+              </li> */}
               <li className="nav-item mb-2 ">
                 <a className="nav-link text-secondary" href="/course/create">
                   Create Course

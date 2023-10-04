@@ -139,11 +139,11 @@ const CourseUnit = ({
     setShowAddUnit(true);
   };
 
-  const handleUnitContent = (unit) => {
-    setUnitId(unit.id);
+  const handleUnitContent = (id) => {
+    setUnitId(id);
 
       //      Unit File API 
-    fetch(`http://127.0.0.1:8000/api/units/${unit.id}/files`, {
+    fetch(`http://127.0.0.1:8000/api/units/${id}/files`, {
       method: "GET",
       headers: {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
@@ -155,7 +155,7 @@ const CourseUnit = ({
     });
 
        //      Unit Video API 
-    fetch(`http://127.0.0.1:8000/api/units/${unit.id}/videos`, {
+    fetch(`http://127.0.0.1:8000/api/units/${id}/videos`, {
       method: "GET",
       headers: {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
@@ -190,6 +190,7 @@ const CourseUnit = ({
             console.log(result);
             setVideoTitle("");
             setVidoUrl("");
+           
             // setModuleDescription("");
             // window.location.reload();
           });
@@ -248,8 +249,8 @@ const CourseUnit = ({
       const obj = {
         title: unitTitle,
         description: "Unit Test Description",
-        start_date: "2023-12-25T00:00:00Z",
-        end_date: "2023-12-25T00:00:00Z",
+        // start_date: "2023-12-25T00:00:00Z",
+        // end_date: "2023-12-25T00:00:00Z",
         module: moduleId,
         updated_by: 1,
       };
@@ -297,7 +298,7 @@ const CourseUnit = ({
                     role="button"
                     aria-expanded="false"
                     onClick={(e) => {
-                      handleUnitContent(unit);
+                      handleUnitContent(unit.id);
                       e.stopPropagation()
                     }}
                   >
@@ -441,7 +442,7 @@ const CourseUnit = ({
                                             {file.file.substr(34)}
                                           </a>
                                         </td>
-                                        <td>{file.created_at.substr(0, 10)}</td>
+                                        <td>{file.created_at}</td>
                                         <td colspan="2">
                                           {/* {String(file.is_active).toUpperCase()} */}
                                           <ul className="unit-content-file-vidoe-options">
@@ -509,7 +510,7 @@ const CourseUnit = ({
                                             {video.url}
                                           </a>
                                         </td>
-                                        <td>{video.created_at.substr(0, 10)}</td>
+                                        <td>{video.created_at}</td>
                                         <td colspan="2">
                                           {/* {String(file.is_active).toUpperCase()} */}
                                           <ul className="unit-content-file-vidoe-options">

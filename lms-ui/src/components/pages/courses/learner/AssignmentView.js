@@ -78,36 +78,39 @@ function AssignmentView({ selectedAssignments }) {
         });
       });
     };
+
+
+    const getGradingData = () => {
+      console.log("Fetching grading data...");
+  
+      fetch("http://127.0.0.1:8000/api/assignment_gradings", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            console.error("Error fetching grading data:", response.statusText);
+            return;
+          }
+  
+          response.json().then(function (result) {
+            console.log("Grading data received:", result);
+            setFeedbackData(result);
+            setGradeData(result);
+          });
+        })
+        .catch((error) => {
+          console.error("Fetch error:", error);
+        });
+    };
+
     getAssignmentData();
+    getGradingData();
   }, [0]);
 
-  const getGradingData = () => {
-    console.log("Fetching grading data...");
-
-    fetch("http://127.0.0.1:8000/api/assignment_gradings", {
-      method: "GET",
-      headers: {
-        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          console.error("Error fetching grading data:", response.statusText);
-          return;
-        }
-
-        response.json().then(function (result) {
-          console.log("Grading data received:", result);
-          setFeedbackData(result);
-          setGradeData(result);
-        });
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-      });
-  };
-
-  getGradingData();
+  
 
   const simulateSubmission = () => {
     setTimeout(() => {

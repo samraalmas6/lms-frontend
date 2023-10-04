@@ -11,10 +11,12 @@ const AllCourse = ({ show, minDate }) => {
 
   const [courseCategory, setCourseCategory] = useState("");
   const [courseTitle, setCourseTitle] = useState("");
-  const [courseStart, setCourseStart] = useState('2023-09-08T00:00:00Z')
-  const [courseEnd, setCourseEnd] = useState('2023-10-08T00:00:00Z')
+  const [courseStart, setCourseStart] = useState('2023-09-08')
+  const [courseEnd, setCourseEnd] = useState('2023-10-08')
   const [courseImg, setCourseImg] = useState("");
   const [uploadImg, setUploadImg] = useState("");
+  const [visibility, setVisibility] = useState();
+
 
   const [courseId, setCourseId] = useState(null);
 
@@ -71,8 +73,8 @@ const AllCourse = ({ show, minDate }) => {
       const obj = {
         title: courseTitle,
         description: "Test Description",
-        start_date: courseStart,
-        end_date: courseEnd,
+        // start_date: courseStart,
+        // end_date: courseEnd,
         author: sessionStorage.getItem('user_id'),
         updated_by: sessionStorage.getItem('user_id'),
         category: [courseCategory],
@@ -107,9 +109,10 @@ const AllCourse = ({ show, minDate }) => {
     setCourseId(course.id);
     setCourseTitle(course.title);
     setCourseCategory(course.category)
-    setCourseStart(course.start_date)
-    setCourseEnd(course.end_date)
+    // setCourseStart(course.start_date)
+    // setCourseEnd(course.end_date)
     setCourseImg(course.course_image)
+    setVisibility(course.is_active)
 
     fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
       method: "GET",
@@ -245,6 +248,8 @@ const AllCourse = ({ show, minDate }) => {
               courseContent={courseContent}
               courseId={courseId}
               setCourseId={setCourseId}
+              visibility= {visibility}
+              setVisibility={setVisibility}
             />
           </div>
         </div>

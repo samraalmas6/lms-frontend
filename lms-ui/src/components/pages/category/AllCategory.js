@@ -63,7 +63,9 @@ const AllCategory = ({ show }) => {
     const obj = {
       title: categoryName,
       description: "This is test cat",
-      parent: 1,
+      parent: parentCat,
+      user: sessionStorage.getItem("user_id"),
+      updated_by: sessionStorage.getItem("user_id"),
       // updated_by: sessionStorage.getItem('name')
     };
 
@@ -176,7 +178,7 @@ const AllCategory = ({ show }) => {
                 {categoryData &&
                   categoryData.map((category) => {
                     return (
-                      <option value={category.title} key={category.id}>
+                      <option value={category.id} key={category.id}>
                         {category.title}
                       </option>
                     );

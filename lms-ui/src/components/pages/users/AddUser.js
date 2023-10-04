@@ -180,21 +180,6 @@ function AddUser() {
 
   const handleExcelFile = (e) => {
 
-    const sendEmail = async () => {
-      const serviceId = "service_x39w5wk";
-      const templateId = "template_yakcx3c";
-      try {
-        await emailjs.send(serviceId, templateId, {
-          name: `${firstName} ${lastName}`,
-          recipient: email,
-          message: "Verify Account",
-          sender: "LMS",
-        });
-        alert("email successfully sent check inbox");
-      } catch (error) {
-        console.log(error);
-      }
-    }
 
     const requestAPI = (user) => {
       fetch(`${"http://127.0.0.1:8000/register/"}`, {
@@ -210,7 +195,7 @@ function AddUser() {
             setFirstName(result.first_name)
             setLastName(result.last_name)
             setEmail(result.email)
-            sendEmail()
+            // sendEmail()
             console.log(result);
           });
         }

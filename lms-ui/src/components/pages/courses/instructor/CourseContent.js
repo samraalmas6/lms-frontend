@@ -17,7 +17,9 @@ const CourseContent = ({
   setModuleData,
   courseContent,
   courseId,
-  setCourseId
+  setCourseId,
+  visibility,
+  setVisibility
 }) => {
   const navigate = useNavigate();
   const inpRef = useRef("");
@@ -29,9 +31,9 @@ const CourseContent = ({
   const [courseEnd, setCourseEnd] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
   const [courseDes, setCourseDes] = useState("");
-  const [visibility, setVisibility] = useState(false);
   // const [course, setCourse] = useState([courseData[0]]);
 
+console.log('this is visibility', visibility);
   const [showModule, setShowModule] = useState(false);
 
   const [showModuleContent, setShowModuleContent] = useState("");
@@ -80,18 +82,44 @@ const CourseContent = ({
     console.log(courseImg);
   };
   const handleVisibility = (e) => {
-    setVisibility(e.target.value);
+    // setVisibility(e.target.value);
+    setVisibility(!visibility)
+    const active = e.target.value
+    const obj = {
+      title: courseTitle,
+      author: sessionStorage.getItem("user_id"),
+      updated_by: sessionStorage.getItem("user_id"),
+      category: courseCategory,
+      is_active: !visibility
+    }
+    fetch(`http://127.0.0.1:8000/api/courses/${courseId}/`, {
+      method: "PUT",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log(result);
+          // window.location.reload();
+        });
+      } else {
+        console.log(response);
+      }
+    });
   };
 
   const handleCourseContent = (course) => {
     setCourseId(course.id);
     setCourseTitle(course.title);
     setCourseCategory(course.category)
-    setCourseStart(course.start_date.substr(0,10))
-    setCourseEnd(course.end_date.substr(0,10))
+    setCourseStart(course.start_date)
+    setCourseEnd(course.end_date)
     setCourseImg(course.course_image)
     setCourseDes(`<p>${course.description}</p>`);
-    setVisibility(() => course.visibility);
+    setVisibility(() => course.is_active);
 
     fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
       method: "GET",
@@ -127,8 +155,8 @@ const CourseContent = ({
       }
       formData.append("title", courseTitle);
       formData.append("description", courseDescription);
-      formData.append("start_date", courseStart+'T00:00:00Z');
-      formData.append("end_date", courseEnd+'T00:00:00Z');
+      formData.append("start_date", courseStart);
+      formData.append("end_date", courseEnd);
       formData.append("category", [courseCategory]);
       formData.append("author",sessionStorage.getItem('user_id'));
       formData.append("updated_by", sessionStorage.getItem('user_id'));
@@ -260,6 +288,7 @@ const CourseContent = ({
                         className="form-check-input "
                         type="checkbox"
                         role="switch"
+                        checked={visibility}
                         value={visibility}
                         onChange={handleVisibility}
                         id="flexSwitchCheckDefault"

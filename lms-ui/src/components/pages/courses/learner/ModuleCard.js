@@ -196,8 +196,7 @@ const ModuleCard = ({
         <div className="module-list">
           <ul className="module-content">
             {/* {module.lessons.map((lesson) => { */}
-            {moduleUnit.length === 0 || moduleUnit.detail == "No objects found"
-              ? moduleUnit.detail
+            {moduleUnit.length === 0 ? "No Unit Found for this Module"
               : moduleUnit &&
                 moduleUnit.map((unit, index) => {
                   const lessonAssignments = unit.assignments || [];
@@ -269,10 +268,8 @@ const ModuleCard = ({
                                 <li>{unit.title}</li>
                               </div>
                               <div className="lecture-pdf">
-                                {unitPDF.length === 0 ||
-                                unitPDF.detail ==
-                                  "No files found for this unit."
-                                  ? unitPDF.detail
+                                {unitPDF.length === 0 
+                                  ? "No Document"
                                   : unitPDF &&
                                     unitPDF.map((pdf) => {
                                       return (
@@ -292,10 +289,8 @@ const ModuleCard = ({
                               <div
                                 onClick={() => setShowAssignment((pre) => !pre)}
                               >
-                                {unitAssignment.length === 0 ||
-                                unitAssignment.detail ==
-                                  "No Assignment found for this unit."
-                                  ? unitAssignment.detail
+                                {unitAssignment.length === 0
+                                  ? "No Assignment"
                                   : unitAssignment &&
                                     unitAssignment.map((assignment) => {
                                       return (

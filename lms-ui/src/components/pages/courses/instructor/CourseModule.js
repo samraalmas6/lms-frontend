@@ -94,8 +94,8 @@ const CourseModule = ({ moduleData,setModuleData, courseId }) => {
       const obj = {
         title: moduleTitle,
         description: 'module Description',
-        start_date: "2023-12-25T00:00:00Z",
-        end_date: "2023-12-25T00:00:00Z",
+        // start_date: moduleStart,
+        // end_date: moduleEnd,
         course: courseId,
         updated_by: sessionStorage.getItem('user_id'),
       };
@@ -251,11 +251,12 @@ const CourseModule = ({ moduleData,setModuleData, courseId }) => {
                       data-bs-parent="#module-section"
                     >
                       <div className="accordion-body">
-                        <CourseUnit unitData={unitData}
+                        <CourseUnit 
+                          unitData={unitData}
                           moduleId={moduleId}
                           showUnit={true}
                           unitTitle={unitTitle}
-                        setUnitTitle={setUnitTitle}
+                          setUnitTitle={setUnitTitle}
                       
 
                         />
@@ -370,8 +371,8 @@ const CourseModule = ({ moduleData,setModuleData, courseId }) => {
                        unitData={unitData}
                        moduleId={moduleId}
                        showUnit={false}
-                        unitTitle={unitTitle}
-                        setUnitTitle={setUnitTitle}
+                       unitTitle={unitTitle}
+                       setUnitTitle={setUnitTitle}
                        
                         />
                  <div className="saveModule-button-section">
