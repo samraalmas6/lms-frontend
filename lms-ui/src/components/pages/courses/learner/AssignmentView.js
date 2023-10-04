@@ -42,7 +42,9 @@ function AssignmentView({ selectedAssignments }) {
   const [instructorFeedback, setInstructorFeedback] = useState(null);
   const [apiData, setApiData] = useState([]);
   const [message, setMessage] = useState("");
-  const  [assignmentid, setAssignmentid]= useState("");
+  const [assignmentid, setAssignmentid] = useState("");
+  const [feedbackData, setFeedbackData] = useState(null); // State variable for feedback
+  const [gradeData, setGradeData] = useState(null);
 
   const assignments = [
     {
@@ -64,7 +66,6 @@ function AssignmentView({ selectedAssignments }) {
 
   useEffect(() => {
     const getAssignmentData = () => {
-      // Replace 'https://your-api-url.com/assignments' with your actual API endpoint
       fetch("http://127.0.0.1:8000/api/assignments", {
         method: "GET",
         headers: {
@@ -79,10 +80,34 @@ function AssignmentView({ selectedAssignments }) {
     };
     getAssignmentData();
   }, [0]);
-  
 
-    
-    
+  const getGradingData = () => {
+    console.log("Fetching grading data...");
+
+    fetch("http://127.0.0.1:8000/api/assignment_gradings", {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          console.error("Error fetching grading data:", response.statusText);
+          return;
+        }
+
+        response.json().then(function (result) {
+          console.log("Grading data received:", result);
+          setFeedbackData(result);
+          setGradeData(result);
+        });
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+      });
+  };
+
+  getGradingData();
 
   const simulateSubmission = () => {
     setTimeout(() => {
@@ -114,7 +139,7 @@ function AssignmentView({ selectedAssignments }) {
     setIsResubmit(false);
     setIsConfirmButtonVisible(true);
     setInstructorFeedback(null); // Reset feedback when changing assignments
-    setAssignmentid(assignment.id)
+    setAssignmentid(assignment.id);
   }
 
   function handleToggleResubmit() {
@@ -151,40 +176,34 @@ function AssignmentView({ selectedAssignments }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-   
-      const obj = {
-        submitted_by: 1,
-        assignment:assignmentid,
-        submission_date: "2014-10-03T10:00:00Z",
-        content: link,
-        // Add other data properties as needed
-      };
-    
-      fetch("http://127.0.0.1:8000/api/assignment_submissions/", {
-        method: "POST",
-        body: JSON.stringify(obj),
-        headers: {
-          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      }).then((response) => {
-        if (response.status == 201) {
-          response.json().then(function (result) {
-            console.log(result);
-            setLink("");
-          
-            
-            
-          });
-        } else {
-          console.log(response);
-        }
-      });
-      setShowConfirmationDialog(true);
-    }
-  
-    
-  
+
+    const obj = {
+      submitted_by: 1,
+      assignment: assignmentid,
+      submission_date: "2014-10-03T10:00:00Z",
+      content: link,
+      // Add other data properties as needed
+    };
+
+    fetch("http://127.0.0.1:8000/api/assignment_submissions/", {
+      method: "POST",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      if (response.status == 201) {
+        response.json().then(function (result) {
+          console.log(result);
+          setLink("");
+        });
+      } else {
+        console.log(response);
+      }
+    });
+    setShowConfirmationDialog(true);
+  }
 
   function handleConfirmSubmit() {
     setIsSubmitClicked(true);
@@ -194,15 +213,13 @@ function AssignmentView({ selectedAssignments }) {
 
   function handleCloseConfirmationDialog() {
     setShowConfirmationDialog(false);
-
-  } 
+  }
 
   return (
     <>
       <div className="app">
         <div className="assignment-view">
           <div className="assignment-list">
-           
             {apiData.map((assignment) => (
               <div
                 key={assignment.id}
@@ -228,13 +245,13 @@ function AssignmentView({ selectedAssignments }) {
                     <strong>Marks:</strong>
                     {selectedAssignment.marks}
                   </div>
+                  <div className="detail-create">
+                    <strong>Created At:</strong>
+                    {selectedAssignment.created_at.substr(0, 10)}
+                  </div>
                   <div className="detail-date">
                     <strong>Due date:</strong>
                     {selectedAssignment.due_date.substr(0, 10)}
-                  </div>
-                  <div className="">
-                    <strong>Created At:</strong>
-                    {selectedAssignment.created_at.substr(0, 10)}
                   </div>
                 </div>
               </div>
@@ -374,8 +391,6 @@ function AssignmentView({ selectedAssignments }) {
                               onChange={(e) => setLink(e.target.value)}
                               placeholder="Enter link URL"
                               className="lnk-text"
-
-
                             />
                             <button
                               type="button"
@@ -476,12 +491,14 @@ function AssignmentView({ selectedAssignments }) {
                       <div className="feedback-and-grad">
                         <div className="feedback">
                           <strong>Feedback:</strong>{" "}
-                          {selectedAssignment.feedback || "No feedback yet"}
+                          {feedbackData
+                            ? feedbackData.comments
+                            : "No feedback yet"}
                         </div>
                         <div className="grade">
                           <strong>Grade:</strong>{" "}
-                          {selectedAssignment.grade !== null
-                            ? `${selectedAssignment.grade} / ${selectedAssignment.points}`
+                          {gradeData !== null
+                            ? `${gradeData.marks} / ${selectedAssignment.points}`
                             : "Not graded yet"}
                         </div>
                       </div>
