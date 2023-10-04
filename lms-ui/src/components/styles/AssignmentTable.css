@@ -64,6 +64,14 @@
     height:auto;
     margin-left: 337px;
     margin-top: 117px;
+    /* display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; */
+  }
+
+  .submit-button.popup{
+    margin-left: 0px;
   }
   
   .close-button {
@@ -166,7 +174,7 @@
     margin-top: 7px;
     font-size: 17px;
 }
-.submit-button{
+.send-btn{
     background-color: #008CBA;
     color: white;
     border: none;

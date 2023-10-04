@@ -223,7 +223,7 @@ function AssignmentTable() {
               </span>
             </div>
 
-            <button onClick={handleSubmit} className="submit-button">
+            <button onClick={handleSubmit} className="send-btn">
               Submit
             </button>
           </div>

@@ -1,110 +1,58 @@
 import React, { useEffect, useState } from "react";
-import assignmentData from "../content/Data/assignmentData";
-import courseData from "../content/Data/courseData";
-import courseModuleData from "../content/Data/courseModulesData";
-import courseUnitData from "../content/Data/courseUnitData";
-import userData from "../content/Data//userData";
+// import assignmentData from "../content/Data/assignmentData";
+// import courseData from "../content/Data/courseData";
+// import courseModuleData from "../content/Data/courseModulesData";
+// import courseUnitData from "../content/Data/courseUnitData";
+// import userData from "../content/Data//userData";
 import Collapse from "react-collapse";
-import Filters from "../hooks/Filters";
-import SubmittedAssignTable from "../content/SubmittedAssignTable";
 import "../styles/AssignmentTable.css";
 import "../styles/AssignmentGrading.css";
 const AssignmentGrading = () => {
-  const data = [
-    {
-      id: 1,
-      userName: "User 1",
-      submissionDate: "2023-09-30",
-      status: "Passed",
-    },
-    {
-      id: 2,
-      userName: "User 2",
-      submissionDate: "2023-09-30",
-      status: "Pending",
-    },
-    {
-      id: 3,
-      userName: "User 3",
-      submissionDate: "2023-09-29",
-      status: "Not Passed",
-    },
-    // Add more data here
-  ];
-
-  // const [courseData, setCourseData] = useState([]);
-  const [activeFilter, setActiveFilter] = useState("All");
-  const [module, setModule] = useState([]);
-  const [unit, setUnit] = useState([]);
-  const [isItemOpen, setIsItemOpen] = useState(
-    Array(courseData.length).fill(false)
+  const [courseContent, setCourseContent] = useState([]);
+  const [moduleContent, setModuleContent] = useState([]);
+  const [unitContent, setUnitContent] = useState([]);
+  const [assignmentContent, setAssignmentContent] = useState([]);
+  const [assignmentSubmissionContent, setAssignmentSubmissionContent] =
+    useState([]);
+  const [assignmentGrading, setAssignmentGrading] = useState([]);
+  const [assignmentFilter, setAssignmentFilter] = useState(null);
+  const [isCourseOpen, setIsCourseOpen] = useState(
+    Array(courseContent.length).fill(false)
   );
-  const [isSubItemOpen, setIsSubItemOpen] = useState(
-    Array(courseData.length).fill(false)
+  const [isModuleOpen, setIsModuleOpen] = useState(
+    Array(moduleContent.length).fill(false)
+  );
+  const [isUnitOpen, setIsUnitOpen] = useState(
+    Array(unitContent.length).fill(false)
+  );
+  const [isAssignmentOpen, setIsAssignmentOpen] = useState(
+    Array(assignmentContent.length).fill(false)
   );
 
-  // useEffect(() => {
-  //   setCourseData[courseData];
-  // });
-  // console.log("I am course data", courseData);
-
-  const minLength = Math.min(
-    courseData.length,
-    courseModuleData.length,
-    courseUnitData.length,
-    assignmentData.length
-  );
-
-  const elements = [];
-
-  for (let i = 0; i < minLength; i++) {
-    elements.push(
-      <h6 key={i}>
-        {/* Course: */}
-        {courseData[i].title},{/* Module:  */}
-        {courseModuleData[i].title} /,
-        {/* Unit: */}
-        {courseUnitData[i].title}/,
-        {/* assignment :  */}
-        {assignmentData[i].assignment}
-      </h6>
-    );
-  }
-
-  const toggleItem = (index) => {
-    const updatedIsItemOpen = [...isItemOpen];
-    updatedIsItemOpen[index] = !updatedIsItemOpen[index];
-    setIsItemOpen(updatedIsItemOpen);
+  const toggleCourse = (index) => {
+    const updatedIsCourseOpen = [...isCourseOpen];
+    updatedIsCourseOpen[index] = !updatedIsCourseOpen[index];
+    setIsCourseOpen(updatedIsCourseOpen);
   };
 
-  const toggleSubItem = (index) => {
-    const updatedIsSubItemOpen = [...isSubItemOpen];
-    updatedIsSubItemOpen[index] = !updatedIsSubItemOpen[index];
-    setIsSubItemOpen(updatedIsSubItemOpen);
+  const toggleModule = (index) => {
+    const updatedIsModuleOpen = [...isModuleOpen];
+    updatedIsModuleOpen[index] = !updatedIsModuleOpen[index];
+    setIsModuleOpen(updatedIsModuleOpen);
   };
 
-  // console.log(elements);
-
-  const myFunction = () => {
-    var input, filter, ul, li, a, i;
-    input = document.getElementById("mySearch");
-    filter = input.value.toUpperCase();
-    ul = document.getElementById("myMenu");
-    li = ul.getElementsByTagName("li");
-    for (i = 0; i < li.length; i++) {
-      a = li[i].getElementsByTagName("a")[0];
-      if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-        li[i].style.display = "";
-      } else {
-        li[i].style.display = "none";
-      }
-    }
+  const toggleUnit = (index) => {
+    const updatedIsUnitOpen = [...isUnitOpen];
+    updatedIsUnitOpen[index] = !updatedIsUnitOpen[index];
+    setIsUnitOpen(updatedIsUnitOpen);
   };
 
-  // const filteredData =
-  //   activeFilter === "All"
-  //     ? data
-  //     : data.filter((item) => item.status === activeFilter);
+  const toggleAssignment = (index) => {
+    const updatedIsAssignmentOpen = [...isAssignmentOpen];
+    updatedIsAssignmentOpen[index] = !updatedIsAssignmentOpen[index];
+    setIsAssignmentOpen(updatedIsAssignmentOpen);
+    console.log(updatedIsAssignmentOpen);
+  };
 
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [feedback, setFeedback] = useState("");
@@ -116,11 +64,11 @@ const AssignmentGrading = () => {
   useEffect(() => {
     // Initialize userStatusMap with "Pending" for each assignment
     const initialStatusMap = {};
-    assignmentData.forEach((item) => {
+    assignmentContent.forEach((item) => {
       initialStatusMap[item.id] = "Pending";
     });
     setUserStatusMap(initialStatusMap);
-  }, []);
+  }, [0]);
 
   const openPopup = (assignmentId) => {
     setSelectedAssignment(assignmentId);
@@ -141,7 +89,7 @@ const AssignmentGrading = () => {
   };
 
   const calculateStatus = (assignmentId, inputGrade) => {
-    const selectedAssignmentData = assignmentData.find(
+    const selectedAssignmentData = assignmentContent.find(
       (item) => item.id === assignmentId
     );
     if (selectedAssignmentData) {
@@ -174,7 +122,7 @@ const AssignmentGrading = () => {
   };
 
   // Filter assignments based on the selected filter option
-  const filteredAssignments = assignmentData.filter((item) => {
+  const filteredAssignments = assignmentContent.filter((item) => {
     if (filterOption === "All") {
       return true; // Show all assignments
     } else if (filterOption === "Passed") {
@@ -186,6 +134,112 @@ const AssignmentGrading = () => {
     }
     return true;
   });
+
+  const filteredSubmission = (
+    assignmentGrading,
+    submissionID,
+    statusFilter
+  ) => {
+    if (statusFilter) {
+      return assignmentGrading.filter(
+        (grading) => grading.assignment_submission === submissionID
+      )[0];
+    }
+    return assignmentGrading.filter(
+      (grading) => grading.assignment_submission === submissionID
+    )[0];
+  };
+
+  const getCourseData = () => {
+    fetch("http://127.0.0.1:8000/api/courses", {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        // console.log(result);
+        setCourseContent(result);
+      });
+    });
+  };
+
+  const getModuleData = () => {
+    fetch("http://127.0.0.1:8000/api/modules/", {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        // console.log(result);
+        setModuleContent(result);
+      });
+    });
+  };
+  const getUnitData = () => {
+    fetch("http://127.0.0.1:8000/api/units/", {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        // console.log(result);
+        setUnitContent(result);
+      });
+    });
+  };
+  const getAssignmentData = () => {
+    fetch("http://127.0.0.1:8000/api/assignments/", {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        // console.log(result);
+        setAssignmentContent(result);
+      });
+    });
+  };
+
+  const getAssignmentSubmissionData = () => {
+    fetch("http://127.0.0.1:8000/api/assignment_submissions/", {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        // console.log(result);
+        setAssignmentSubmissionContent(result);
+      });
+    });
+  };
+
+  const getAssignmentGradingData = () => {
+    fetch("http://127.0.0.1:8000/api/assignment_gradings/", {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        // console.log(result);
+        setAssignmentGrading(result);
+      });
+    });
+  };
+
+  useEffect(() => {
+    getCourseData();
+    getModuleData();
+    getUnitData();
+    getAssignmentData();
+    getAssignmentSubmissionData();
+    getAssignmentGradingData();
+  }, []);
 
   return (
     <div className="grading-screen-main-container">
@@ -199,49 +253,38 @@ const AssignmentGrading = () => {
             placeholder="Search for users ,units or courses"
             title="Type in a category"
           />
-          {/* <ul id="myMenu">
-      <li><a href="#">HTML</a></li>
-      <li><a href="#">CSS</a></li>
-      <li><a href="#">JavaScript</a></li>
-      <li><a href="#">PHP</a></li>
-      <li><a href="#">Python</a></li>
-      <li><a href="#">jQuery</a></li>
-      <li><a href="#">SQL</a></li>
-      <li><a href="#">Bootstrap</a></li>
-      <li><a href="#">Node.js</a></li>
-    </ul> */}
         </div>
         <div className="filter-container">
           {/* <label>Filter by:</label> */}
           <button
             className={`filter-button all ${
-              filterOption === "All" ? "active" : ""
+              assignmentFilter === null ? "active" : ""
             }`}
-            onClick={() => setFilterOption("All")}
+            onClick={() => setAssignmentFilter(null)}
           >
             All
           </button>
           <button
             className={`filter-button passed ${
-              filterOption === "Passed" ? "active" : ""
+              assignmentFilter === "pass" ? "active" : ""
             }`}
-            onClick={() => setFilterOption("Passed")}
+            onClick={() => setAssignmentFilter("pass")}
           >
             Passed
           </button>
           <button
             className={`filter-button failed ${
-              filterOption === "NotPassed" ? "active" : ""
+              assignmentFilter === "not pass" ? "active" : ""
             }`}
-            onClick={() => setFilterOption("NotPassed")}
+            onClick={() => setAssignmentFilter("not pass")}
           >
             Not Passed
           </button>
           <button
             className={`filter-button pending ${
-              filterOption === "Pending" ? "active" : ""
+              assignmentFilter === "pending" ? "active" : ""
             }`}
-            onClick={() => setFilterOption("Pending")}
+            onClick={() => setAssignmentFilter("pending")}
           >
             Pending
           </button>
@@ -254,29 +297,35 @@ const AssignmentGrading = () => {
       <div className="course-title">
         {/* <h6>Course Data</h6> */}
         <ul>
-          {courseData.map((course, index) => (
-            <li key={course.id}>
-              <button onClick={() => toggleItem(index)}>
-                {course.title}
-                <i class='fas fa-angle-double-down'></i>
-              </button>
-              <Collapse isOpened={isItemOpen[index]}>
-                <ul>
-                  {elements.map((element, subIndex) => (
+          {courseContent &&
+            courseContent.map((course, index) => (
+              <li key={course.id}>
+                <button
+                  onClick={() => {
+                    toggleCourse(index);
+                    // handleCourseModule(course.id);
+                  }}
+                >
+                  {course.title}
+                  <i class="fas fa-angle-double-down"></i>
+                </button>
+                <Collapse isOpened={isCourseOpen[index]}>
+                  <ul>
+                    {/* {elements.map((element, subIndex) => (
                     <li key={subIndex}>
                       <button onClick={() => toggleSubItem(subIndex)}>
                         {element}
                       </button>
                       <Collapse isOpened={isSubItemOpen[subIndex]}>
-                        {/* Render your sub-item content here */}
-                        {/* <div>
+                        Render your sub-item content here
+                        <div>
                           Module:
                           {module.title} /
                           Unit:{" "}
                           {courseUnitData[subIndex].title} /
                           Assignment:{" "}
                           {assignmentData[subIndex].assignment}
-                        </div> */}
+                        </div>
                         <div>
                           <table className="assignment-table">
                             <thead className="head-row">
@@ -340,7 +389,7 @@ const AssignmentGrading = () => {
                                 <p className="content">
                                   <a
                                     href={
-                                      assignmentData.find(
+                                      assignmentContent.find(
                                         (item) => item.id === selectedAssignment
                                       )?.content
                                     }
@@ -348,7 +397,7 @@ const AssignmentGrading = () => {
                                     rel="noopener noreferrer"
                                   >
                                     {
-                                      assignmentData.find(
+                                      assignmentContent.find(
                                         (item) => item.id === selectedAssignment
                                       )?.content
                                     }
@@ -375,14 +424,14 @@ const AssignmentGrading = () => {
                                     onChange={handleGradeChange}
                                     className="grade-input"
                                     max={
-                                      assignmentData.find(
+                                      assignmentContent.find(
                                         (item) => item.id === selectedAssignment
                                       )?.Grade || 100
                                     }
                                   />
                                   <span className="grade-text">
                                     out of{" "}
-                                    {assignmentData.find(
+                                    {assignmentContent.find(
                                       (item) => item.id === selectedAssignment
                                     )?.Grade || 100}
                                   </span>
@@ -400,11 +449,181 @@ const AssignmentGrading = () => {
                         </div>
                       </Collapse>
                     </li>
-                  ))}
-                </ul>
-              </Collapse>
-            </li>
-          ))}
+                  ))} */}
+                    {moduleContent
+                      .filter((module) => module.course === course.id)
+                      .map((module, moduleIndex) => (
+                        <li key={module.id}>
+                          <button
+                            onClick={() => {
+                              toggleModule(moduleIndex);
+                            }}
+                          >
+                            {module.title}
+                            <i class="fas fa-angle-double-down"></i>
+                          </button>
+                          <Collapse isOpened={isModuleOpen[moduleIndex]}>
+                            <ul>
+                              {unitContent
+                                .filter((unit) => unit.module === module.id)
+                                .map((unit, unitIndex) => (
+                                  <li key={unit.id}>
+                                    <button
+                                      onClick={() => {
+                                        toggleUnit(unitIndex);
+                                      }}
+                                    >
+                                      {unit.title}
+                                      <i class="fas fa-angle-double-down"></i>
+                                    </button>
+                                    <Collapse isOpened={isUnitOpen[unitIndex]}>
+                                      <ul>
+                                        {assignmentContent
+                                          .filter(
+                                            (assignment) =>
+                                              assignment.unit === unit.id
+                                          )
+                                          .map(
+                                            (assignment, assignmentIndex) => (
+                                              <li key={assignment.id}>
+                                                <button
+                                                  onClick={() => {
+                                                    toggleAssignment(
+                                                      assignmentIndex
+                                                    );
+                                                  }}
+                                                >
+                                                  {assignment.title}
+                                                  <i class="fas fa-angle-double-down"></i>
+                                                </button>
+                                                <Collapse
+                                                  isOpened={
+                                                    isAssignmentOpen[
+                                                      assignmentIndex
+                                                    ]
+                                                  }
+                                                >
+                                                  <table className="assignment-table">
+                                                    <thead className="head-row">
+                                                      <tr>
+                                                        <th scope="col">ID</th>
+                                                        <th scope="col">
+                                                          Submitted By
+                                                        </th>
+                                                        <th scope="col">
+                                                          Assignment
+                                                        </th>
+                                                        <th scope="col">
+                                                          Submission Date
+                                                        </th>
+                                                        <th scope="col">
+                                                          Due Date
+                                                        </th>
+                                                        <th scope="col">
+                                                          Partners
+                                                        </th>
+                                                        <th scope="col">
+                                                          Graders Name
+                                                        </th>
+                                                        <th scope="col">
+                                                          Grade
+                                                        </th>
+                                                        <th scope="col">
+                                                          Status
+                                                        </th>
+                                                        <th scope="col">
+                                                          Actions
+                                                        </th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      {assignmentSubmissionContent
+                                                        .filter(
+                                                          (submission) =>
+                                                            submission.assignment ===
+                                                            assignment.id
+                                                        )
+                                                        .map(
+                                                          (
+                                                            submission,
+                                                            submissionIndex
+                                                          ) => {
+                                                            const grading =
+                                                              filteredSubmission(
+                                                                assignmentGrading,
+                                                                submission.id,
+                                                                assignmentFilter
+                                                              );
+                                                            return (
+                                                              <tr>
+                                                                <td>
+                                                                  {
+                                                                    submission.id
+                                                                  }
+                                                                </td>
+                                                                <td>
+                                                                  {
+                                                                    submission.submitted_by
+                                                                  }
+                                                                </td>
+                                                                <td>
+                                                                  {
+                                                                    assignment.title
+                                                                  }
+                                                                </td>
+                                                                <td>
+                                                                  {
+                                                                    submission.submission_date
+                                                                  }
+                                                                </td>
+                                                                <td>
+                                                                  {
+                                                                    assignment.due_date
+                                                                  }
+                                                                </td>
+                                                                <td>
+                                                                  {
+                                                                    assignment.Number_of_members
+                                                                  }
+                                                                </td>
+                                                                <td>
+                                                                  {
+                                                                    grading.grader
+                                                                  }
+                                                                </td>
+                                                                <td>
+                                                                  {
+                                                                    grading.marks
+                                                                  }
+                                                                </td>
+                                                                <td>
+                                                                  {
+                                                                    grading.status
+                                                                  }
+                                                                </td>
+                                                                <td></td>
+                                                              </tr>
+                                                            );
+                                                          }
+                                                        )}
+                                                    </tbody>
+                                                  </table>
+                                                </Collapse>
+                                              </li>
+                                            )
+                                          )}
+                                      </ul>
+                                    </Collapse>
+                                  </li>
+                                ))}
+                            </ul>
+                          </Collapse>
+                        </li>
+                      ))}
+                  </ul>
+                </Collapse>
+              </li>
+            ))}
         </ul>
       </div>
     </div>
