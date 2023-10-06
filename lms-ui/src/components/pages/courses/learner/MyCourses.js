@@ -7,25 +7,70 @@ import { useNavigate } from "react-router-dom";
 
 const MyCourses = () => {
   const navigation = useNavigate();
+  const userId = sessionStorage.getItem("user_id")
+
   const [showBlock, setShowBlock] = useState(false);
   const [courseContent, setCourseContent] = useState([]);
 
+
+
   useEffect(() => {
-    const getCourseData = () => {
+
+    const getTeamData = () => {
+      fetch("http://127.0.0.1:8000/teams_list_data/", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if(response.status === 200){
+        response.json().then(function (result) {
+          let totalCourses = [];
+          for (const team of result) {
+            if (team.users.includes(Number(userId))) {
+              team.courses.forEach(course => {
+                totalCourses.push(course)
+              })
+              // totalCourses += team.courses
+              // totalCourses = [...totalCourses, team.courses];
+            }
+          }
+          console.log('this is total courses ', totalCourses);
+          // setMyCourses(totalCourses)
+          getCourseData(totalCourses);
+          // setTeamData(result);
+        });
+      }
+      else {
+        console.log(response);
+      }
+      });
+    };
+
+    getTeamData();
+
+    const getCourseData = (totalCourses) => {
       fetch("http://127.0.0.1:8000/api/courses", {
         method: "GET",
         headers: {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
+        if(response.status === 200) {
         response.json().then(function (result) {
-          console.log(result);
-          setCourseContent(result);
+          const courses = [];
+          for (const course of result) {
+            if (totalCourses.includes(course.id)) {
+              courses.push(course)
+          }
+        }
+          setCourseContent(courses);
         });
+      }
       });
     };
 
-    getCourseData();
+   
   }, [0]);
 
   const handleViewToggle = () => {
@@ -54,9 +99,8 @@ const MyCourses = () => {
         {/* Courses Block view */}
         {showBlock ? (
           <div className="main-cards-container">
-            {courseContent.length === 0 ||
-            courseContent.detail == "No objects found"
-              ? courseContent.detail
+            {courseContent.length === 0 
+              ? "No Course Found"
               : courseContent &&
                 courseContent.map((course) => {
                   return (
@@ -271,7 +315,10 @@ const MyCourses = () => {
           </div>
         ) : (
           <div className="main-listView-Container">
-            {courseContent.map((course) => {
+            {courseContent.length === 0 
+              ? "No Course Found"
+              : courseContent &&
+                courseContent.map((course) => {
               return (
                 <div className="list-container">
                   <div className="image-div">

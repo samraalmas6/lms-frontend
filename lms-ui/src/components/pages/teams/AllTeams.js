@@ -206,13 +206,13 @@ const AllTeams = ({ show }) => {
   };
 
   const handleDeleteUser = (user) => {
-    const userEmail = userData.filter((users) => {
+    const user_id = userData.filter((users) => {
       return users.id === user;
     });
     console.log("team name", teamName);
     const obj = {
       team_name: teamName,
-      user_emails: [userEmail[0].email],
+      user_ids: [user_id[0].id],
     };
 
     fetch("http://127.0.0.1:8000/remove_users_from_team/", {

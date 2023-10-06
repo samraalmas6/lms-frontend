@@ -53,8 +53,28 @@ const AllCourse = ({ show, minDate }) => {
       });
     };
 
+    const getTeamData = () => {
+      fetch("http://127.0.0.1:8000/teams_list_data/", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if(response.status === 200){
+        response.json().then(function (result) {
+          console.log("team data", result);
+          setTeamData(result);
+        });
+      }
+      else {
+        console.log(response);
+      }
+      });
+    };
+
     getCourseData();
     getCategoryData();
+    getTeamData();
   }, [0]);
 
  
@@ -73,8 +93,8 @@ const AllCourse = ({ show, minDate }) => {
       const obj = {
         title: courseTitle,
         description: "Test Description",
-        // start_date: courseStart,
-        // end_date: courseEnd,
+        start_date: courseStart,
+        end_date: courseEnd,
         author: sessionStorage.getItem('user_id'),
         updated_by: sessionStorage.getItem('user_id'),
         category: [courseCategory],
@@ -104,6 +124,19 @@ const AllCourse = ({ show, minDate }) => {
 
     
   };
+
+
+  const getNumberOfUsers = (id) => {
+
+    let totalUsers = 0;
+    for (const team of teamData) {
+      if (team.courses.includes(id)) {
+        totalUsers += team.users.length;
+      }
+    }
+return totalUsers
+   
+  }
 
   const handleCourseContentData = (course) => {
     setCourseId(course.id);
@@ -285,7 +318,9 @@ const AllCourse = ({ show, minDate }) => {
                       <td>{course.title}</td>
                       <td>{course.description}</td>
                       <td>{course.duration}</td>
-                      <td>{course.users_enrolled}</td>
+                      <td>{
+                          getNumberOfUsers(course.id)
+                        }</td>
                       <td>{course.created_at}</td>
                     </tr>
                   );
