@@ -49,9 +49,7 @@ function AssignmentView({ selectedAssignments }) {
   const [assignmentid, setAssignmentid] = useState("");
   const [feedbackData, setFeedbackData] = useState("feedback"); // State variable for feedback
   const [gradeData, setGradeData] = useState(0);
-  const [marks, setMarks] = useState(87)
-  const [submissionId, setSubmissionId] =useState(null)
-  const [isChecked, setIsChecked]=useState("false")
+
   const assignments = [
     {
       id: 1,
@@ -110,35 +108,31 @@ function AssignmentView({ selectedAssignments }) {
   // }, []);
 
   useEffect(() => {
-    // const getGradingData = async () => {
-    //   try {
-    //     const response = await fetch("http://127.0.0.1:8000/api/assignment_gradings", {
-    //       method: "GET",
-    //       headers: {
-    //         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-    //       },
-    //     });
+    const getGradingData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/assignment_gradings", {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          },
+        });
         
-    //     if (!response.ok) {
-    //       throw new Error("Network response was not ok");
-    //     }
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
   
-    //     const data = await response.json();
-    //     console.log('grading data:',data.filter(grading => {
-    //       return grading.assignment_submission == assignmentid
-    //       // grading.assignment_submission)
-    //     }) )
-    //     // console.log("API Data:", data, data[0].marks);
-    //     setGradeData(data[0].marks);
-    //     setFeedbackData(data[0].comments);
-    //     console.log("feddback data from variab", gradeData)
+        const data = await response.json();
+        // console.log("API Data:", data, data[0].marks);
+        setGradeData(data[0].marks);
+        setFeedbackData(data[0].comments);
+        console.log("feddback data from variab", gradeData)
         
-    //   } catch (error) {
-    //     console.error("Error fetching grading data:", error);
-    //   }
-    // };
+      } catch (error) {
+        console.error("Error fetching grading data:", error);
+      }
+    };
     
-    // getGradingData();
+    getGradingData();
   }, []);
   
 
@@ -166,34 +160,7 @@ function AssignmentView({ selectedAssignments }) {
     }, 2000); // Simulate a 2-second delay for submission
   };
 
-  const getGradingData = (id) => {
-    console.log('sub sub sub',id,submissionId);
-
-      fetch("http://127.0.0.1:8000/api/assignment_gradings/", {
-        method: "GET",
-        headers: {
-          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-        },
-      }).then((response) => {
-        if(response.status === 200){
-        response.json().then(function (result) {
-          
-          const data = result.filter(grading => {
-            return grading.assignment_submission === id
-            // grading.assignment_submission)
-          });
-          console.log("API Data:", data);
-          setGradeData(data[0].marks);
-          setFeedbackData(data[0].comments);
-          console.log("feddback data from variab", gradeData)
-          
-        });
-      }
-      });
-  };
-
   function handleAssignment(assignment) {
-    console.log('assignment id', assignment.id);
     setSelectedAssignment(assignment);
     setFiles([]);
     setLinks([]);
@@ -203,37 +170,6 @@ function AssignmentView({ selectedAssignments }) {
     setIsConfirmButtonVisible(true);
     setInstructorFeedback(null); // Reset feedback when changing assignments
     setAssignmentid(assignment.id);
-
-    fetch("http://127.0.0.1:8000/api/assignment_submissions/", {
-      method: "GET",
-      headers: {
-        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          response.json().then(function (result) {
-            const res = result.filter(assignmentSub => {
-              return assignmentSub.assignment === assignment.id
-            })
-            if(res.length !== 0){
-            setSubmissionId(res[0].id)
-            getGradingData(res[0].id);
-            console.log('Assignment_subm',res);
-            }
-          });
-        } else {
-          console.log(response);
-         
-        }
-      })
-      .catch((error) => {
-        console.error("Error submitting submission data:", error);
-        // Handle error for the first request
-      });
-    
-    
   }
 
   function handleToggleResubmit() {
@@ -269,97 +205,34 @@ function AssignmentView({ selectedAssignments }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-  
-    // First POST request data
-    const submissionData = {
+
+    const obj = {
       submitted_by: 1,
       assignment: assignmentid,
       submission_date: "2024-10-03T10:00:00Z",
-      content: link,
-      // Add other data properties as needed for the first request
+      submitted_link: link,
+      // Add other data properties as needed
     };
-  
-    // Second POST request data
-  
-  
-    // Send the first POST request
+
     fetch("http://127.0.0.1:8000/api/assignment_submissions/", {
       method: "POST",
-      body: JSON.stringify(submissionData),
+      body: JSON.stringify(obj),
       headers: {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         "Content-type": "application/json; charset=UTF-8",
       },
-    })
-      .then((response) => {
-        if (response.status === 201) {
-          response.json().then(function (result) {
-            console.log('result = ',result);
-            setLink("");
-            // Handle success for the first request
-            // Now, send the second POST request
-            console.log("kch bhi nbi")
-            setSubmissionId(result.id)
-            console.log(submissionId)
-            // getGradingData(result.id);
-            gradingPostRequest(result.id);
-            // getGradingData(result.id);
-          });
-        } else {
-          console.log(response);
-          // Handle error for the first request
-        }
-      })
-      .catch((error) => {
-        console.error("Error submitting submission data:", error);
-        // Handle error for the first request
-      });
-  
-    // This flag shows the confirmation dialog, but it's up to you if you want to show it for both requests
+    }).then((response) => {
+      if (response.status === 201) {
+        response.json().then(function (result) {
+          console.log(result);
+          setLink("");
+        });
+      } else {
+        console.log(response);
+      }
+    });
     setShowConfirmationDialog(true);
-
-
   }
-  
-  // Function to send the second POST request
-  function gradingPostRequest(id) {
-
-    const gradingData = {
-      
-      marks: marks, // Replace gradeData with the actual grade you want to send
-      grading_datetime: new Date().toISOString(), // Replace with the actual grading datetime
-      comments: null, // Replace feedbackData with the actual comments
-      status: "pending", // You can change the status as needed
-      user: 1, // Replace with the user ID of the grader
-      assignment_submission: id,
-      grader: 1, // Replace with the user ID of the grader
-    };
-    fetch("http://127.0.0.1:8000/api/assignment_gradings/", {
-      method: "POST",
-      body: JSON.stringify(gradingData),
-      headers: {
-        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => {
-        if (response.status === 201) {
-          response.json().then(function (result) {
-            console.log("this is post grading " + result);
-            getGradingData(id);
-            // Handle success for the second request
-          });
-        } else {
-          console.log("this is post grading response" + response);
-          // Handle error for the second request
-        }
-      })
-      .catch((error) => {
-        console.error("Error submitting grading data:", error);
-        // Handle error for the second request
-      });
-  }
-  
 
   function handleConfirmSubmit() {
     setIsSubmitClicked(true);
@@ -630,7 +503,7 @@ function AssignmentView({ selectedAssignments }) {
                 </div>
                 {/* Display Feedback and Grade */}
                 <>
-                  {/* {isSubmitClicked && feedbackData !== null && ( */}
+                  {isSubmitClicked && feedbackData !== null && (
                     <div className="feedback-and-grade">
                       <div className="feedback-and-grad">
                         <div className="feedback">
@@ -645,7 +518,7 @@ function AssignmentView({ selectedAssignments }) {
                         </div>
                       </div>
                     </div>
-                  {/* )} */}
+                  )}
                 </>
               </div>
             </div>
