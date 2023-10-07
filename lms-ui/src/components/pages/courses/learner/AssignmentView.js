@@ -6,8 +6,6 @@ import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import fil from "../../../content/Images/fil.png";
 
 
-
-// adding comments here
 function calculateSubmissionStatus(
   dueDate,
   isDone,
