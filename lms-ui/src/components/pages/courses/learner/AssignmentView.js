@@ -1,8 +1,10 @@
+
 import React, { useState, useEffect } from "react";
 import "../../../styles/AssignmentView.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import fil from "../../../content/Images/fil.png";
+
 
 function calculateSubmissionStatus(
   dueDate,
@@ -27,7 +29,7 @@ function calculateSubmissionStatus(
 }
 
 function AssignmentView({ selectedAssignments }) {
-  const [selectedAssignment, setSelectedAssignment] = useState();
+  const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [files, setFiles] = useState([]);
   const [link, setLink] = useState("");
   const [links, setLinks] = useState([]);
@@ -41,28 +43,28 @@ function AssignmentView({ selectedAssignments }) {
   const [isConfirmButtonVisible, setIsConfirmButtonVisible] = useState(true);
   const [instructorFeedback, setInstructorFeedback] = useState(null);
   const [apiData, setApiData] = useState([]);
-  const [message, setMessage] = useState("");
+  const[number, setNumber] = useState(0);
   const [assignmentid, setAssignmentid] = useState("");
-  const [feedbackData, setFeedbackData] = useState(null); // State variable for feedback
-  const [gradeData, setGradeData] = useState(null);
+  const [feedbackData, setFeedbackData] = useState("feedback"); // State variable for feedback
+  const [gradeData, setGradeData] = useState(0);
 
-  const assignments = [
-    {
-      id: 1,
-      title: "Assignment 1",
-      description: "Complete the first assignment.",
-      dueDate: "2023-09-30 14:00",
-      points: 90,
-      resourceFiles: ["https://example.com/your-pdf-file.pdf", "file2.doc"],
-      submissionLinks: [
-        "https://example.com/your-file-url",
-        "https://anotherlink.com",
-      ],
-      feedback: "", // Add feedback property
-      grade: null, // Add grade property
-    },
-    // Add more assignments here.
-  ];
+  // const assignments = [
+  //   {
+  //     id: 1,
+  //     title: "Assignment 1",
+  //     description: "Complete the first assignment.",
+  //     dueDate: "2023-09-30 14:00",
+  //     points: 90,
+  //     resourceFiles: ["https://example.com/your-pdf-file.pdf", "file2.doc"],
+  //     submissionLinks: [
+  //       "https://example.com/your-file-url",
+  //       "https://anotherlink.com",
+  //     ],
+  //     feedback: "", // Add feedback property
+  //     grade: null, // Add grade property
+  //   },
+  //   // Add more assignments here.
+  // ];
 
   useEffect(() => {
     const getAssignmentData = () => {
@@ -71,43 +73,80 @@ function AssignmentView({ selectedAssignments }) {
         headers: {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
-      }).then((response) => {
-        response.json().then(function (result) {
+      })
+      .then((response) => response.json())
+      .then((result) => {
+        if (Array.isArray(result) && result.length > 0) {
           console.log(result);
           setApiData(result);
-        });
-      });
-    };
-    getAssignmentData();
-  }, [0]);
-
-  const getGradingData = () => {
-    console.log("Fetching grading data...");
-
-    fetch("http://127.0.0.1:8000/api/assignment_gradings", {
-      method: "GET",
-      headers: {
-        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          console.error("Error fetching grading data:", response.statusText);
-          return;
+          setNumber(result[0].marks);
+        } else {
+          console.error("Invalid API response:", result);
         }
-
-        response.json().then(function (result) {
-          console.log("Grading data received:", result);
-          setFeedbackData(result);
-          setGradeData(result);
-        });
       })
       .catch((error) => {
-        console.error("Fetch error:", error);
+        console.error("Error fetching assignment data:", error);
       });
-  };
+    };
+  
+    getAssignmentData();
+  }, []);
+  
+  
+ 
 
-  getGradingData();
+  // useEffect(() => {
+  //   const getGradingData = () => {
+  //     console.log("Fetching grading data...");
+
+  //     fetch("http://127.0.0.1:8000/api/assignment_gradings", {
+  //       method: "GET",
+  //       headers: {
+  //         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+  //       },
+  //     })
+  //       .then((response) => {
+  //         response.json().then(function (result) {
+  //           console.log(result);
+  //           setFeedbackData(result);
+  //           setGradeData(result);
+  //         });
+  //       });
+  //   };
+  //   getGradingData();
+  // }, []);
+
+  // useEffect(() => {
+  //   const getGradingData = async () => {
+  //     try {
+  //       const response = await fetch("http://127.0.0.1:8000/api/assignment_gradings", {
+  //         method: "GET",
+  //         headers: {
+  //           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+  //         },
+  //       });
+        
+  //       if (!response.ok) {
+  //         throw new Error("Network response was not ok");
+  //       }
+  
+  //       const data = await response.json();
+  //       // console.log("API Data:", data, data[0].marks);
+  //       setGradeData(data[0].marks);
+  //       setFeedbackData(data[0].comments);
+  //       console.log("feddback data from variab", gradeData)
+        
+  //     } catch (error) {
+  //       console.error("Error fetching grading data:", error);
+  //     }
+  //   };
+    
+  //   getGradingData();
+  // }, []);
+  
+
+  // console.log("I m feedback data : ", feedbackData);
+  // const marks = feedbackData ? feedbackData.marks : null;
 
   const simulateSubmission = () => {
     setTimeout(() => {
@@ -140,6 +179,52 @@ function AssignmentView({ selectedAssignments }) {
     setIsConfirmButtonVisible(true);
     setInstructorFeedback(null); // Reset feedback when changing assignments
     setAssignmentid(assignment.id);
+
+    const getGradingData = () => {
+
+      fetch(`http://127.0.0.1:8000/api/assignments/${assignment.id}/assignment_submissions/`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      if(response.status === 200){
+      response.json().then(function (result) {
+        console.log("Api result submissions: ", result);
+        console.log('result id', result[result.length - 1].id);
+        getGradingAPI(result[result.length - 1].id)
+     
+      });
+    }
+    else {
+      console.log(response);
+      setGradeData(0);
+    }
+    });
+    }
+    
+
+    const getGradingAPI = (id) => {
+      fetch(`http://127.0.0.1:8000/api/assignment_submissions/${id}/assignment_gradings`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      if(response.status === 200){
+      response.json().then(function (result) {
+        console.log("Api result Gradings: ", result);
+        setGradeData(result[result.length -1].marks);
+      });
+    }
+    else {
+      console.log(response);
+      setGradeData(0);
+    }
+    });
+    }
+
+    getGradingData()
   }
 
   function handleToggleResubmit() {
@@ -160,7 +245,6 @@ function AssignmentView({ selectedAssignments }) {
   function handleLinkChange() {
     if (link.trim() !== "") {
       setLinks([...links, link]);
-      // setLink("");
     }
   }
 
@@ -178,30 +262,66 @@ function AssignmentView({ selectedAssignments }) {
     event.preventDefault();
 
     const obj = {
-      submitted_by: 1,
+      submitted_by: sessionStorage.getItem("user_id"),
       assignment: assignmentid,
-      submission_date: "2014-10-03T10:00:00Z",
-      content: link,
+      submission_date: "2024-10-03T10:00:00Z",
+      submitted_link: link,
       // Add other data properties as needed
     };
 
-    fetch("http://127.0.0.1:8000/api/assignment_submissions/", {
+   async function postData(obj) {
+  try {
+    const response = await fetch("http://127.0.0.1:8000/api/assignment_submissions/", {
       method: "POST",
       body: JSON.stringify(obj),
       headers: {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         "Content-type": "application/json; charset=UTF-8",
       },
-    }).then((response) => {
-      if (response.status == 201) {
-        response.json().then(function (result) {
-          console.log(result);
-          setLink("");
-        });
-      } else {
-        console.log(response);
-      }
     });
+
+    if (response.status === 201) {
+      const result = await response.json();
+      console.log(result.id);
+
+      
+      const submissionId = result.id;
+
+      
+      const gradingURL = `http://127.0.0.1:8000/api/assignment_submissions/${submissionId}/assignment_gradings`;
+
+      const gradingResponse = await fetch(gradingURL, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+
+      if (gradingResponse.status === 200) {
+        const gradingResult = await gradingResponse.json();
+        console.log(gradingResult[0].marks);
+        console.log(gradingResult[0].status);
+        console.log(gradingResult[0].comments);
+        setGradeData(gradingResult[0].marks);
+      } else {
+        console.log(gradingResponse);
+      }
+
+      setLink("");
+    } else {
+      console.log(response);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+    
+    
+    // Call the postData function when needed:
+    postData(obj);
+    
     setShowConfirmationDialog(true);
   }
 
@@ -217,6 +337,7 @@ function AssignmentView({ selectedAssignments }) {
 
   return (
     <>
+    
       <div className="app">
         <div className="assignment-view">
           <div className="assignment-list">
@@ -243,11 +364,11 @@ function AssignmentView({ selectedAssignments }) {
                 <div className="detail-points-and-date">
                   <div className="detail-points">
                     <strong>Marks:</strong>
-                    {selectedAssignment.marks}
+                  {number}
                   </div>
                   <div className="detail-create">
                     <strong>Created At:</strong>
-                    {selectedAssignment.created_at.substr(0, 10)}
+                    {selectedAssignment.created_at}
                   </div>
                   <div className="detail-date">
                     <strong>Due date:</strong>
@@ -440,6 +561,7 @@ function AssignmentView({ selectedAssignments }) {
                                     Submit
                                   </button>
                                 )}
+                                
                                 {showConfirmationDialog && (
                                   <div className="confirmation-dialog">
                                     <p>
@@ -470,40 +592,24 @@ function AssignmentView({ selectedAssignments }) {
                     )}
                   </div>
                 </div>
-                {/* Instructor's feedback
-              {instructorFeedback !== null && (
-                <div className="instructor-feedback">
-                  <div
-                    className={`feedback ${
-                      instructorFeedback.includes("Congratulations")
-                        ? "pass"
-                        : "fail"
-                    }`}
-                  >
-                    {instructorFeedback}
-                  </div>
-                </div>
-              )} */}
                 {/* Display Feedback and Grade */}
                 <>
-                  {isSubmitClicked && (
+                  {/* {isSubmitClicked && feedbackData !== null && ( */}
                     <div className="feedback-and-grade">
                       <div className="feedback-and-grad">
                         <div className="feedback">
-                          <strong>Feedback:</strong>{" "}
-                          {feedbackData
-                            ? feedbackData.comments
-                            : "No feedback yet"}
+                          <strong>Comments:</strong>{" "}
+                          {gradeData? feedbackData : "No feedback yet"}
                         </div>
                         <div className="grade">
                           <strong>Grade:</strong>{" "}
-                          {gradeData !== null
-                            ? `${gradeData.marks} / ${selectedAssignment.points}`
+                          {gradeData 
+                            ? `${gradeData} / ${number}`
                             : "Not graded yet"}
                         </div>
                       </div>
                     </div>
-                  )}
+                  {/* )} */}
                 </>
               </div>
             </div>
@@ -515,3 +621,4 @@ function AssignmentView({ selectedAssignments }) {
 }
 
 export default AssignmentView;
+
