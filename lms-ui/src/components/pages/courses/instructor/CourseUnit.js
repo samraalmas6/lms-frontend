@@ -55,13 +55,13 @@ const CourseUnit = ({
   }, [unitData]);
 
   const handlUnitStart = (e) => {
-    // startDateRefUnit.current.removeAttribute("class", "unit-start-field");
-    // startDatePickerRefUnit.current.setAttribute("class", "unit-start-field");
+    // startDateRefUnit.current.removeAttribute("className", "unit-start-field");
+    // startDatePickerRefUnit.current.setAttribute("className", "unit-start-field");
     setUnitStart(e.target.value);
   };
   const handlUnitEnd = (e) => {
-    // endDateRefUnit.current.removeAttribute("class", "unit-end-field");
-    // endDatePickerRefUnit.current.setAttribute("class", "unit-end-field");
+    // endDateRefUnit.current.removeAttribute("className", "unit-end-field");
+    // endDatePickerRefUnit.current.setAttribute("className", "unit-end-field");
     setUnitEnd(e.target.value);
   };
 
@@ -156,6 +156,7 @@ const CourseUnit = ({
     }
     else {
       console.log(response);
+      setUnitFiles([])
     }
     });
 
@@ -173,6 +174,7 @@ const CourseUnit = ({
     }
     else {
       console.log(response);
+      setUnitVideos([])
     }
     });
   };
@@ -295,16 +297,14 @@ const CourseUnit = ({
           id="unit-section"
         >
           {/* <h1 className="text-center rounded unit-list-heading" >Units</h1> */}
-          {unitData.length === 0 ||
-          unitData.detail === "No unit found for this module."
-            ? unitData.detail
+          {unitData.length === 0 ? "No Unit Found"
             : unitData &&
               unitData.map((unit) => {
                 return (
                   <div
                     key={unit.id}
                     type="button"
-                    className="accordion-item mb-0 mt-1 unitSection"
+                    className="accordion-item mb-3 mt-0 unitSection"
                     role="button"
                     aria-expanded="false"
                     onClick={(e) => {
@@ -359,7 +359,7 @@ const CourseUnit = ({
                             />
                           </div>
 
-                          <div class="btn-group dropstart">
+                          <div className="btn-group dropstart">
                             <i
                               className="bi bi-three-dots-vertical "
                               type="button"
@@ -369,7 +369,7 @@ const CourseUnit = ({
                             ></i>
                             <div className="dropdown-menu option-main-container module-option">
                               <ul
-                                class="option-ul"
+                                className="option-ul"
                                 style={{
                                   display: "flex",
                                 }}
@@ -393,7 +393,7 @@ const CourseUnit = ({
                                   ></i>
                                 </li>
                                 <li>
-                                  <i class="bi bi-copy text-info"></i>
+                                  <i className="bi bi-copy text-info"></i>
                                 </li>
                               </ul>
                             </div>
@@ -405,7 +405,7 @@ const CourseUnit = ({
                       id={`unit${unit.id}`}
                       className="accordion- collapse"
                       aria-labelledby={`flush-unit${unit.id}`}
-                      data-bs-parent="#unit-section"
+                      // data-bs-parent="#unit-section"
                     >
                       <div className="accordion-body">
                         <div className="video-sections">
@@ -419,14 +419,12 @@ const CourseUnit = ({
                           ></div>
                           <div className="file-content">
                     
-                            <table class="table table-striped ">
+                            <table className="table table-striped ">
                             <caption className="caption-top mb-0 text-success"><strong>Unit Files</strong></caption>
                             {
-                              unitFiles.length === 0 ||
-                              unitFiles.detail ===
-                                "No files found for this unit." ? unitFiles.detail :(
+                              unitFiles.length === 0 ? "No File Found" :(
                                   <>
-                                  <thead class="table-light">
+                                  <thead className="table-light">
                                 <tr>
                                   <th scope="col">#</th>
                                   <th scope="col">Title</th>
@@ -475,7 +473,7 @@ const CourseUnit = ({
                                               ></i>
                                             </li>
                                             <li>
-                                              <i class="bi bi-copy text-info"></i>
+                                              <i className="bi bi-copy text-info"></i>
                                             </li>
                                           </ul>
                                         </td>
@@ -491,14 +489,12 @@ const CourseUnit = ({
                             </table>
                             <hr />
 
-                            <table class="table table-striped ">
+                            <table className="table table-striped ">
                             <caption className="caption-top mb-0 text-warning"><strong>Unit Videos</strong></caption>
                             {
-                              unitVideos.length === 0 ||
-                              unitVideos.detail ===
-                                "No video found for this unit." ? unitVideos.detail : (
+                              unitVideos.length === 0 ? "No Video Found" : (
                                 <> 
-                                <thead class="table-light">
+                                <thead className="table-light">
                                 <tr>
                                   <th scope="col">#</th>
                                   <th scope="col">Title</th>
@@ -543,7 +539,7 @@ const CourseUnit = ({
                                               ></i>
                                             </li>
                                             <li>
-                                              <i class="bi bi-copy text-info"></i>
+                                              <i className="bi bi-copy text-info"></i>
                                             </li>
                                           </ul>
                                         </td>
@@ -589,7 +585,7 @@ const CourseUnit = ({
                                         ></i>
                                         <div className="dropdown-menu file-content-options">
                                           <ul
-                                            class="option-ul"
+                                            className="option-ul"
                                             style={{
                                               display: "flex",
                                             }}
@@ -613,7 +609,7 @@ const CourseUnit = ({
                                               ></i>
                                             </li>
                                             <li>
-                                              <i class="bi bi-copy text-info"></i>
+                                              <i className="bi bi-copy text-info"></i>
                                             </li>
                                           </ul>
                                         </div>
@@ -625,7 +621,7 @@ const CourseUnit = ({
                           <div className="add-content-unit">
                             <h5>Add Content</h5>
                             <i
-                              class="bi bi-plus-circle plus-icon"
+                              className="bi bi-plus-circle plus-icon"
                               onClick={() => setShowUnitContent((pre) => !pre)}
                             ></i>
                           </div>
@@ -639,7 +635,7 @@ const CourseUnit = ({
                                       Video
                                     </span>
                                     <i
-                                      class="bi bi-plus-circle plus-icon unit-form-i-title"
+                                      className="bi bi-plus-circle plus-icon unit-form-i-title"
                                       ref={videoAddRef}
                                       onClick={(e) => hanldeVideoUpload(e)}
                                     ></i>
@@ -673,11 +669,11 @@ const CourseUnit = ({
                                     </div>
                                     <div className="unit-video-icon-section">
                                       <i
-                                        class="bi bi-check-lg check-unit-content text-success"
+                                        className="bi bi-check-lg check-unit-content text-success"
                                         onClick={(e) => handleUploadVideo(e)}
                                       ></i>
                                       <i
-                                        class="bi bi-x check-unit-content text-danger"
+                                        className="bi bi-x check-unit-content text-danger"
                                         onClick={() => handleAddVido()}
                                       ></i>
                                     </div>
@@ -689,7 +685,7 @@ const CourseUnit = ({
                                       Slide
                                     </span>
                                     <i
-                                      class="bi bi-plus-circle plus-icon unit-form-i-title"
+                                      className="bi bi-plus-circle plus-icon unit-form-i-title"
                                       ref={slideSelector}
                                       onClick={() => hanldeSlideUpload()}
                                     ></i>
@@ -708,11 +704,11 @@ const CourseUnit = ({
                                     />
                                     <span>{unitSlide && unitSlide.name}</span>
                                     <i
-                                      class="bi bi-check-lg check-unit-content text-success"
+                                      className="bi bi-check-lg check-unit-content text-success"
                                       onClick={(e) => handleUploadFile(e)}
                                     ></i>
                                     <i
-                                      class="bi bi-x check-unit-content text-danger"
+                                      className="bi bi-x check-unit-content text-danger"
                                       onClick={() => handleRemoveSlide()}
                                     ></i>
                                   </div>
@@ -723,7 +719,7 @@ const CourseUnit = ({
                                       PDF
                                     </span>
                                     <i
-                                      class="bi bi-plus-circle plus-icon unit-form-i-title"
+                                      className="bi bi-plus-circle plus-icon unit-form-i-title"
                                       ref={pdfSelector}
                                       onClick={() => hanldePDFUpload()}
                                     ></i>
@@ -742,11 +738,11 @@ const CourseUnit = ({
                                     />
                                     <span>{unitPDF && unitPDF.name}</span>
                                     <i
-                                      class="bi bi-check-lg check-unit-content text-success"
+                                      className="bi bi-check-lg check-unit-content text-success"
                                       onClick={(e) => handleUploadFile(e)}
                                     ></i>
                                     <i
-                                      class="bi bi-x check-unit-content text-danger"
+                                      className="bi bi-x check-unit-content text-danger"
                                       onClick={() => handleRemovePDF()}
                                     ></i>
                                   </div>
@@ -757,7 +753,7 @@ const CourseUnit = ({
                                       Assignment
                                     </span>
                                     <i
-                                      class="bi bi-plus-circle plus-icon unit-form-i-title"
+                                      className="bi bi-plus-circle plus-icon unit-form-i-title"
                                       onClick={() => handleAssignment()}
                                     ></i>
                                   </div>
@@ -799,7 +795,7 @@ const CourseUnit = ({
                     <div className="">
                       <label>Start Date:</label>
                       <i
-                        class="bi bi-calendar-date date-picker"
+                        className="bi bi-calendar-date date-picker"
                         role="button"
                         ref={startDatePickerRefUnit}
                         onClick={() => startDateRefUnit.current.showPicker()}
@@ -814,7 +810,7 @@ const CourseUnit = ({
                       />
                       <label>End Date:</label>
                       <i
-                        class="bi bi-calendar-date date-picker"
+                        className="bi bi-calendar-date date-picker"
                         role="button"
                         ref={endDatePickerRefUnit}
                         onClick={() => endDateRefUnit.current.showPicker()}
@@ -829,7 +825,7 @@ const CourseUnit = ({
                       />
                     </div>
 
-                    <div class="btn-group dropstart">
+                    <div className="btn-group dropstart">
                       <i
                         className="bi bi-three-dots-vertical "
                         type="button"
@@ -850,7 +846,7 @@ const CourseUnit = ({
                       ></button>
                       <div className="dropdown-menu option-main-container module-option">
                         <ul
-                          class="option-ul"
+                          className="option-ul"
                           style={{
                             display: "flex",
                           }}
@@ -874,7 +870,7 @@ const CourseUnit = ({
                             ></i>
                           </li>
                           <li>
-                            <i class="bi bi-copy text-info"></i>
+                            <i className="bi bi-copy text-info"></i>
                           </li>
                         </ul>
                       </div>
@@ -887,7 +883,7 @@ const CourseUnit = ({
                         <div className="unit-selection-section  unit-selection-section-video">
                           <span className="unit-form-span-title">Video</span>
                           <i
-                            class="bi bi-plus-circle plus-icon unit-form-i-title"
+                            className="bi bi-plus-circle plus-icon unit-form-i-title"
                             ref={videoAddRef}
                             onClick={() => hanldeVideoUpload()}
                           ></i>
@@ -918,11 +914,11 @@ const CourseUnit = ({
                           </div>
                           <div className="unit-video-icon-section">
                             <i
-                              class="bi bi-check-lg check-unit-content text-success"
+                              className="bi bi-check-lg check-unit-content text-success"
                               onClick={(e) => handleUploadVideo(e)}
                             ></i>
                             <i
-                              class="bi bi-x check-unit-content text-danger"
+                              className="bi bi-x check-unit-content text-danger"
                               onClick={() => handleAddVido()}
                             ></i>
                           </div>
@@ -932,7 +928,7 @@ const CourseUnit = ({
                         <div className="unit-selection-section">
                           <span className="unit-form-span-title">Slide</span>
                           <i
-                            class="bi bi-plus-circle plus-icon unit-form-i-title"
+                            className="bi bi-plus-circle plus-icon unit-form-i-title"
                             ref={slideSelector}
                             onClick={() => hanldeSlideUpload()}
                           ></i>
@@ -951,11 +947,11 @@ const CourseUnit = ({
                           />
                           <span>{unitSlide && unitSlide.name}</span>
                           <i
-                            class="bi bi-check-lg check-unit-content text-success"
+                            className="bi bi-check-lg check-unit-content text-success"
                             onClick={(e) => handleUploadFile(e)}
                           ></i>
                           <i
-                            class="bi bi-x check-unit-content text-danger"
+                            className="bi bi-x check-unit-content text-danger"
                             onClick={() => handleRemoveSlide()}
                           ></i>
                         </div>
@@ -964,7 +960,7 @@ const CourseUnit = ({
                         <div className="unit-selection-section">
                           <span className="unit-form-span-title">PDF</span>
                           <i
-                            class="bi bi-plus-circle plus-icon unit-form-i-title"
+                            className="bi bi-plus-circle plus-icon unit-form-i-title"
                             ref={pdfSelector}
                             onClick={() => hanldePDFUpload()}
                           ></i>
@@ -983,11 +979,11 @@ const CourseUnit = ({
                           />
                           <span>{unitPDF && unitPDF.name}</span>
                           <i
-                            class="bi bi-check-lg check-unit-content text-success"
+                            className="bi bi-check-lg check-unit-content text-success"
                             onClick={(e) => handleUploadFile(e)}
                           ></i>
                           <i
-                            class="bi bi-x check-unit-content text-danger"
+                            className="bi bi-x check-unit-content text-danger"
                             onClick={() => handleRemovePDF()}
                           ></i>
                         </div>
@@ -998,7 +994,7 @@ const CourseUnit = ({
                             Assignment
                           </span>
                           <i
-                            class="bi bi-plus-circle plus-icon unit-form-i-title"
+                            className="bi bi-plus-circle plus-icon unit-form-i-title"
                             onClick={() => handleAssignment()}
                           ></i>
                         </div>
@@ -1032,7 +1028,7 @@ const CourseUnit = ({
               setListUnit((pre) => [...pre, increment + 1]);
             }}
           >
-            Add Unit <i class="bi bi-plus-circle plus-icon"></i>
+            Add Unit <i className="bi bi-plus-circle plus-icon"></i>
           </button>
         </div>
       </div>

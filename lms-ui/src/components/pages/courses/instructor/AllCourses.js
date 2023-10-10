@@ -34,12 +34,12 @@ const AllCourse = ({ show, minDate }) => {
       }).then((response) => {
         if(response.status === 200){
         response.json().then(function (result) {
-        
           setCourseContent(result);
         });
       }
       else{
         console.log(response);
+        setCourseContent([])
       }
       });
     };
@@ -54,12 +54,12 @@ const AllCourse = ({ show, minDate }) => {
       }).then((response) => {
         if(response.status === 200){
         response.json().then(function (result) {
-         
           setCategoryData(result);
         });
       }
       else{
         console.log(response);
+        setCategoryData([])
       }
       });
     };
@@ -79,6 +79,7 @@ const AllCourse = ({ show, minDate }) => {
       }
       else {
         console.log(response);
+        setTeamData([])
       }
       });
     };
@@ -165,13 +166,7 @@ return totalUsers
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if(response.status === 404 ){
-        response.json().then(function (result) {
-          console.log("Api result: ", result);
-          // setModuleData(result);
-        });
-      }
-      else if(response.status === 200) {
+      if(response.status === 200) {
         response.json().then(function (result) {
           console.log("Api result: ", result);
           setModuleData(result);
@@ -179,10 +174,10 @@ return totalUsers
       }
       else {
         console.log(response);
+        setModuleData([])
       }
     });
   };
-  console.log('Module Data', moduleData);
 
 
   return (
@@ -300,9 +295,9 @@ return totalUsers
             />
           </div>
         </div>
-        <table class="table table-striped ">
+        <table className="table table-striped ">
 
-          <thead class="table-info">
+          <thead className="table-info">
             <tr>
               <th scope="col">Course Title</th>
               <th scope="col">Description</th>

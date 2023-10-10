@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import CourseUnit from "./CourseUnit";
+import SingleModule from "./SingleModule";
 
 const CourseModule = ({ moduleData,setModuleData, courseId }) => {
  
@@ -41,16 +42,16 @@ const CourseModule = ({ moduleData,setModuleData, courseId }) => {
     setModuleTitle(e.target.value);
   };
   const handlModuleStart = (e) => {
-    startDateRefModule.current.removeAttribute("class", "module-start-field");
+    startDateRefModule.current.removeAttribute("className", "module-start-field");
     startDatePickerRefModule.current.setAttribute(
-      "class",
+      "className",
       "module-start-field"
     );
     setModuleStart(e.target.value);
   };
   const handlModuleEnd = (e) => {
-    endDateRefModule.current.removeAttribute("class", "module-end-field");
-    endDatePickerRefModule.current.setAttribute("class", "module-end-field");
+    endDateRefModule.current.removeAttribute("className", "module-end-field");
+    endDatePickerRefModule.current.setAttribute("className", "module-end-field");
     setModuleEnd(e.target.value);
   };
 
@@ -66,11 +67,10 @@ const CourseModule = ({ moduleData,setModuleData, courseId }) => {
     setShowAddModule(true);
   };
 
+ 
+
   const handleModuleContent = (module) => {
     setModuleId(module.id)
-
-
-    
     fetch(`http://127.0.0.1:8000/api/modules/${module.id}/units`, {
       method: "GET",
       headers: {
@@ -79,7 +79,6 @@ const CourseModule = ({ moduleData,setModuleData, courseId }) => {
     }).then((response) => {
       if(response.status === 200){
       response.json().then(function (result) {
-      
         setUnitData(result);
       });
     }
@@ -89,8 +88,6 @@ const CourseModule = ({ moduleData,setModuleData, courseId }) => {
     }
     });
   };
-
-
 
 
   const handleSaveModule = (moduleTitle) => {
@@ -133,142 +130,15 @@ const CourseModule = ({ moduleData,setModuleData, courseId }) => {
     <div className="">
       <div className="unitData-section">
         <div className="accordion accordion-flush w-100" id="module-section">
-          {moduleData.length === 0 ||
-          moduleData.detail == "No module found for this course."
-            ? moduleData.detail
+          {moduleData.length === 0 ? "No module found for this course."
             : moduleData &&
               moduleData.map((module) => {
                 return (
-                  <div
-                    key={module.id}
-                    type="button"
-                    className="accordion-item mb-1"
-                    role="button"
-                    aria-expanded="false"
-                    onClick={() => {
-                      // showModuleList();
-                      // setUnitContent(unit)
-                      handleModuleContent(module);
-                      setModuelContent(() => module);
-                    }}
-                  >
-                    <h2
-                      className="accordion-header module-collapse-button"
-                      id={`flush-module${module.id}`}
-                    >
-                      <div
-                        className="accordion-button collapsed module-button w-100"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target={`#module${module.id}`}
-                        aria-expanded="false"
-                        aria-controls={`flush-module${module.id}`}
-                      >
-                        <div className="module-heading-container">
-                          <div className="">
-                            <span className="me-3">MODULE</span>
-                            <input
-                              type="text"
-                              placeholder="Module Title"
-                              value={module.title}
-                              className="moduleTitle"
-                              // onChange={"handleModuleTitle"}
-                              required
-                            />
-                          </div>
-                          <div className="">
-                            <label>Start Date:</label>
-                            {/* <i
-                              class="bi bi-calendar-date date-picker"
-                              role="button"
-                              ref={startDatePickerRefModule}
-                              onClick={() =>
-                                startDateRefModule.current.showPicker()
-                              }
-                            ></i> */}
-                            <input
-                              type="date"
-                              value={moduleStart}
-                              className="module-start-fiel"
-                              ref={startDateRefModule}
-                              id="module-date-field"
-                              onChange={(e) => handlModuleStart(e)}
-                            />
-                            <label>End Date:</label>
-                            {/* <i
-                              class="bi bi-calendar-date date-picker"
-                              role="button"
-                              ref={endDatePickerRefModule}
-                              onClick={() =>
-                                endDateRefModule.current.showPicker()
-                              }
-                            ></i> */}
-                            <input
-                              type="date"
-                              value={moduleEnd}
-                              onChange={(e) => handlModuleEnd(e)}
-                              className="module-end-fiel"
-                              id="module-date-field"
-                              ref={endDateRefModule}
-                            />
-                          </div>
-
-                          <div class="btn-group dropstart">
-                            <i
-                              className="bi bi-three-dots-vertical "
-                              type="button"
-                              data-bs-toggle="dropdown"
-                              aria-expanded="false"
-                              onClick={() => null}
-                            ></i>
-                            <div className="dropdown-menu option-main-container module-option">
-                              <ul class="option-ul" style={{ display: "flex" }}>
-                                <li>
-                                  <div className="form-check form-switch visibility">
-                                    <input
-                                      className="form-check-input "
-                                      type="checkbox"
-                                      role="switch"
-                                      value={visibility}
-                                      onChange={handleVisibility}
-                                      id="flexSwitchCheckDefault"
-                                    />
-                                  </div>
-                                </li>
-                                <li>
-                                  <i
-                                    className="bi bi-trash text-danger"
-                                    onClick={() => null}
-                                  ></i>
-                                </li>
-                                <li>
-                                  <i class="bi bi-copy text-info"></i>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </h2>
-                    <div
-                      id={`module${module.id}`}
-                      className="accordion-collapse collapse"
-                      aria-labelledby={`flush-module${module.id}`}
-                      data-bs-parent="#module-section"
-                    >
-                      <div className="accordion-body">
-                        <CourseUnit 
-                          unitData={unitData}
-                          moduleId={moduleId}
-                          showUnit={true}
-                          unitTitle={unitTitle}
-                          setUnitTitle={setUnitTitle}
-                      
-
-                        />
-                      </div>
-                    </div>
-                  </div>
+                  <SingleModule key={module.id}  
+                  module={module}
+                  setModuelContent={setModuelContent}
+                  handleModuleContent={handleModuleContent}
+                  />
                 );
               })}
 
@@ -293,7 +163,7 @@ const CourseModule = ({ moduleData,setModuleData, courseId }) => {
                 <div className="">
                   <label>Start Date:</label>
                   <i
-                    class="bi bi-calendar-date date-picker"
+                    className="bi bi-calendar-date date-picker"
                     role="button"
                     ref={startDatePickerRefModule}
                     onClick={() => startDateRefModule.current.showPicker()}
@@ -308,7 +178,7 @@ const CourseModule = ({ moduleData,setModuleData, courseId }) => {
                   />
                   <label>End Date:</label>
                   <i
-                    class="bi bi-calendar-date date-picker"
+                    className="bi bi-calendar-date date-picker"
                     role="button"
                     ref={endDatePickerRefModule}
                     onClick={() => endDateRefModule.current.showPicker()}
@@ -323,7 +193,7 @@ const CourseModule = ({ moduleData,setModuleData, courseId }) => {
                   />
                 </div>
 
-                <div class="btn-group dropstart">
+                <div className="btn-group dropstart">
                   <i
                     className="bi bi-three-dots-vertical "
                     type="button"
@@ -339,7 +209,7 @@ const CourseModule = ({ moduleData,setModuleData, courseId }) => {
                   }}></button>
                   <div className="dropdown-menu option-main-container module-option">
                     <ul
-                      class="option-ul"
+                      className="option-ul"
                       style={{
                         display: "flex",
                       }}
@@ -363,7 +233,7 @@ const CourseModule = ({ moduleData,setModuleData, courseId }) => {
                         ></i>
                       </li>
                       <li>
-                        <i class="bi bi-copy text-info"></i>
+                        <i className="bi bi-copy text-info"></i>
                       </li>
                     </ul>
                   </div>
@@ -431,7 +301,7 @@ const CourseModule = ({ moduleData,setModuleData, courseId }) => {
               }
               }
             >
-              Add Module <i class="bi bi-plus-circle plus-icon"></i>
+              Add Module <i className="bi bi-plus-circle plus-icon"></i>
             </button>
           </div>
         </div>
