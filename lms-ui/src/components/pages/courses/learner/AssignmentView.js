@@ -179,6 +179,52 @@ function AssignmentView({ selectedAssignments }) {
     setIsConfirmButtonVisible(true);
     setInstructorFeedback(null); // Reset feedback when changing assignments
     setAssignmentid(assignment.id);
+
+    const getGradingData = () => {
+
+      fetch(`http://127.0.0.1:8000/api/assignments/${assignment.id}/assignment_submissions/`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      if(response.status === 200){
+      response.json().then(function (result) {
+        console.log("Api result submissions: ", result);
+        console.log('result id', result[result.length - 1].id);
+        getGradingAPI(result[result.length - 1].id)
+     
+      });
+    }
+    else {
+      console.log(response);
+      setGradeData(0);
+    }
+    });
+    }
+    
+
+    const getGradingAPI = (id) => {
+      fetch(`http://127.0.0.1:8000/api/assignment_submissions/${id}/assignment_gradings`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      if(response.status === 200){
+      response.json().then(function (result) {
+        console.log("Api result Gradings: ", result);
+        setGradeData(result[0].marks);
+      });
+    }
+    else {
+      console.log(response);
+      setGradeData(0);
+    }
+    });
+    }
+
+    getGradingData()
   }
 
   function handleToggleResubmit() {
@@ -216,7 +262,7 @@ function AssignmentView({ selectedAssignments }) {
     event.preventDefault();
 
     const obj = {
-      submitted_by: 1,
+      submitted_by: sessionStorage.getItem("user_id"),
       assignment: assignmentid,
       submission_date: "2024-10-03T10:00:00Z",
       submitted_link: link,
@@ -548,7 +594,7 @@ function AssignmentView({ selectedAssignments }) {
                 </div>
                 {/* Display Feedback and Grade */}
                 <>
-                  {isSubmitClicked && feedbackData !== null && (
+                  {/* {isSubmitClicked && feedbackData !== null && ( */}
                     <div className="feedback-and-grade">
                       <div className="feedback-and-grad">
                         <div className="feedback">
@@ -563,7 +609,7 @@ function AssignmentView({ selectedAssignments }) {
                         </div>
                       </div>
                     </div>
-                  )}
+                  {/* )} */}
                 </>
               </div>
             </div>
