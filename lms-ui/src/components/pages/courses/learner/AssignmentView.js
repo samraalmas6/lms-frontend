@@ -73,11 +73,16 @@ function AssignmentView({ selectedAssignments }) {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
+        if(response.status === 200){
         response.json().then(function (result) {
           console.log(result);
           setApiData(result);
           setNumber(result[0].marks);
         });
+      }
+      else{
+        console.log(response);
+      }
       });
     };
     getAssignmentData();
@@ -117,13 +122,13 @@ function AssignmentView({ selectedAssignments }) {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-  
+        if(response.status === 200){
         const data = await response.json();
         // console.log("API Data:", data, data[0].marks);
         setGradeData(data[0].marks);
         setFeedbackData(data[0].comments);
         console.log("feddback data from variab", gradeData)
-        
+        }
       } catch (error) {
         console.error("Error fetching grading data:", error);
       }

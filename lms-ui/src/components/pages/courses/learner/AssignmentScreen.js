@@ -181,8 +181,15 @@ import paraIcon from "../../../content/Images/paragraph.svg";
 // import FileUploadComponent from "../../../content/FileUploadComponent";
 import { Editor } from "@tinymce/tinymce-react";
 import "../../../styles/editor.css";
+import { useLocation, useNavigate,  } from "react-router-dom";
 
 const AssignmentScreen = () => {
+
+  const userId = sessionStorage.getItem('user_id')
+
+  const navigate = useNavigate()
+  const {state} = useLocation();
+
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = String(currentDate.getMonth() + 1).padStart(2, "0");
@@ -238,9 +245,9 @@ const AssignmentScreen = () => {
       description: content, // You can add the description here if you have it
       due_date: courseStart,
       marks: marks,
-      unit: 1, // Assuming a default unit value
+      unit: state.unitId, // Assuming a default unit value
       Number_of_members: 1,
-      updated_by: 1,
+      updated_by: userId,
     };
 
     fetch("http://127.0.0.1:8000/api/assignments/", {
@@ -260,6 +267,7 @@ const AssignmentScreen = () => {
             setMarks("");
             setCourseStart("");
             setCourseEnd("");
+            navigate(-1)
           });
         } else {
           console.log(response);

@@ -20,8 +20,8 @@ const CourseModule = ({ moduleData,setModuleData, courseId }) => {
   const [saveUnit, setSaveUnit] = useState(false)
 
   const [moduleTitle, setModuleTitle] = useState("");
-  const [moduleStart, setModuleStart] = useState("");
-  const [moduleEnd, setModuleEnd] = useState("");
+  const [moduleStart, setModuleStart] = useState('2023-10-08');
+  const [moduleEnd, setModuleEnd] = useState('2023-11-08');
   const [moduleDescription, setModuleDescription] = useState("");
   const [visibility, setVisibility] = useState(false);
 
@@ -77,10 +77,16 @@ const CourseModule = ({ moduleData,setModuleData, courseId }) => {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
+      if(response.status === 200){
       response.json().then(function (result) {
       
         setUnitData(result);
       });
+    }
+    else {
+      console.log(response);
+      setUnitData([])
+    }
     });
   };
 
@@ -94,8 +100,8 @@ const CourseModule = ({ moduleData,setModuleData, courseId }) => {
       const obj = {
         title: moduleTitle,
         description: 'module Description',
-        // start_date: moduleStart,
-        // end_date: moduleEnd,
+        start_date: moduleStart,
+        end_date: moduleEnd,
         course: courseId,
         updated_by: sessionStorage.getItem('user_id'),
       };

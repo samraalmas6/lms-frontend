@@ -52,7 +52,7 @@ const ModuleCard = ({
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
-        if (response.status == 200) {
+        if (response.status === 200) {
           response.json().then(function (result) {
             console.log("Units", result);
             setModuleUnit(result);
@@ -71,10 +71,15 @@ const ModuleCard = ({
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
+      if(response.status === 200){
       response.json().then(function (result) {
         console.log("Units", result);
         setUnitPDF(result);
       });
+    }
+    else {
+      console.log(response);
+    }
     });
     fetch(`http://127.0.0.1:8000/api/units/${unit.id}/assignments/`, {
       method: "GET",
@@ -82,10 +87,15 @@ const ModuleCard = ({
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
+      if(response.status === 200){
       response.json().then(function (result) {
         console.log("Units", result);
         setUnitAssignment(result);
       });
+    }
+    else {
+      console.log(response);
+    }
     });
   };
 

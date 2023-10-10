@@ -11,7 +11,7 @@ const CourseUnit = ({
 }) => {
   //  ************************* Unit Ref Hooks  ********************
   // ***************************************************************
-
+  const userId = sessionStorage.getItem('user_id')
   const navigate = useNavigate();
 
   const startDateRefUnit = useRef(null);
@@ -31,8 +31,8 @@ const CourseUnit = ({
   );
   const [unitId, setUnitId] = useState(null);
 
-  const [unitStart, setUnitStart] = useState("");
-  const [unitEnd, setUnitEnd] = useState("");
+  const [unitStart, setUnitStart] = useState("2023-12-25");
+  const [unitEnd, setUnitEnd] = useState("2023-12-25");
   const [visibility, setVisibility] = useState("");
   const [unitFiles, setUnitFiles] = useState([]);
   const [unitVideos, setUnitVideos] = useState([]);
@@ -132,7 +132,7 @@ const CourseUnit = ({
   };
 
   const handleAssignment = () => {
-    navigate("/course/create-assignment");
+    navigate("/course/create-assignment",{ state: { unitId } });
   };
 
   const handleShowAddUnit = () => {
@@ -149,9 +149,14 @@ const CourseUnit = ({
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
+      if(response.status === 200){
       response.json().then(function (result) {
         setUnitFiles(result);
       });
+    }
+    else {
+      console.log(response);
+    }
     });
 
        //      Unit Video API 
@@ -161,9 +166,14 @@ const CourseUnit = ({
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
+      if(response.status === 200){
       response.json().then(function (result) {
         setUnitVideos(result);
       });
+    }
+    else {
+      console.log(response);
+    }
     });
   };
 
@@ -175,7 +185,7 @@ const CourseUnit = ({
         title: videoTitle,
         url: videoUrl,
         unit: unitId,
-        updated_by: 1,
+        updated_by: userId,
       };
       fetch("http://127.0.0.1:8000/api/videos/", {
         method: "POST",
@@ -213,12 +223,12 @@ const CourseUnit = ({
         unitSlide.name.split(".").slice(0, 1).toString()
       );
       formData.append("unit", unitId);
-      formData.append("updated_by", 1);
+      formData.append("updated_by", userId);
     } else {
       formData.append("file", unitPDF);
       formData.append("title", unitPDF.name.split(".").slice(0, 1).toString());
       formData.append("unit", unitId);
-      formData.append("updated_by", 1);
+      formData.append("updated_by", userId);
     }
     fetch("http://127.0.0.1:8000/api/files/", {
       method: "POST",
@@ -249,10 +259,10 @@ const CourseUnit = ({
       const obj = {
         title: unitTitle,
         description: "Unit Test Description",
-        // start_date: "2023-12-25T00:00:00Z",
-        // end_date: "2023-12-25T00:00:00Z",
+        start_date: unitStart,
+        end_date: unitEnd,
         module: moduleId,
-        updated_by: 1,
+        updated_by: userId,
       };
       fetch("http://127.0.0.1:8000/api/units/", {
         method: "POST",

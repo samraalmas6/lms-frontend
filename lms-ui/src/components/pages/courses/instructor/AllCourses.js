@@ -16,6 +16,7 @@ const AllCourse = ({ show, minDate }) => {
   const [courseImg, setCourseImg] = useState("");
   const [uploadImg, setUploadImg] = useState("");
   const [visibility, setVisibility] = useState();
+  const [courseDes, setCourseDes] = useState("");
 
 
   const [courseId, setCourseId] = useState(null);
@@ -31,10 +32,15 @@ const AllCourse = ({ show, minDate }) => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
+        if(response.status === 200){
         response.json().then(function (result) {
         
           setCourseContent(result);
         });
+      }
+      else{
+        console.log(response);
+      }
       });
     };
 
@@ -46,10 +52,15 @@ const AllCourse = ({ show, minDate }) => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
+        if(response.status === 200){
         response.json().then(function (result) {
          
           setCategoryData(result);
         });
+      }
+      else{
+        console.log(response);
+      }
       });
     };
 
@@ -92,7 +103,7 @@ const AllCourse = ({ show, minDate }) => {
     if (courseTitle && courseCategory) {
       const obj = {
         title: courseTitle,
-        description: "Test Description",
+        description: `This is description for the ${courseTitle} course.`,
         start_date: courseStart,
         end_date: courseEnd,
         author: sessionStorage.getItem('user_id'),
@@ -146,6 +157,7 @@ return totalUsers
     // setCourseEnd(course.end_date)
     setCourseImg(course.course_image)
     setVisibility(course.is_active)
+    setCourseDes(`<p>${course.description}</p>`);
 
     fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
       method: "GET",
@@ -156,7 +168,7 @@ return totalUsers
       if(response.status === 404 ){
         response.json().then(function (result) {
           console.log("Api result: ", result);
-          setModuleData(result);
+          // setModuleData(result);
         });
       }
       else if(response.status === 200) {
@@ -283,6 +295,8 @@ return totalUsers
               setCourseId={setCourseId}
               visibility= {visibility}
               setVisibility={setVisibility}
+              courseDes={courseDes}
+              setCourseDes={setCourseDes}
             />
           </div>
         </div>

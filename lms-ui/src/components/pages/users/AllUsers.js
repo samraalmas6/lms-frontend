@@ -15,13 +15,18 @@ const AllUsers = () => {
           Authorization: `Token ${sessionStorage.getItem('user_token')}`,
         },
       }).then((response) => { 
+        if(response.status === 200){
         response.json().then(function (result) {
           console.log(result);
           setUserData(result)
-        })
-      })
+        });
+      }
+      else {
+        console.log(response);
+      }
+      });
     }
-    getUsers()
+    getUsers();
   }, [])
 
   const handleViewTogle = () => {

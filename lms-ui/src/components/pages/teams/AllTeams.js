@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import teamsData from "../../hooks/teamData";
 import styles from "../../styles/AllTeam.module.css";
 import userImg from "../../content/Images/user.png";
-// import courseData from "../../hooks/courseData";
 
 const AllTeams = ({ show }) => {
   const [showBlock, setShowBlock] = useState(false);
@@ -18,7 +16,6 @@ const AllTeams = ({ show }) => {
   const [teamData, setTeamData] = useState([]);
   const [teamUsers, setTeamUser] = useState([]);
   const [teamCourses, setTeamCourses] = useState([]);
-  const [teamDetail, setTeamDetail] = useState([]);
   const [addTeamUsersId, setAddTeamUsersId] = useState([]);
   const [addTeamCoursesId, setAddTeamCoursesId] = useState([]);
   const [userData, setUserData] = useState([]);
@@ -32,10 +29,15 @@ const AllTeams = ({ show }) => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
+        if(response.status === 200){
         response.json().then(function (result) {
           console.log(result);
           setTeamData(result);
         });
+      }
+      else {
+        console.log(response);
+      }
       });
     };
 
@@ -46,10 +48,15 @@ const AllTeams = ({ show }) => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
+        if(response.status === 200){
         response.json().then(function (result) {
           console.log(result);
           setUserData(result);
         });
+      }
+      else {
+        console.log(response);
+      }
       });
     };
     const getCourse = () => {
@@ -59,10 +66,15 @@ const AllTeams = ({ show }) => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
+        if(response.status === 200){
         response.json().then(function (result) {
           console.log(result);
           setCoursesData(result);
         });
+      }
+      else {
+        console.log(response);
+      }
       });
       // setCoursesData(courseData);
     };
@@ -98,7 +110,7 @@ const AllTeams = ({ show }) => {
       response.json().then(function (result) {
         console.log(result);
         // window.location.reload();
-        // setTeamData(result);
+        setTeamData((pre) => [...pre, result]);
       });
     });
 
@@ -265,7 +277,6 @@ const AllTeams = ({ show }) => {
           }).then((response) => {
             response.json().then(function (result) {
               console.log(result);
-
               window.location.reload();
               // setTeamData(result);
             });
@@ -890,13 +901,13 @@ const AllTeams = ({ show }) => {
                         // })
                       }
                     </td>
-                    <td>
-                      <i
-                        className="bi bi-trash text-danger"
-                        onClick={(e) => {
+                    <td onClick={(e) => {
                           e.stopPropagation();
                           handleDeleteTeam(team.id);
-                        }}
+                        }}>
+                      <i
+                        className="bi bi-trash text-danger"
+                        
                       ></i>
                     </td>
                   </tr>

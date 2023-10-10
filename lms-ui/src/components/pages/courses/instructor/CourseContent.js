@@ -2,7 +2,6 @@ import { Editor } from "@tinymce/tinymce-react";
 import React, { useRef, useState } from "react";
 import CourseModule from "./CourseModule";
 import img from "../../../content/Images/uploadImg.jpg";
-import catData from "../../../hooks/catData";
 import { useNavigate } from "react-router-dom";
 
 const CourseContent = ({
@@ -19,7 +18,9 @@ const CourseContent = ({
   courseId,
   setCourseId,
   visibility,
-  setVisibility
+  setVisibility,
+  courseDes,
+  setCourseDes
 }) => {
   const navigate = useNavigate();
   const inpRef = useRef("");
@@ -30,7 +31,7 @@ const CourseContent = ({
   const [courseStart, setCourseStart] = useState("");
   const [courseEnd, setCourseEnd] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
-  const [courseDes, setCourseDes] = useState("");
+ 
   // const [course, setCourse] = useState([courseData[0]]);
 
 console.log('this is visibility', visibility);
@@ -121,6 +122,7 @@ console.log('this is visibility', visibility);
     setCourseDes(`<p>${course.description}</p>`);
     setVisibility(() => course.is_active);
 
+
     fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
       method: "GET",
       headers: {
@@ -130,7 +132,8 @@ console.log('this is visibility', visibility);
       if(response.status === 404 ){
         response.json().then(function (result) {
           console.log("Api result: ", result);
-          setModuleData([result]);
+          // setModuleData([result]);
+          setModuleData([])
         });
       }
       else if(response.status === 200) {
@@ -150,7 +153,7 @@ console.log('this is visibility', visibility);
 
     if (courseTitle && courseCategory) {
       const formData = new FormData();
-      if(typeof(courseImg) === 'object'){
+      if(typeof(courseImg) === 'object' && courseImg){
         formData.append("course_image", courseImg);
       }
       formData.append("title", courseTitle);

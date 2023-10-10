@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import catData from "../../hooks/catData";
+// import catData from "../../hooks/catData";
 import "../../styles/Category.css";
-import courseData from "../../hooks/courseData";
+// import courseData from "../../hooks/courseData";
 
 const AllCategory = ({ show }) => {
   const [categoryName, setCatgoryName] = useState("");
   const [parentCat, setParentCat] = useState("");
-  const [categoryData, setCategoryData] = useState(catData);
+  const [categoryData, setCategoryData] = useState([]);
   const [categoryCourses, setcategoryCourses] = useState([]);
   const [coursesData, setCoursesData] = useState([]);
 
@@ -20,10 +20,15 @@ const AllCategory = ({ show }) => {
           Authorization: `Token ${sessionStorage.getItem('user_token')}`,
         },
       }).then((response) => {
+        if(response.status === 200){
         response.json().then(function (result) {
           console.log(result);
           setCategoryData(result);
         });
+      }
+      else {
+        console.log(response);
+      }
       });
       // setCoursesData(courseData);
     };
@@ -34,10 +39,15 @@ const AllCategory = ({ show }) => {
           Authorization: `Token ${sessionStorage.getItem('user_token')}`,
         },
       }).then((response) => {
+        if(response.status === 200){
         response.json().then(function (result) {
           console.log(result);
           setCoursesData(result);
         });
+      }
+      else {
+        console.log(response);
+      }
       });
     };
 
@@ -82,17 +92,13 @@ const AllCategory = ({ show }) => {
           console.log(result);
           setCatgoryName("");
           setParentCat("");
-          window.location.reload();
+          setCategoryData(pre => [...pre, result])
+          // window.location.reload();
         });
       } else {
         console.log(response);
       }
     });
-
-    // setCategoryData(() => [...categoryData, obj]);
-    // setCatgoryName("");
-    // setParentCat("");
-    // console.log(obj);
   };
 
   const handlAllSelect = () => {
@@ -113,7 +119,7 @@ const AllCategory = ({ show }) => {
     const selectItems = document.getElementsByClassName("course-check");
     for (let item of selectItems) {
       if (item.checked) {
-        const newObj = courseData.filter((course) => {
+        const newObj = coursesData.filter((course) => {
           return course.course_title === item.value;
         });
         console.log(" obj  =", newObj);
@@ -417,11 +423,11 @@ const AllCategory = ({ show }) => {
             </tr>
           </thead>
           <tbody>
-            {courseData.length === 0 ||
-          courseData.detail == "No objects found"
-            ? courseData.detail
-            : courseData &&
-            courseData.map((course) => {
+            {coursesData.length === 0 ||
+          coursesData.detail == "No objects found"
+            ? coursesData.detail
+            : coursesData &&
+            coursesData.map((course) => {
                 return (
                   <tr key={course.id}>
                     <td>
