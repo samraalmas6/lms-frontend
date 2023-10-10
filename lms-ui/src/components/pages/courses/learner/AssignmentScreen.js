@@ -201,9 +201,10 @@ const AssignmentScreen = () => {
   //   handleEditorChange(content, editor);
   //   setContent(event.target.value);
   // }
-  const handleEditorChange = (content, editor) => {
+  const handleEditorChange = (content, e) => {
     console.log("Content was updated:", content);
-    setContent(content);
+    // setContent(content);
+    setContent(e.getContent({ format: "text" }))
   };
 
   const handleTitle = (event) => {
@@ -238,8 +239,9 @@ const AssignmentScreen = () => {
       description: content, // You can add the description here if you have it
       due_date: courseStart,
       marks: marks,
+      due_time: courseEnd,
       unit: 1, // Assuming a default unit value
-      Number_of_members: 1,
+      // Number_of_members: 1,
       updated_by: 1,
     };
 
@@ -308,7 +310,8 @@ const AssignmentScreen = () => {
                       alignleft aligncenter alignright alignjustify | \
                       bullist numlist outdent indent | removeformat | help",
                   }}
-                  onEditorChange={handleEditorChange}
+                  // onEditorChange={handleEditorChange}
+                  onEditorChange={(value, evt) => handleEditorChange(value, evt)}
                   value={content}
                 />
               </div>
