@@ -214,7 +214,7 @@ function AssignmentView({ selectedAssignments }) {
       if(response.status === 200){
       response.json().then(function (result) {
         console.log("Api result Gradings: ", result);
-        setGradeData(result[0].marks);
+        setGradeData(result[result.length -1].marks);
       });
     }
     else {
