@@ -66,7 +66,6 @@ function AssignmentView({ selectedAssignments }) {
   //   // Add more assignments here.
   // ];
 
-
   useEffect(() => {
     const getAssignmentData = () => {
       fetch("http://127.0.0.1:8000/api/assignments", {
@@ -77,14 +76,22 @@ function AssignmentView({ selectedAssignments }) {
       })
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        setApiData(result);
-        setNumber(result[0].marks);
+        if (Array.isArray(result) && result.length > 0) {
+          console.log(result);
+          setApiData(result);
+          setNumber(result[0].marks);
+        } else {
+          console.error("Invalid API response:", result);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching assignment data:", error);
       });
     };
   
     getAssignmentData();
   }, []);
+  
   
  
 
@@ -216,49 +223,54 @@ function AssignmentView({ selectedAssignments }) {
       // Add other data properties as needed
     };
 
-    async function postData(obj) {
-      try {
-        const response = await fetch("http://127.0.0.1:8000/api/assignment_submissions/", {
-          method: "POST",
-          body: JSON.stringify(obj),
-          headers: {
-            Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        });
-    
-        if (response.status === 201) {
-          const result = await response.json();
-          console.log(result.id);
-    
-          const gradingResponse = await fetch(`http://127.0.0.1:8000/api/assignment_submissions/10/assignment_gradings`, {
-            method: "GET",
-            headers: {
-              Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-              "Content-type": "application/json; charset=UTF-8",
-            },
-          });
-    
-          if (gradingResponse.status === 200) {
-            const gradingResult = await gradingResponse.json();
-            console.log(gradingResult[0].marks);
-            console.log(gradingResult[0].status);
-            console.log(gradingResult[0].comments);
-            setGradeData(gradingResult[0].marks)
-          
-            
-          } else {
-            console.log(gradingResponse);
-          }
-    
-          setLink("");
-        } else {
-          console.log(response);
-        }
-      } catch (error) {
-        console.error("Error:", error);
+   async function postData(obj) {
+  try {
+    const response = await fetch("http://127.0.0.1:8000/api/assignment_submissions/", {
+      method: "POST",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+
+    if (response.status === 201) {
+      const result = await response.json();
+      console.log(result.id);
+
+      
+      const submissionId = result.id;
+
+      
+      const gradingURL = `http://127.0.0.1:8000/api/assignment_submissions/${submissionId}/assignment_gradings`;
+
+      const gradingResponse = await fetch(gradingURL, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+
+      if (gradingResponse.status === 200) {
+        const gradingResult = await gradingResponse.json();
+        console.log(gradingResult[0].marks);
+        console.log(gradingResult[0].status);
+        console.log(gradingResult[0].comments);
+        setGradeData(gradingResult[0].marks);
+      } else {
+        console.log(gradingResponse);
       }
+
+      setLink("");
+    } else {
+      console.log(response);
     }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
     
     
     // Call the postData function when needed:
@@ -310,7 +322,7 @@ function AssignmentView({ selectedAssignments }) {
                   </div>
                   <div className="detail-create">
                     <strong>Created At:</strong>
-                    {selectedAssignment.created_at.substr(0, 10)}
+                    {selectedAssignment.created_at}
                   </div>
                   <div className="detail-date">
                     <strong>Due date:</strong>
@@ -541,7 +553,7 @@ function AssignmentView({ selectedAssignments }) {
                       <div className="feedback-and-grad">
                         <div className="feedback">
                           <strong>Comments:</strong>{" "}
-                          {feedbackData ? feedbackData : "No feedback yet"}
+                          {gradeData? feedbackData : "No feedback yet"}
                         </div>
                         <div className="grade">
                           <strong>Grade:</strong>{" "}
