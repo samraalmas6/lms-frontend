@@ -1,11 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import CourseUnit from "./CourseUnit";
 
-const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
+const SingleModule = ({ module, setModuelContent,handleModuleContent }) => {
 
     const startDateRefModule = useRef(null);
     const endDateRefModule = useRef(null);
-    const startDatePickerRefModule = useRef(null);
-    const endDatePickerRefModule = useRef(null);
+
+
 
     const [moduleTitle, setModuleTitle] = useState( module.title);
     const [moduleStart, setModuleStart] = useState( module.start_date);
@@ -34,8 +35,6 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
         setVisibility(e.target.value);
       };
 
-
- 
 
   return (
     <div
@@ -154,15 +153,9 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
         // data-bs-parent="#module-section"
       >
         <div className="accordion-body">
-          {/* <CourseUnit 
-          unitData={unitData}
-          moduleId={moduleId}
+          <CourseUnit 
           showUnit={true}
-          unitTitle={unitTitle}
-          setUnitTitle={setUnitTitle}
-      
-
-        /> */}
+        />
         </div>
       </div>
     </div>
