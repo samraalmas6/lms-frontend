@@ -1,5 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import CourseContent from "./CourseContent";
+
+export const CourseProbs = createContext(null)
 
 const AllCourse = ({ show, minDate }) => {
   //   Create Course Section
@@ -275,6 +277,7 @@ return totalUsers
           aria-labelledby="offcanvasRightLabel"
         >
           <div className="offcanvas-body">
+            <CourseProbs.Provider value={{courseId}} >
             <CourseContent
               courseTitle={courseTitle}
               setCourseTitle={setCourseTitle}
@@ -286,13 +289,13 @@ return totalUsers
               categoryData={categoryData}
               setModuleData={setModuleData}
               courseContent={courseContent}
-              courseId={courseId}
               setCourseId={setCourseId}
               visibility= {visibility}
               setVisibility={setVisibility}
               courseDes={courseDes}
               setCourseDes={setCourseDes}
             />
+             </CourseProbs.Provider>
           </div>
         </div>
         <table className="table table-striped ">

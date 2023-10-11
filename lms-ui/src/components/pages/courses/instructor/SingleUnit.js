@@ -1,7 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import AddUnit from "./AddUnit";
+import { ModuleProbs } from "./CourseModule";
 
 const SingleUnit = ({ unit, setUnitId }) => {
+    
+    const {moduleId} = useContext(ModuleProbs)
 
     const startDateRefUnit = useRef(null);
     const endDateRefUnit = useRef(null);
@@ -27,7 +30,34 @@ const SingleUnit = ({ unit, setUnitId }) => {
   };
 
   const handleVisibility = (e) => {
-    setVisibility(e.target.value);
+    setVisibility(!visibility);
+
+    const obj = {
+      title: unitTitle,
+      is_active: !visibility,
+      start_date: unitStart,
+      end_date: unitEnd,
+      module: moduleId,
+      updated_by: sessionStorage.getItem("user_id"),
+    }; 
+
+    fetch(`http://127.0.0.1:8000/api/units/${unit.id}/`, {
+      method: "PUT",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log(result);
+          // window.location.reload();
+        });
+      } else {
+        console.log(response);
+      }
+    });
   };
 
   const handleUnitTitle = (e) => {
@@ -157,6 +187,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
                         type="checkbox"
                         role="switch"
                         value={visibility}
+                        checked={visibility}
                         onChange={handleVisibility}
                         id="flexSwitchCheckDefault"
                       />

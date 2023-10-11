@@ -1,8 +1,9 @@
 import { Editor } from "@tinymce/tinymce-react";
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import CourseModule from "./CourseModule";
 import img from "../../../content/Images/uploadImg.jpg";
 import { useNavigate } from "react-router-dom";
+import { CourseProbs } from "./AllCourses";
 
 const CourseContent = ({
   courseTitle,
@@ -15,14 +16,15 @@ const CourseContent = ({
   categoryData,
   setModuleData,
   courseContent,
-  courseId,
   setCourseId,
   visibility,
   setVisibility,
   courseDes,
   setCourseDes,
 }) => {
+
   const navigate = useNavigate();
+  const {courseId} = useContext(CourseProbs)
   const inpRef = useRef("");
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
