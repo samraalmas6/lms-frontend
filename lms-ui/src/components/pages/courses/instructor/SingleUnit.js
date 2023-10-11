@@ -2,12 +2,13 @@ import React, { useRef, useState } from "react";
 import AddUnit from "./AddUnit";
 
 const SingleUnit = ({ unit, setUnitId }) => {
-  const startDateRefUnit = useRef(null);
-  const endDateRefUnit = useRef(null);
-  const [showUnitContent, setShowUnitContent] = useState(false);
 
-  const [unitFiles, setUnitFiles] = useState([]);
-  const [unitVideos, setUnitVideos] = useState([]);
+    const startDateRefUnit = useRef(null);
+    const endDateRefUnit = useRef(null);
+    const [showUnitContent, setShowUnitContent] = useState(false);
+
+    const [unitFiles, setUnitFiles] = useState([]);
+    const [unitVideos, setUnitVideos] = useState([]);
 
   const [unitTitle, setUnitTitle] = useState(unit.title);
   const [unitStart, setUnitStart] = useState("2023-12-25");
@@ -33,43 +34,49 @@ const SingleUnit = ({ unit, setUnitId }) => {
     setUnitTitle(e.target.value);
   };
 
+
+
   const handleUnitContent = (id) => {
     setUnitId(id);
 
-    //      Unit File API
+      //      Unit File API 
     fetch(`http://127.0.0.1:8000/api/units/${id}/files`, {
       method: "GET",
       headers: {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if (response.status === 200) {
-        response.json().then(function (result) {
-          setUnitFiles(result);
-        });
-      } else {
-        console.log(response);
-        setUnitFiles([]);
-      }
+      if(response.status === 200){
+      response.json().then(function (result) {
+        setUnitFiles(result);
+      });
+    }
+    else {
+      console.log(response);
+      setUnitFiles([])
+    }
     });
 
-    //      Unit Video API
+       //      Unit Video API 
     fetch(`http://127.0.0.1:8000/api/units/${id}/videos`, {
       method: "GET",
       headers: {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if (response.status === 200) {
-        response.json().then(function (result) {
-          setUnitVideos(result);
-        });
-      } else {
-        console.log(response);
-        setUnitVideos([]);
-      }
+      if(response.status === 200){
+      response.json().then(function (result) {
+        setUnitVideos(result);
+      });
+    }
+    else {
+      console.log(response);
+      setUnitVideos([])
+    }
     });
   };
+
+
 
   return (
     <div
@@ -388,15 +395,15 @@ const SingleUnit = ({ unit, setUnitId }) => {
               <h5>Add Content</h5>
               <i
                 className="bi bi-plus-circle plus-icon"
-                onClick={() => {
-                  setShowUnitContent((pre) => !pre);
-                  setUnitId(unit.id);
-                }}
+                onClick={() => setShowUnitContent((pre) => !pre)}
               ></i>
             </div>
 
-            {showUnitContent && <AddUnit />}
-          </div>
+            {showUnitContent && (
+              <AddUnit />
+            )}
+           
+          </div> 
           <div className="slide-section"></div>
           <div className="pdf-section"></div>
         </div>

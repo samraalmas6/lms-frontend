@@ -65,7 +65,7 @@ const CourseUnit = ({ showUnit }) => {
   };
 
   const handleShowAddUnit = () => {
-    setShowAddUnit(true);
+    // setShowAddUnit(true);
   };
 
   const handleSaveUnit = (unitTitle) => {
@@ -88,7 +88,7 @@ const CourseUnit = ({ showUnit }) => {
           "Content-type": "application/json; charset=UTF-8",
         },
       }).then((response) => {
-        if (response.status == 201) {
+        if (response.status === 201) {
           response.json().then(function (result) {
             setInitUnitName((pre) => Number(pre + 1));
             // setUnitTitle("");
