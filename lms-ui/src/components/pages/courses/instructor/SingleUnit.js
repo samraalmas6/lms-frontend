@@ -256,6 +256,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
                                 <a href={file.file} target="_blank">
                                   {file.file.substr(34)}
                                 </a>
+                                
                               </td>
                               <td>{file.created_at}</td>
                               <td colspan="2">
