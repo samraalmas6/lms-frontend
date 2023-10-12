@@ -12,11 +12,13 @@ const SingleUnit = ({ unit, setUnitId }) => {
 
   const [unitFiles, setUnitFiles] = useState([]);
   const [unitVideos, setUnitVideos] = useState([]);
+  const [unitAssignment, setUnitAssignment] = useState([])
 
   const [unitTitle, setUnitTitle] = useState(unit.title);
   const [unitStart, setUnitStart] = useState("2023-12-25");
   const [unitEnd, setUnitEnd] = useState("2023-12-25");
   const [visibility, setVisibility] = useState("");
+  const [userName, setUserName] = useState("")
 
   const handlUnitStart = (e) => {
     // startDateRefUnit.current.removeAttribute("className", "unit-start-field");
@@ -29,6 +31,31 @@ const SingleUnit = ({ unit, setUnitId }) => {
     setUnitEnd(e.target.value);
   };
 
+
+  const getUserName = (id) => {
+
+    let user = ''
+    fetch(`http://127.0.0.1:8000/list_single_user/${id}/`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log('user',result);
+          setUserName(result)
+          user = ` ${result.first_name} ${result.last_name}`;
+          
+        });
+      } else {
+        console.log(response);
+        
+      }
+    });
+    console.log('this is user Name',  user);
+     return user
+  }
   const handleVisibility = (e) => {
     setVisibility(!visibility);
 
@@ -107,6 +134,24 @@ const SingleUnit = ({ unit, setUnitId }) => {
         setUnitVideos([]);
       }
     });
+
+    //      Assignment API
+    fetch(`http://127.0.0.1:8000/api/units/${id}/assignments`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          setUnitAssignment(result);
+        });
+      } else {
+        console.log(response);
+        setUnitAssignment([]);
+      }
+    });
+
   };
 
   return (
@@ -311,6 +356,9 @@ const SingleUnit = ({ unit, setUnitId }) => {
                 )}
               </table>
               <hr />
+              
+              
+              {/************ Video Section ****************/}
 
               <table className="table table-striped ">
                 <caption className="caption-top mb-0 text-warning">
@@ -343,6 +391,74 @@ const SingleUnit = ({ unit, setUnitId }) => {
                                 </a>
                               </td>
                               <td>{video.created_at}</td>
+                              <td colspan="2">
+                                {/* {String(file.is_active).toUpperCase()} */}
+                                <ul className="unit-content-file-vidoe-options">
+                                  <li>
+                                    <div className="form-check form-switch visibility">
+                                      <input
+                                        className="form-check-input "
+                                        type="checkbox"
+                                        role="switch"
+                                        value={visibility}
+                                        onChange={handleVisibility}
+                                        id="flexSwitchCheckDefault"
+                                      />
+                                    </div>
+                                  </li>
+                                  <li>
+                                    <i
+                                      className="bi bi-trash text-danger"
+                                      onClick={() => null}
+                                    ></i>
+                                  </li>
+                                  <li>
+                                    <i className="bi bi-copy text-info"></i>
+                                  </li>
+                                </ul>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </>
+                )}
+              </table>
+
+              {/************ Assignment Section ****************/}
+
+
+              <table className="table table-striped ">
+                <caption className="caption-top mb-0 text-success">
+                  <strong>Unit Assignments</strong>
+                </caption>
+                {unitAssignment.length === 0 ? (
+                  "No Assignment Found"
+                ) : (
+                  <>
+                    <thead className="table-light">
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Due Date</th>
+                        <th scope="col">Updated By</th>
+                        <th scope="col">Action</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {unitAssignment &&
+                        unitAssignment.map((assignment, index) => {
+                          return (
+                            <tr key={assignment.id}>
+                              <td>{index + 1}</td>
+                              <td>{assignment.title.slice(0, 20)}...</td>
+                              <td>
+                                {assignment.description}
+                              </td>
+                              <td>{assignment.due_date}</td>
+                              <td>{() => getUserName(assignment.updated_by)}</td>
                               <td colspan="2">
                                 {/* {String(file.is_active).toUpperCase()} */}
                                 <ul className="unit-content-file-vidoe-options">
