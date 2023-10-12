@@ -157,10 +157,15 @@ const AssignmentGrading = () => {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
+      if(response.status === 200){
       response.json().then(function (result) {
         console.log(result);
         setCourseContent(result);
       });
+    }
+    else{
+      console.log(response);
+    }
     });
   };
   const getModuleData = () => {
@@ -170,10 +175,15 @@ const AssignmentGrading = () => {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
+      if(response.status === 200){
       response.json().then(function (result) {
         // console.log(result);
         setModuleContent(result);
       });
+    }
+    else {
+      console.log(response);
+    }
     });
   };
   const getUnitData = () => {
@@ -183,10 +193,15 @@ const AssignmentGrading = () => {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
+      if(response.status === 200){
       response.json().then(function (result) {
         // console.log(result);
         setUnitContent(result);
       });
+    }
+    else{
+      console.log(response);
+    }
     });
   };
   const getAssignmentData = () => {
@@ -196,10 +211,15 @@ const AssignmentGrading = () => {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
+      if(response.status === 200){
       response.json().then(function (result) {
         // console.log(result);
         setAssignmentContent(result);
       });
+    }
+    else {
+      console.log(response);
+    }
     });
   };
   const getAssignmentSubmissionData = () => {
@@ -209,10 +229,15 @@ const AssignmentGrading = () => {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
+      if(response.status === 200){
       response.json().then(function (result) {
         // console.log(result);
         setAssignmentSubmissionContent(result);
       });
+    }
+      else {
+        console.log(response);
+      }
     });
   };
   const getAssignmentGradingData = async () => {
@@ -222,12 +247,15 @@ const AssignmentGrading = () => {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if (response.status === 200) {
-        response.json().then(function (result) {
-          // console.log(result);
-          setAssignmentGrading(result);
-        });
-      }
+      if(response.status === 200){
+      response.json().then(function (result) {
+        // console.log(result);
+        setAssignmentGrading(result);
+      });
+    }
+    else {
+      console.log(response);
+    }
     });
   };
   const putAssignmentGradingData = (userId, gradingId, submissionId) => {

@@ -666,6 +666,20 @@ margin-left: 1px;
   border-radius: 5px;
   height:200px;
 }
-.feedback{
-  color:#35172d
+.feedback-fb{
+  left: 21px;
+  position: absolute;
+  margin-top: 72px;
+}
+ 
+.status{
+  margin-top: 26px;
+  position: absolute;
+  left: 22px;
+}
+
+.grade-gd{
+  left: 23px;
+  position: absolute;
+  margin-top: 48px;
 }
