@@ -204,6 +204,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
                         onMouseLeave={preventAccordionOpen}
                       />
                     </div>
+                    
                   </li>
                   <li>
                     <i
