@@ -47,6 +47,7 @@ function AssignmentView({ selectedAssignments }) {
   const [assignmentid, setAssignmentid] = useState("");
   const [feedbackData, setFeedbackData] = useState("feedback"); // State variable for feedback
   const [gradeData, setGradeData] = useState(0);
+  const [statusData, setStatusData] = useState([])
 
   // const assignments = [
   //   {
@@ -80,6 +81,7 @@ function AssignmentView({ selectedAssignments }) {
           console.log(result);
           setApiData(result);
           setNumber(result[0].marks);
+          
         } else {
           console.error("Invalid API response:", result);
         }
@@ -193,9 +195,11 @@ function AssignmentView({ selectedAssignments }) {
         console.log("Api result submissions: ", result);
         console.log('result id', result[result.length - 1].id);
         getGradingAPI(result[result.length - 1].id)
-     
+        
       });
+      
     }
+    
     else {
       console.log(response);
       setGradeData(0);
@@ -206,39 +210,72 @@ function AssignmentView({ selectedAssignments }) {
 
     const getGradingAPI = (id) => {
       fetch(`http://127.0.0.1:8000/api/assignment_submissions/${id}/assignment_gradings`, {
-      method: "GET",
-      headers: {
-        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-      },
-    }).then((response) => {
-      if(response.status === 200){
-      response.json().then(function (result) {
-        console.log("Api result Gradings: ", result);
-        setGradeData(result[result.length -1].marks);
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log("Api result Gradings: ", result);
+            setGradeData(result[result.length - 1].marks);
+            setFeedbackData(result[result.length - 1].comments);
+            setStatusData(result[result.length - 1].status);
+    
+            if (result[result.length - 1].marks !== null) {
+              setIsSubmitClicked(true);
+            } else {
+              setIsSubmitClicked(false);
+            }
+            
+            // Check if the status is "pending" and update isResubmit accordingly
+            if (result[result.length - 1].marks !== null) {
+              setIsResubmit(true);
+            } else {
+              setIsResubmit(false);
+            }
+          });
+        } else {
+          console.log(response);
+          setGradeData(0);
+        }
       });
     }
-    else {
-      console.log(response);
-      setGradeData(0);
-    }
-    });
-    }
+    
 
     getGradingData()
   }
 
-  function handleToggleResubmit() {
-    setIsResubmit(!isResubmit);
+  // function handleToggleResubmit() {
+  //   setIsResubmit(!isResubmit);
 
-    if (!isResubmit) {
-      setFiles([]);
-      setLinks([]);
-      setIsDone(false);
-      setSubmissionOption(null);
-      setShowSubmissionOptions(false);
-      setIsSubmitClicked(false);
-      setIsConfirmButtonVisible(true);
-      setInstructorFeedback(null); // Reset feedback when toggling resubmit
+  //   if (!isResubmit) {
+  //     setFiles([]);
+  //     setLinks([]);
+  //     setIsDone(false);
+  //     setSubmissionOption(null);
+  //     setShowSubmissionOptions(false);
+  //     setIsSubmitClicked(false);
+  //     setIsConfirmButtonVisible(true);
+  //     setInstructorFeedback(null); // Reset feedback when toggling resubmit
+  //   }
+  // }
+
+  function handleToggleResubmit() {
+    // Check if the status is not "pending"
+    if (statusData !== "pending") {
+      setIsResubmit(!isResubmit);
+
+      if (!isResubmit) {
+        setFiles([]);
+        setLinks([]);
+        setIsDone(false);
+        setSubmissionOption(null);
+        setShowSubmissionOptions(false);
+        setIsSubmitClicked(false);
+        setIsConfirmButtonVisible(true);
+        setInstructorFeedback(null);
+      }
     }
   }
 
@@ -597,15 +634,19 @@ function AssignmentView({ selectedAssignments }) {
                   {/* {isSubmitClicked && feedbackData !== null && ( */}
                     <div className="feedback-and-grade">
                       <div className="feedback-and-grad">
-                        <div className="feedback">
+                        <div className="feedback-fb">
                           <strong>Comments:</strong>{" "}
                           {gradeData? feedbackData : "No feedback yet"}
                         </div>
-                        <div className="grade">
+                        <div className="grade-gd">
                           <strong>Grade:</strong>{" "}
                           {gradeData 
                             ? `${gradeData} / ${number}`
                             : "Not graded yet"}
+                        </div>
+                        <div className="status">
+                          <strong>Status:</strong>{" "}
+                          {gradeData? statusData : "pending"}
                         </div>
                       </div>
                     </div>
