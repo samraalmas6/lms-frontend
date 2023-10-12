@@ -3,15 +3,15 @@ import AddUnit from "./AddUnit";
 import { ModuleProbs } from "./CourseModule";
 
 const SingleUnit = ({ unit, setUnitId }) => {
-    
-    const {moduleId} = useContext(ModuleProbs)
+  const { moduleId } = useContext(ModuleProbs);
+  const accordion = useRef(null);
 
-    const startDateRefUnit = useRef(null);
-    const endDateRefUnit = useRef(null);
-    const [showUnitContent, setShowUnitContent] = useState(false);
+  const startDateRefUnit = useRef(null);
+  const endDateRefUnit = useRef(null);
+  const [showUnitContent, setShowUnitContent] = useState(false);
 
-    const [unitFiles, setUnitFiles] = useState([]);
-    const [unitVideos, setUnitVideos] = useState([]);
+  const [unitFiles, setUnitFiles] = useState([]);
+  const [unitVideos, setUnitVideos] = useState([]);
 
   const [unitTitle, setUnitTitle] = useState(unit.title);
   const [unitStart, setUnitStart] = useState("2023-12-25");
@@ -39,7 +39,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
       end_date: unitEnd,
       module: moduleId,
       updated_by: sessionStorage.getItem("user_id"),
-    }; 
+    };
 
     fetch(`http://127.0.0.1:8000/api/units/${unit.id}/`, {
       method: "PUT",
@@ -64,49 +64,50 @@ const SingleUnit = ({ unit, setUnitId }) => {
     setUnitTitle(e.target.value);
   };
 
-
+  const preventAccordionClose = () => {
+    accordion.current.setAttribute("data-bs-toggle", "");
+  };
+  const preventAccordionOpen = () => {
+    accordion.current.setAttribute("data-bs-toggle", "collapse");
+  };
 
   const handleUnitContent = (id) => {
     setUnitId(id);
 
-      //      Unit File API 
+    //      Unit File API
     fetch(`http://127.0.0.1:8000/api/units/${id}/files`, {
       method: "GET",
       headers: {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if(response.status === 200){
-      response.json().then(function (result) {
-        setUnitFiles(result);
-      });
-    }
-    else {
-      console.log(response);
-      setUnitFiles([])
-    }
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          setUnitFiles(result);
+        });
+      } else {
+        console.log(response);
+        setUnitFiles([]);
+      }
     });
 
-       //      Unit Video API 
+    //      Unit Video API
     fetch(`http://127.0.0.1:8000/api/units/${id}/videos`, {
       method: "GET",
       headers: {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if(response.status === 200){
-      response.json().then(function (result) {
-        setUnitVideos(result);
-      });
-    }
-    else {
-      console.log(response);
-      setUnitVideos([])
-    }
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          setUnitVideos(result);
+        });
+      } else {
+        console.log(response);
+        setUnitVideos([]);
+      }
     });
   };
-
-
 
   return (
     <div
@@ -130,6 +131,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
           data-bs-target={`#unit${unit.id}`}
           aria-expanded="false"
           aria-controls={`flush-unit${unit.id}`}
+          ref={accordion}
         >
           <div className="module-heading-container">
             <div className="">
@@ -141,6 +143,8 @@ const SingleUnit = ({ unit, setUnitId }) => {
                 className="unitTitle"
                 onChange={(e) => handleUnitTitle(e)}
                 required
+                onMouseEnter={preventAccordionClose}
+                onMouseLeave={preventAccordionOpen}
               />
             </div>
             <div className="">
@@ -153,12 +157,16 @@ const SingleUnit = ({ unit, setUnitId }) => {
                 ref={startDateRefUnit}
                 id="unit-date-field"
                 onChange={(e) => handlUnitStart(e)}
+                onMouseEnter={preventAccordionClose}
+                onMouseLeave={preventAccordionOpen}
               />
               <label>End Date:</label>
               <input
                 type="date"
                 value={unitEnd}
                 onChange={(e) => handlUnitEnd(e)}
+                onMouseEnter={preventAccordionClose}
+                onMouseLeave={preventAccordionOpen}
                 className="unit-end-fiel"
                 id="unit-date-field"
                 ref={endDateRefUnit}
@@ -172,6 +180,8 @@ const SingleUnit = ({ unit, setUnitId }) => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
                 onClick={(e) => e.stopPropagation()}
+                onMouseEnter={preventAccordionClose}
+                onMouseLeave={preventAccordionOpen}
               ></i>
               <div className="dropdown-menu option-main-container module-option">
                 <ul
@@ -190,6 +200,8 @@ const SingleUnit = ({ unit, setUnitId }) => {
                         checked={visibility}
                         onChange={handleVisibility}
                         id="flexSwitchCheckDefault"
+                        onMouseEnter={preventAccordionClose}
+                        onMouseLeave={preventAccordionOpen}
                       />
                     </div>
                   </li>
@@ -197,10 +209,16 @@ const SingleUnit = ({ unit, setUnitId }) => {
                     <i
                       className="bi bi-trash text-danger"
                       onClick={() => null}
+                      onMouseEnter={preventAccordionClose}
+                      onMouseLeave={preventAccordionOpen}
                     ></i>
                   </li>
                   <li>
-                    <i className="bi bi-copy text-info"></i>
+                    <i
+                      className="bi bi-copy text-info"
+                      onMouseEnter={preventAccordionClose}
+                      onMouseLeave={preventAccordionOpen}
+                    ></i>
                   </li>
                 </ul>
               </div>
@@ -256,7 +274,6 @@ const SingleUnit = ({ unit, setUnitId }) => {
                                 <a href={file.file} target="_blank">
                                   {file.file.substr(34)}
                                 </a>
-                                
                               </td>
                               <td>{file.created_at}</td>
                               <td colspan="2">
@@ -431,11 +448,8 @@ const SingleUnit = ({ unit, setUnitId }) => {
               ></i>
             </div>
 
-            {showUnitContent && (
-              <AddUnit />
-            )}
-           
-          </div> 
+            {showUnitContent && <AddUnit />}
+          </div>
           <div className="slide-section"></div>
           <div className="pdf-section"></div>
         </div>
