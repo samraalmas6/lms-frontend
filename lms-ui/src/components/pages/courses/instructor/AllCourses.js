@@ -1,5 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import CourseContent from "./CourseContent";
+
+export const CourseProbs = createContext(null)
 
 const AllCourse = ({ show, minDate }) => {
   //   Create Course Section
@@ -11,10 +13,13 @@ const AllCourse = ({ show, minDate }) => {
 
   const [courseCategory, setCourseCategory] = useState("");
   const [courseTitle, setCourseTitle] = useState("");
-  const [courseStart, setCourseStart] = useState('2023-09-08T00:00:00Z')
-  const [courseEnd, setCourseEnd] = useState('2023-10-08T00:00:00Z')
+  const [courseStart, setCourseStart] = useState('2023-09-08')
+  const [courseEnd, setCourseEnd] = useState('2023-10-08')
   const [courseImg, setCourseImg] = useState("");
   const [uploadImg, setUploadImg] = useState("");
+  const [visibility, setVisibility] = useState();
+  const [courseDes, setCourseDes] = useState("");
+
 
   const [courseId, setCourseId] = useState(null);
 
@@ -29,10 +34,15 @@ const AllCourse = ({ show, minDate }) => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
+        if(response.status === 200){
         response.json().then(function (result) {
-          console.log(result);
           setCourseContent(result);
         });
+      }
+      else{
+        console.log(response);
+        setCourseContent([])
+      }
       });
     };
 
@@ -44,18 +54,44 @@ const AllCourse = ({ show, minDate }) => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
+        if(response.status === 200){
         response.json().then(function (result) {
-          console.log(result);
           setCategoryData(result);
         });
+      }
+      else{
+        console.log(response);
+        setCategoryData([])
+      }
+      });
+    };
+
+    const getTeamData = () => {
+      fetch("http://127.0.0.1:8000/teams_list_data/", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if(response.status === 200){
+        response.json().then(function (result) {
+          console.log("team data", result);
+          setTeamData(result);
+        });
+      }
+      else {
+        console.log(response);
+        setTeamData([])
+      }
       });
     };
 
     getCourseData();
     getCategoryData();
+    getTeamData();
   }, [0]);
 
-  console.log("Team Data", teamData);
+ 
 
   const handleCourseTitle = (e) => {
     setCourseTitle(e.target.value);
@@ -70,7 +106,7 @@ const AllCourse = ({ show, minDate }) => {
     if (courseTitle && courseCategory) {
       const obj = {
         title: courseTitle,
-        description: "Test Description",
+        description: `This is description for the ${courseTitle} course.`,
         start_date: courseStart,
         end_date: courseEnd,
         author: sessionStorage.getItem('user_id'),
@@ -89,10 +125,10 @@ const AllCourse = ({ show, minDate }) => {
       }).then((response) => {
         if (response.status == 201) {
           response.json().then(function (result) {
-            console.log(result);
+            setCourseContent((pre) => [...pre, result])
             setCourseCategory("");
             setCourseTitle("");
-            window.location.reload();
+            // window.location.reload();
           });
         } else {
           console.log(response);
@@ -103,13 +139,28 @@ const AllCourse = ({ show, minDate }) => {
     
   };
 
+
+  const getNumberOfUsers = (id) => {
+
+    let totalUsers = 0;
+    for (const team of teamData) {
+      if (team.courses.includes(id)) {
+        totalUsers += team.users.length;
+      }
+    }
+return totalUsers
+   
+  }
+
   const handleCourseContentData = (course) => {
     setCourseId(course.id);
     setCourseTitle(course.title);
     setCourseCategory(course.category)
-    setCourseStart(course.start_date)
-    setCourseEnd(course.end_date)
+    // setCourseStart(course.start_date)
+    // setCourseEnd(course.end_date)
     setCourseImg(course.course_image)
+    setVisibility(course.is_active)
+    setCourseDes(`<p>${course.description}</p>`);
 
     fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
       method: "GET",
@@ -117,12 +168,19 @@ const AllCourse = ({ show, minDate }) => {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      response.json().then(function (result) {
-        console.log("Api result: ", result);
-        setModuleData(result);
-      });
+      if(response.status === 200) {
+        response.json().then(function (result) {
+          console.log("Api result: ", result);
+          setModuleData(result);
+        });
+      }
+      else {
+        console.log(response);
+        setModuleData([])
+      }
     });
   };
+
 
   return (
     <div>
@@ -219,6 +277,7 @@ const AllCourse = ({ show, minDate }) => {
           aria-labelledby="offcanvasRightLabel"
         >
           <div className="offcanvas-body">
+            <CourseProbs.Provider value={{courseId}} >
             <CourseContent
               courseTitle={courseTitle}
               setCourseTitle={setCourseTitle}
@@ -230,13 +289,18 @@ const AllCourse = ({ show, minDate }) => {
               categoryData={categoryData}
               setModuleData={setModuleData}
               courseContent={courseContent}
-              courseId={courseId}
               setCourseId={setCourseId}
+              visibility= {visibility}
+              setVisibility={setVisibility}
+              courseDes={courseDes}
+              setCourseDes={setCourseDes}
             />
+             </CourseProbs.Provider>
           </div>
         </div>
-        <table className="table">
-          <thead>
+        <table className="table table-striped ">
+
+          <thead className="table-info">
             <tr>
               <th scope="col">Course Title</th>
               <th scope="col">Description</th>
@@ -266,7 +330,9 @@ const AllCourse = ({ show, minDate }) => {
                       <td>{course.title}</td>
                       <td>{course.description}</td>
                       <td>{course.duration}</td>
-                      <td>{course.users_enrolled}</td>
+                      <td>{
+                          getNumberOfUsers(course.id)
+                        }</td>
                       <td>{course.created_at}</td>
                     </tr>
                   );

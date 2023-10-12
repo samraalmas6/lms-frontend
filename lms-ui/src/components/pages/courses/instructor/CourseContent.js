@@ -1,9 +1,9 @@
 import { Editor } from "@tinymce/tinymce-react";
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import CourseModule from "./CourseModule";
 import img from "../../../content/Images/uploadImg.jpg";
-import catData from "../../../hooks/catData";
 import { useNavigate } from "react-router-dom";
+import { CourseProbs } from "./AllCourses";
 
 const CourseContent = ({
   courseTitle,
@@ -16,10 +16,15 @@ const CourseContent = ({
   categoryData,
   setModuleData,
   courseContent,
-  courseId,
-  setCourseId
+  setCourseId,
+  visibility,
+  setVisibility,
+  courseDes,
+  setCourseDes,
 }) => {
+
   const navigate = useNavigate();
+  const {courseId} = useContext(CourseProbs)
   const inpRef = useRef("");
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
@@ -28,10 +33,10 @@ const CourseContent = ({
   const [courseStart, setCourseStart] = useState("");
   const [courseEnd, setCourseEnd] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
-  const [courseDes, setCourseDes] = useState("");
-  const [visibility, setVisibility] = useState(false);
+
   // const [course, setCourse] = useState([courseData[0]]);
 
+  console.log("this is visibility", visibility);
   const [showModule, setShowModule] = useState(false);
 
   const [showModuleContent, setShowModuleContent] = useState("");
@@ -49,13 +54,13 @@ const CourseContent = ({
   };
 
   const handlCourseStart = (e) => {
-    startDateRef.current.removeAttribute("class", "course-start-field");
-    startDatePickerRef.current.setAttribute("class", "course-start-field");
+    startDateRef.current.removeAttribute("className", "course-start-field");
+    startDatePickerRef.current.setAttribute("className", "course-start-field");
     setCourseStart(e.target.value);
   };
   const handlCourseEnd = (e) => {
-    endDateRef.current.removeAttribute("class", "course-end-field");
-    endDatePickerRef.current.setAttribute("class", "course-end-field");
+    endDateRef.current.removeAttribute("className", "course-end-field");
+    endDatePickerRef.current.setAttribute("className", "course-end-field");
     setCourseEnd(e.target.value);
   };
 
@@ -80,18 +85,44 @@ const CourseContent = ({
     console.log(courseImg);
   };
   const handleVisibility = (e) => {
-    setVisibility(e.target.value);
+    // setVisibility(e.target.value);
+    setVisibility(!visibility);
+    const active = e.target.value;
+    const obj = {
+      title: courseTitle,
+      author: sessionStorage.getItem("user_id"),
+      updated_by: sessionStorage.getItem("user_id"),
+      category: courseCategory,
+      is_active: !visibility,
+    };
+    fetch(`http://127.0.0.1:8000/api/courses/${courseId}/`, {
+      method: "PUT",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log(result);
+          // window.location.reload();
+        });
+      } else {
+        console.log(response);
+      }
+    });
   };
 
   const handleCourseContent = (course) => {
     setCourseId(course.id);
     setCourseTitle(course.title);
-    setCourseCategory(course.category)
-    setCourseStart(course.start_date.substr(0,10))
-    setCourseEnd(course.end_date.substr(0,10))
-    setCourseImg(course.course_image)
+    setCourseCategory(course.category);
+    setCourseStart(course.start_date);
+    setCourseEnd(course.end_date);
+    setCourseImg(course.course_image);
     setCourseDes(`<p>${course.description}</p>`);
-    setVisibility(() => course.visibility);
+    setVisibility(() => course.is_active);
 
     fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
       method: "GET",
@@ -99,27 +130,30 @@ const CourseContent = ({
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      response.json().then(function (result) {
-        console.log("Api result: ", result);
-        setModuleData(result);
-      });
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log("Api result: ", result);
+          setModuleData(result);
+        });
+      } else {
+        console.log(response);
+        setModuleData([]);
+      }
     });
-    
   };
   const handleSaveCourse = () => {
-
     if (courseTitle && courseCategory) {
       const formData = new FormData();
-      if(typeof(courseImg) === 'object'){
+      if (typeof courseImg === "object" && courseImg) {
         formData.append("course_image", courseImg);
       }
       formData.append("title", courseTitle);
       formData.append("description", courseDescription);
-      formData.append("start_date", courseStart+'T00:00:00Z');
-      formData.append("end_date", courseEnd+'T00:00:00Z');
+      formData.append("start_date", courseStart);
+      formData.append("end_date", courseEnd);
       formData.append("category", [courseCategory]);
-      formData.append("author",sessionStorage.getItem('user_id'));
-      formData.append("updated_by", sessionStorage.getItem('user_id'));
+      formData.append("author", sessionStorage.getItem("user_id"));
+      formData.append("updated_by", sessionStorage.getItem("user_id"));
       // const obj = {
       //   title: courseTitle,
       //   description: courseDescription,
@@ -149,7 +183,7 @@ const CourseContent = ({
         }
       });
     }
-  }
+  };
 
   return (
     <div>
@@ -196,7 +230,7 @@ const CourseContent = ({
               />
               <label>Start Date:</label>
               <i
-                class="bi bi-calendar-date date-picker"
+                className="bi bi-calendar-date date-picker"
                 role="button"
                 ref={startDatePickerRef}
                 onClick={() => startDateRef.current.showPicker()}
@@ -211,7 +245,7 @@ const CourseContent = ({
               />
               <label>End Date:</label>
               <i
-                class="bi bi-calendar-date date-picker"
+                className="bi bi-calendar-date date-picker"
                 role="button"
                 ref={endDatePickerRef}
                 onClick={() => endDateRef.current.showPicker()}
@@ -226,7 +260,7 @@ const CourseContent = ({
               />
             </div>
 
-            <div class="btn-group dropstart">
+            <div className="btn-group dropstart">
               <i
                 className="bi bi-three-dots-vertical "
                 type="button"
@@ -241,13 +275,14 @@ const CourseContent = ({
                 aria-label="Close"
               ></button>
               <div className="dropdown-menu option-main-container">
-                <ul class="option-ul" style={{ display: "flex" }}>
+                <ul className="option-ul" style={{ display: "flex" }}>
                   <li>
                     <div className="form-check form-switch visibility">
                       <input
                         className="form-check-input "
                         type="checkbox"
                         role="switch"
+                        checked={visibility}
                         value={visibility}
                         onChange={handleVisibility}
                         id="flexSwitchCheckDefault"
@@ -261,7 +296,7 @@ const CourseContent = ({
                     ></i>
                   </li>
                   <li>
-                    <i class="bi bi-copy text-info"></i>
+                    <i className="bi bi-copy text-info"></i>
                   </li>
                 </ul>
               </div>
@@ -343,7 +378,7 @@ const CourseContent = ({
                 categoryData.detail == "No objects found"
                   ? categoryData.detail
                   : categoryData &&
-                  categoryData.map((category) => {
+                    categoryData.map((category) => {
                       return (
                         <option value={category.id} key={category.id}>
                           {category.title}
@@ -367,13 +402,17 @@ const CourseContent = ({
             </div> */}
             <hr style={{ margin: "20px 0px 20px 0px" }} />
             <div className="course-module-section">
-              <CourseModule moduleData={moduleData} courseId={courseId} />
+              <CourseModule
+                moduleData={moduleData}
+                setModuleData={setModuleData}
+                courseId={courseId}
+              />
             </div>
             <div className="category-save-btn">
               <button
                 type="button"
                 className="btn btn-primary"
-                  onClick={() => handleSaveCourse()}
+                onClick={() => handleSaveCourse()}
               >
                 Save Course
               </button>

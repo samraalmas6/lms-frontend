@@ -8,7 +8,9 @@ const ExcelExportData =
         "city": "Turbat",
         "country": "Pak",
         "phone_number": "03162485944",
-        "gender": "Male"
+        "gender": "M",
+        "is_active": "false"
+
     },
     {
         "first_name": "Abeera",
@@ -18,7 +20,8 @@ const ExcelExportData =
         "city": "Karachi",
         "country": "Pak",
         "phone_number": "03162485944",
-        "gender": "Female"
+        "gender": "F",
+        "is_active": "false"
     },
     {
         "first_name": "Mufaddal",
@@ -28,7 +31,8 @@ const ExcelExportData =
         "city": "Karachi",
         "country": "Pak",
         "phone_number": "03162485944",
-        "gender": "Male"
+        "gender": "M",
+        "is_active": "false"
     },
     {
         "first_name": "Muhammad",
@@ -38,7 +42,8 @@ const ExcelExportData =
         "city": "Karachi",
         "country": "Pak",
         "phone_number": "03162485944",
-        "gender": "Male"
+        "gender": "M",
+        "is_active": "false"
     },
     {
         "first_name": "Gul",
@@ -48,7 +53,8 @@ const ExcelExportData =
         "city": "Turbat",
         "country": "Pak",
         "phone_number": "03162485944",
-        "gender": "Male"
+        "gender": "M",
+        "is_active": "false"
     },
     {
         "first_name": "Samra",
@@ -58,7 +64,8 @@ const ExcelExportData =
         "city": "Karachi",
         "country": "Pak",
         "phone_number": "03162485944",
-        "gender": "Female"
+        "gender": "F",
+        "is_active": "false"
     }
 ]
 export default ExcelExportData
