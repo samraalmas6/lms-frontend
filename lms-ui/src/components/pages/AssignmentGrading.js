@@ -284,9 +284,12 @@ const AssignmentGrading = () => {
       }
     });
   };
-  const getfilteredData = () => {
+  const getfilteredData = (filterValue) => {
+    if(filterValue=="undefined"){
+      filterValue= "none"
+    }
     fetch(
-      "http://127.0.0.1:8000/api/assignment_status/filter_related_objects/?status=none",
+      `http://127.0.0.1:8000/api/assignment_status/filter_related_objects/?status=${filterValue}`,
       {
         method: "GET",
         headers: {
@@ -294,11 +297,20 @@ const AssignmentGrading = () => {
         },
       }
     ).then((response) => {
+      if (response.status===200){
       response.json().then(function (result) {
-        console.log("filtered data in api:", result);
+        console.log("filtered data in api:", result.assignment_grading);
         setFilteredData(result);
+        setAssignmentGrading(result.assignment_grading)
+        setAssignmentSubmissionContent(result.assignment_submission)
+        setAssignmentContent(result.assignment)
         // setAssignmentGrading(filteredData.assignment_grading)
-      });
+      })}
+      else {
+        setAssignmentGrading([])
+        setAssignmentSubmissionContent([])
+        setAssignmentContent([])
+      }
     });
   };
   useEffect(() => {
@@ -308,7 +320,7 @@ const AssignmentGrading = () => {
     getAssignmentData();
     getAssignmentSubmissionData();
     getAssignmentGradingData();
-    getfilteredData();
+    // getfilteredData();
   }, []);
 
   console.log("grader is jo user login h", sessionStorage.getItem("user_id"));
@@ -335,6 +347,7 @@ const AssignmentGrading = () => {
             }`}
             // onClick={() => setAssignmentFilter(null)}
             // onClick={() =>setAssignmentGrading(filteredData.assignment_grading) }
+            onClick={() => getfilteredData("none") }
           >
             All
           </button>
@@ -343,7 +356,8 @@ const AssignmentGrading = () => {
               assignmentFilter === "pass" ? "active" : ""
             }`}
             // onClick={() => setAssignmentFilter("pass")}
-            onClick={() => setAssignmentFilter("pass")}
+            // onClick={() => setAssignmentFilter("pass")}
+            onClick={() => getfilteredData("pass") }
           >
             Passed
           </button>
@@ -351,7 +365,8 @@ const AssignmentGrading = () => {
             className={`filter-button failed ${
               assignmentFilter === "not pass" ? "active" : ""
             }`}
-            onClick={() => setAssignmentFilter("not pass")}
+            // onClick={() => setAssignmentFilter("not pass")}
+            onClick={() => getfilteredData("fail") }
           >
             Not Passed
           </button>
@@ -359,7 +374,8 @@ const AssignmentGrading = () => {
             className={`filter-button pending ${
               assignmentFilter === "pending" ? "active" : ""
             }`}
-            onClick={() => setAssignmentFilter("pending")}
+            // onClick={() => setAssignmentFilter("pending")}
+            onClick={() => getfilteredData("pending") }
           >
             Pending
           </button>
@@ -465,7 +481,9 @@ const AssignmentGrading = () => {
                                                   </tr>
                                                 </thead>
                                                 <tbody>
-                                                  {assignmentSubmissionContent
+                                                  
+                                                  { assignmentSubmissionContent.length ===0? "No record found":
+                                                  assignmentSubmissionContent
                                                     .filter(
                                                       (submission) =>
                                                         submission.assignment ===
