@@ -16,6 +16,7 @@ const AssignmentGrading = () => {
     useState([]);
   const [assignmentGrading, setAssignmentGrading] = useState([]);
   const [assignmentFilter, setAssignmentFilter] = useState(null);
+  const [filteredData, setFilteredData] = useState();
   const [isCourseOpen, setIsCourseOpen] = useState(
     Array(courseContent.length).fill(false)
   );
@@ -133,22 +134,22 @@ const AssignmentGrading = () => {
     closePopup();
 
     // getAssignmentGradingData()
-
   };
 
   // Filter assignments based on the selected filter option
-  const filteredAssignments = assignmentContent.filter((item) => {
-    if (filterOption === "All") {
-      return true; // Show all assignments
-    } else if (filterOption === "Passed") {
-      return userStatusMap[item.id] === "Passed";
-    } else if (filterOption === "NotPassed") {
-      return userStatusMap[item.id] === "Not-Passed";
-    } else if (filterOption === "Pending") {
-      return userStatusMap[item.id] === "Pending";
-    }
-    return true;
-  });
+  // const filteredAssignments = assignmentContent.filter((item) => {
+  //   if (filterOption === "All") {
+  //     return true; // Show all assignments
+  //   } else if (filterOption === "Passed") {
+  //     return userStatusMap[item.id] === "Passed";
+  //   } else if (filterOption === "NotPassed") {
+  //     return userStatusMap[item.id] === "Not-Passed";
+  //   } else if (filterOption === "Pending") {
+  //     return userStatusMap[item.id] === "Pending";
+  //   }
+  //   return true;
+  // });
+
   const getCourseData = () => {
     fetch("http://127.0.0.1:8000/api/courses", {
       method: "GET",
@@ -214,7 +215,7 @@ const AssignmentGrading = () => {
       });
     });
   };
-  const getAssignmentGradingData = async() => {
+  const getAssignmentGradingData = async () => {
     await fetch("http://127.0.0.1:8000/api/assignment_gradings/", {
       method: "GET",
       headers: {
@@ -248,12 +249,28 @@ const AssignmentGrading = () => {
       },
     }).then((response) => {
       if (response.status === 200) {
-        getAssignmentGradingData()
-        response.json().then(function (result) {
-        });
+        getAssignmentGradingData();
+        response.json().then(function (result) {});
       } else {
         console.log(response);
       }
+    });
+  };
+  const getfilteredData = () => {
+    fetch(
+      "http://127.0.0.1:8000/api/assignment_status/filter_related_objects/?status=none",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }
+    ).then((response) => {
+      response.json().then(function (result) {
+        console.log("filtered data in api:", result);
+        setFilteredData(result);
+        // setAssignmentGrading(filteredData.assignment_grading)
+      });
     });
   };
   useEffect(() => {
@@ -263,7 +280,11 @@ const AssignmentGrading = () => {
     getAssignmentData();
     getAssignmentSubmissionData();
     getAssignmentGradingData();
+    getfilteredData();
   }, []);
+
+  console.log("grader is jo user login h", sessionStorage.getItem("user_id"));
+  // console.log("checking filter api : ", filteredData.assignment);
 
   return (
     <div className="grading-screen-main-container">
@@ -284,7 +305,8 @@ const AssignmentGrading = () => {
             className={`filter-button all ${
               assignmentFilter === null ? "active" : ""
             }`}
-            onClick={() => setAssignmentFilter(null)}
+            // onClick={() => setAssignmentFilter(null)}
+            // onClick={() =>setAssignmentGrading(filteredData.assignment_grading) }
           >
             All
           </button>
@@ -292,6 +314,7 @@ const AssignmentGrading = () => {
             className={`filter-button passed ${
               assignmentFilter === "pass" ? "active" : ""
             }`}
+            // onClick={() => setAssignmentFilter("pass")}
             onClick={() => setAssignmentFilter("pass")}
           >
             Passed
@@ -425,9 +448,18 @@ const AssignmentGrading = () => {
                                                         submission,
                                                         submissionIndex
                                                       ) => {
-                                                        const grading = assignmentGrading.length >0 && assignmentGrading.filter(
-                                                          (grading) => grading.assignment_submission === submission.id
-                                                        )[0];
+                                                        const grading =
+                                                          assignmentGrading.length >
+                                                            0 &&
+                                                          assignmentGrading.filter(
+                                                            (grading) =>
+                                                              grading.assignment_submission ===
+                                                              submission.id
+                                                          )[0];
+                                                        console.log(
+                                                          "grading data:",
+                                                          grading
+                                                        );
                                                         return (
                                                           <tr
                                                             key={submission.id}
@@ -454,24 +486,26 @@ const AssignmentGrading = () => {
                                                               }
                                                             </td>
                                                             <td>
+                                                              assignment
+                                                              partners
                                                               {
                                                                 assignment.Number_of_members
                                                               }
                                                             </td>
                                                             <td>
                                                               {
-                                                                grading.grader
+                                                                grading?.grader
                                                                 // grade
                                                               }
                                                             </td>
                                                             <td>
                                                               {
-                                                                grading.marks
+                                                                grading?.marks
                                                                 // grade
                                                               }
                                                             </td>
                                                             <td>
-                                                              {grading.status}
+                                                              {grading?.status}
                                                             </td>
                                                             <td>
                                                               <button

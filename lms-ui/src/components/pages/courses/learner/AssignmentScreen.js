@@ -178,7 +178,7 @@ import AssignmentPartners from "./AssignmentPartners";
 import "../../../styles/AssignmentScreen.css";
 // import AssigDesc from "./AssigDesc";
 import paraIcon from "../../../content/Images/paragraph.svg";
-// import FileUploadComponent from "../../../content/FileUploadComponent";
+import FileUploadComponent from "../../../content/FileUploadComponent";
 import { Editor } from "@tinymce/tinymce-react";
 import "../../../styles/editor.css";
 
@@ -314,6 +314,9 @@ const AssignmentScreen = () => {
                   onEditorChange={(value, evt) => handleEditorChange(value, evt)}
                   value={content}
                 />
+              </div>
+              <div>
+                <FileUploadComponent />
               </div>
             </div>
           </div>
