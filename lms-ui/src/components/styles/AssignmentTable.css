@@ -13,6 +13,10 @@
     padding: 10px;
     text-align: left;
     box-shadow: 5px 8px 19px -3px rgb(177, 173, 173);
+    /* z-index: 1; */
+    /* background-color:red; */
+    position:relative;
+
   }
   .assign-lin{
     width: 100%;

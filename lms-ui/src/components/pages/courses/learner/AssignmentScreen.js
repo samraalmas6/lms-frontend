@@ -181,8 +181,15 @@ import paraIcon from "../../../content/Images/paragraph.svg";
 import FileUploadComponent from "../../../content/FileUploadComponent";
 import { Editor } from "@tinymce/tinymce-react";
 import "../../../styles/editor.css";
+import { useLocation, useNavigate,  } from "react-router-dom";
 
 const AssignmentScreen = () => {
+
+  const userId = sessionStorage.getItem('user_id')
+
+  const navigate = useNavigate()
+  const {state} = useLocation();
+
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   const month = String(currentDate.getMonth() + 1).padStart(2, "0");
@@ -268,6 +275,7 @@ const AssignmentScreen = () => {
             setCourseStart("");
             setCourseEnd("");
             setSelectedFile(null)
+            navigate(-1)
           });
         } else {
           console.log(response);
@@ -321,6 +329,9 @@ const AssignmentScreen = () => {
                   value={content}
                 />
               </div>
+              <div>
+                <FileUploadComponent />
+              </div>
             </div>
           </div>
           <div className="file-upload-container">
@@ -372,3 +383,4 @@ const AssignmentScreen = () => {
 };
 
 export default AssignmentScreen;
+

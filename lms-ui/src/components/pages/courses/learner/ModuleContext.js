@@ -8,11 +8,17 @@ export const ModuleProvider = ({ children }) => {
   const [selectedLesson, setSelectedLesson] = useState(null);
 
   return (
-    <ModuleContext.Provider value={{ selectedModule, setSelectedModule, selectedLesson, setSelectedLesson }}>
+    <ModuleContext.Provider
+      value={{
+        selectedModule,
+        setSelectedModule,
+        selectedLesson,
+        setSelectedLesson,
+      }}
+    >
       {children}
     </ModuleContext.Provider>
   );
 };
 
 export const useModuleContext = () => useContext(ModuleContext);
-

@@ -4,6 +4,7 @@ import VideoPlayer from "./VideoPlayer";
 
 import ModuleCard from "./ModuleCard";
 import AssignmentView from "./AssignmentView";
+import { useLocation } from "react-router-dom";
 
 const coursesData = [
   {
@@ -231,6 +232,8 @@ const coursesData = [
 ];
 
 function CourseTable({ modules, assignments }) {
+  const {state} = useLocation();
+  
   const [activeTab, setActiveTab] = useState("Overview");
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [videoCompleted, setVideoCompleted] = useState(false);
@@ -261,23 +264,33 @@ function CourseTable({ modules, assignments }) {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
+        if(response.status === 200){
         response.json().then(function (result) {
           console.log(result);
           setCourseContent(result);
         });
+      }
+      else{
+        console.log(response);
+      }
       });
     };
     const getModuleData = () => {
-      fetch("http://127.0.0.1:8000/api/modules/", {
+      fetch(`http://127.0.0.1:8000/api/courses/${state.courseId}/modules`, {
         method: "GET",
         headers: {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
+        if(response.status === 200){
         response.json().then(function (result) {
           console.log(result);
           setModuleContent(result);
         });
+      }
+      else {
+        console.log(response);
+      }
       });
     };
 
@@ -436,7 +449,7 @@ function CourseTable({ modules, assignments }) {
                     {/* <h2>{course.title}</h2> */}
 
                     {moduleContent.length === 0 ||
-                    moduleContent.detail == "No objects found"
+                    moduleContent.detail === 'No module found for this course.'
                       ? moduleContent.detail
                       : moduleContent &&
                         moduleContent.map((module, index) => (

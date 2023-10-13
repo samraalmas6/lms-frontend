@@ -23,16 +23,20 @@ import CourseTable from "./components/pages/courses/learner/CourseTable";
 import AssignmentView from "./components/pages/courses/learner/AssignmentView";
 import AssignmentScreen from "./components/pages/courses/learner/AssignmentScreen";
 import AssignmentGrading from "./components/pages/AssignmentGrading";
+import Practice from "./components/hooks/Practice";
 
 function App() {
   const [showlogin, setShowLogin] = useState(false);
 
   return (
-    // <div className="">
-    //   <AssignmentScreen />
-    // </div>
     <div>
        <BrowserRouter>
+       {/* It is just use for Testing purpose it will be remove from here */}
+       <Routes>
+        <Route path="/test" element={<Practice />} ></Route>
+       </Routes>
+
+
        <Routes>
        <Route element={<SigninPage />} path="/auth/login" />
        <Route element= {<VerificationPage />} path="/auth/verification"></Route>

@@ -1,11 +1,18 @@
 import React from "react";
 import user from "./Images/user.png";
 import "../styles/HomePage.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
-  const name = "Mohsen Ali";
-  const role = "Admin";
+  const navigate = useNavigate()
+  const name = `${sessionStorage.getItem('first_name')} ${sessionStorage.getItem("last_name")}`
+  const role = sessionStorage.getItem('role');
+
+  const handleLogout = () => {
+    sessionStorage.clear()
+    navigate('/auth/login')
+  }
+
   return (
     <nav className="navbar navbar-expand-md mb-0 nav-bar">
       <div className="container-fluid">
@@ -76,7 +83,13 @@ export const Navbar = () => {
                   <span className="user-name">{name}</span>
                   <span className="user-role">{role}</span>
                 </div>
+                
               </a>
+            </li>
+            <li>
+            <div className="logout-container">
+                  <button className="log-out-btn" type="button" onClick={() => handleLogout()}>LogOut</button>
+                </div>
             </li>
           </ul>
         </div>

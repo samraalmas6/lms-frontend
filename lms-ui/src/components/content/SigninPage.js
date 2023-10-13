@@ -70,7 +70,11 @@ const SigninPage = () => {
             console.log(result);
             sessionStorage.clear()
 
-            sessionStorage.setItem("user_id", 1);
+            sessionStorage.setItem("user_id", result.id);
+            sessionStorage.setItem('first_name', result.first_name);
+            sessionStorage.setItem('last_name', result.last_name);
+            sessionStorage.setItem('role', result.role);
+
             // sessionStorage.setItem('user_email', result.data.user.email);
             // sessionStorage.setItem('user_firstname', result.data.user.full_name);
             // sessionStorage.setItem('user_lastname', result.data.user.full_name);
