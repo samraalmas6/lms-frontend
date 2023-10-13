@@ -163,6 +163,15 @@ const Sidebar = () => {
                       Create Assignment
                     </Link>
                   </li>
+
+                  <li className="nav-item mb-2 ">
+                    <Link
+                      to="/course/my-assignments"
+                      className="nav-link text-secondary"
+                    >
+                      My Assignments
+                    </Link>
+                  </li>
                   
                   <li className="nav-item mb-2 ">
                     <Link
