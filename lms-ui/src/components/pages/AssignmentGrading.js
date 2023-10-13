@@ -537,7 +537,7 @@ const AssignmentGrading = () => {
                                                             </td>
                                                             <td>
                                                               <button
-                                                                className="view-button"
+                                                                className="opn-btn"
                                                                 onClick={() =>
                                                                   openPopup(
                                                                     submissionIndex,
@@ -560,7 +560,7 @@ const AssignmentGrading = () => {
                                                 <div className="popup">
                                                   <div className="popup-content">
                                                     <button
-                                                      className="close-button"
+                                                      className="end-btn"
                                                       onClick={closePopup}
                                                     >
                                                       X
@@ -638,6 +638,7 @@ const AssignmentGrading = () => {
                                                           handleStatus(e)
                                                         }
                                                         value={updatedStatus}
+                                                      
                                                       >
                                                         <option
                                                           disabled
