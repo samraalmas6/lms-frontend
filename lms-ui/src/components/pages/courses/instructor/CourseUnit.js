@@ -17,7 +17,7 @@ const CourseUnit = ({ showUnit }) => {
   //  ************************* Unit Ref Hooks  ********************
   // ***************************************************************
   const userId = sessionStorage.getItem("user_id");
-  const { unitData, moduleId, unitTitle, setUnitTitle } =
+  const { unitData, setUnitData, moduleId, unitTitle, setUnitTitle } =
     useContext(ModuleProbs);
   // console.log('unit data', unitData);
   const startDateRefUnit = useRef(null);
@@ -92,6 +92,7 @@ const CourseUnit = ({ showUnit }) => {
           response.json().then(function (result) {
             setInitUnitName((pre) => Number(pre + 1));
             // setUnitTitle("");
+            setUnitData(pre => [...pre, {result}])
             setUnitId(() => result.id);
             // setModuleDescription("");
             // window.location.reload();
