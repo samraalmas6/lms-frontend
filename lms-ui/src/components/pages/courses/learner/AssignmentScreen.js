@@ -178,7 +178,7 @@ import AssignmentPartners from "./AssignmentPartners";
 import "../../../styles/AssignmentScreen.css";
 // import AssigDesc from "./AssigDesc";
 import paraIcon from "../../../content/Images/paragraph.svg";
-// import FileUploadComponent from "../../../content/FileUploadComponent";
+import FileUploadComponent from "../../../content/FileUploadComponent";
 import { Editor } from "@tinymce/tinymce-react";
 import "../../../styles/editor.css";
 import { useLocation, useNavigate,  } from "react-router-dom";
@@ -202,6 +202,7 @@ const AssignmentScreen = () => {
   const [title, setTitle] = useState("");
   const [marks, setMarks] = useState("");
   const [content, setContent] = useState("");
+  const [selectedFile, setSelectedFile] = useState("")
 
 
   // const handleContentChange = (event) => {
@@ -233,7 +234,10 @@ const AssignmentScreen = () => {
   const handleCourseEnd = (e) => {
     setCourseEnd(e.target.value);
   };
-
+  const handleFileUpload = (selectedFile) => {
+    // Handle the selected file here
+    setSelectedFile(selectedFile);
+  };
   const handleFileAttachment = () => {
     // Handle file attachment here if needed
   };
@@ -270,6 +274,7 @@ const AssignmentScreen = () => {
             setMarks("");
             setCourseStart("");
             setCourseEnd("");
+            setSelectedFile(null)
             navigate(-1)
           });
         } else {
@@ -324,11 +329,18 @@ const AssignmentScreen = () => {
                   value={content}
                 />
               </div>
+              <div>
+                <FileUploadComponent />
+              </div>
             </div>
+          </div>
+          <div className="file-upload-container">
+            <FileUploadComponent onFileSelected={handleFileUpload} />
           </div>
 
           <button onClick={handleSubmit}>Create Assignment</button>
         </div>
+       
         <div className="side-container">
           <div className="due-date-and-time">
             <div className="due-date-time">

@@ -13,6 +13,10 @@
     padding: 10px;
     text-align: left;
     box-shadow: 5px 8px 19px -3px rgb(177, 173, 173);
+    /* z-index: 1; */
+    /* background-color:red; */
+    position:relative;
+
   }
   .assign-lin{
     width: 100%;
@@ -161,11 +165,15 @@
 }
 .content{
     background-color: #93d0e4;
-    width: 269px;
-    height: 38px;
+    padding: 10px;
+    width: 40%;
+    /* height: 38px; */
     border-radius: 5px;
     margin-left:75px;
     margin-left: 199px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .grade-text{
     font-family: 'Times New Roman', Times, serif;

@@ -580,7 +580,7 @@ function AssignmentView({ selectedAssignments }) {
                                       onChange={handleFileChange}
                                       id="fileInput"
                                       multiple
-                                      className="upload-file"
+                                      className="upload-fil"
                                     />
                                   </>
                                 )}

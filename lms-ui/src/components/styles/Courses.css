@@ -50,13 +50,14 @@
     margin: 10px 2px 0px 3px;
 }
 .course-create-form input, .course-module-form input, .course-unit-form input, .unit-content, .unit-video input, select{
-    padding: 8px 12px;
-    margin: 6px 2px 3px;
+    /* padding: 8px 12px;
+    margin: 6px 2px 3px; */
     border-radius: 6px;
     border-style: solid;
     border-color: #eee;
     font-size: 17px;
-    width: 70%;
+    width: 100%;
+    border: none;
 }
 .unit-slide i, .unit-pdf i, .unit-assignment i, .unit-quiz i {
     padding: 12px 10px;
