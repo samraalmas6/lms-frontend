@@ -23,7 +23,6 @@ const ForgetPassword = () => {
             response.json().then(function (result) {
                 console.log(result);
                 sendEmail(result.link[0])
-                alert("check your email box");
               });
      
           
@@ -48,6 +47,7 @@ const ForgetPassword = () => {
         sender: "LMS",
       });
       alert("email successfully sent check inbox");
+      setEmail("")
     } catch (error) {
       console.log(error);
     }
