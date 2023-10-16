@@ -109,6 +109,7 @@ function AddUser() {
   };
 
   const handleFormSubmit = (e) => {
+    console.log('register user');
     e.preventDefault();
     const errors = validate({ firstName, lastName, email, city, country });
     setErros(errors);
@@ -135,7 +136,7 @@ function AddUser() {
           Authorization: `Token ${sessionStorage.getItem('user_token')}`,
         },
       }).then((response) => {
-        if (response.status == 201) {
+        if (response.status === 201) {
 
           response.json().then(function (result) {
             console.log(result);

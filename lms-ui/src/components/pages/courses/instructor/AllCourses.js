@@ -4,10 +4,13 @@ import CourseContent from "./CourseContent";
 export const CourseProbs = createContext(null)
 
 const AllCourse = ({ show, minDate }) => {
+  const userId = sessionStorage.getItem("user_id")
+  const userRole = sessionStorage.getItem("role")
   //   Create Course Section
   const [courseContent, setCourseContent] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
   const [teamData, setTeamData] = useState([]);
+  const [userData, setUserData] = useState([])
 
   const [moduleData, setModuleData] = useState([]);
 
@@ -36,7 +39,16 @@ const AllCourse = ({ show, minDate }) => {
       }).then((response) => {
         if(response.status === 200){
         response.json().then(function (result) {
-          setCourseContent(result);
+          if(userRole === 'admin'){
+            setCourseContent(result);
+          }
+          else {
+            const obj = result.filter(course => {
+              console.log('this is course ', course);
+              return course.author === userId;
+            })
+            setCourseContent(obj)
+          }
         });
       }
       else{
@@ -86,12 +98,44 @@ const AllCourse = ({ show, minDate }) => {
       });
     };
 
+    const getUsers = () => {
+      fetch("http://127.0.0.1:8000/list_all_users/", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if(response.status === 200){
+        response.json().then(function (result) {
+          console.log(result);
+          setUserData(result);
+          
+        });
+      }
+      else {
+        console.log(response);
+      }
+      });
+    };
+    getUsers()
+
+
     getCourseData();
     getCategoryData();
     getTeamData();
   }, [0]);
 
  
+  const getUSerFullName = (id) => {
+    if (id) {
+      const name = userData.filter((users) => users.id === id);
+      return `${name[0].first_name} ${name[0].last_name}`;
+    }
+    else{
+      return "N/A"
+    }
+    
+  };
 
   const handleCourseTitle = (e) => {
     setCourseTitle(e.target.value);
@@ -123,7 +167,7 @@ const AllCourse = ({ show, minDate }) => {
           "Content-type": "application/json; charset=UTF-8",
         },
       }).then((response) => {
-        if (response.status == 201) {
+        if (response.status === 201) {
           response.json().then(function (result) {
             setCourseContent((pre) => [...pre, result])
             setCourseCategory("");
@@ -304,7 +348,7 @@ return totalUsers
             <tr>
               <th scope="col">Course Title</th>
               <th scope="col">Description</th>
-              <th scope="col">Duration</th>
+              <th scope="col">Author</th>
               <th scope="col">Users Enrolled</th>
               <th scope="col">Last Update</th>
             </tr>
@@ -329,7 +373,7 @@ return totalUsers
                     >
                       <td>{course.title}</td>
                       <td>{course.description}</td>
-                      <td>{course.duration}</td>
+                      <td>{getUSerFullName(course.author)}</td>
                       <td>{
                           getNumberOfUsers(course.id)
                         }</td>

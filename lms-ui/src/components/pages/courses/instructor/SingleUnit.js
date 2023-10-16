@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import AddUnit from "./AddUnit";
 import { ModuleProbs } from "./CourseModule";
 
@@ -12,13 +12,38 @@ const SingleUnit = ({ unit, setUnitId }) => {
 
   const [unitFiles, setUnitFiles] = useState([]);
   const [unitVideos, setUnitVideos] = useState([]);
-  const [unitAssignment, setUnitAssignment] = useState([])
+  const [unitAssignment, setUnitAssignment] = useState([]);
 
   const [unitTitle, setUnitTitle] = useState(unit.title);
   const [unitStart, setUnitStart] = useState("2023-12-25");
   const [unitEnd, setUnitEnd] = useState("2023-12-25");
   const [visibility, setVisibility] = useState("");
-  const [userName, setUserName] = useState("")
+  const [userName, setUserName] = useState("");
+
+  const [userData, setUserData] = useState({});
+
+  useEffect(() => {
+    const getUsers = () => {
+      fetch("http://127.0.0.1:8000/list_all_users/", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if(response.status === 200){
+        response.json().then(function (result) {
+          console.log(result);
+          setUserData(result);
+          
+        });
+      }
+      else {
+        console.log(response);
+      }
+      });
+    };
+    getUsers()
+  }, []);
 
   const handlUnitStart = (e) => {
     // startDateRefUnit.current.removeAttribute("className", "unit-start-field");
@@ -31,31 +56,6 @@ const SingleUnit = ({ unit, setUnitId }) => {
     setUnitEnd(e.target.value);
   };
 
-
-  const getUserName = (id) => {
-
-    let user = ''
-    fetch(`http://127.0.0.1:8000/list_single_user/${id}/`, {
-      method: "GET",
-      headers: {
-        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-      },
-    }).then((response) => {
-      if (response.status === 200) {
-        response.json().then(function (result) {
-          console.log('user',result);
-          setUserName(result)
-          user = ` ${result.first_name} ${result.last_name}`;
-          
-        });
-      } else {
-        console.log(response);
-        
-      }
-    });
-    console.log('this is user Name',  user);
-     return user
-  }
   const handleVisibility = (e) => {
     setVisibility(!visibility);
 
@@ -145,6 +145,12 @@ const SingleUnit = ({ unit, setUnitId }) => {
       if (response.status === 200) {
         response.json().then(function (result) {
           setUnitAssignment(result);
+          
+          // Fetch user data for each assignment
+          result.forEach((assignment) => {
+            const userId = assignment.updated_by;
+            // fetchUserData(userId);
+          });
         });
       } else {
         console.log(response);
@@ -152,6 +158,45 @@ const SingleUnit = ({ unit, setUnitId }) => {
       }
     });
 
+
+        // Function to fetch user data for a specific ID
+        // const fetchUserData = async (id) => {
+        //   try {
+        //     const response = await fetch(
+        //       `http://127.0.0.1:8000/list_single_user/${id}/`,
+        //       {
+        //         method: "GET",
+        //         headers: {
+        //           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        //         },
+        //       }
+        //     );
+    
+        //     if (response.status === 200) {
+        //       const user = await response.json();
+        //       setUserData((prevUserData) => ({
+        //         ...prevUserData,
+        //         [id]: user,
+        //       }));
+        //     } else {
+        //       console.error("Error fetching user data:", response);
+        //     }
+        //   } catch (error) {
+        //     console.error("Error fetching user data:", error);
+        //   }
+        // };
+
+  };
+
+  const getUSerFullName = (id) => {
+    if (id) {
+      const name = userData.filter((users) => users.id === id);
+      return `${name[0].first_name} ${name[0].last_name}`;
+    }
+    else{
+      return "N/A"
+    }
+    
   };
 
   return (
@@ -249,7 +294,6 @@ const SingleUnit = ({ unit, setUnitId }) => {
                         onMouseLeave={preventAccordionOpen}
                       />
                     </div>
-                    
                   </li>
                   <li>
                     <i
@@ -356,8 +400,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
                 )}
               </table>
               <hr />
-              
-              
+
               {/************ Video Section ****************/}
 
               <table className="table table-striped ">
@@ -374,6 +417,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
                         <th scope="col">Title</th>
                         <th scope="col">Video</th>
                         <th scope="col">Created At</th>
+                        <th scope="col">Updated By</th>
                         <th scope="col">Action</th>
                         <th scope="col"></th>
                       </tr>
@@ -391,6 +435,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
                                 </a>
                               </td>
                               <td>{video.created_at}</td>
+                              <td>{getUSerFullName(video.updated_by)}</td>
                               <td colspan="2">
                                 {/* {String(file.is_active).toUpperCase()} */}
                                 <ul className="unit-content-file-vidoe-options">
@@ -427,7 +472,6 @@ const SingleUnit = ({ unit, setUnitId }) => {
 
               {/************ Assignment Section ****************/}
 
-
               <table className="table table-striped ">
                 <caption className="caption-top mb-0 text-success">
                   <strong>Unit Assignments</strong>
@@ -450,15 +494,18 @@ const SingleUnit = ({ unit, setUnitId }) => {
                     <tbody>
                       {unitAssignment &&
                         unitAssignment.map((assignment, index) => {
+                          const userId = assignment.updated_by;
+                          const userName = userData[userId]
+                            ? `${userData[userId].first_name} ${userData[userId].last_name}`
+                            : "none";
                           return (
                             <tr key={assignment.id}>
                               <td>{index + 1}</td>
                               <td>{assignment.title.slice(0, 20)}...</td>
-                              <td>
-                                {assignment.description}
-                              </td>
+                              <td>{assignment.description}</td>
                               <td>{assignment.due_date}</td>
-                              <td>{() => getUserName(assignment.updated_by)}</td>
+                              {/* <td>{assignment.updated_by}</td> */}
+                              <td>{getUSerFullName(assignment.updated_by)}</td>
                               <td colspan="2">
                                 {/* {String(file.is_active).toUpperCase()} */}
                                 <ul className="unit-content-file-vidoe-options">

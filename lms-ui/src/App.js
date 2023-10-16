@@ -24,6 +24,7 @@ import AssignmentView from "./components/pages/courses/learner/AssignmentView";
 import AssignmentScreen from "./components/pages/courses/learner/AssignmentScreen";
 import AssignmentGrading from "./components/pages/AssignmentGrading";
 import Practice from "./components/hooks/Practice";
+import ForgetPassword from "./components/content/ForgetPassword";
 
 function App() {
   const [showlogin, setShowLogin] = useState(false);
@@ -40,6 +41,7 @@ function App() {
        <Routes>
        <Route element={<SigninPage />} path="/auth/login" />
        <Route element= {<VerificationPage />} path="/auth/verification"></Route>
+       <Route element= {<ForgetPassword />} path="/auth/reset_password"></Route>
        </Routes>
 			<Routes>
 				<Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>}></Route>

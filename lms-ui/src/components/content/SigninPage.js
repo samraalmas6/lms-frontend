@@ -46,6 +46,10 @@ const SigninPage = () => {
     return errors;
   };
 
+ const handleForgetPasswordBtn =() =>{
+    navigate('/auth/reset_password')
+ }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const errors = validateLogin({ email, password });
@@ -139,7 +143,7 @@ const SigninPage = () => {
           className="button"
         />
         <span className="forgot-password">
-          Forgot your <a href="#">password?</a>
+          Forgot your <a role="button"  onClick={() => handleForgetPasswordBtn()}>password?</a>
         </span>
       </form>
     </div>
