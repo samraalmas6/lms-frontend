@@ -300,6 +300,7 @@ const AssignmentScreen = () => {
               type="text"
               placeholder="Title"
               value={title}
+              // className="assignment-screen-input-field "
               onChange={handleTitle}
             />
           </form>
@@ -350,12 +351,13 @@ const AssignmentScreen = () => {
                 placeholder="Start Date"
                 min={minDate}
                 value={courseStart}
+                className="assignment-screen-input-field "
                 onChange={handleCourseStart}
               />
             </div>
             <div className="due-date-time">
               <i className="far fa-clock"></i>
-              <input type="time" value={courseEnd} onChange={handleCourseEnd} />
+              <input type="time" value={courseEnd} className="assignment-screen-input-field " onChange={handleCourseEnd} />
             </div>
           </div>
           <div className="marks">
@@ -363,7 +365,8 @@ const AssignmentScreen = () => {
             <input
               type="text"
               placeholder="Enter Marks"
-              value={marks}
+              value={marks} 
+              className="assignment-screen-input-field"
               onChange={handleMarks}
             />
           </div>

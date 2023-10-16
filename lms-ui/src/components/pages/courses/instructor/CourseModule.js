@@ -139,7 +139,13 @@ const CourseModule = ({ moduleData, setModuleData, courseId }) => {
               moduleData.map((module) => {
                 return (
                   <ModuleProbs.Provider
-                    value={{ moduleId, unitData, setUnitData, unitTitle, setUnitTitle }}
+                    value={{
+                      moduleId,
+                      unitData,
+                      setUnitData,
+                      unitTitle,
+                      setUnitTitle,
+                    }}
                   >
                     <SingleModule
                       key={module.id}
@@ -259,7 +265,13 @@ const CourseModule = ({ moduleData, setModuleData, courseId }) => {
                   <div className="module-form-section">
                     <form className="module-form">
                       <ModuleProbs.Provider
-                        value={{ moduleId, unitData, setUnitData, unitTitle, setUnitTitle }}
+                        value={{
+                          moduleId,
+                          unitData,
+                          setUnitData,
+                          unitTitle,
+                          setUnitTitle,
+                        }}
                       >
                         <CourseUnit showUnit={false} />
                       </ModuleProbs.Provider>
