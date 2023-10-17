@@ -19,14 +19,14 @@
   font-size: 20px;
   box-shadow: 5px 8px 19px -3px rgb(177, 173, 173);
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   background-color: red;
   align-content: center;
   flex-direction: row;
   align-items: center;
   flex-wrap: wrap;
   height: 40px;
-  margin-left: 643px;
+  /* margin-left: 643px; */
   border: none;
   color: white;
 }
@@ -106,11 +106,23 @@
   flex-direction: row;
   height: 44px;
 }
-/* .course-title ul li button {
+.course-title ul li button {
     padding: 30px;
     width: 100%;
     font-size: 20px;
     box-shadow: 5px 8px 19px -3px rgb(177, 173, 173);
     display: flex;
     justify-content: space-between;
-} */
+}
+
+.course-title ul li button .end-btn {
+  padding: 0px;
+}
+
+.overDue{
+  color: red;
+}
+
+.on-time{
+  color: green;
+}

@@ -61,6 +61,8 @@ const AssignmentGrading = () => {
   const [submittedBy, setSubmittedBy] = useState();
   const [gradingId, setGradingId] = useState();
   const [updatedStatus, setUpdatedStatus] = useState();
+  const [userData, setUserData] = useState();
+  const [overDue, setOverDue] = useState();
 
   useEffect(() => {
     // Initialize userStatusMap with "Pending" for each assignment
@@ -95,22 +97,19 @@ const AssignmentGrading = () => {
     setGrade(event.target.value);
   };
 
-  // const calculateStatus = (assignmentId, inputGrade) => {
-  //   const selectedAssignmentData = assignmentContent.find(
-  //     (item) => item.id === assignmentId
-  //   );
-  //   if (selectedAssignmentData) {
-  //     const totalMarks = parseInt(selectedAssignmentData.Grade, 10); // Parse as integer
-  //     const inputGradeValue = parseInt(inputGrade, 10); // Parse inputGrade as integer
-  //     const halfMarks = totalMarks / 2;
-  //     return inputGradeValue < halfMarks ? "Not-Passed" : "Passed";
-  //   }
-  //   return "Pending"; // Default to 'Pending' if assignment data not found
-  // };
-
   const handleStatus = (e) => {
     setUpdatedStatus(e.target.value);
   };
+
+  const handleOverDueDate = (subDate, dueDate) =>{
+    if (subDate>dueDate){
+      // setOverDue(true)
+      return true
+    }
+    else{
+      return false
+    }
+  }
 
   const handleSubmit = (userId, gradingId, submissionId) => {
     // Update the userFeedbackMap with the submitted feedback and grade
@@ -157,15 +156,14 @@ const AssignmentGrading = () => {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if(response.status === 200){
-      response.json().then(function (result) {
-        console.log(result);
-        setCourseContent(result);
-      });
-    }
-    else{
-      console.log(response);
-    }
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log(result);
+          setCourseContent(result);
+        });
+      } else {
+        console.log(response);
+      }
     });
   };
   const getModuleData = () => {
@@ -175,15 +173,14 @@ const AssignmentGrading = () => {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if(response.status === 200){
-      response.json().then(function (result) {
-        // console.log(result);
-        setModuleContent(result);
-      });
-    }
-    else {
-      console.log(response);
-    }
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          // console.log(result);
+          setModuleContent(result);
+        });
+      } else {
+        console.log(response);
+      }
     });
   };
   const getUnitData = () => {
@@ -193,15 +190,14 @@ const AssignmentGrading = () => {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if(response.status === 200){
-      response.json().then(function (result) {
-        // console.log(result);
-        setUnitContent(result);
-      });
-    }
-    else{
-      console.log(response);
-    }
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          // console.log(result);
+          setUnitContent(result);
+        });
+      } else {
+        console.log(response);
+      }
     });
   };
   const getAssignmentData = () => {
@@ -211,15 +207,14 @@ const AssignmentGrading = () => {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if(response.status === 200){
-      response.json().then(function (result) {
-        // console.log(result);
-        setAssignmentContent(result);
-      });
-    }
-    else {
-      console.log(response);
-    }
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          // console.log(result);
+          setAssignmentContent(result);
+        });
+      } else {
+        console.log(response);
+      }
     });
   };
   const getAssignmentSubmissionData = () => {
@@ -229,13 +224,16 @@ const AssignmentGrading = () => {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if(response.status === 200){
-      response.json().then(function (result) {
-        // console.log(result);
-        setAssignmentSubmissionContent(result);
-      });
-    }
-      else {
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          // console.log(result);
+          setAssignmentSubmissionContent(result);
+          console.log(
+            "assignment submission content: submitted link",
+            result[0].submitted_link
+          );
+        });
+      } else {
         console.log(response);
       }
     });
@@ -247,15 +245,14 @@ const AssignmentGrading = () => {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if(response.status === 200){
-      response.json().then(function (result) {
-        // console.log(result);
-        setAssignmentGrading(result);
-      });
-    }
-    else {
-      console.log(response);
-    }
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          // console.log(result);
+          setAssignmentGrading(result);
+        });
+      } else {
+        console.log(response);
+      }
     });
   };
   const putAssignmentGradingData = (userId, gradingId, submissionId) => {
@@ -285,8 +282,8 @@ const AssignmentGrading = () => {
     });
   };
   const getfilteredData = (filterValue) => {
-    if(filterValue=="undefined"){
-      filterValue= "none"
+    if (filterValue == "undefined") {
+      filterValue = "none";
     }
     fetch(
       `http://127.0.0.1:8000/api/assignment_status/filter_related_objects/?status=${filterValue}`,
@@ -297,22 +294,40 @@ const AssignmentGrading = () => {
         },
       }
     ).then((response) => {
-      if (response.status===200){
-      response.json().then(function (result) {
-        console.log("filtered data in api:", result.assignment_grading);
-        setFilteredData(result);
-        setAssignmentGrading(result.assignment_grading)
-        setAssignmentSubmissionContent(result.assignment_submission)
-        setAssignmentContent(result.assignment)
-        // setAssignmentGrading(filteredData.assignment_grading)
-      })}
-      else {
-        setAssignmentGrading([])
-        setAssignmentSubmissionContent([])
-        setAssignmentContent([])
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log("filtered data in api:", result.assignment_grading);
+          setFilteredData(result);
+          setAssignmentGrading(result.assignment_grading);
+          setAssignmentSubmissionContent(result.assignment_submission);
+          setAssignmentContent(result.assignment);
+          // setAssignmentGrading(filteredData.assignment_grading)
+        });
+      } else {
+        setAssignmentGrading([]);
+        setAssignmentSubmissionContent([]);
+        setAssignmentContent([]);
       }
     });
   };
+  const getUsers = () => {
+    fetch("http://127.0.0.1:8000/list_all_users/", {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log(result);
+          setUserData(result);
+        });
+      } else {
+        console.log(response);
+      }
+    });
+  };
+
   useEffect(() => {
     getCourseData();
     getModuleData();
@@ -320,11 +335,25 @@ const AssignmentGrading = () => {
     getAssignmentData();
     getAssignmentSubmissionData();
     getAssignmentGradingData();
+    getUsers();
+
     // getfilteredData();
   }, []);
 
   console.log("grader is jo user login h", sessionStorage.getItem("user_id"));
+  console.log(
+    "grader is jo user login h uska first name",
+    sessionStorage.getItem("first_name")
+  );
+  const instructor =
+    sessionStorage.getItem("first_name") + sessionStorage.getItem("last_name");
+  console.log(
+    "grader is jo user login h uska first name",
+    sessionStorage.getItem("last_name")
+  );
   // console.log("checking filter api : ", filteredData.assignment);
+  // console.log("(assignmentSubmissionContent.submitted_link",assignmentSubmissionContent.submitted_link)
+  console.log("filter ka result:",assignmentSubmissionContent.filter((obj)=> obj.id === submissionId)?.submitted_link)
 
   return (
     <div className="grading-screen-main-container">
@@ -347,7 +376,7 @@ const AssignmentGrading = () => {
             }`}
             // onClick={() => setAssignmentFilter(null)}
             // onClick={() =>setAssignmentGrading(filteredData.assignment_grading) }
-            onClick={() => getfilteredData("none") }
+            onClick={() => getfilteredData("none")}
           >
             All
           </button>
@@ -357,7 +386,7 @@ const AssignmentGrading = () => {
             }`}
             // onClick={() => setAssignmentFilter("pass")}
             // onClick={() => setAssignmentFilter("pass")}
-            onClick={() => getfilteredData("pass") }
+            onClick={() => getfilteredData("pass")}
           >
             Passed
           </button>
@@ -366,7 +395,7 @@ const AssignmentGrading = () => {
               assignmentFilter === "not pass" ? "active" : ""
             }`}
             // onClick={() => setAssignmentFilter("not pass")}
-            onClick={() => getfilteredData("fail") }
+            onClick={() => getfilteredData("fail")}
           >
             Not Passed
           </button>
@@ -375,7 +404,7 @@ const AssignmentGrading = () => {
               assignmentFilter === "pending" ? "active" : ""
             }`}
             // onClick={() => setAssignmentFilter("pending")}
-            onClick={() => getfilteredData("pending") }
+            onClick={() => getfilteredData("pending")}
           >
             Pending
           </button>
@@ -469,9 +498,9 @@ const AssignmentGrading = () => {
                                                     <th scope="col">
                                                       Due Date
                                                     </th>
-                                                    <th scope="col">
+                                                    {/* <th scope="col">
                                                       Partners
-                                                    </th>
+                                                    </th> */}
                                                     <th scope="col">
                                                       Graders Name
                                                     </th>
@@ -481,97 +510,116 @@ const AssignmentGrading = () => {
                                                   </tr>
                                                 </thead>
                                                 <tbody>
-                                                  
-                                                  { assignmentSubmissionContent.length ===0? "No record found":
-                                                  assignmentSubmissionContent
-                                                    .filter(
-                                                      (submission) =>
-                                                        submission.assignment ===
-                                                        assignment.id
-                                                    )
-                                                    .map(
-                                                      (
-                                                        submission,
-                                                        submissionIndex
-                                                      ) => {
-                                                        const grading =
-                                                          assignmentGrading.length >
-                                                            0 &&
-                                                          assignmentGrading.filter(
-                                                            (grading) =>
-                                                              grading.assignment_submission ===
-                                                              submission.id
-                                                          )[0];
-                                                        console.log(
-                                                          "grading data:",
-                                                          grading
-                                                        );
-                                                        return (
-                                                          <tr
-                                                            key={submission.id}
-                                                          >
-                                                            <td>
-                                                              {submission.id}
-                                                            </td>
-                                                            <td>
-                                                              {
-                                                                submission.submitted_by
-                                                              }
-                                                            </td>
-                                                            <td>
-                                                              {assignment.title}
-                                                            </td>
-                                                            <td>
-                                                              {
-                                                                submission.submission_date
-                                                              }
-                                                            </td>
-                                                            <td>
-                                                              {
-                                                                assignment.due_date
-                                                              }
-                                                            </td>
-                                                            <td>
-                                                              assignment
-                                                              partners
-                                                              {
-                                                                assignment.Number_of_members
-                                                              }
-                                                            </td>
-                                                            <td>
-                                                              {
-                                                                grading?.grader
-                                                                // grade
-                                                              }
-                                                            </td>
-                                                            <td>
-                                                              {
-                                                                grading?.marks
-                                                                // grade
-                                                              }
-                                                            </td>
-                                                            <td>
-                                                              {grading?.status}
-                                                            </td>
-                                                            <td>
-                                                              <button
-                                                                className="opn-btn"
-                                                                onClick={() =>
-                                                                  openPopup(
-                                                                    submissionIndex,
-                                                                    grading.id,
-                                                                    submission.id,
-                                                                    submission.submitted_by
-                                                                  )
+                                                  {assignmentSubmissionContent.length ===
+                                                  0
+                                                    ? "No record found"
+                                                    : assignmentSubmissionContent
+                                                        .filter(
+                                                          (submission) =>
+                                                            submission.assignment ===
+                                                            assignment.id
+                                                        )
+                                                        .map(
+                                                          (
+                                                            submission,
+                                                            submissionIndex
+                                                          ) => {
+                                                            const grading =
+                                                              assignmentGrading.length >
+                                                                0 &&
+                                                              assignmentGrading.filter(
+                                                                (grading) =>
+                                                                  grading.assignment_submission ===
+                                                                  submission.id
+                                                              )[0];
+                                                            // console.log(
+                                                            //   "grading data:",
+                                                            //   grading
+                                                            // );
+                                                            return (
+                                                              <tr
+                                                                key={
+                                                                  submission.id
                                                                 }
                                                               >
-                                                                View
-                                                              </button>
-                                                            </td>
-                                                          </tr>
-                                                        );
-                                                      }
-                                                    )}
+                                                                <td>
+                                                                  {
+                                                                    submission.id
+                                                                  }
+                                                                </td>
+                                                                <td>
+                                                                  {
+                                                                    userData.filter((obj) => obj.id === submission.submitted_by)[0].first_name +" " +userData.filter((obj) => obj.id === submission.submitted_by)[0].last_name
+                                                                    // handleSubmitterName(),
+                                                                    // submission.submitted_by
+                                                                  }
+                                                                </td>
+                                                                <td>
+                                                                  {
+                                                                    assignment.title
+                                                                  }
+                                                                </td>
+                                                                <td  
+                                                                className=
+                                                                  {`${
+                                                                      handleOverDueDate(submission.submission_date,assignment.due_date)
+                                                                      ? "overDue"
+                                                                      : "on-time"
+                                                                  }`}
+                                                                  >
+                                                                  {
+                                                                    submission.submission_date
+                                                                  }
+                                                                </td>
+                                                                <td>
+                                                                  {
+                                                                    assignment.due_date
+                                                                  }
+                                                                </td>
+                                                                {/* <td>
+                                                                  assignment
+                                                                  partners
+                                                                  {
+                                                                    assignment.Number_of_members
+                                                                  }
+                                                                </td> */}
+                                                                <td>
+                                                                  {
+                                                                    instructor
+                                                                    // grading?.grader
+                                                                    // grade
+                                                                  }
+                                                                </td>
+                                                                <td>
+                                                                  {
+                                                                    grading?.marks
+                                                                    // grade
+                                                                  }
+                                                                </td>
+                                                                <td>
+                                                                  {
+                                                                    grading?.status
+                                                                  }
+                                                                </td>
+                                                                <td>
+                                                                  <button
+                                                                    className="opn-btn"
+                                                                    onClick={() =>
+                                                                      openPopup(
+                                                                        submissionIndex,
+                                                                        grading.id,
+                                                                        submission.id,
+                                                                        submission.submitted_by
+                                                                      )
+                                                                    }
+                                                                  >
+                                                                    View
+                                                                  </button>
+                                                                </td>
+                                                              </tr>
+                                                            );
+                                                          }
+                                                        )}
                                                 </tbody>
                                               </table>
                                               {selectedAssignment !== null && (
@@ -585,23 +633,28 @@ const AssignmentGrading = () => {
                                                     </button>
                                                     <p>Assignment Content</p>
                                                     <p className="content">
+                                                      {/* <p> */}
+                                                      {/* {assignmentSubmissionContent[0].submitted_link}</p> */}
+                                                      {/* <h1>Samara{assignmentSubmissionContent.filter((obj)=> obj.id === submissionId)[0].submitted_link}</h1> */}
+                                                      <a href="assignmentSubmissionContent[0].submitted_link">
+                                                      {assignmentSubmissionContent.filter((obj)=> obj.id === submissionId)[0].submitted_link}
+                                                      </a>
                                                       <a
-                                                        href={
-                                                          assignmentContent.find(
-                                                            (item) =>
-                                                              item.id ===
-                                                              selectedAssignment
-                                                          )?.content
-                                                        }
+                                                        href=//     item.id === //   (item) => // assignmentContent.find(
+                                                        //     selectedAssignment
+                                                        // )?.content
+                                                        // assignmentSubmissionContent[0].submitted_link
+                                                        "samara"
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                       >
                                                         {
-                                                          assignmentContent.find(
+                                                          assignmentSubmissionContent.find(
                                                             (item) =>
                                                               item.id ===
                                                               selectedAssignment
                                                           )?.content
+                                                          // assignmentSubmissionContent.submitted_link
                                                         }
                                                       </a>
                                                     </p>
@@ -656,7 +709,6 @@ const AssignmentGrading = () => {
                                                           handleStatus(e)
                                                         }
                                                         value={updatedStatus}
-                                                      
                                                       >
                                                         <option
                                                           disabled
