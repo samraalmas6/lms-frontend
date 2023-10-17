@@ -29,8 +29,6 @@ const AllCourse = ({ show, minDate }) => {
   useEffect(() => {
 
     const getCourseData = () => {
-
-
       fetch("http://127.0.0.1:8000/api/courses", {
         method: "GET",
         headers: {

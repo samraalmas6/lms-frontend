@@ -37,12 +37,12 @@
   }
   .assignment-screen-input-field {
     /* background-color: #E6E6E3; */
-    /* width: 100%;
+    width: 100%;
     border: none;
     border-color: #E6E6E3;
     padding: 10px;
     border-radius: 5px;
-    box-shadow: 0px 0px 5px -2px gray; */
+    box-shadow: 0px 0px 5px -2px gray;
   }
   .side-container {
     width: 30%;

@@ -4,6 +4,7 @@ import { UnitProbs } from "./CourseUnit";
 
 const AddUnit = ({}) => {
     const userId = sessionStorage.getItem('user_id');
+
     const navigate = useNavigate();
     const videoFieldRef = useRef(null);
     const videoAddRef = useRef(null);
@@ -82,6 +83,9 @@ const AddUnit = ({}) => {
       };
     
       const handleAssignment = () => {
+
+        // navigate('/assignment', { state: { courseId, unitId } });
+
         navigate("/course/create-assignment",{ state: { unitId } });
       };
 
