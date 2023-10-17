@@ -357,10 +357,12 @@ function AssignmentView({ selectedAssignments }) {
   }
 
   function handleFileChange(event) {
-    const selectedFiles = event.target.files;
-    setFiles([...files, ...selectedFiles]);
+    const selectedFiles = event.target.files[0];
+    // setFiles((pre) =>[...pre, selectedFiles]);
+    setFiles(selectedFiles)
     setIsFileInputVisible(false);
   }
+console.log('file ', files);
   function handleRemoveFile(index) {
     const updatedFiles = [...files];
     updatedFiles.splice(index, 1);
@@ -445,6 +447,12 @@ function AssignmentView({ selectedAssignments }) {
     //   setShowConfirmationDialog(true);
     // }
     let url = "";
+    const formData = new FormData();
+    formData.append("submitted_by", sessionStorage.getItem("user_id"));
+    formData.append("assignment", assignmentid);
+    formData.append("submission_date", "2022-10-03T10:00:00Z");
+    formData.append("submitted_link", link);
+    formData.append("content", files);
     const obj = {
       submitted_by: sessionStorage.getItem("user_id"),
       assignment: assignmentid,
@@ -461,10 +469,11 @@ function AssignmentView({ selectedAssignments }) {
       try {
         const response = await fetch(`${url}`, {
           method: request,
-          body: JSON.stringify(obj),
+          // body: JSON.stringify(obj),
+          body: formData,
           headers: {
             Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-            "Content-type": "application/json; charset=UTF-8",
+            // "Content-type": "application/json; charset=UTF-8",
           },
         });
 
@@ -802,7 +811,7 @@ function AssignmentView({ selectedAssignments }) {
                                 <input
                                   type="file"
                                   accept=".pdf,.doc,.docx"
-                                  onChange={handleFileChange}
+                                  onChange={(e) =>handleFileChange(e)}
                                   id="fileInput"
                                   multiple
                                   className="upload-fil"
