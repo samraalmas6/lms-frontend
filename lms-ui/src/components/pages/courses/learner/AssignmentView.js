@@ -55,6 +55,7 @@ function AssignmentView({ selectedAssignments }) {
   });
   const [submittedLink, setSubmittedLink] = useState("");
   const [submissionStatus, setSubmissionStatus] = useState([]);
+  const [isEditClicked, setIsEditClicked] = useState(false);
 
   // const assignments = [
   //   {
@@ -306,6 +307,7 @@ function AssignmentView({ selectedAssignments }) {
       if (!isResubmit) {
         fetchSubmissionByAssignment(submission);
         // setSubmittedLink(submission.submitted_link);
+         setIsEditClicked(true);
 
         setFiles([]);
         setLinks([]);
@@ -457,6 +459,40 @@ function AssignmentView({ selectedAssignments }) {
           } else {
             setSubmissionStatus("");
           }
+
+          const updatedData = {
+            submitted_link: link, // Update with the new link
+            // Other fields that need to be updated
+          };
+          console.log("Submitting data:", obj);
+          fetch(
+            `http://127.0.0.1:8000/api/assignment_submissions/${submissionId}/`,
+            {
+              method: "PUT",
+              headers: {
+                Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(updatedData),
+            }
+          )
+            .then((putResponse) => {
+              if (putResponse.status === 200) {
+                // Submission updated successfully, you can update your local state if needed
+                console.log("Submission updated successfully");
+              } else {
+                console.error("Error updating submission:", putResponse);
+              }
+            })
+            .catch((error) => {
+              console.error("Error updating submission:", error);
+            });
+  
+          // Rest of your code
+          setLink("");
+          // setFile([])
+
+
           const gradingURL = `http://127.0.0.1:8000/api/assignment_submissions/${submissionId}/assignment_gradings`;
 
           const gradingResponse = await fetch(gradingURL, {
@@ -485,7 +521,10 @@ function AssignmentView({ selectedAssignments }) {
       } catch (error) {
         console.error("Error:", error);
       }
+
+      
     }
+    
 
     // Call the postData function when needed:
     postData(obj);
@@ -645,16 +684,18 @@ function AssignmentView({ selectedAssignments }) {
                       </button>
                       </div>
                     ) : (
-
                       <>
-                       <input
-                       type="text"
-                       value={link}
-                       // value={submissionOption === "link" ? link : previousLink}
-                       onChange={(e) => setLink(e.target.value)}
-                       placeholder="Enter link URL"
-                       className="lnk-text"
-                     />
+                      {isEditClicked && (
+                        <input
+                          type="text"
+                          value={link}
+                          onChange={(e) => setLink(e.target.value)}
+                          placeholder="Enter link URL"
+                          className="lnk-text"
+                        />
+                      )}
+
+                     
                      
                         <div className="add-create-dropdown">
                        

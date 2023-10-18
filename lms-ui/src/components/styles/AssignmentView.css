@@ -354,7 +354,7 @@ ul.resources {
 }
 .confirmation-dialog{
   background-color: #fff;
-  margin-left: -431px;
+  margin-left: -589px;
   margin-top: -125px;
   width: 393px;
   /* border: 2px solid #0056b3; */
@@ -504,12 +504,12 @@ ul.resources {
   margin-bottom: 10px;
 }
 .link-place{
-  background-color: #dee2e6;
+  background-color: #fff;
   width: 270px;
   margin-left: -598px;
   margin-top: -75px;
   height: 115px;
-  border-radius: 16px;
+  box-shadow: 5px 8px 19px -3px rgb(177, 173, 173);
 }
 .link-btn{
   width: 107px;
@@ -520,6 +520,7 @@ ul.resources {
   color: white;
   border: none;
   height: 29px;
+  
 }
 /* .load-img{
   background-color: #dee2e6;
