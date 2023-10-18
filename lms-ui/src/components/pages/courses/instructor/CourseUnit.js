@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { ModuleProbs } from "./CourseModule";
 import SingleUnit from "./SingleUnit";
 import AddUnit from "./AddUnit";
-
+import {CourseProbs} from "./AllCourses"
 export const UnitProbs = createContext(null);
 
 const CourseUnit = ({ showUnit }) => {
@@ -19,6 +19,8 @@ const CourseUnit = ({ showUnit }) => {
   const userId = sessionStorage.getItem("user_id");
   const { unitData, setUnitData, moduleId, unitTitle, setUnitTitle } =
     useContext(ModuleProbs);
+    const {courseCoauthors} = useContext(CourseProbs)
+    console.log('co-author in unit', courseCoauthors);
   // console.log('unit data', unitData);
   const startDateRefUnit = useRef(null);
   const endDateRefUnit = useRef(null);
@@ -79,6 +81,8 @@ const CourseUnit = ({ showUnit }) => {
         end_date: unitEnd,
         module: moduleId,
         updated_by: userId,
+        editor: courseCoauthors,
+        created_by: sessionStorage.getItem("user_id")
       };
       fetch("http://127.0.0.1:8000/api/units/", {
         method: "POST",

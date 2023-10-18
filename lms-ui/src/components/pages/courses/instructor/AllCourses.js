@@ -22,6 +22,8 @@ const AllCourse = ({ show, minDate }) => {
   const [uploadImg, setUploadImg] = useState("");
   const [visibility, setVisibility] = useState();
   const [courseDes, setCourseDes] = useState("");
+  const [courseCoauthors, setCourseCoauthors] = useState([]);
+
 
 
   const [courseId, setCourseId] = useState(null);
@@ -29,7 +31,7 @@ const AllCourse = ({ show, minDate }) => {
   useEffect(() => {
 
     const getCourseData = () => {
-      fetch("http://127.0.0.1:8000/api/courses", {
+      fetch("http://127.0.0.1:8000/api/courses/", {
         method: "GET",
         headers: {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
@@ -37,14 +39,16 @@ const AllCourse = ({ show, minDate }) => {
       }).then((response) => {
         if(response.status === 200){
         response.json().then(function (result) {
+          console.log('Api course result', result);
+          // setCourseContent(result);
           if(userRole === 'admin'){
             setCourseContent(result);
           }
           else {
             const obj = result.filter(course => {
-              console.log('this is course ', course);
-              return course.author === userId;
+              return course.created_by == userId || course.editor.includes(+userId);
             })
+            console.log('this is obj', obj, userId);
             setCourseContent(obj)
           }
         });
@@ -115,17 +119,17 @@ const AllCourse = ({ show, minDate }) => {
       }
       });
     };
-    getUsers()
-
-
-    getCourseData();
+    
     getCategoryData();
     getTeamData();
+    getUsers();
+    getCourseData();
+  
   }, [0]);
 
  
   const getUSerFullName = (id) => {
-    if (id) {
+    if (id !== 'undefined' && userData.length !== 0) {
       const name = userData.filter((users) => users.id === id);
       return `${name[0].first_name} ${name[0].last_name}`;
     }
@@ -151,9 +155,9 @@ const AllCourse = ({ show, minDate }) => {
         description: `This is description for the ${courseTitle} course.`,
         start_date: courseStart,
         end_date: courseEnd,
-        author: sessionStorage.getItem('user_id'),
         updated_by: sessionStorage.getItem('user_id'),
         category: [courseCategory],
+        created_by: sessionStorage.getItem('user_id')
       };
 
 
@@ -195,6 +199,7 @@ return totalUsers
   }
 
   const handleCourseContentData = (course) => {
+    setCourseCoauthors(course.editor)
     setCourseId(course.id);
     setCourseTitle(course.title);
     setCourseCategory(course.category)
@@ -223,7 +228,7 @@ return totalUsers
     });
   };
 
-
+console.log('Course co-authors:', courseCoauthors);
   return (
     <div>
       <div className="all-course-content">
@@ -319,7 +324,7 @@ return totalUsers
           aria-labelledby="offcanvasRightLabel"
         >
           <div className="offcanvas-body">
-            <CourseProbs.Provider value={{courseId}} >
+            <CourseProbs.Provider value={{courseId, courseCoauthors, setCourseCoauthors}} >
             <CourseContent
               courseTitle={courseTitle}
               setCourseTitle={setCourseTitle}
@@ -336,6 +341,7 @@ return totalUsers
               setVisibility={setVisibility}
               courseDes={courseDes}
               setCourseDes={setCourseDes}
+              userData={userData}
             />
              </CourseProbs.Provider>
           </div>
@@ -352,10 +358,7 @@ return totalUsers
             </tr>
           </thead>
           <tbody>
-            {courseContent.length === 0 ||
-            courseContent.detail == "No objects found"
-              ? courseContent.detail
-              : courseContent &&
+            {courseContent.length !== 0 &&
                 courseContent.map((course) => {
                   return (
                     <tr
@@ -371,7 +374,7 @@ return totalUsers
                     >
                       <td>{course.title}</td>
                       <td>{course.description}</td>
-                      <td>{getUSerFullName(course.author)}</td>
+                      <td>{getUSerFullName(course.created_by)}</td>
                       <td>{
                           getNumberOfUsers(course.id)
                         }</td>

@@ -78,7 +78,7 @@ const SigninPage = () => {
             sessionStorage.setItem('first_name', result.first_name);
             sessionStorage.setItem('last_name', result.last_name);
             // sessionStorage.setItem('role', result.role);
-            sessionStorage.setItem('role', "admin");
+            sessionStorage.setItem('role', result.role);
 
 
             // sessionStorage.setItem('user_email', result.data.user.email);

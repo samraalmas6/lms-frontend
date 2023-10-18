@@ -249,18 +249,24 @@ body::-webkit-scrollbar {
     /* height: 100%; */
 
 }
-.category-section {
+.dropdown-section-for-cat-couthor{
+    display: flex;
+    /* justify-content: space-between; */
+}
+.category-section, .coauthor-section {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    /* flex-direction: column; */
+    width: 25%;
 }
-.category-section label {
+.coauther-selection{
+    width: 50%;
+}
+.category-section label, .coauthor-section label {
     font-size: 17px;
     font-weight: 500;
 }
-.category-section select {
-    width: 30%;
+.category-section select, .coauthor-section select {
+    width: 100%;
     padding: 6px 12px;
     margin-bottom: 3px;
     border-radius: 6px;
@@ -685,5 +691,41 @@ hr {
     list-style: none;
 
 }
+.coauthor-list-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    /* align-items: end; */
+    list-style: none;
+}
+.coauthor-name-icon {
+    background-color: cornflowerblue;
+    width: 7%;
+    height: 10%;
+    border-radius: 100%;
+    border: 2px solid white;
+    /* margin-bottom: 10px; */
+    text-align: center;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .coauthor-name-icon1 {
+    background-color: black;
+  }
+  .coauthor-name-icon2 {
+    background-color: green;
+  }
+  .coauthor-name-icon3 {
+    background-color: purple;
+  }
+  .coauthor-name-icon4 {
+    background-color: orange;
+  }
+  .coauthor-name-icon5 {
+    background-color: yellow;
+    color: black;
+  }
 
   
