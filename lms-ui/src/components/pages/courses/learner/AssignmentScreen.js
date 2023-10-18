@@ -255,6 +255,7 @@ const AssignmentScreen = () => {
       unit: 1, // Assuming a default unit value
       // Number_of_members: 1,
       updated_by: sessionStorage.getItem('user_id'),
+      created_by: sessionStorage.getItem('user_id')
     };
 
     fetch("http://127.0.0.1:8000/api/assignments/", {

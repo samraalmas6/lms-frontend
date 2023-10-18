@@ -795,11 +795,11 @@ const AssignmentGrading = () => {
                                                           >
                                                             select status
                                                           </option>
-                                                          <option value="pass">
-                                                            pass
+                                                          <option value="Pass">
+                                                            Pass
                                                           </option>
-                                                          <option value="fail">
-                                                            fail
+                                                          <option value="Not Passed">
+                                                          Not Passed
                                                           </option>
                                                         </select>
                                                       </div>

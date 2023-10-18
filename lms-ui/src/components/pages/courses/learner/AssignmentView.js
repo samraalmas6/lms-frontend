@@ -311,6 +311,7 @@ function AssignmentView({ selectedAssignments }) {
 
           setSubmissionId(submission.id);
           setLink(submission.submitted_link);
+          // setFiles(submission.content)
           setShowAddNewSubmission(false);
         } else {
           console.log("No submissions found for this assignment");
@@ -455,19 +456,19 @@ console.log('file ', files);
     formData.append("submission_date", "2022-10-03T10:00:00Z");
     formData.append("submitted_link", link);
     formData.append("content", files);
-    const obj = {
-      submitted_by: sessionStorage.getItem("user_id"),
-      assignment: assignmentid,
-      submission_date: "2022-10-03T10:00:00Z",
-      submitted_link: link,
-      // content: file,
-    };
+    // const obj = {
+    //   submitted_by: sessionStorage.getItem("user_id"),
+    //   assignment: assignmentid,
+    //   submission_date: "2022-10-03T10:00:00Z",
+    //   submitted_link: link,
+    //   // content: file,
+    // };
     if (request === "POST") {
       url = `http://127.0.0.1:8000/api/assignment_submissions/`;
     } else {
       url = `http://127.0.0.1:8000/api/assignment_submissions/${submissionId}/`;
     }
-    async function postData(obj) {
+    async function postData(formData) {
       try {
         const response = await fetch(`${url}`, {
           method: request,
@@ -488,7 +489,7 @@ console.log('file ', files);
           // const newSubmissionId = result.id;
           // fetchSubmissionByAssignment(newSubmissionId);
 
-          const formattedSubmissionDate = new Date(obj.submission_date);
+          const formattedSubmissionDate = new Date(formData.submission_date);
           const formattedDueDate = new Date(selectedAssignment.due_date);
 
           if (formattedSubmissionDate > formattedDueDate) {
@@ -497,33 +498,33 @@ console.log('file ', files);
             setSubmissionStatus("");
           }
 
-          const updatedData = {
-            submitted_link: link, // Update with the new link
-            // Other fields that need to be updated
-          };
-          console.log("Submitting data:", obj);
-          fetch(
-            `http://127.0.0.1:8000/api/assignment_submissions/${submissionId}/`,
-            {
-              method: "PUT",
-              headers: {
-                Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(updatedData),
-            }
-          )
-            .then((putResponse) => {
-              if (putResponse.status === 200) {
-                // Submission updated successfully, you can update your local state if needed
-                console.log("Submission updated successfully");
-              } else {
-                console.error("Error updating submission:", putResponse);
-              }
-            })
-            .catch((error) => {
-              console.error("Error updating submission:", error);
-            });
+          // const updatedData = {
+          //   submitted_link: link, // Update with the new link
+          //   // Other fields that need to be updated
+          // };
+          // console.log("Submitting data:", formData);
+          // fetch(
+          //   `http://127.0.0.1:8000/api/assignment_submissions/${submissionId}/`,
+          //   {
+          //     method: "PUT",
+          //     headers: {
+          //       Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          //       "Content-Type": "application/json",
+          //     },
+          //     body: JSON.stringify(updatedData),
+          //   }
+          // )
+          //   .then((putResponse) => {
+          //     if (putResponse.status === 200) {
+          //       // Submission updated successfully, you can update your local state if needed
+          //       console.log("Submission updated successfully");
+          //     } else {
+          //       console.error("Error updating submission:", putResponse);
+          //     }
+          //   })
+          //   .catch((error) => {
+          //     console.error("Error updating submission:", error);
+          //   });
   
           // Rest of your code
           setLink("");
@@ -564,7 +565,7 @@ console.log('file ', files);
     
 
     // Call the postData function when needed:
-    postData(obj);
+    postData(formData);
 
     setShowConfirmationDialog(true);
   }
@@ -723,6 +724,7 @@ console.log('file ', files);
                     {showLink && (
                       <>
                        {isEditClicked && (
+                        <>
                         <input
                              type="text"
                              value={link}
@@ -730,6 +732,19 @@ console.log('file ', files);
                              placeholder="Enter link URL"
                              className="lnk-text"
                            />
+                   
+                  
+                              <input
+                                type="file"
+                                accept=".pdf,.doc,.docx"
+                                onChange={(e) =>handleFileChange(e)}
+                                id="fileInput"
+                                multiple
+                                // className="upload-fil"
+                                value={file}
+                              />
+                    
+                          </>
                       )}
 
                      
