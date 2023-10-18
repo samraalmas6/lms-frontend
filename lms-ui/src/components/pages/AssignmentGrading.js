@@ -136,6 +136,7 @@ const AssignmentGrading = () => {
 
   const handleGraderName = (id) => {
     const graderName = userData.filter((obj) => obj.id === id);
+    console.log('This is grader name', graderName);
     if (graderName.length !== 0) {
       return `${graderName[0].first_name} ${graderName[0].last_name}`;
     } else {
