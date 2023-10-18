@@ -53,6 +53,9 @@ background-color: aqua;
   border-radius: 5px;
   margin-top: -7px;
 }
+.lnk-optn:hover{
+background-color: #5464f0;
+}
 .fas-fa-link{
   margin-left: 22px;
   background-color: #bf96b4;
@@ -325,8 +328,23 @@ ul.resources {
   margin-top: -26px;
 }
 
+.texeria_two{
+  margin-right: 72px;
+  margin-top: -26px;
+}
 
+.texeria-tex{
+  margin-left: -48px;
+    margin-top: -23px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+.texeria-tex:hover{
+  background-color: #2ecc71;
 
+}
 
 .fas.fa-file {
   /* Add your styling here */
@@ -335,11 +353,12 @@ ul.resources {
   /* You can add more styles as needed */
 }
 .confirmation-dialog{
-  background-color: #dee2e6;
-  margin-left: -431px;
+  background-color: #fff;
+  margin-left: -589px;
   margin-top: -125px;
-  width: 361px;
-  border-radius: 10px;
+  width: 393px;
+  /* border: 2px solid #0056b3; */
+  box-shadow: 5px 8px 19px -3px rgb(173, 173, 177);
 
 }
 
@@ -485,12 +504,12 @@ ul.resources {
   margin-bottom: 10px;
 }
 .link-place{
-  background-color: #dee2e6;
+  background-color: #fff;
   width: 270px;
   margin-left: -598px;
   margin-top: -75px;
   height: 115px;
-  border-radius: 16px;
+  box-shadow: 5px 8px 19px -3px rgb(177, 173, 173);
 }
 .link-btn{
   width: 107px;
@@ -501,6 +520,7 @@ ul.resources {
   color: white;
   border: none;
   height: 29px;
+  
 }
 /* .load-img{
   background-color: #dee2e6;
@@ -640,7 +660,7 @@ margin-left: 1px;
   font-size: 17px;
   margin-left: 22px;
   background-color: #dee2e6;
-  width: 227px;
+  width: 240px;
   border-radius: 5px;
   font-family: ui-serif;
   
@@ -681,4 +701,31 @@ margin-left: 1px;
       left: 23px;
     position: absolute;
     margin-top: 48px;
+}
+.rem-fil{
+      /* position: absolute; */
+      display: flex;
+      justify-content: center;
+      margin-left: 200px;
+      align-items: flex-start;
+      align-content: center;
+      flex-direction: row;
+      margin-top: -21px;
+      cursor: pointer;
+}
+
+.rem-link{
+  display: flex;
+  justify-content: center;
+  margin-left: 216px;
+  align-items: flex-start;
+  flex-direction: row;
+  margin-top: -40px;
+  cursor: pointer;
+  align-content: space-around;
+  position: absolute;
+}
+.pht{
+  display: flex;
+    width: 36px;
 }
