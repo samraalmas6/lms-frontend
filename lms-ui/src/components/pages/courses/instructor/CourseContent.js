@@ -1,5 +1,5 @@
 import { Editor } from "@tinymce/tinymce-react";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import CourseModule from "./CourseModule";
 import img from "../../../content/Images/uploadImg.jpg";
 import { useNavigate } from "react-router-dom";
@@ -74,6 +74,10 @@ const CourseContent = ({
   // const [moduleData, setModuleData] = useState([]);
 
   const editorRef = useRef(null);
+
+  useEffect(() => {
+    
+  },)
 
   const showModuleList = () => {
     setShowModuleContent(() => "show");

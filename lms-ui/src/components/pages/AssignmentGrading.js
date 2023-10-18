@@ -9,6 +9,7 @@ import "../styles/AssignmentTable.css";
 import "../styles/AssignmentGrading.css";
 const AssignmentGrading = () => {
   const [courseContent, setCourseContent] = useState([]);
+  const [courseCoauthors, setCourseCoauthors] = useState([])
   const [moduleContent, setModuleContent] = useState([]);
   const [unitContent, setUnitContent] = useState([]);
   const [assignmentContent, setAssignmentContent] = useState([]);
@@ -29,7 +30,8 @@ const AssignmentGrading = () => {
   const [isAssignmentOpen, setIsAssignmentOpen] = useState(
     Array(assignmentContent.length).fill(false)
   );
-  const toggleCourse = (index) => {
+  const toggleCourse = (course,index) => {
+    setCourseCoauthors(course.editor)
     const updatedIsCourseOpen = [...isCourseOpen];
     updatedIsCourseOpen[index] = !updatedIsCourseOpen[index];
     setIsCourseOpen(updatedIsCourseOpen);
@@ -263,6 +265,8 @@ const AssignmentGrading = () => {
       grader: sessionStorage.getItem("user_id"),
       user: userId,
       status: updatedStatus,
+      editor: courseCoauthors,
+      updated_by: sessionStorage.getItem('user_id')
     };
 
     fetch(`http://127.0.0.1:8000/api/assignment_gradings/${gradingId}/`, {
@@ -355,6 +359,8 @@ const AssignmentGrading = () => {
   // console.log("(assignmentSubmissionContent.submitted_link",assignmentSubmissionContent.submitted_link)
   console.log("filter ka result:",assignmentSubmissionContent.filter((obj)=> obj.id === submissionId)?.submitted_link)
 
+
+  console.log('Co-Authors in Assignment Grading screen', courseCoauthors);
   return (
     <div className="grading-screen-main-container">
       <div className="filters-main-container">
@@ -421,7 +427,7 @@ const AssignmentGrading = () => {
             <li key={course.id}>
               <button
                 onClick={() => {
-                  toggleCourse(index);
+                  toggleCourse(course, index);
                   // handleCourseModule(course.id);
                 }}
               >
