@@ -12,7 +12,7 @@ function FileUploadComponent() {
   return (
     <div className="file-attach-div">
       <i class="fas fa-solid fa-paperclip"></i>
-      <input type="file" onChange={handleFileChange} />
+      <input type="file"  onChange={handleFileChange} />
       {selectedFile && (
         <div>
           <p>Selected File: {selectedFile.name}</p>

@@ -1,6 +1,7 @@
-import React, { createContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import CourseUnit from "./CourseUnit";
 import SingleModule from "./SingleModule";
+import { CourseProbs } from "./AllCourses";
 
 export const ModuleProbs = createContext(null);
 
@@ -13,6 +14,7 @@ const CourseModule = ({ moduleData, setModuleData, courseId }) => {
   const startDatePickerRefModule = useRef(null);
   const endDatePickerRefModule = useRef(null);
 
+  const {courseCoauthors} = useContext(CourseProbs)
   const [initModuleName, setInitModuleName] = useState(
     moduleData.length === 0 ? Number(1) : Number(moduleData.length + 1)
   );
@@ -97,7 +99,6 @@ const CourseModule = ({ moduleData, setModuleData, courseId }) => {
   const handleSaveModule = (moduleTitle) => {
     // e.preventDefault();
     setModuleTitle(moduleTitle);
-
     const obj = {
       title: moduleTitle,
       description: "module Description",
@@ -105,6 +106,8 @@ const CourseModule = ({ moduleData, setModuleData, courseId }) => {
       end_date: moduleEnd,
       course: courseId,
       updated_by: sessionStorage.getItem("user_id"),
+      editor: courseCoauthors,
+      created_by: sessionStorage.getItem("user_id")
     };
     fetch("http://127.0.0.1:8000/api/modules/", {
       method: "POST",
@@ -139,7 +142,13 @@ const CourseModule = ({ moduleData, setModuleData, courseId }) => {
               moduleData.map((module) => {
                 return (
                   <ModuleProbs.Provider
-                    value={{ moduleId, unitData, unitTitle, setUnitTitle }}
+                    value={{
+                      moduleId,
+                      unitData,
+                      setUnitData,
+                      unitTitle,
+                      setUnitTitle,
+                    }}
                   >
                     <SingleModule
                       key={module.id}
@@ -259,7 +268,13 @@ const CourseModule = ({ moduleData, setModuleData, courseId }) => {
                   <div className="module-form-section">
                     <form className="module-form">
                       <ModuleProbs.Provider
-                        value={{ moduleId, unitData, unitTitle, setUnitTitle }}
+                        value={{
+                          moduleId,
+                          unitData,
+                          setUnitData,
+                          unitTitle,
+                          setUnitTitle,
+                        }}
                       >
                         <CourseUnit showUnit={false} />
                       </ModuleProbs.Provider>
