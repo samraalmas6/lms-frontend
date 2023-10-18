@@ -63,7 +63,6 @@ function App() {
       </BrowserRouter>
 
   </div>
-  // <AssignmentGrading />
   );
 }
 
