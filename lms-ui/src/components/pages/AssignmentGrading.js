@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
-// import assignmentData from "../content/Data/assignmentData";
-// import courseData from "../content/Data/courseData";
-// import courseModuleData from "../content/Data/courseModulesData";
-// import courseUnitData from "../content/Data/courseUnitData";
-// import userData from "../content/Data//userData";
+
 import Collapse from "react-collapse";
 import "../styles/AssignmentTable.css";
 import "../styles/AssignmentGrading.css";
 const AssignmentGrading = () => {
   const [courseContent, setCourseContent] = useState([]);
   const [courseCoauthors, setCourseCoauthors] = useState([])
+  const [openIndex, setOpenIndex] = useState(null); //one collapsible at a time
   const [moduleContent, setModuleContent] = useState([]);
   const [unitContent, setUnitContent] = useState([]);
   const [assignmentContent, setAssignmentContent] = useState([]);
@@ -18,6 +15,7 @@ const AssignmentGrading = () => {
   const [assignmentGrading, setAssignmentGrading] = useState([]);
   const [assignmentFilter, setAssignmentFilter] = useState(null);
   const [filteredData, setFilteredData] = useState();
+  const [showTable, setShowTable] = useState(true);
   const [isCourseOpen, setIsCourseOpen] = useState(
     Array(courseContent.length).fill(false)
   );
@@ -35,7 +33,26 @@ const AssignmentGrading = () => {
     const updatedIsCourseOpen = [...isCourseOpen];
     updatedIsCourseOpen[index] = !updatedIsCourseOpen[index];
     setIsCourseOpen(updatedIsCourseOpen);
+    //one collapsible at a time
+    if (index === openIndex) {
+      // Clicking the open one closes it
+      setOpenIndex(null);
+      console.log("one at a time logic if condition applied");
+    } else {
+      setOpenIndex(index);
+      console.log("one at a time logic else condition applied");
+    }
   };
+
+  // const toggleCollapsible = (index) => {
+  //   if (index === openIndex) {
+  //     // Clicking the open one closes it
+  //     setOpenIndex(null);
+  //   } else {
+  //     setOpenIndex(index);
+  //   }
+  // };
+
   const toggleModule = (index) => {
     const updatedIsModuleOpen = [...isModuleOpen];
     updatedIsModuleOpen[index] = !updatedIsModuleOpen[index];
@@ -50,7 +67,8 @@ const AssignmentGrading = () => {
     const updatedIsAssignmentOpen = [...isAssignmentOpen];
     updatedIsAssignmentOpen[index] = !updatedIsAssignmentOpen[index];
     setIsAssignmentOpen(updatedIsAssignmentOpen);
-    console.log(updatedIsAssignmentOpen);
+    // console.log(updatedIsAssignmentOpen);
+    setShowTable();
   };
 
   const [selectedAssignment, setSelectedAssignment] = useState(null);
@@ -84,11 +102,15 @@ const AssignmentGrading = () => {
     setGrade(userFeedbackMap[assignmentId]?.grade || ""); // Load existing grade if available
   };
 
-  console.log("this is grade : .......", grade);
-  console.log("this is feedback.............", feedback);
+  // console.log("this is grade : .......", grade);
+  // console.log("this is feedback.............", feedback);
 
   const closePopup = () => {
     setSelectedAssignment(null);
+  };
+
+  const closeTable = () => {
+    setShowTable(null);
   };
 
   const handleFeedbackChange = (event) => {
@@ -103,15 +125,23 @@ const AssignmentGrading = () => {
     setUpdatedStatus(e.target.value);
   };
 
-  const handleOverDueDate = (subDate, dueDate) =>{
-    if (subDate>dueDate){
+  const handleOverDueDate = (subDate, dueDate) => {
+    if (subDate > dueDate) {
       // setOverDue(true)
-      return true
+      return true;
+    } else {
+      return false;
     }
-    else{
-      return false
+  };
+
+  const handleGraderName = (id) => {
+    const graderName = userData.filter((obj) => obj.id === id);
+    if (graderName.length !== 0) {
+      return `${graderName[0].first_name} ${graderName[0].last_name}`;
+    } else {
+      return "";
     }
-  }
+  };
 
   const handleSubmit = (userId, gradingId, submissionId) => {
     // Update the userFeedbackMap with the submitted feedback and grade
@@ -160,11 +190,11 @@ const AssignmentGrading = () => {
     }).then((response) => {
       if (response.status === 200) {
         response.json().then(function (result) {
-          console.log(result);
+          // console.log(result);
           setCourseContent(result);
         });
       } else {
-        console.log(response);
+        // console.log(response);
       }
     });
   };
@@ -230,10 +260,10 @@ const AssignmentGrading = () => {
         response.json().then(function (result) {
           // console.log(result);
           setAssignmentSubmissionContent(result);
-          console.log(
-            "assignment submission content: submitted link",
-            result[0].submitted_link
-          );
+          // console.log(
+          //   "assignment submission content: submitted link",
+          //   result[0].submitted_link
+          // );
         });
       } else {
         console.log(response);
@@ -300,11 +330,12 @@ const AssignmentGrading = () => {
     ).then((response) => {
       if (response.status === 200) {
         response.json().then(function (result) {
-          console.log("filtered data in api:", result.assignment_grading);
+          // console.log("filtered data in api:", result.assignment_grading);
           setFilteredData(result);
           setAssignmentGrading(result.assignment_grading);
           setAssignmentSubmissionContent(result.assignment_submission);
           setAssignmentContent(result.assignment);
+          setAssignmentFilter(null);
           // setAssignmentGrading(filteredData.assignment_grading)
         });
       } else {
@@ -323,7 +354,7 @@ const AssignmentGrading = () => {
     }).then((response) => {
       if (response.status === 200) {
         response.json().then(function (result) {
-          console.log(result);
+          // console.log(result);
           setUserData(result);
         });
       } else {
@@ -344,28 +375,28 @@ const AssignmentGrading = () => {
     // getfilteredData();
   }, []);
 
-  console.log("grader is jo user login h", sessionStorage.getItem("user_id"));
-  console.log(
-    "grader is jo user login h uska first name",
-    sessionStorage.getItem("first_name")
-  );
+  // console.log("grader is jo user login h", sessionStorage.getItem("user_id"));
+  // console.log(
+  //   "grader is jo user login h uska first name",
+  //   sessionStorage.getItem("first_name")
+  // );
+
   const instructor =
     sessionStorage.getItem("first_name") + sessionStorage.getItem("last_name");
-  console.log(
-    "grader is jo user login h uska first name",
-    sessionStorage.getItem("last_name")
-  );
+  // console.log(
+  //   "grader is jo user login h uska first name",
+  //   sessionStorage.getItem("last_name")
+  // );
   // console.log("checking filter api : ", filteredData.assignment);
   // console.log("(assignmentSubmissionContent.submitted_link",assignmentSubmissionContent.submitted_link)
+
   console.log("filter ka result:",assignmentSubmissionContent.filter((obj)=> obj.id === submissionId)?.submitted_link)
-
-
   console.log('Co-Authors in Assignment Grading screen', courseCoauthors);
   return (
     <div className="grading-screen-main-container">
       <div className="filters-main-container">
-        <div class="search-menu">
-          {/* <h2>Menu</h2> */}
+        {/* <div class="search-menu">
+          <h2>Menu</h2>
           <input
             type="text"
             id="mySearch"
@@ -373,12 +404,12 @@ const AssignmentGrading = () => {
             placeholder="Search for users ,units or courses"
             title="Type in a category"
           />
-        </div>
+        </div> */}
         <div className="filter-container">
           {/* <label>Filter by:</label> */}
           <button
             className={`filter-button all ${
-              assignmentFilter === null ? "active" : ""
+              assignmentFilter === null ? "active-all" : ""
             }`}
             // onClick={() => setAssignmentFilter(null)}
             // onClick={() =>setAssignmentGrading(filteredData.assignment_grading) }
@@ -388,7 +419,7 @@ const AssignmentGrading = () => {
           </button>
           <button
             className={`filter-button passed ${
-              assignmentFilter === "pass" ? "active" : ""
+              assignmentFilter === "pass" ? "active-pass" : ""
             }`}
             // onClick={() => setAssignmentFilter("pass")}
             // onClick={() => setAssignmentFilter("pass")}
@@ -398,7 +429,7 @@ const AssignmentGrading = () => {
           </button>
           <button
             className={`filter-button failed ${
-              assignmentFilter === "not pass" ? "active" : ""
+              assignmentFilter === "not pass" ? "active-fail" : ""
             }`}
             // onClick={() => setAssignmentFilter("not pass")}
             onClick={() => getfilteredData("fail")}
@@ -407,7 +438,7 @@ const AssignmentGrading = () => {
           </button>
           <button
             className={`filter-button pending ${
-              assignmentFilter === "pending" ? "active" : ""
+              assignmentFilter === "pending" ? "active-pending" : ""
             }`}
             // onClick={() => setAssignmentFilter("pending")}
             onClick={() => getfilteredData("pending")}
@@ -415,53 +446,66 @@ const AssignmentGrading = () => {
             Pending
           </button>
         </div>
-        <div>
-          {/* <Filters activeFilter={activeFilter} onChangeFilter={setActiveFilter} />
-      <SubmittedAssignTable data={filteredData} /> */}
-        </div>
       </div>
-      <div className="course-title">
-        {/* <h6>Course Data</h6> */}
+      <div className="courses-container">
         <ul>
           {courseContent?.map((course, index) => (
-            <li key={course.id}>
-              <button
+            <li key={course.id} className="list-item">
+              <div
+                // className="collapse-btn"
+                className="collapse-btn"
                 onClick={() => {
                   toggleCourse(course, index);
                   // handleCourseModule(course.id);
                 }}
               >
                 {course.title}
-                <i class="fas fa-angle-double-down"></i>
-              </button>
+                {/* <i class="fas fa-angle-double-down collapse-icon"></i> */}
+                <div className="collapse-icon-course">
+                  <i class="fa fa-chevron-circle-down"></i>
+                </div>
+                {/* ​<i class="fas fa-toggle-down"></i>
+                <i class="fa fa-hand-o-down"></i> */}
+                {/* <div class="toggle-btn-content">
+                <input type="checkbox" id="btn" />
+                <label for="btn">
+                  <span class="track">
+                    <span class="txt"></span>
+                  </span>
+                  <span class="thumb">|||</span>
+                </label>
+              </div> */}
+              </div>
               <Collapse isOpened={isCourseOpen[index]}>
                 <ul>
                   {moduleContent
                     .filter((module) => module.course === course.id)
                     .map((module, moduleIndex) => (
-                      <li key={module.id}>
-                        <button
+                      <li key={module.id} className="list-item">
+                        <div
+                          className="collapse-btn module"
                           onClick={() => {
                             toggleModule(moduleIndex);
                           }}
                         >
                           {module.title}
                           <i class="fas fa-angle-double-down"></i>
-                        </button>
+                        </div>
                         <Collapse isOpened={isModuleOpen[moduleIndex]}>
                           <ul>
                             {unitContent
                               .filter((unit) => unit.module === module.id)
                               .map((unit, unitIndex) => (
-                                <li key={unit.id}>
-                                  <button
+                                <li key={unit.id} className="list-item">
+                                  <div
+                                    className="collapse-btn unit"
                                     onClick={() => {
                                       toggleUnit(unitIndex);
                                     }}
                                   >
                                     {unit.title}
                                     <i class="fas fa-angle-double-down"></i>
-                                  </button>
+                                  </div>
                                   <Collapse isOpened={isUnitOpen[unitIndex]}>
                                     <ul>
                                       {assignmentContent
@@ -470,8 +514,12 @@ const AssignmentGrading = () => {
                                             assignment.unit === unit.id
                                         )
                                         .map((assignment, assignmentIndex) => (
-                                          <li key={assignment.id}>
-                                            <button
+                                          <li
+                                            key={assignment.id}
+                                            className="list-item"
+                                          >
+                                            <div
+                                              className="collapse-btn assign"
                                               onClick={() => {
                                                 toggleAssignment(
                                                   assignmentIndex
@@ -480,7 +528,7 @@ const AssignmentGrading = () => {
                                             >
                                               {assignment.title}
                                               <i class="fas fa-angle-double-down"></i>
-                                            </button>
+                                            </div>
                                             <Collapse
                                               isOpened={
                                                 isAssignmentOpen[
@@ -489,7 +537,7 @@ const AssignmentGrading = () => {
                                               }
                                             >
                                               <table className="assignment-table">
-                                                <thead className="head-row">
+                                                <thead className="head-row table-info">
                                                   <tr>
                                                     <th scope="col">ID</th>
                                                     <th scope="col">
@@ -515,7 +563,7 @@ const AssignmentGrading = () => {
                                                     <th scope="col">Actions</th>
                                                   </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody className="assignment-sub-body">
                                                   {assignmentSubmissionContent.length ===
                                                   0
                                                     ? "No record found"
@@ -544,6 +592,7 @@ const AssignmentGrading = () => {
                                                             // );
                                                             return (
                                                               <tr
+                                                                className="table-submission-data"
                                                                 key={
                                                                   submission.id
                                                                 }
@@ -555,7 +604,19 @@ const AssignmentGrading = () => {
                                                                 </td>
                                                                 <td>
                                                                   {
-                                                                    userData.filter((obj) => obj.id === submission.submitted_by)[0].first_name +" " +userData.filter((obj) => obj.id === submission.submitted_by)[0].last_name
+                                                                    userData.filter(
+                                                                      (obj) =>
+                                                                        obj.id ===
+                                                                        submission.submitted_by
+                                                                    )[0]
+                                                                      .first_name +
+                                                                      " " +
+                                                                      userData.filter(
+                                                                        (obj) =>
+                                                                          obj.id ===
+                                                                          submission.submitted_by
+                                                                      )[0]
+                                                                        .last_name
                                                                     // handleSubmitterName(),
                                                                     // submission.submitted_by
                                                                   }
@@ -565,14 +626,16 @@ const AssignmentGrading = () => {
                                                                     assignment.title
                                                                   }
                                                                 </td>
-                                                                <td  
-                                                                className=
-                                                                  {`${
-                                                                      handleOverDueDate(submission.submission_date,assignment.due_date)
+                                                                <td
+                                                                  className={`${
+                                                                    handleOverDueDate(
+                                                                      submission.submission_date,
+                                                                      assignment.due_date
+                                                                    )
                                                                       ? "overDue"
                                                                       : "on-time"
                                                                   }`}
-                                                                  >
+                                                                >
                                                                   {
                                                                     submission.submission_date
                                                                   }
@@ -582,19 +645,18 @@ const AssignmentGrading = () => {
                                                                     assignment.due_date
                                                                   }
                                                                 </td>
-                                                                {/* <td>
-                                                                  assignment
-                                                                  partners
-                                                                  {
-                                                                    assignment.Number_of_members
-                                                                  }
-                                                                </td> */}
                                                                 <td>
-                                                                  {
-                                                                    instructor
-                                                                    // grading?.grader
-                                                                    // grade
-                                                                  }
+                                                                  {handleGraderName(
+                                                                    grading.grader
+                                                                  )}
+                                                                  {/* {console.log(
+                                                                    "grader ka object with respect to user api",
+                                                                    userData.filter(
+                                                                      (obj) =>
+                                                                        obj.id ===
+                                                                        grading.grader
+                                                                    ).first_name
+                                                                  )} */}
                                                                 </td>
                                                                 <td>
                                                                   {
@@ -631,41 +693,51 @@ const AssignmentGrading = () => {
                                               {selectedAssignment !== null && (
                                                 <div className="popup">
                                                   <div className="popup-content">
-                                                    <button
-                                                      className="end-btn"
+                                                    <i
+                                                      class="fas fa-window-close popup-close-icon"
                                                       onClick={closePopup}
-                                                    >
-                                                      X
-                                                    </button>
-                                                    <p>Assignment Content</p>
-                                                    <p className="content">
+                                                    ></i>
+                                                    <h5>Assignment Content</h5>
+                                                    <div className="content">
                                                       {/* <p> */}
-                                                      {/* {assignmentSubmissionContent[0].submitted_link}</p> */}
-                                                      {/* <h1>Samara{assignmentSubmissionContent.filter((obj)=> obj.id === submissionId)[0].submitted_link}</h1> */}
-                                                      <a href="assignmentSubmissionContent[0].submitted_link">
-                                                      {assignmentSubmissionContent.filter((obj)=> obj.id === submissionId)[0].submitted_link}
-                                                      </a>
-                                                      <a
-                                                        href=//     item.id === //   (item) => // assignmentContent.find(
-                                                        //     selectedAssignment
-                                                        // )?.content
-                                                        // assignmentSubmissionContent[0].submitted_link
-                                                        "samara"
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                      >
-                                                        {
-                                                          assignmentSubmissionContent.find(
-                                                            (item) =>
-                                                              item.id ===
-                                                              selectedAssignment
-                                                          )?.content
-                                                          // assignmentSubmissionContent.submitted_link
-                                                        }
-                                                      </a>
-                                                    </p>
 
-                                                    <div>
+                                                      {/* submitted link */}
+                                                      <div className="submitted_link">
+                                                        <a href="assignmentSubmissionContent[0].submitted_link">
+                                                          {
+                                                            assignmentSubmissionContent.filter(
+                                                              (obj) =>
+                                                                obj.id ===
+                                                                submissionId
+                                                            )[0].submitted_link
+                                                          }
+                                                        </a>
+                                                      </div>
+                                                      {/* submitted pdf  */}
+                                                      <div className="submitted_pdf">
+                                                        <a
+                                                          href={
+                                                            assignmentSubmissionContent.filter(
+                                                              (obj) =>
+                                                                obj.id ===
+                                                                submissionId
+                                                            )[0].content
+                                                          }
+                                                          target="_blank"
+                                                          rel="noopener noreferrer"
+                                                        >
+                                                          {
+                                                            assignmentSubmissionContent.filter(
+                                                              (obj) =>
+                                                                obj.id ===
+                                                                submissionId
+                                                            )[0].content
+                                                          }
+                                                        </a>
+                                                      </div>
+                                                    </div>
+
+                                                    <div className="feedback-container">
                                                       <label className="feedback">
                                                         Feedback:
                                                       </label>
@@ -679,57 +751,60 @@ const AssignmentGrading = () => {
                                                         className="feedback-input"
                                                       />
                                                     </div>
-                                                    <div>
-                                                      <label className="grade">
-                                                        Grade:
-                                                      </label>
-                                                      <input
-                                                        type="number"
-                                                        id="grade"
-                                                        name="grade"
-                                                        value={grade}
-                                                        onChange={
-                                                          handleGradeChange
-                                                        }
-                                                        className="grade-input"
-                                                        max={
-                                                          assignmentContent.find(
+                                                    <div className="grade-status-container">
+                                                      <div>
+                                                        <label className="grade">
+                                                          Grade:
+                                                        </label>
+                                                        <input
+                                                          type="number"
+                                                          id="grade"
+                                                          name="grade"
+                                                          value={grade}
+                                                          onChange={
+                                                            handleGradeChange
+                                                          }
+                                                          className="grade-input"
+                                                          max={
+                                                            assignmentContent.find(
+                                                              (item) =>
+                                                                item.id ===
+                                                                selectedAssignment
+                                                            )?.Grade || 100
+                                                          }
+                                                        />
+                                                        <span className="grade-text">
+                                                          out of{" "}
+                                                          {assignmentContent.find(
                                                             (item) =>
                                                               item.id ===
                                                               selectedAssignment
-                                                          )?.Grade || 100
-                                                        }
-                                                      />
-                                                      <span className="grade-text">
-                                                        out of{" "}
-                                                        {assignmentContent.find(
-                                                          (item) =>
-                                                            item.id ===
-                                                            selectedAssignment
-                                                        )?.Grade || 100}
-                                                      </span>
-                                                    </div>
-                                                    <div className="status-dropdown">
-                                                      <select
-                                                        onChange={(e) =>
-                                                          handleStatus(e)
-                                                        }
-                                                        value={updatedStatus}
-                                                      >
-                                                        <option
-                                                          disabled
-                                                          selected
+                                                          )?.Grade || 100}
+                                                        </span>
+                                                      </div>
+                                                      <div className="status-dropdown">
+                                                        <select
+                                                          onChange={(e) =>
+                                                            handleStatus(e)
+                                                          }
+                                                          value={updatedStatus}
                                                         >
-                                                          select status
-                                                        </option>
-                                                        <option value="pass">
-                                                          pass
-                                                        </option>
-                                                        <option value="fail">
-                                                          fail
-                                                        </option>
-                                                      </select>
+                                                          <option
+                                                            disabled
+                                                            selected
+                                                          >
+                                                            select status
+                                                          </option>
+                                                          <option value="pass">
+                                                            pass
+                                                          </option>
+                                                          <option value="fail">
+                                                            fail
+                                                          </option>
+                                                        </select>
+                                                      </div>
                                                     </div>
+                                                    <div className="popup-submit-button">
                                                     <button
                                                       onClick={() =>
                                                         handleSubmit(
@@ -738,10 +813,12 @@ const AssignmentGrading = () => {
                                                           submissionId
                                                         )
                                                       }
-                                                      className="submit-button"
+                                                      // className="popup-submit-button "
+                                                      type="button" class="btn btn-primary popup-submit-button"
                                                     >
                                                       Submit
                                                     </button>
+                                                    </div>
                                                   </div>
                                                 </div>
                                               )}
