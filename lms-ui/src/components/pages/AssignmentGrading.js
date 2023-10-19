@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import Collapse from "react-collapse";
-import "../styles/AssignmentTable.css";
+// import "../styles/AssignmentTable.css";
 import "../styles/AssignmentGrading.css";
 const AssignmentGrading = () => {
   const [courseContent, setCourseContent] = useState([]);
@@ -608,7 +608,8 @@ const AssignmentGrading = () => {
                                                                         obj.id ===
                                                                         submission.submitted_by
                                                                     )[0]
-                                                                      .first_name +
+                                                                      .first_name
+                                                                       +
                                                                       " " +
                                                                       userData.filter(
                                                                         (obj) =>
@@ -737,9 +738,9 @@ const AssignmentGrading = () => {
                                                     </div>
 
                                                     <div className="feedback-container">
-                                                      <label className="feedback">
+                                                      <h6 className="feedback">
                                                         Feedback:
-                                                      </label>
+                                                      </h6>
                                                       <textarea
                                                         id="feedback"
                                                         name="feedback"
@@ -752,13 +753,18 @@ const AssignmentGrading = () => {
                                                     </div>
                                                     <div className="grade-status-container">
                                                       <div>
-                                                        <label className="grade">
+                                                        <h6 className="grade">
                                                           Grade:
-                                                        </label>
+                                                        </h6>
                                                         <input
                                                           type="number"
                                                           id="grade"
                                                           name="grade"
+                                                          placeholder={`out of ${assignmentContent.find(
+                                                            (item) =>
+                                                              item.id ===
+                                                              selectedAssignment
+                                                          )?.Grade || 100} `}
                                                           value={grade}
                                                           onChange={
                                                             handleGradeChange
@@ -772,17 +778,19 @@ const AssignmentGrading = () => {
                                                             )?.Grade || 100
                                                           }
                                                         />
-                                                        <span className="grade-text">
+                                                        {/* <span className="grade-text">
                                                           out of{" "}
                                                           {assignmentContent.find(
                                                             (item) =>
                                                               item.id ===
                                                               selectedAssignment
                                                           )?.Grade || 100}
-                                                        </span>
+                                                        </span> */}
                                                       </div>
-                                                      <div className="status-dropdown">
-                                                        <select
+                                                      </div>
+                                                      <div className="status-dropdown-container">
+                                                      <h6>Status:</h6>
+                                                        <select className="status-dropdown"
                                                           onChange={(e) =>
                                                             handleStatus(e)
                                                           }
@@ -802,7 +810,7 @@ const AssignmentGrading = () => {
                                                           </option>
                                                         </select>
                                                       </div>
-                                                    </div>
+                                                
                                                     <div className="popup-submit-button">
                                                     <button
                                                       onClick={() =>
