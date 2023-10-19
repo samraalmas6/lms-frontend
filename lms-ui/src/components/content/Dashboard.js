@@ -134,7 +134,7 @@ const Dashboard = () => {
         <strong>Data and Records</strong> Learn more about LMS
       </div>
       <div className="row mb-3">
-        <div className="col-xl-2 offset-xl-1 col-sm-6 py-2  text-center">
+        <div className="col-xl-2 col-sm-6 py-2  text-center">
           <div className="card bg-success text-white h-100 dashboard-card">
             <div
               className="card-body bg-success "
