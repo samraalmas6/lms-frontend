@@ -18,3 +18,25 @@
     align-items: end;
     margin-top: 7px;
 }
+.save-team-btn-section{
+    display: flex;
+    justify-content: end;
+    margin-right: 12px;
+    align-items: end;
+    height: 260px;
+}
+.save-team-btn-section button {
+    border: none;
+    background: none;
+    background-color: #009688;
+    padding: 8px 10px;
+    font-weight: 500;
+    color: #fff3f3;
+    border-radius: 8px;
+}
+.save-team-btn-section button:hover, .save-team-btn-section button:focus, .save-team-btn-section button:active {
+    background-color: #0caf9f;
+    color: #000000;
+    outline: none;
+    border: none;
+}

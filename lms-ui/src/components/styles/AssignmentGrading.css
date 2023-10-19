@@ -1,0 +1,219 @@
+.grading-screen-main-container {
+  /* border: 1px solid black; */
+  padding: 10px;
+  margin: 10px;
+}
+
+.filters-main-container {
+  /* border: 1px solid black; */
+  display: flex;
+  /* gap: 20px; */
+  /* background-color: red; */
+  justify-content: center;
+  align-items: center;
+}
+
+.end-btn {
+  padding: 16px;
+  width: 7%;
+  font-size: 20px;
+  box-shadow: 5px 8px 19px -3px rgb(177, 173, 173);
+  display: flex;
+  justify-content: flex-end;
+  background-color: red;
+  align-content: center;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  height: 40px;
+  /* margin-left: 643px; */
+  border: none;
+  color: white;
+}
+
+.filter-container {
+  display: flex;
+  /* gap: 10px; */
+}
+.filter-container button {
+  padding: 10px;
+  /* border-radius: 10px; */
+  border: 1px solid grey;
+  background-color: lightgray;
+  width: 130px;
+  text-align: center;
+}
+
+/* .filter-container button .all:hover {
+  background-color: red;
+} */
+
+.filter-button.all:hover {
+  background-color: grey;
+}
+
+.filter-button.passed:hover {
+  background-color: #63d4af;
+}
+
+.filter-button.failed:hover {
+  background-color: #d18a7e;
+}
+
+.filter-button.pending:hover {
+  background-color: lightblue;
+}
+
+/* -------xxxxxx---------- */
+
+.filter-button.all:active {
+  background-color: grey;
+}
+
+.filter-button.passed:active {
+  background-color: #63d4af;
+}
+
+.filter-button.failed:active {
+  background-color: #d18a7e;
+}
+
+.filter-button.pending:active {
+  background-color: lightblue;
+}
+
+/* -------xxxxxx---------- */
+
+.search-menu {
+  width: 15%;
+}
+
+.courses-container {
+  /* border: 1px solid black; */
+  border: none;
+  margin-top: 20px;
+}
+
+.courses-container ul {
+  padding: 0px;
+}
+.courses-container ul li .list-item {
+  /* background-color: blue; */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* margin-bottom: 10px; */
+}
+.opn-btn {
+  background-color: #008cba;
+  display: flex;
+  color: white;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  align-items: center;
+  margin: 10px;
+  width: 70%;
+  justify-content: center;
+}
+.table-submission-data {
+  border-bottom: 1px solid black;
+}
+.status-dropdown {
+  padding: 10px;
+  padding: 6px 12px;
+  margin: 6px 2px 3px;
+  border-radius: 6px;
+  border-style: solid;
+  display: flex;
+  border-color: #eee;
+  font-size: 17px;
+  width: 21%;
+  /* margin-left: 413px; */
+  margin-top: 1px;
+  justify-content: center;
+  align-content: flex-end;
+  flex-direction: row;
+  height: 44px;
+}
+.collapse-btn {
+  /* padding: 30px; */
+  width: 100%;
+  font-size: 20px;
+  /* box-shadow: 5px 8px 19px -3px rgb(177, 173, 173); */
+  display: flex;
+  justify-content: space-between;
+  /* border-radius: 10px; */
+  margin-bottom: 10px;
+  margin-right: 10px;
+  border: none;
+  font-size: 15px;
+  font-family: sans-serif;
+  background-color: #cff4fc;
+  padding: 10px;
+}
+
+.collapse-btn.module{
+  /* background-color: 	#C0C0C0; */
+  background-color: #A9A9A9	;
+}
+
+.collapse-btn.unit{
+  background-color: #D3D3D3	;
+}
+
+.collapse-btn.assign{
+  background-color: #F5F5F5		;
+}
+
+
+.view-button {
+  background-color: #008cba;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 20px !important;
+  cursor: pointer;
+  margin: 10px;
+}
+.courses-container ul li button .end-btn {
+  /* padding: 0px; */
+}
+
+.list-item {
+  list-style: none;
+}
+
+.overDue {
+  color: red;
+}
+
+.on-time {
+  color: green;
+}
+
+.collapse-icon-course{
+  /* background-color: red; */
+}
+
+.active-all{
+  background-color: red;
+}
+
+.popup-close-icon{
+  font-size: 30px;
+    display: flex;
+    justify-content: flex-end;
+    color: red;
+}
+
+.feedback-container{
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* -----------xxxxxxx----------- */
+
+/* -----------xxxxxxxxx---------------- */

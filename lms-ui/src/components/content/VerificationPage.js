@@ -16,7 +16,8 @@ function VerificationPage() {
   const [passwordType, setPasswordType] = useState("password");
   const [passwordConfirmType, setConfirmPasswordType] = useState("password");
 
-
+const token = query.get('token')
+console.log('token ',token);
 
   const handleEyeMode1 = () => {
     if (eyeMode === "fa-eye-slash") {
@@ -52,38 +53,67 @@ function VerificationPage() {
   
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    const userData = {
-      email: query.get("email"),
-      password: confirmPassword,
-      is_active: true,
-    };
-    console.log(userData);
-    fetch("http://localhost:8000/update_user/", {
-      method: "PUT",
-      body: JSON.stringify(userData),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        Authorization: process.env.REACT_APP_ADMIN_TOKEN,
-      },
-    }).then((response) => {
-      if (response.status == 200) {
-        console.log("User record updated!");
-        navigate("/auth/login");
-      }
-      // response.json().then(function (result) {
-      //   console.log(result);
-      // })
-    });
 
     if (newPassword === "" || confirmPassword === "") {
       alert("Fill in the required fields");
       return;
     } else {
-      alert("Password updated successfully");
+      
+      if(token){
+        const userData = {
+          new_password: confirmPassword,
+        };
+  
+        fetch(`http://localhost:8000/reset_password/${token}/`, {
+          method: "POST",
+          body: JSON.stringify(userData),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            Authorization: process.env.REACT_APP_ADMIN_TOKEN,
+          },
+        }).then((response) => {
+          if (response.status === 200) {
+            console.log("User Password reset!");
+            setOldPassword("");
+            setNewPassword("");
+            setConfirmPassword("");
+            navigate("/auth/login");
+          }
+          // response.json().then(function (result) {
+          //   console.log(result);
+          // })
+        });
+  
+      }
+      else {
+  
+        const userData = {
+          email: query.get("email"),
+          password: confirmPassword,
+          is_active: true,
+        };
+  
+        fetch("http://localhost:8000/update_user/", {
+          method: "PUT",
+          body: JSON.stringify(userData),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            Authorization: process.env.REACT_APP_ADMIN_TOKEN,
+          },
+        }).then((response) => {
+          if (response.status === 200) {
+            console.log("User record updated!");
+            setOldPassword("");
+            setNewPassword("");
+            setConfirmPassword("");
+            navigate("/auth/login");
+          }
+          // response.json().then(function (result) {
+          //   console.log(result);
+          // })
+        });
+      }
 
-      setOldPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
     }
   };
 
@@ -92,7 +122,7 @@ function VerificationPage() {
       {/* <div className="col"> */}
       <div className={styles.contain}>
         <form className={styles.form}>
-          <h2 className={styles.activateHeading}>Activate Account</h2>
+          <h2 className={styles.activateHeading}>{token ? 'Reset Password' : 'Activate Account'}</h2>
           {/* <label>
                     <input
                     type="password"

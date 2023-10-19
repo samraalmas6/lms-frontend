@@ -46,6 +46,10 @@ const SigninPage = () => {
     return errors;
   };
 
+ const handleForgetPasswordBtn =() =>{
+    navigate('/auth/reset_password')
+ }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const errors = validateLogin({ email, password });
@@ -59,7 +63,6 @@ const SigninPage = () => {
       // API CALL
       fetch(`${"http://127.0.0.1:8000/login/"}`, {
         method: "POST",
-        // mode: 'no-cors',
         body: JSON.stringify(data),
         headers: {
           "Content-type": "application/json",
@@ -71,7 +74,13 @@ const SigninPage = () => {
             console.log(result);
             sessionStorage.clear()
 
-            sessionStorage.setItem("user_id", 1);
+            sessionStorage.setItem("user_id", result.id);
+            sessionStorage.setItem('first_name', result.first_name);
+            sessionStorage.setItem('last_name', result.last_name);
+            // sessionStorage.setItem('role', result.role);
+            sessionStorage.setItem('role', result.role);
+
+
             // sessionStorage.setItem('user_email', result.data.user.email);
             // sessionStorage.setItem('user_firstname', result.data.user.full_name);
             // sessionStorage.setItem('user_lastname', result.data.user.full_name);
@@ -136,7 +145,7 @@ const SigninPage = () => {
           className="button"
         />
         <span className="forgot-password">
-          Forgot your <a href="#">password?</a>
+          Forgot your <a role="button"  onClick={() => handleForgetPasswordBtn()}>password?</a>
         </span>
       </form>
     </div>

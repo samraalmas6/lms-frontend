@@ -1,29 +1,46 @@
 import React, { useEffect, useRef, useState } from "react";
-import teamsData from "../../hooks/teamData";
 import styles from "../../styles/AllTeam.module.css";
 import userImg from "../../content/Images/user.png";
-// import courseData from "../../hooks/courseData";
 
 const AllTeams = ({ show }) => {
   const [showBlock, setShowBlock] = useState(false);
   const [showUserDelete, setShowUserDelete] = useState(false);
   const [showCourseDelete, setShowCourseDelete] = useState(false);
-  const [checkedAll, setCheckAll] = useState(false);
-  const [userCheckedAll, setUserCheckAll] = useState(false);
+  const [checkedAllCourse, setCheckAllCourse] = useState(false);
+  const [checkedAllUser, setCheckAllUser] = useState(false);
 
   const checkbox = useRef("");
-
+  const [teamId, setTeamId] = useState(null);
   const [teamName, setTeamName] = useState("");
-  const [teamData, setTeamData] = useState(teamsData);
+  const [teamDes, setTeamDes] = useState("");
+  const [teamData, setTeamData] = useState([]);
   const [teamUsers, setTeamUser] = useState([]);
   const [teamCourses, setTeamCourses] = useState([]);
-  const [teamDetail, setTeamDetail] = useState([]);
-  const [addTeam, setAddTeam] = useState([]);
-
+  const [addTeamUsersId, setAddTeamUsersId] = useState([]);
+  const [addTeamCoursesId, setAddTeamCoursesId] = useState([]);
   const [userData, setUserData] = useState([]);
   const [coursesData, setCoursesData] = useState([]);
 
   useEffect(() => {
+    const getAllTeams = () => {
+      fetch("http://127.0.0.1:8000/teams_list_data/", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if(response.status === 200){
+        response.json().then(function (result) {
+          console.log(result);
+          setTeamData(result);
+        });
+      }
+      else {
+        console.log(response);
+      }
+      });
+    };
+
     const getUsers = () => {
       fetch("http://127.0.0.1:8000/list_all_users/", {
         method: "GET",
@@ -31,26 +48,55 @@ const AllTeams = ({ show }) => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
+        if(response.status === 200){
         response.json().then(function (result) {
           console.log(result);
           setUserData(result);
+
+        // ************   List only Learner Users *********************
+        //
+        //   const users = result.filter(user => {
+        //     return user.role === 'learner'
+        // })
+        // setUserData(users);
+          
         });
+      }
+      else {
+        console.log(response);
+      }
       });
     };
     const getCourse = () => {
       fetch("http://127.0.0.1:8000/api/courses", {
         method: "GET",
         headers: {
-          Authorization: `Token 39d67e21dcd82c5ad6c98a1024fa1fdd0a484c61`,
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
+        if(response.status === 200){
         response.json().then(function (result) {
-          console.log(result);
+          console.log("API result Courses:",result);
           setCoursesData(result);
+
+          // ****************** List only Acive Courses *********************
+          //
+          // const activeCourses = result.filter(course => {
+          //   return course.is_active === true
+          // });
+          // setCoursesData(activeCourses)
+
+
         });
+      }
+      else {
+        console.log(response);
+      }
       });
       // setCoursesData(courseData);
     };
+
+    getAllTeams();
     getUsers();
     getCourse();
   }, []);
@@ -59,38 +105,81 @@ const AllTeams = ({ show }) => {
     setTeamName(e.target.value);
   };
 
+  const handleTeamDes = (e) => {
+    setTeamDes(e.target.value);
+  };
   const handleSaveTeam = (e) => {
     e.preventDefault();
-    setTeamData([...teamData, { TeamName: teamName, id: 3 }]);
+    const obj = {
+      name: teamName,
+      description: teamDes,
+      created_by: sessionStorage.getItem("user_id"),
+    };
+
+    fetch("http://127.0.0.1:8000/create_team/", {
+      method: "POST",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log(result);
+        // window.location.reload();
+        setTeamData((pre) => [...pre, result]);
+      });
+    });
+
+    // setTeamData([...teamData, { TeamName: teamName, id: 3 }]);
     setTeamName("");
+    setTeamDes("");
   };
 
-  const handleCheckChange = (e) => {
+  const handleCourseCheckChange = (e) => {
     const title = e.target.value;
-    if (e.target.checked && title != "undefined") {
-      const newObj = coursesData.filter((course) => {
-        return course.title === title;
+    const newObj = coursesData.filter((course) => {
+      return course.title === title;
+    });
+
+    if (e.target.checked && title !== "undefined") {
+      setAddTeamCoursesId((pre) => [...pre, newObj[0].id]);
+    } else if (!e.target.checked) {
+      const coursesId = addTeamCoursesId.filter((course) => {
+        return newObj[0].id !== course;
       });
-      setAddTeam([newObj[0]]);
+      setAddTeamCoursesId(coursesId);
     }
   };
+
+
   const handleUserCheckChange = (e) => {
-    const title = e.target.value;
-    if (e.target.checked && title != "undefined") {
-      const newObj = coursesData.filter((course) => {
-        return course.title === title;
+    const email = e.target.value;
+    const newObj = userData.filter((user) => {
+      return user.email === email;
+    });
+
+    if (e.target.checked && email !== "undefined") {
+      setAddTeamUsersId((pre) => [...pre, newObj[0].id]);
+    } else if (!e.target.checked) {
+      const usersId = addTeamUsersId.filter((user) => {
+        return newObj[0].id !== user;
       });
-      setAddTeam([newObj[0]]);
+      setAddTeamUsersId(usersId);
     }
   };
 
-  const handlAllSelect = () => {
+  const handlCourseAllSelect = () => {
     const selectItems = document.getElementsByClassName("course-check");
-    if (checkedAll) {
+    if (checkedAllCourse) {
+      setAddTeamCoursesId([]);
       for (let item of selectItems) {
         item.checked = false;
       }
     } else {
+      coursesData.forEach((course) => {
+        setAddTeamCoursesId((pre) => [...pre, course.id]);
+      });
       for (let item of selectItems) {
         item.checked = true;
       }
@@ -98,78 +187,208 @@ const AllTeams = ({ show }) => {
   };
   const handlUserAllSelect = () => {
     const selectItems = document.getElementsByClassName("user-check");
-    if (checkedAll) {
+    if (checkedAllUser) {
+      setAddTeamUsersId([]);
       for (let item of selectItems) {
         item.checked = false;
       }
     } else {
+      userData.forEach((user) => {
+        setAddTeamUsersId((pre) => [...pre, user.id]);
+      });
       for (let item of selectItems) {
         item.checked = true;
       }
     }
   };
-  const handleDeleteCourse = (id) => {
-    const obj = teamCourses.filter(course => {
-      return course.id !== id
-    })
-    setTeamCourses(obj)
-  }
 
-  const handleDeleteUser = (id) => {
-    const obj = teamUsers.filter(user => {
-      return user.id !== id
-    })
-    setTeamUser(obj)
-  }
+  const handleDeleteCourse = (id) => {
+    const obj = {
+      team_id: teamId,
+      course_ids: [id],
+    };
+
+    fetch("http://127.0.0.1:8000/remove_courses_from_team/", {
+      method: "POST",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log(result);
+        window.location.reload();
+        // setTeamData(result);
+      });
+    });
+
+    // const obj = teamCourses.filter((course) => {
+    //   return course.id !== id;
+    // });
+    // setTeamCourses(obj);
+  };
+
+  const handleDeleteUser = (user) => {
+    const user_id = userData.filter((users) => {
+      return users.id === user;
+    });
+    const obj = {
+      team_name: teamName,
+      user_ids: [user_id[0].id],
+    };
+
+    fetch("http://127.0.0.1:8000/remove_users_from_team/", {
+      method: "POST",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log(result);
+        window.location.reload();
+        // setTeamData(result);
+      });
+    });
+
+    // const obj = teamUsers.filter((users) => {
+    //   return users.id !== user;
+    // });
+    // setTeamUser(obj);
+  };
 
   const handleAddCourse = (e) => {
     e.preventDefault();
     const selectItems = document.getElementsByClassName("course-check");
     for (let item of selectItems) {
       if (item.checked) {
-        const newObj = coursesData.filter((course) => {
-          return course.title === item.value;
-        });
-        console.log(" obj  =", newObj);
         if (typeof teamCourses !== "undefined") {
-          setTeamCourses(() => [...teamCourses, newObj[0]]);
+          for (let i = 0; i < addTeamCoursesId.length; i++) {
+            const element = addTeamCoursesId[i];
+            if (teamCourses.includes(element)) {
+              addTeamCoursesId.splice(i, 1);
+              i--;
+            }
+          }
+
+          const obj = {
+            team_id: teamId,
+            course_ids: addTeamCoursesId,
+          };
+
+          fetch("http://127.0.0.1:8000/add_courses_to_team/", {
+            method: "POST",
+            body: JSON.stringify(obj),
+            headers: {
+              Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          }).then((response) => {
+            response.json().then(function (result) {
+              console.log(result);
+              window.location.reload();
+              // setTeamData(result);
+            });
+          });
+
+          // setTeamCourses(() => [...teamCourses, newObj[0]]);
         } else {
-          setTeamCourses([newObj[0]]);
+          // setTeamCourses([newObj[0]]);
         }
       }
 
       item.checked = false;
     }
 
-    console.log(teamCourses);
   };
+
+  const getUSerFullName = (user) => {
+    if (user) {
+      const name = userData.filter((users) => users.id === user);
+      return `${name[0].first_name} ${name[0].last_name}`;
+    }
+  };
+
+  const getTeamCourseName = (course) => {
+    const title = coursesData.filter((courses) => courses.id === course);
+    return `${title[0].title}`;
+  };
+
   const handleAddUser = (e) => {
     e.preventDefault();
     const selectItems = document.getElementsByClassName("user-check");
     for (let item of selectItems) {
       if (item.checked) {
-        const newObj = userData.filter((user) => {
-          return user.email === item.value;
-        });
-        console.log(" obj  =", newObj);
         if (typeof teamUsers !== "undefined") {
-          setTeamUser(() => [...teamUsers, newObj[0]]);
+          for (let i = 0; i < addTeamUsersId.length; i++) {
+            const element = addTeamUsersId[i];
+            if (teamUsers.includes(element)) {
+              addTeamUsersId.splice(i, 1);
+              i--;
+            }
+          }
+
+          const obj = {
+            team_name: teamName,
+            // user_emails: ["hammad@example.com"],
+            user_ids: addTeamUsersId,
+          };
+
+          fetch("http://127.0.0.1:8000/add_users_to_team/", {
+            method: "POST",
+            body: JSON.stringify(obj),
+            headers: {
+              Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          }).then((response) => {
+            response.json().then(function (result) {
+              console.log('API result ',result);
+              // setTeamUser(pre => [...pre, result])
+
+              // conuserData.filter((user, index) => {
+              //   return result.added_users[index] === user.id
+              // })
+              window.location.reload();
+              // setTeamData(result);
+            });
+          });
+
+          // setTeamUser(() => [...teamUsers, newObj[0]]);
         } else {
-          setTeamUser([newObj[0]]);
+          // setTeamUser([newObj[0]]);
         }
       }
 
       item.checked = false;
     }
 
-    console.log(teamUsers);
   };
-  const handleSave = (e) => {};
 
-  // console.log(process.env.REACT_APP_API_KEY);
+  const handleDeleteTeam = (id) => {
+    fetch("http://127.0.0.1:8000/delete_team/", {
+      method: "DELETE",
+      body: JSON.stringify({ team_id: id }),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      response.json().then(function (result) {
+        console.log(result);
 
-  // console.log(teamDetail);
-  // console.log(teamCourses);
+        window.location.reload();
+        // setTeamData(result);
+      });
+    });
+  };
+
+  const handleTeamUpdate = () => {
+    
+  };
+
   return (
     <div>
       <div className="all-course-content">
@@ -213,9 +432,20 @@ const AllTeams = ({ show }) => {
                   <input
                     type="text"
                     value={teamName}
-                    onChange={handleTeamName}
+                    onChange={(e) => handleTeamName(e)}
                     required
                     placeholder="Team Name"
+                    className="team-name"
+                  />
+                  <label className="mb-0">
+                    Team Description<span style={{ color: "red" }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={teamDes}
+                    onChange={(e) => handleTeamDes(e)}
+                    required
+                    placeholder="Team Description"
                     className="team-name"
                   />
                   <div className="team-save-btn">
@@ -244,7 +474,7 @@ const AllTeams = ({ show }) => {
           <div className="offcanvas-body">
             <div className="add-course-content">
               <div className="course-name-section">
-              <ul style={{ paddingLeft: '10px'}}>
+                <ul style={{ paddingLeft: "10px" }}>
                   {teamData &&
                     teamData.map((team) => {
                       return (
@@ -253,12 +483,13 @@ const AllTeams = ({ show }) => {
                             <a
                               role="button"
                               onClick={() => {
-                                setTeamName(team.TeamName);
-                                setTeamUser(team.Users);
-                                setTeamCourses(team.Courses);
+                                setTeamName(team.name);
+                                setTeamUser(team.users);
+                                setTeamId(team.id);
+                                setTeamCourses(team.courses);
                               }}
                             >
-                              {team.TeamName}
+                              {team.name}
                             </a>
                           </li>
                         </div>
@@ -285,7 +516,7 @@ const AllTeams = ({ show }) => {
                   <input
                     type="text"
                     value={teamName}
-                    onChange={handleTeamName}
+                    onChange={(e) => handleTeamName(e)}
                     required
                     className="course-title"
                   />
@@ -304,7 +535,7 @@ const AllTeams = ({ show }) => {
                           teamUsers.map((user, index) => {
                             return (
                               <tr
-                                key={user.id}
+                                key={user}
                                 onMouseEnter={() => setShowUserDelete(true)}
                                 onMouseLeave={() => setShowUserDelete(false)}
                               >
@@ -316,8 +547,12 @@ const AllTeams = ({ show }) => {
                                   //   className="allusers-name-container"
                                 >
                                   <span>
-                                    {user.first_name} {user.last_name}
-                                    {/* {user.firstName} */}
+                                    {getUSerFullName(user)}
+                                    {/* { userData.filter((users) => {
+                                    if( users.id === user){
+                                      return users.first_name
+                                    }
+                                  } )} */}
                                   </span>
                                 </td>
                                 <td className={styles.borderLess}>
@@ -325,19 +560,18 @@ const AllTeams = ({ show }) => {
                                     <button
                                       type="button"
                                       className={styles.deleteBtn}
-                                      onClick={() => handleDeleteUser(user.id)}
-
+                                      onClick={() => handleDeleteUser(user)}
                                     >
-                                      X
+                                      <i className="bi bi-trash"></i>
                                     </button>
                                   ) : (
                                     <button
                                       type="button"
                                       style={{ color: "white" }}
-                                      onClick={() => handleDeleteUser(user.id)}
+                                      onClick={() => handleDeleteUser(user)}
                                       className={styles.deleteBtn}
                                     >
-                                      X
+                                      <i className="bi bi-trash"></i>
                                     </button>
                                   )}
                                 </td>
@@ -359,30 +593,30 @@ const AllTeams = ({ show }) => {
                           teamCourses.map((course) => {
                             return (
                               <tr
-                                key={course.id}
+                                key={course}
                                 onMouseEnter={() => setShowCourseDelete(true)}
                                 onMouseLeave={() => setShowCourseDelete(false)}
                               >
                                 <td className={styles.borderLess}>
-                                  {course.title}
+                                  {getTeamCourseName(course)}
                                 </td>
                                 <td className={styles.borderLess}>
                                   {showCourseDelete ? (
                                     <button
                                       type="button"
                                       className={styles.deleteBtn}
-                                      onClick={() => handleDeleteCourse(course.id)}
+                                      onClick={() => handleDeleteCourse(course)}
                                     >
-                                     
+                                      <i className="bi bi-trash"></i>
                                     </button>
                                   ) : (
                                     <button
                                       type="button"
                                       style={{ color: "white" }}
-                                      onClick={() => handleDeleteCourse(course.id)}
+                                      onClick={() => handleDeleteCourse(course)}
                                       className={styles.deleteBtn}
                                     >
-                                      X
+                                      <i className="bi bi-trash"></i>
                                     </button>
                                   )}
                                 </td>
@@ -415,7 +649,9 @@ const AllTeams = ({ show }) => {
                     </button>
                   </div>
 
-                  <div className="category-save-btn"></div>
+                  <div className="save-team-btn-section">
+                    <button type="button" onClick={() => handleTeamUpdate()}>Update Team</button>
+                  </div>
                 </form>
               </div>
             </div>
@@ -436,7 +672,7 @@ const AllTeams = ({ show }) => {
             <button
               type="button"
               className="text-bg-primary add-new-user"
-              onClick={handleAddCourse}
+              onClick={(e) => handleAddCourse(e)}
               data-bs-toggle="offcanvas"
               data-bs-target="#offcanvasCourse"
             >
@@ -448,8 +684,8 @@ const AllTeams = ({ show }) => {
               <tr>
                 <th
                   onClick={() => {
-                    setCheckAll((pre) => !pre);
-                    handlAllSelect();
+                    setCheckAllCourse((pre) => !pre);
+                    handlCourseAllSelect();
                   }}
                   style={{ cursor: "pointer" }}
                 >
@@ -463,40 +699,43 @@ const AllTeams = ({ show }) => {
               </tr>
             </thead>
             <tbody>
-              {coursesData &&
-                coursesData.map((course) => {
-                  return (
-                    <tr
-                      key={course.id}
-                      // role="button"
-                      // data-bs-toggle="offcanvas"
-                      // data-bs-target="#offcanvasCourse"
-                      // aria-controls="offcanvasRight"
-                    >
-                      <td>
-                        <div className="form-check">
-                          <input
-                            className="form-check-input course-check"
-                            type="checkbox"
-                            ref={checkbox}
-                            name="check"
-                            value={course.title}
-                            onChange={(e) => {
-                              handleCheckChange(e);
-                            }}
-                            // checked={check}
-                            id="flexCheckDefult"
-                          />
-                        </div>
-                      </td>
-                      <td>{course.title}</td>
-                      <td>{course.author}</td>
-                      <td>{course.description}</td>
-                      <td>{course.users_enrolled}</td>
-                      <td>{course.created_at}</td>
-                    </tr>
-                  );
-                })}
+              {coursesData.length === 0 ||
+              coursesData.detail == "No objects found"
+                ? coursesData.detail
+                : coursesData &&
+                  coursesData.map((course) => {
+                    return (
+                      <tr
+                        key={course.id}
+                        // role="button"
+                        // data-bs-toggle="offcanvas"
+                        // data-bs-target="#offcanvasCourse"
+                        // aria-controls="offcanvasRight"
+                      >
+                        <td>
+                          <div className="form-check">
+                            <input
+                              className="form-check-input course-check"
+                              type="checkbox"
+                              ref={checkbox}
+                              name="check"
+                              value={course.title}
+                              onChange={(e) => {
+                                handleCourseCheckChange(e);
+                              }}
+                              // checked={check}
+                              id="flexCheckDefult"
+                            />
+                          </div>
+                        </td>
+                        <td>{course.title}</td>
+                        <td>{course.author}</td>
+                        <td>{course.description}</td>
+                        <td>{course.users_enrolled}</td>
+                        <td>{course.created_at}</td>
+                      </tr>
+                    );
+                  })}
             </tbody>
           </table>
         </div>
@@ -527,7 +766,7 @@ const AllTeams = ({ show }) => {
               <tr>
                 <th
                   onClick={() => {
-                    setUserCheckAll((pre) => !pre);
+                    setCheckAllUser((pre) => !pre);
                     handlUserAllSelect();
                   }}
                   style={{ cursor: "pointer" }}
@@ -545,7 +784,7 @@ const AllTeams = ({ show }) => {
               {userData &&
                 userData.map((user) => {
                   return (
-                    <tr key={user.email}>
+                    <tr key={user.id}>
                       <td>
                         <div className="form-check">
                           <input
@@ -577,7 +816,7 @@ const AllTeams = ({ show }) => {
                           <span className="designation">{user.country}</span>
                         </div>
                       </td>
-                      <td>{user.Role}</td>
+                      <td>{user.role}</td>
                       <td>{user.email}</td>
                       <td>{user.phone_number}</td>
                       <td>
@@ -605,6 +844,7 @@ const AllTeams = ({ show }) => {
                 <th scope="col">Names</th>
                 <th scope="col">Users</th>
                 <th scope="col">Courses</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -614,21 +854,26 @@ const AllTeams = ({ show }) => {
                     key={team.id}
                     role="button"
                     onClick={() => {
-                      setTeamName(team.TeamName);
-                      setTeamUser(team.Users);
-                      setTeamCourses(team.Courses);
+                      setTeamName(team.name);
+                      setTeamUser(team.users);
+                      setTeamId(team.id);
+                      setTeamCourses(team.courses);
                       // setTeamDetail([team.Users, team.Courses]);
                     }}
                     data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasCourse"
                     aria-controls="offcanvasRight"
                   >
-                    <td>{team.TeamName}</td>
+                    <td>{team.name}</td>
                     <td>
                       {
-                        team.Users && (
+                        team.users && team.users.length !== 0 ? (
                           <span className={styles.text_with_background}>
-                            {team.Users.length}
+                            {team.users.length}
+                          </span>
+                        ) : (
+                          <span className={styles.text_with_background}>
+                            {"0"}
                           </span>
                         )
                         // team.Users.map((user) => {
@@ -642,9 +887,13 @@ const AllTeams = ({ show }) => {
                     </td>
                     <td>
                       {
-                        team.Courses && (
+                        team.courses && team.courses.length !== 0 ? (
                           <span className={styles.txt_with_background}>
-                            {team.Courses.length}
+                            {team.courses.length}
+                          </span>
+                        ) : (
+                          <span className={styles.text_with_background}>
+                            {"0"}
                           </span>
                         )
                         // team.Courses.map((course) => {
@@ -655,6 +904,15 @@ const AllTeams = ({ show }) => {
                         //   );
                         // })
                       }
+                    </td>
+                    <td onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteTeam(team.id);
+                        }}>
+                      <i
+                        className="bi bi-trash text-danger"
+                        
+                      ></i>
                     </td>
                   </tr>
                 );
