@@ -223,7 +223,7 @@ const Dashboard = () => {
         </div>
         <div className="table-responsive mt-5 col-lg-5">
         <h5 className="mt-3 mb-3 text-secondary">
-           New Users
+           Recently Registered Users
           </h5>
           <table className="table">
             <thead>
