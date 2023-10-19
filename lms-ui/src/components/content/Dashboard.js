@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Dashboard.css";
 import { Chart } from "react-google-charts";
+import { useNavigate } from "react-router";
 
 const Dashboard = () => {
+  const navigate = useNavigate()
   const [noCourses, setNoCourses] = useState(0);
   const [noUsers, setNoUsers] = useState(0);
   const [noTeams, setNoTeams] = useState(0);
@@ -114,6 +116,16 @@ const Dashboard = () => {
     },
   };
 
+  const handleUserClick = () => {
+    navigate('/allusers')
+  }
+ const handleCourseClick = () => {
+  navigate('/course/all')
+  } 
+  const handleTeamClick = () => {
+    navigate('/allteams')
+  }
+ 
   return (
     <div className="main">
       <p className="lead d-none d-sm-block">Overview</p>
@@ -139,6 +151,7 @@ const Dashboard = () => {
             <div
               className="card-body bg-success "
               style={{ backgroundColor: "#57b960" }}
+              onClick={() =>handleUserClick()}
             >
               <div className="rotate">
                 <i className="fa fa-user fa-4x"></i>
@@ -149,7 +162,10 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="col-xl-2 col-sm-6 py-2  text-center">
-          <div className="card text-white bg-warning h-100 dashboard-card">
+          <div className="card text-white bg-warning h-100 dashboard-card"
+                                  onClick={() =>handleUserClick()}
+
+          >
             <div className="card-body">
               <div className="rotate">
                 <i className="fas fa-solid fa-users fa-4x"></i>
@@ -160,7 +176,9 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="col-xl-2 col-sm-6 py-2  text-center">
-          <div className="card text-white bg-primary h-100 dashboard-card">
+          <div className="card text-white bg-primary h-100 dashboard-card"
+                        onClick={() =>handleUserClick()}
+                        >
             <div className="card-body">
               <div className="rotate">
                 <i className="fas fa-solid fa-users fa-4x"></i>
@@ -171,7 +189,9 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="col-xl-2 col-sm-6 py-2  text-center">
-          <div className="card text-white bg-danger h-100 dashboard-card">
+          <div className="card text-white bg-danger h-100 dashboard-card"
+                        onClick={() =>handleTeamClick()}
+                        >
             <div className="card-body bg-danger">
               <div className="rotate">
                 <i className="fa fa-list fa-4x"></i>
@@ -182,7 +202,9 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="col-xl-2 col-sm-6 py-2  text-center">
-          <div className="card text-white bg-info h-100 dashboard-card">
+          <div className="card text-white bg-info h-100 dashboard-card"
+                        onClick={() =>handleCourseClick()}
+                        >
             <div className="card-body bg-info">
               <div className="rotate">
                 <i className="fas fa-solid fa-book fa-4x"></i>
