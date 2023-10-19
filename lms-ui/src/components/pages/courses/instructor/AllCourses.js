@@ -4,10 +4,13 @@ import CourseContent from "./CourseContent";
 export const CourseProbs = createContext(null)
 
 const AllCourse = ({ show, minDate }) => {
+  const userId = sessionStorage.getItem("user_id")
+  const userRole = sessionStorage.getItem("role")
   //   Create Course Section
   const [courseContent, setCourseContent] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
   const [teamData, setTeamData] = useState([]);
+  const [userData, setUserData] = useState([])
 
   const [moduleData, setModuleData] = useState([]);
 
@@ -19,6 +22,8 @@ const AllCourse = ({ show, minDate }) => {
   const [uploadImg, setUploadImg] = useState("");
   const [visibility, setVisibility] = useState();
   const [courseDes, setCourseDes] = useState("");
+  const [courseCoauthors, setCourseCoauthors] = useState([]);
+
 
 
   const [courseId, setCourseId] = useState(null);
@@ -26,9 +31,7 @@ const AllCourse = ({ show, minDate }) => {
   useEffect(() => {
 
     const getCourseData = () => {
-
-
-      fetch("http://127.0.0.1:8000/api/courses", {
+      fetch("http://127.0.0.1:8000/api/courses/", {
         method: "GET",
         headers: {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
@@ -36,7 +39,18 @@ const AllCourse = ({ show, minDate }) => {
       }).then((response) => {
         if(response.status === 200){
         response.json().then(function (result) {
-          setCourseContent(result);
+          console.log('Api course result', result);
+          // setCourseContent(result);
+          if(userRole === 'admin'){
+            setCourseContent(result);
+          }
+          else {
+            const obj = result.filter(course => {
+              return course.created_by == userId || course.editor.includes(+userId);
+            })
+            console.log('this is obj', obj, userId);
+            setCourseContent(obj)
+          }
         });
       }
       else{
@@ -86,12 +100,44 @@ const AllCourse = ({ show, minDate }) => {
       });
     };
 
-    getCourseData();
+    const getUsers = () => {
+      fetch("http://127.0.0.1:8000/list_all_users/", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if(response.status === 200){
+        response.json().then(function (result) {
+          console.log(result);
+          setUserData(result);
+          
+        });
+      }
+      else {
+        console.log(response);
+      }
+      });
+    };
+    
     getCategoryData();
     getTeamData();
+    getUsers();
+    getCourseData();
+  
   }, [0]);
 
  
+  const getUSerFullName = (id) => {
+    if (id !== 'undefined' && userData.length !== 0) {
+      const name = userData.filter((users) => users.id === id);
+      return `${name[0].first_name} ${name[0].last_name}`;
+    }
+    else{
+      return "N/A"
+    }
+    
+  };
 
   const handleCourseTitle = (e) => {
     setCourseTitle(e.target.value);
@@ -109,9 +155,9 @@ const AllCourse = ({ show, minDate }) => {
         description: `This is description for the ${courseTitle} course.`,
         start_date: courseStart,
         end_date: courseEnd,
-        author: sessionStorage.getItem('user_id'),
         updated_by: sessionStorage.getItem('user_id'),
         category: [courseCategory],
+        created_by: sessionStorage.getItem('user_id')
       };
 
 
@@ -123,7 +169,7 @@ const AllCourse = ({ show, minDate }) => {
           "Content-type": "application/json; charset=UTF-8",
         },
       }).then((response) => {
-        if (response.status == 201) {
+        if (response.status === 201) {
           response.json().then(function (result) {
             setCourseContent((pre) => [...pre, result])
             setCourseCategory("");
@@ -153,6 +199,7 @@ return totalUsers
   }
 
   const handleCourseContentData = (course) => {
+    setCourseCoauthors(course.editor)
     setCourseId(course.id);
     setCourseTitle(course.title);
     setCourseCategory(course.category)
@@ -181,7 +228,7 @@ return totalUsers
     });
   };
 
-
+console.log('Course co-authors:', courseCoauthors);
   return (
     <div>
       <div className="all-course-content">
@@ -277,7 +324,7 @@ return totalUsers
           aria-labelledby="offcanvasRightLabel"
         >
           <div className="offcanvas-body">
-            <CourseProbs.Provider value={{courseId}} >
+            <CourseProbs.Provider value={{courseId, courseCoauthors, setCourseCoauthors}} >
             <CourseContent
               courseTitle={courseTitle}
               setCourseTitle={setCourseTitle}
@@ -294,6 +341,7 @@ return totalUsers
               setVisibility={setVisibility}
               courseDes={courseDes}
               setCourseDes={setCourseDes}
+              userData={userData}
             />
              </CourseProbs.Provider>
           </div>
@@ -304,16 +352,13 @@ return totalUsers
             <tr>
               <th scope="col">Course Title</th>
               <th scope="col">Description</th>
-              <th scope="col">Duration</th>
+              <th scope="col">Author</th>
               <th scope="col">Users Enrolled</th>
               <th scope="col">Last Update</th>
             </tr>
           </thead>
           <tbody>
-            {courseContent.length === 0 ||
-            courseContent.detail == "No objects found"
-              ? courseContent.detail
-              : courseContent &&
+            {courseContent.length !== 0 &&
                 courseContent.map((course) => {
                   return (
                     <tr
@@ -329,7 +374,7 @@ return totalUsers
                     >
                       <td>{course.title}</td>
                       <td>{course.description}</td>
-                      <td>{course.duration}</td>
+                      <td>{getUSerFullName(course.created_by)}</td>
                       <td>{
                           getNumberOfUsers(course.id)
                         }</td>

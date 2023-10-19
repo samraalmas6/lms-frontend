@@ -251,10 +251,11 @@ const AssignmentScreen = () => {
       due_date: courseStart,
       marks: marks,
       due_time: courseEnd,
+      is_updated: true,
       unit: 1, // Assuming a default unit value
       // Number_of_members: 1,
-      updated_by: 1,
-      selectedFile: selectedFile,
+      updated_by: sessionStorage.getItem('user_id'),
+      created_by: sessionStorage.getItem('user_id')
     };
 
     fetch("http://127.0.0.1:8000/api/assignments/", {
@@ -300,6 +301,7 @@ const AssignmentScreen = () => {
               type="text"
               placeholder="Title"
               value={title}
+              // className="assignment-screen-input-field "
               onChange={handleTitle}
             />
           </form>
@@ -350,12 +352,13 @@ const AssignmentScreen = () => {
                 placeholder="Start Date"
                 min={minDate}
                 value={courseStart}
+                className="assignment-screen-input-field "
                 onChange={handleCourseStart}
               />
             </div>
             <div className="due-date-time">
               <i className="far fa-clock"></i>
-              <input type="time" value={courseEnd} onChange={handleCourseEnd} />
+              <input type="time" value={courseEnd} className="assignment-screen-input-field " onChange={handleCourseEnd} />
             </div>
           </div>
           <div className="marks">
@@ -363,7 +366,8 @@ const AssignmentScreen = () => {
             <input
               type="text"
               placeholder="Enter Marks"
-              value={marks}
+              value={marks} 
+              className="assignment-screen-input-field"
               onChange={handleMarks}
             />
           </div>

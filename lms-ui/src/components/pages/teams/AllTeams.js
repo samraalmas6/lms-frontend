@@ -170,7 +170,7 @@ const AllTeams = ({ show }) => {
   };
 
   const handlCourseAllSelect = () => {
-    const selectItems = document.getElementsByclassName("course-check");
+    const selectItems = document.getElementsByClassName("course-check");
     if (checkedAllCourse) {
       setAddTeamCoursesId([]);
       for (let item of selectItems) {
@@ -186,7 +186,7 @@ const AllTeams = ({ show }) => {
     }
   };
   const handlUserAllSelect = () => {
-    const selectItems = document.getElementsByclassName("user-check");
+    const selectItems = document.getElementsByClassName("user-check");
     if (checkedAllUser) {
       setAddTeamUsersId([]);
       for (let item of selectItems) {
@@ -261,7 +261,7 @@ const AllTeams = ({ show }) => {
 
   const handleAddCourse = (e) => {
     e.preventDefault();
-    const selectItems = document.getElementsByclassName("course-check");
+    const selectItems = document.getElementsByClassName("course-check");
     for (let item of selectItems) {
       if (item.checked) {
         if (typeof teamCourses !== "undefined") {
@@ -318,7 +318,7 @@ const AllTeams = ({ show }) => {
 
   const handleAddUser = (e) => {
     e.preventDefault();
-    const selectItems = document.getElementsByclassName("user-check");
+    const selectItems = document.getElementsByClassName("user-check");
     for (let item of selectItems) {
       if (item.checked) {
         if (typeof teamUsers !== "undefined") {

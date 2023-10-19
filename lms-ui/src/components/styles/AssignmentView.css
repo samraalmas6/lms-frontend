@@ -1,13 +1,13 @@
 .submit-section {
   background-color: #ffff;
-  position: relative;
   width: 277px;
   margin-top: -120px;
   box-shadow: 5px 8px 19px -3px rgb(177, 173, 173);
-  left: -132%;
+  left: -134%;
   border-radius: 5px;
   border: 2px solid #0056b3;
   height: auto;
+  position:relative;
 }
 /* 
 .toggle-submission-button{
@@ -355,10 +355,11 @@ ul.resources {
 .confirmation-dialog{
   background-color: #fff;
   margin-left: -589px;
-  margin-top: -125px;
+  margin-top: -46px;
   width: 393px;
   /* border: 2px solid #0056b3; */
   box-shadow: 5px 8px 19px -3px rgb(173, 173, 177);
+  position: absolute;
 
 }
 
@@ -534,7 +535,7 @@ ul.resources {
   background-color: #fff;
   
     border-radius: 10px;
-    height: 164px;
+    height: auto;
 }
 
 .load-img .close-icon{
@@ -675,7 +676,7 @@ margin-left: 1px;
 
 .feedback-and-grade{
   background-color: #f9fcff;
-  margin-top: 61px;
+  margin-top: 31px;
   width: 277px;
   padding: 28px;
   border: 2px solid #0056b3;

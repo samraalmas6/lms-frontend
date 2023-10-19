@@ -1,11 +1,18 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import CourseUnit from "./CourseUnit";
 import { CourseProbs } from "./AllCourses";
+export const ModuleProbs = createContext(null);
 
 const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
   const startDateRefModule = useRef(null);
   const endDateRefModule = useRef(null);
-  const {courseId} = useContext(CourseProbs)
+  const { courseId } = useContext(CourseProbs);
   const accordion = useRef(null);
 
   const [moduleTitle, setModuleTitle] = useState(module.title);
@@ -47,7 +54,7 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
       end_date: moduleEnd,
       course: courseId,
       updated_by: sessionStorage.getItem("user_id"),
-    }; 
+    };
 
     fetch(`http://127.0.0.1:8000/api/modules/${module.id}/`, {
       method: "PUT",
@@ -176,7 +183,6 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
                         onMouseEnter={preventAccordionClose}
                         onMouseLeave={preventAccordionOpen}
                         onChange={handleVisibility}
-
                         id="flexSwitchCheckDefault"
                       />
                     </div>
@@ -209,7 +215,9 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
         // data-bs-parent="#module-section"
       >
         <div className="accordion-body">
-          <CourseUnit showUnit={true} />
+          <ModuleProbs.Provider>
+            <CourseUnit showUnit={true} />
+          </ModuleProbs.Provider>
         </div>
       </div>
     </div>

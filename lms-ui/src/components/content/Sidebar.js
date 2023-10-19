@@ -55,7 +55,7 @@ const Sidebar = () => {
                           Overview
                         </a>
                       </li> */}
-                  <li className="nav-item mb-2 ">
+                  {/* <li className="nav-item mb-2 ">
                     <Link
                       to="/adduser"
                       style={{
@@ -67,7 +67,7 @@ const Sidebar = () => {
                     >
                       Add User
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="nav-item mb-2 ">
                     <Link
                       to="/allusers"
@@ -78,17 +78,17 @@ const Sidebar = () => {
                       }}
                       className="nav-link text-secondary navLink"
                     >
-                      All Users
+                      Users
                     </Link>
                   </li>
-                  <li className="nav-item mb-2 ">
+                  {/* <li className="nav-item mb-2 ">
                     <a className="nav-link text-secondary" href="/addteam">
                       Add Team
                     </a>
-                  </li>
+                  </li> */}
                   <li className="nav-item mb-2 ">
                     <a className="nav-link text-secondary" href="/allteams">
-                      All Teams
+                      Teams
                     </a>
                   </li>
                   {/* <li className="nav-item mb-2 ">
@@ -120,58 +120,37 @@ const Sidebar = () => {
                         </a>
                       </li> */}
 
-                  <li className="nav-item mb-2 ">
+                  {/* <li className="nav-item mb-2 ">
                     <a className="nav-link text-secondary" href="/category/add">
                       Add Category
                     </a>
-                  </li>
+                  </li> */}
                   <li className="nav-item mb-2 ">
                     <Link
                       className="nav-link text-secondary"
                       to="/category/all"
                     >
-                      All Category
+                      Categories
                     </Link>
                   </li>
-                  <li className="nav-item mb-2 ">
+                  {/* <li className="nav-item mb-2 ">
                     <a
                       className="nav-link text-secondary"
                       href="/course/create"
                     >
                       Create Course
                     </a>
-                  </li>
+                  </li> */}
                   <li className="nav-item mb-2 ">
                     <Link to="/course/all" className="nav-link text-secondary">
-                      All Courses
+                      Courses
                     </Link>
                   </li>
-                  <li className="nav-item mb-2 ">
-                    <Link
-                      to="/course/my-courses"
-                      className="nav-link text-secondary"
-                    >
-                      My Courses
-                    </Link>
-                  </li>
+                  
 
-                  <li className="nav-item mb-2 ">
-                    <Link
-                      to="/course/create-assignment"
-                      className="nav-link text-secondary"
-                    >
-                      Create Assignment
-                    </Link>
-                  </li>
+                
 
-                  <li className="nav-item mb-2 ">
-                    <Link
-                      to="/course/my-assignments"
-                      className="nav-link text-secondary"
-                    >
-                      My Assignments
-                    </Link>
-                  </li>
+                
                   
                   <li className="nav-item mb-2 ">
                     <Link
@@ -183,6 +162,7 @@ const Sidebar = () => {
                   </li>
                 </ul>
               </li>
+{/*             
               <li className="nav-item mb-2 ">
                 <a
                   className="nav-link text-secondary"
@@ -191,15 +171,15 @@ const Sidebar = () => {
                   data-target="#submenu3"
                 >
                   <i className="fas fa-solid fa-comment font-weight-bold"></i>
-                  <span className="ml-2">Communication</span>
+                  <span className="ml-2" >Communication</span>
                 </a>
                 <ul
                   className="list-unstyled flex-column pl-3 collapse sidebar-nav-sub"
                   id="submenu3"
                 >
-                  {/*  Chats and notification section will be developed in future  */}
+                 
 
-                  {/* <li className="nav-item mb-2 ">
+                  <li className="nav-item mb-2 ">
                       <a className="nav-link text-secondary" href="">
                        Chats
                       </a>
@@ -208,7 +188,7 @@ const Sidebar = () => {
                       <a className="nav-link text-secondary" href="">
                         Notifications
                       </a>
-                    </li> */}
+                    </li> 
                   <li className="nav-item mb-2 ">
                     <a className="nav-link text-secondary" href="">
                       Announcements
@@ -251,13 +231,13 @@ const Sidebar = () => {
                     </a>
                   </li>
 
-                  {/* This feature will be added in future */}
+                  {/* This feature will be added in future 
 
                   {/* <li className="nav-item mb-2 ">
                       <a className="nav-link text-secondary" href="">
                        System Insight
                       </a>
-                    </li> */}
+                    </li> 
                   <li className="nav-item mb-2 ">
                     <a className="nav-link text-secondary" href="">
                       All Reports
@@ -287,6 +267,7 @@ const Sidebar = () => {
                   </li>
                 </ul>
               </li>
+               */}
             </>
           ) : // ************** Learner Section   *************************************
 

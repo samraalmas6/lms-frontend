@@ -28,9 +28,9 @@ function calculateSubmissionStatus(
 
 function AssignmentView({ selectedAssignments }) {
   const [selectedAssignment, setSelectedAssignment] = useState(null);
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState(null);
   const [link, setLink] = useState("");
-  const [file, setFile] = useState([]);
+  const [file, setFile] = useState(null);
   const [links, setLinks] = useState([]);
   const [isDone, setIsDone] = useState(false);
   const [submissionOption, setSubmissionOption] = useState(null);
@@ -59,6 +59,7 @@ function AssignmentView({ selectedAssignments }) {
   const [submissionStatus, setSubmissionStatus] = useState([]);
   const [submissionId, setSubmissionId] = useState(null);
   const [isEditClicked, setIsEditClicked] = useState(false);
+  const [isEditButtonDisabled, setIsEditButtonDisabled] = useState(false);
 
   // const assignments = [
   //   {
@@ -184,7 +185,7 @@ function AssignmentView({ selectedAssignments }) {
     setIsDone(false);
     setSubmissionOption(null);
     setIsResubmit(false);
-    setShowLink(false)
+    setShowLink(false);
     // setShowAddNewSubmission(false)
     setIsConfirmButtonVisible(true);
     setInstructorFeedback(null);
@@ -249,11 +250,11 @@ function AssignmentView({ selectedAssignments }) {
             }
 
             // Check if the status is "pending" and update isResubmit accordingly
-            // if (result[result.length - 1].marks === null) {
-            //   setIsResubmit(true);
-            // } else {
-            //   setIsResubmit(false);
-            // }
+            if (result[result.length - 1].marks === null) {
+              setIsResubmit(true);
+            } else {
+              setIsResubmit(false);
+            }
           });
         } else {
           console.log(response);
@@ -311,6 +312,7 @@ function AssignmentView({ selectedAssignments }) {
 
           setSubmissionId(submission.id);
           setLink(submission.submitted_link);
+          // setFiles(submission.content)
           setShowAddNewSubmission(false);
         } else {
           console.log("No submissions found for this assignment");
@@ -324,28 +326,29 @@ function AssignmentView({ selectedAssignments }) {
 
   function handleToggleResubmit(submission) {
     setShowLink(true);
-    // Check if the status is not "pending"
+    
     console.log("getting status :", statusData);
     console.log("getting  :", isResubmit);
-    // if (statusData === "pending") {
-    setIsResubmit(!isResubmit);
+    if (statusData === "pending") {
+      setIsResubmit(!isResubmit);
 
-    if (!isResubmit) {
-      fetchSubmissionByAssignment(submission);
-      // setSubmittedLink(submission.submitted_link);
-         setIsEditClicked(true);
+      if (!isResubmit) {
+        fetchSubmissionByAssignment(submission);
+        // setSubmittedLink(submission.submitted_link);
+        setIsEditClicked(true);
+        setShowLink(true);
 
-      setFiles([]);
-      setLinks([]);
+        setFiles([]);
+        setLinks([]);
 
-      setIsDone(false);
-      setSubmissionOption(null);
-      setShowSubmissionOptions(false);
-      setIsSubmitClicked(false);
-      setIsConfirmButtonVisible(true);
-      setInstructorFeedback(null);
+        setIsDone(false);
+        setSubmissionOption(null);
+        setShowSubmissionOptions(false);
+        setIsSubmitClicked(false);
+        setIsConfirmButtonVisible(true);
+        setInstructorFeedback(null);
+      }
     }
-    // }
   }
 
   function handleLinkChange() {
@@ -359,12 +362,12 @@ function AssignmentView({ selectedAssignments }) {
   }
 
   function handleFileChange(event) {
-    const selectedFiles = event.target.files[0];
+    const selectedFile = event.target.files[0];
     // setFiles((pre) =>[...pre, selectedFiles]);
-    setFiles(selectedFiles)
-    setIsFileInputVisible(false);
+    setFile(selectedFile);
+    setIsFileInputVisible(true);
   }
-console.log('file ', files);
+  console.log("file ", files);
   function handleRemoveFile(index) {
     const updatedFiles = [...files];
     updatedFiles.splice(index, 1);
@@ -455,19 +458,19 @@ console.log('file ', files);
     formData.append("submission_date", "2022-10-03T10:00:00Z");
     formData.append("submitted_link", link);
     formData.append("content", files);
-    const obj = {
-      submitted_by: sessionStorage.getItem("user_id"),
-      assignment: assignmentid,
-      submission_date: "2022-10-03T10:00:00Z",
-      submitted_link: link,
-      // content: file,
-    };
+    // const obj = {
+    //   submitted_by: sessionStorage.getItem("user_id"),
+    //   assignment: assignmentid,
+    //   submission_date: "2022-10-03T10:00:00Z",
+    //   submitted_link: link,
+    //   // content: file,
+    // };
     if (request === "POST") {
       url = `http://127.0.0.1:8000/api/assignment_submissions/`;
     } else {
       url = `http://127.0.0.1:8000/api/assignment_submissions/${submissionId}/`;
     }
-    async function postData(obj) {
+    async function postData(formData) {
       try {
         const response = await fetch(`${url}`, {
           method: request,
@@ -480,7 +483,7 @@ console.log('file ', files);
         });
 
         if (response.status === 201 || response.status === 200) {
-          setShowLink(false)
+          setShowLink(false);
           const result = await response.json();
           console.log(result.id);
           setShowAddNewSubmission(false);
@@ -488,7 +491,7 @@ console.log('file ', files);
           // const newSubmissionId = result.id;
           // fetchSubmissionByAssignment(newSubmissionId);
 
-          const formattedSubmissionDate = new Date(obj.submission_date);
+          const formattedSubmissionDate = new Date(formData.submission_date);
           const formattedDueDate = new Date(selectedAssignment.due_date);
 
           if (formattedSubmissionDate > formattedDueDate) {
@@ -497,38 +500,37 @@ console.log('file ', files);
             setSubmissionStatus("");
           }
 
-          const updatedData = {
-            submitted_link: link, // Update with the new link
-            // Other fields that need to be updated
-          };
-          console.log("Submitting data:", obj);
-          fetch(
-            `http://127.0.0.1:8000/api/assignment_submissions/${submissionId}/`,
-            {
-              method: "PUT",
-              headers: {
-                Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(updatedData),
-            }
-          )
-            .then((putResponse) => {
-              if (putResponse.status === 200) {
-                // Submission updated successfully, you can update your local state if needed
-                console.log("Submission updated successfully");
-              } else {
-                console.error("Error updating submission:", putResponse);
-              }
-            })
-            .catch((error) => {
-              console.error("Error updating submission:", error);
-            });
-  
+          // const updatedData = {
+          //   submitted_link: link, // Update with the new link
+          //   // Other fields that need to be updated
+          // };
+          // console.log("Submitting data:", formData);
+          // fetch(
+          //   `http://127.0.0.1:8000/api/assignment_submissions/${submissionId}/`,
+          //   {
+          //     method: "PUT",
+          //     headers: {
+          //       Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          //       "Content-Type": "application/json",
+          //     },
+          //     body: JSON.stringify(updatedData),
+          //   }
+          // )
+          //   .then((putResponse) => {
+          //     if (putResponse.status === 200) {
+          //       // Submission updated successfully, you can update your local state if needed
+          //       console.log("Submission updated successfully");
+          //     } else {
+          //       console.error("Error updating submission:", putResponse);
+          //     }
+          //   })
+          //   .catch((error) => {
+          //     console.error("Error updating submission:", error);
+          //   });
+
           // Rest of your code
           setLink("");
           // setFile([])
-
 
           const gradingURL = `http://127.0.0.1:8000/api/assignment_submissions/${submissionId}/assignment_gradings`;
 
@@ -558,13 +560,10 @@ console.log('file ', files);
       } catch (error) {
         console.error("Error:", error);
       }
-
-      
     }
-    
 
     // Call the postData function when needed:
-    postData(obj);
+    postData(formData);
 
     setShowConfirmationDialog(true);
   }
@@ -662,24 +661,24 @@ console.log('file ', files);
                       {submissionStatus}
                     </span>
                   </div>
-                  {files.length > 0 && (
+                  {/* {file.length > 0 && ( */}
                     <>
                       <ul className="uploa">
-                        {files.map((file, index) => (
-                          <li className="upload" key={index}>
+                        {file && (
+                          <li className="upload">
                             <img src={fil} alt="" className="pht" />
                             <div className="fil-text">{file.name}</div>
                             <span
                               className="rem-fil"
-                              onClick={() => handleRemoveFile(index)}
+                              onClick={handleRemoveFile}
                             >
                               &#x2716;
                             </span>
                           </li>
-                        ))}
+                        )}
                       </ul>
                     </>
-                  )}
+                  {/* )} */}
                 </div>
 
                 <div className="submitted-links">
@@ -713,7 +712,11 @@ console.log('file ', files);
                       <div>
                         <button
                           type="button"
-                          onClick={() => handleToggleResubmit(assignmentid)}
+                          onClick={() =>{
+                            setIsEditClicked(true);
+                          
+                             handleToggleResubmit(assignmentid)}}
+                          disabled={isEditButtonDisabled}
                           className="resubmit-btn"
                         >
                           Edit
@@ -722,21 +725,33 @@ console.log('file ', files);
                     )}
                     {showLink && (
                       <>
-                       {isEditClicked && (
-                        <input
-                             type="text"
-                             value={link}
-                                onChange={(e) => setLink(e.target.value)}
-                             placeholder="Enter link URL"
-                             className="lnk-text"
-                           />
-                      )}
+                        {isEditClicked && (
+                          <>
+                            <input
+                              type="text"
+                              value={link}
+                              onChange={(e) => setLink(e.target.value)}
+                              placeholder="Enter link URL"
+                              className="lnk-text"
+                            />
 
-                     
+                            <input
+                              type="file"
+                              accept=".pdf,.doc,.docx"
+                              onChange={(e) => handleFileChange(e)}
+                              id="fileInput"
+                              //  className="upload-fil"
+                              // value={file}
+                            />
+                          </>
+                        )}
 
                         <button
                           type="button"
-                          onClick={(e) => handleSubmit(e, "PUT")}
+                          onClick={(e) => {
+                            setIsEditButtonDisabled(false);
+                            handleSubmit(e, "PUT");
+                          }}
                           className="save-btn"
                           disabled={!selectedAssignment}
                         >
@@ -744,7 +759,7 @@ console.log('file ', files);
                         </button>
                       </>
                     )}
-                    {showAddNewSubmission &&  (
+                    {showAddNewSubmission && (
                       <div className="add-create-dropdown">
                         <button
                           type="button"
@@ -774,27 +789,32 @@ console.log('file ', files);
                                 <div className="texeria"> Link</div>
                               </button>
                             </div>
-                            <div className="texeria-two">
-                              <button
-                                type="button"
-                                onClick={() => setSubmissionOption("file")}
-                                className="lnk-optn"
-                              >
-                                {/* <i className=" fil fas fa-paperclip"></i>{" "} */}
-                                {/* <div className="texeria">File</div> */}
-
+                            {!isSubmitClicked && (
+                              <div className="load-img">
                                 <label
                                   htmlFor="fileInput"
-                                  className={` ${
+                                  className={`custom-button ${
                                     isFileInputVisible ? "hidden" : ""
                                   }`}
                                   onClick={toggleFileInput}
                                 >
-                                  <i className=" fil fas fa-paperclip"></i>{" "}
-                                  <div className="texeria-tex">Upload File</div>
+                                  <i className="fas fa-upload"></i> Upload File
                                 </label>
-                              </button>
-                            </div>
+                                {isFileInputVisible && (
+                                  <>
+                                    <input
+                                      type="file"
+                                      accept=".pdf,.doc,.docx"
+                                      onChange={(e) => handleFileChange(e)}
+                                      id="fileInput"
+                                      multiple
+                                      // className="upload-fil"
+                                      // value={""}
+                                    />
+                                  </>
+                                )}
+                              </div>
+                            )}
                           </div>
                         )}
                         {isConfirmButtonVisible && (
@@ -853,11 +873,11 @@ console.log('file ', files);
                                 <input
                                   type="file"
                                   accept=".pdf,.doc,.docx"
-                                  onChange={(e) =>handleFileChange(e)}
+                                  onChange={(e) => handleFileChange(e)}
                                   id="fileInput"
                                   multiple
-                                  className="upload-fil"
-                                  value={file}
+                                  // className="upload-fil"
+                                  // value={""}
                                 />
                               </>
                             )}
@@ -921,3 +941,340 @@ console.log('file ', files);
 }
 
 export default AssignmentView;
+// return (
+//   <>
+//     <div className="app">
+//       <div className="assignment-view">
+//         <div className="assignment-list">
+//           {apiData.map((assignment) => (
+//             <div
+//               key={assignment.id}
+//               className={`assignment-item ${
+//                 selectedAssignment === assignment ? "selected" : ""
+//               }`}
+//               onClick={() => handleAssignment(assignment)}
+//             >
+//               {assignment.title}
+//             </div>
+//           ))}
+//         </div>
+//         {selectedAssignment ? (
+//           <div className="detail">
+//             <div className="title-date">
+//               <div className="detail-title">
+//                 <i className="fas fa-file-pen"></i>
+//                 <img src={fil} alt="" className="head" />{" "}
+//                 {selectedAssignment.title}
+//               </div>
+//               <div className="detail-points-and-date">
+//                 <div className="detail-points">
+//                   <strong>Marks:</strong>
+//                   {number}
+//                 </div>
+//                 <div className="detail-create">
+//                   <strong>Created At:</strong>
+//                   {selectedAssignment.created_at}
+//                 </div>
+//                 <div className="detail-date">
+//                   <strong>Due date:</strong>
+//                   {selectedAssignment.due_date.substr(0, 10)}
+//                 </div>
+//               </div>
+//             </div>
+//             <div className="detail-description">
+//               {selectedAssignment.description}
+//             </div>
+//             <div className="resource-files">
+//               {selectedAssignment.resourceFiles &&
+//                 selectedAssignment.resourceFiles.length > 0 && (
+//                   <>
+//                     <p>Attached Resource Files:</p>
+//                     <ul className="resources">
+//                       {selectedAssignment.resourceFiles.map((file, index) => (
+//                         <li key={index}>
+//                           <a className="res" href={file} download>
+//                             <i
+//                               className="fas fa-file"
+//                               style={{ marginRight: "5px" }}
+//                             ></i>
+//                             {file}
+//                           </a>
+//                         </li>
+//                       ))}
+//                     </ul>
+//                   </>
+//                 )}
+//             </div>
+//           </div>
+//         ) : (
+//           <p>Select an assignment to view details:</p>
+//         )}
+//         {selectedAssignment && (
+//           <div className="submit">
+//             <div className="submit-section">
+//               <div className="uploaded-files">
+//                 <div className="submission-status">
+//                   {calculateSubmissionStatus(
+//                     selectedAssignment.dueDate,
+//                     isDone,
+//                     isResubmit,
+//                     isSubmitClicked
+//                   )}
+//                   <span className={`${submissionStatus}-status`}>
+//                     {submissionStatus}
+//                   </span>
+//                 </div>
+//                 {files.length > 0 && (
+//                   <>
+//                     <ul className="uploa">
+//                       {files.map((file, index) => (
+//                         <li className="upload" key={index}>
+//                           <img src={fil} alt="" className="pht" />
+//                           <div className="fil-text">{file.name}</div>
+//                           <span
+//                             className="rem-fil"
+//                             onClick={() => handleRemoveFile(index)}
+//                           >
+//                             &#x2716;
+//                           </span>
+//                         </li>
+//                       ))}
+//                     </ul>
+//                   </>
+//                 )}
+//               </div>
+//               <div className="submitted-links">
+//                 {links.length > 0 && (
+//                   <>
+//                     <ul>
+//                       {links.map((link, index) => (
+//                         <li key={index} className="lnk-upld">
+//                           <a
+//                             href={link}
+//                             target="_blank"
+//                             rel="noopener noreferrer"
+//                           >
+//                             {link}
+//                           </a>
+//                           <span
+//                             className="rem-link"
+//                             onClick={() => handleRemoveLink(index)}
+//                           >
+//                             &#x2716;
+//                           </span>
+//                         </li>
+//                       ))}
+//                     </ul>
+//                   </>
+//                 )}
+//               </div>
+//               <div className="feedback-section">
+//                 <div className="toggle-submission-button">
+//                   {isSubmitClicked ? (
+//                     <div>
+
+//                     <button
+//                       type="button"
+//                       onClick={() => handleToggleResubmit(assignmentid)}
+//                       className="resubmit-btn"
+//                     >
+//                       Edit
+//                     </button>
+//                     </div>
+//                   ) : (
+
+//                     <>
+//                      <input
+//                      type="text"
+//                      value={link}
+//                      // value={submissionOption === "link" ? link : previousLink}
+//                      onChange={(e) => setLink(e.target.value)}
+//                      placeholder="Enter link URL"
+//                      className="lnk-text"
+//                    />
+//                     {isEditClicked && (
+//                       <input
+//                         type="text"
+//                         value={link}
+//                         onChange={(e) => setLink(e.target.value)}
+//                         placeholder="Enter link URL"
+//                         className="lnk-text"
+//                       />
+//                     )}
+
+//                       <div className="add-create-dropdown">
+
+//                         <button
+//                           type="button"
+//                           onClick={() =>
+//                             setShowSubmissionOptions(!showSubmissionOptions)
+//                           }
+//                           className="add-create"
+//                         >
+//                           <FontAwesomeIcon icon={faPlus} /> Add or create
+//                         </button>
+//                         {showSubmissionOptions && (
+//                           <div className="submission-options-dropdown">
+//                             <div>
+//                               <button
+//                                 type="button"
+//                                 onClick={() => setSubmissionOption("link")}
+//                                 className="lnk-optn"
+//                               >
+//                                 <i
+//                                   className=" lnk  fas fa-link"
+//                                   style={{
+//                                     position: "relative",
+//                                     top: "-2px",
+//                                     left: "-108px",
+//                                   }}
+//                                 ></i>
+//                                 <div className="texeria"> Link</div>
+//                               </button>
+//                             </div>
+//                             <div className="texeria-two">
+//                               <button
+//                                 type="button"
+//                                 onClick={() => setSubmissionOption("file")}
+//                                 className="lnk-optn"
+//                               >
+//                                 {/* <i className=" fil fas fa-paperclip"></i>{" "} */}
+//                                 {/* <div className="texeria">File</div> */}
+//                                 <label
+//                                   htmlFor="fileInput"
+//                                   className={` ${
+//                                     isFileInputVisible ? "hidden" : ""
+//                                   }`}
+//                                   onClick={toggleFileInput}
+//                                 >
+//                                   <i className=" fil fas fa-paperclip"></i>{" "}
+//                                   <div className="texeria-tex">
+//                                     Upload File
+//                                   </div>
+//                                 </label>
+//                               </button>
+//                             </div>
+//                           </div>
+//                         )}
+//                       </div>
+//                       {submissionOption === "link" && (
+//                         <div className="link-place">
+//                           <div
+//                             className="close-icon"
+//                             onClick={() => setSubmissionOption(null)}
+//                           >
+//                             <FontAwesomeIcon icon={faTimes} />
+//                           </div>
+//                           <input
+//                             type="text"
+//                             value={link}
+//                             // value={submissionOption === "link" ? link : previousLink}
+//                             onChange={(e) => setLink(e.target.value)}
+//                             placeholder="Enter link URL"
+//                             className="lnk-text"
+//                           />
+//                           <button
+//                             type="button"
+//                             onClick={handleLinkChange}
+//                             className="link-btn"
+//                           >
+//                             Submit Link
+//                           </button>
+//                         </div>
+//                       )}
+//                       {submissionOption === "file" && (
+//                         <>
+//                           {!isSubmitClicked && (
+//                             <div className="load-img">
+//                               {/* <label
+//                                 htmlFor="fileInput"
+//                                 className={`custom-button ${
+//                                   isFileInputVisible ? "hidden" : ""
+//                                 }`}
+//                                 onClick={toggleFileInput}
+//                               >
+//                                 <i className="fas fa-upload"></i> Upload File
+//                               </label> */}
+//                               {isFileInputVisible && (
+//                                 <>
+//                                   <input
+//                                     type="file"
+//                                     accept=".pdf,.doc,.docx"
+//                                     onChange={handleFileChange}
+//                                     id="fileInput"
+//                                     multiple
+//                                     className="upload-fil"
+//                                     value={file}
+//                                   />
+//                                 </>
+//                               )}
+//                             </div>
+//                           )}
+//                           {!isFileInputVisible && <></>}
+//                         </>
+//                       )}
+//                       {isConfirmButtonVisible && (
+//                         <button
+//                           type="button"
+//                           onClick={handleSubmit}
+//                           className="save-btn"
+//                           disabled={!selectedAssignment}
+//                         >
+//                           Submit
+//                         </button>
+//                       )}
+//                       {showConfirmationDialog && (
+//                         <div className="confirmation-dialog">
+//                           <p>
+//                             Are you sure you want to submit this assignment?
+//                           </p>
+//                           <button
+//                             type="button"
+//                             onClick={handleConfirmSubmit}
+//                             className="confirm-btn"
+//                           >
+//                             Confirm
+//                           </button>
+//                           <button
+//                             type="button"
+//                             onClick={handleCloseConfirmationDialog}
+//                             className="cancel-btn"
+//                           >
+//                             Cancel
+//                           </button>
+//                         </div>
+//                       )}
+//                     </>
+//                   )}
+//                 </div>
+//               </div>
+//               {/* Display Feedback and Grade */}
+//               <>
+//                 {/* {isSubmitClicked && feedbackData !== null && ( */}
+//                 <div className="feedback-and-grade">
+//                   <div className="feedback-and-grad">
+//                     <div className="feedback-fb">
+//                       <strong>Comments:</strong>{" "}
+//                       {gradeData ? feedbackData : "No feedback yet"}
+//                     </div>
+//                     <div className="grade-gd">
+//                       <strong>Grade:</strong>{" "}
+//                       {gradeData
+//                         ? `${gradeData} / ${number}`
+//                         : "Not graded yet"}
+//                     </div>
+//                     <div className="status">
+//                       <strong>Status:</strong>{" "}
+//                       {gradeData ? statusData : "pending"}
+//                     </div>
+//                   </div>
+//                 </div>
+//                 {/* )} */}
+//               </>
+//             </div>
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   </>
+// );

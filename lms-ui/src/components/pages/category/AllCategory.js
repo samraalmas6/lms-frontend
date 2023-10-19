@@ -74,7 +74,7 @@ const AllCategory = ({ show }) => {
       title: categoryName,
       description: "This is test cat",
       parent: parentCat,
-      user: sessionStorage.getItem("user_id"),
+      created_by: sessionStorage.getItem("user_id"),
       updated_by: sessionStorage.getItem("user_id"),
       // updated_by: sessionStorage.getItem('name')
     };

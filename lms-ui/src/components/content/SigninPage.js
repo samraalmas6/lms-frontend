@@ -46,6 +46,10 @@ const SigninPage = () => {
     return errors;
   };
 
+ const handleForgetPasswordBtn =() =>{
+    navigate('/auth/reset_password')
+ }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const errors = validateLogin({ email, password });
@@ -74,7 +78,7 @@ const SigninPage = () => {
             sessionStorage.setItem('first_name', result.first_name);
             sessionStorage.setItem('last_name', result.last_name);
             // sessionStorage.setItem('role', result.role);
-            sessionStorage.setItem('role', "admin");
+            sessionStorage.setItem('role', result.role);
 
 
             // sessionStorage.setItem('user_email', result.data.user.email);
@@ -141,7 +145,7 @@ const SigninPage = () => {
           className="button"
         />
         <span className="forgot-password">
-          Forgot your <a href="#">password?</a>
+          Forgot your <a role="button"  onClick={() => handleForgetPasswordBtn()}>password?</a>
         </span>
       </form>
     </div>

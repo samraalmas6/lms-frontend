@@ -1,9 +1,38 @@
 import { Editor } from "@tinymce/tinymce-react";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import CourseModule from "./CourseModule";
 import img from "../../../content/Images/uploadImg.jpg";
 import { useNavigate } from "react-router-dom";
 import { CourseProbs } from "./AllCourses";
+
+export const coautherData = [
+  {
+    id:1,
+    first_name: "Mohsen",
+    last_name: "Ali",
+  },
+  {
+    id:2,
+    first_name: "Hammad",
+    last_name: "Sidiqi",
+  },
+  {
+    id:3,
+    first_name: "Samra",
+    last_name: "Almas",
+  },
+  {
+    id:4,
+    first_name: "Abeera",
+    last_name: "Arshad",
+  },
+  {
+    id:5,
+    first_name: "Samara",
+    last_name: "Mohsin",
+  }
+
+]
 
 const CourseContent = ({
   courseTitle,
@@ -21,10 +50,10 @@ const CourseContent = ({
   setVisibility,
   courseDes,
   setCourseDes,
+  userData,
 }) => {
-
   const navigate = useNavigate();
-  const {courseId} = useContext(CourseProbs)
+  const { courseId } = useContext(CourseProbs);
   const inpRef = useRef("");
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
@@ -33,6 +62,7 @@ const CourseContent = ({
   const [courseStart, setCourseStart] = useState("");
   const [courseEnd, setCourseEnd] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
+  const [coAuthor, setCoAuthor] = useState('')
 
   // const [course, setCourse] = useState([courseData[0]]);
 
@@ -44,6 +74,10 @@ const CourseContent = ({
   // const [moduleData, setModuleData] = useState([]);
 
   const editorRef = useRef(null);
+
+  useEffect(() => {
+    
+  },)
 
   const showModuleList = () => {
     setShowModuleContent(() => "show");
@@ -67,6 +101,10 @@ const CourseContent = ({
   const handlecourseCategory = (e) => {
     setCourseCategory(e.target.value);
   };
+
+  const handleCoAuthor = (e) => {
+    setCoAuthor(e.target.value)
+  }
 
   const handleDescription = (value, e) => {
     setCourseDes(value);
@@ -141,6 +179,14 @@ const CourseContent = ({
       }
     });
   };
+
+  const getFirstAndLastName = (coAuthors) => {
+      const {first_name, last_name} = coAuthors;
+      const name =`${first_name.slice(0,1)}${last_name.slice(0,1)}`
+      return name.toUpperCase();
+  };
+
+
   const handleSaveCourse = () => {
     if (courseTitle && courseCategory) {
       const formData = new FormData();
@@ -369,24 +415,67 @@ const CourseContent = ({
                   style={{ display: "none" }}
                 />
               </div>
+              <div className="dropdown-section-for-cat-couthor">
+              <div className="category-section me-2">
+                <label className="mb-0 mt-1">Category</label>
+                <select onChange={handlecourseCategory} value={courseCategory}>
+                  <option value="">--Select Category--</option>
+                  {categoryData.length === 0 ||
+                  categoryData.detail == "No objects found"
+                    ? categoryData.detail
+                    : categoryData &&
+                      categoryData.map((category) => {
+                        return (
+                          <option value={category.id} key={category.id}>
+                            {category.title}
+                          </option>
+                        );
+                      })}
+                </select>
+              </div>
             </div>
-            <div className="category-section">
-              <label className="mb-0 mt-1">Category</label>
-              <select onChange={handlecourseCategory} value={courseCategory}>
-                <option value="">--Select Category--</option>
-                {categoryData.length === 0 ||
-                categoryData.detail == "No objects found"
-                  ? categoryData.detail
-                  : categoryData &&
-                    categoryData.map((category) => {
-                      return (
-                        <option value={category.id} key={category.id}>
-                          {category.title}
-                        </option>
-                      );
+            </div>
+
+            <div className="coauthor-section me-2">
+                <label className="mb-0 mt-1">Co-Author</label>
+                <select onChange={(e) =>handleCoAuthor(e)} value={coAuthor}>
+                  <option value="">--Select Co-Author--</option>
+                  {userData.length !== 0 &&
+                    userData.map((user) => {
+                      if (user.role === "instructor") {
+                        return (
+                          <option value={user.id} key={user.id}>
+                            {`${user.first_name} ${user.last_name}`}
+                          </option>
+                        );
+                      } else {
+                        return null;
+                      }
                     })}
-              </select>
-            </div>
+                </select>
+              </div>
+              <div className="coauther-selection">
+                <ul className="coauthor-list-section">
+                    {
+                      coautherData && coautherData.map((coAuthor, index) => {
+                        return (
+                          <li key={coAuthor.id} style={{display: 'flex'}}>
+                            <div className={`coauthor-name-icon coauthor-name-icon${index}`}>
+                            {getFirstAndLastName(coAuthor)}
+                            </div>
+                            <div className="coauthor-name-section ms-3">
+                            <strong>{`${coAuthor.first_name} ${coAuthor.last_name}`}</strong>
+                            </div>
+                            <div className="coauthor-remove-icon ms-5">
+                              <i className="bi bi-trash text-warining"></i>
+                            </div>
+                            </li>
+                        )
+                      })
+                    }
+                          </ul>
+              </div>
+
             {/* <div className="form-check form-switch visibility">
               <label htmlFor="IsActive" className=" course-unit-form-label">
                 Course Visibility
