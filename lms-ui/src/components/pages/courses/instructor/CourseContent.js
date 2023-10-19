@@ -7,32 +7,31 @@ import { CourseProbs } from "./AllCourses";
 
 export const coautherData = [
   {
-    id:1,
+    id: 1,
     first_name: "Mohsen",
     last_name: "Ali",
   },
   {
-    id:2,
+    id: 2,
     first_name: "Hammad",
     last_name: "Sidiqi",
   },
   {
-    id:3,
+    id: 3,
     first_name: "Samra",
     last_name: "Almas",
   },
   {
-    id:4,
+    id: 4,
     first_name: "Abeera",
     last_name: "Arshad",
   },
   {
-    id:5,
+    id: 5,
     first_name: "Samara",
     last_name: "Mohsin",
-  }
-
-]
+  },
+];
 
 const CourseContent = ({
   courseTitle,
@@ -53,7 +52,7 @@ const CourseContent = ({
   userData,
 }) => {
   const navigate = useNavigate();
-  const { courseId } = useContext(CourseProbs);
+  const { courseId, courseCoauthors } = useContext(CourseProbs);
   const inpRef = useRef("");
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
@@ -62,7 +61,9 @@ const CourseContent = ({
   const [courseStart, setCourseStart] = useState("");
   const [courseEnd, setCourseEnd] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
-  const [coAuthor, setCoAuthor] = useState('')
+  const [coAuthor, setCoAuthor] = useState("");
+  const [coAuthors, setCoAuthors] = useState([])
+  const [coAutherData, setCoAuthorData] = useState([])
 
   // const [course, setCourse] = useState([courseData[0]]);
 
@@ -76,8 +77,14 @@ const CourseContent = ({
   const editorRef = useRef(null);
 
   useEffect(() => {
-    
-  },)
+    const getCoAuthorsData = () => {
+      const coAuthors = userData.filter((user) => {
+        return courseCoauthors.includes(user.id);
+      });
+      setCoAuthorData(coAuthors)
+    };
+    getCoAuthorsData();
+  });
 
   const showModuleList = () => {
     setShowModuleContent(() => "show");
@@ -103,8 +110,9 @@ const CourseContent = ({
   };
 
   const handleCoAuthor = (e) => {
-    setCoAuthor(e.target.value)
-  }
+    setCoAuthor(e.target.value);
+    setCoAuthors(pre => [...pre, e.target.value])
+  };
 
   const handleDescription = (value, e) => {
     setCourseDes(value);
@@ -181,16 +189,15 @@ const CourseContent = ({
   };
 
   const getFirstAndLastName = (coAuthors) => {
-      const {first_name, last_name} = coAuthors;
-      const name =`${first_name.slice(0,1)}${last_name.slice(0,1)}`
-      return name.toUpperCase();
+    const { first_name, last_name } = coAuthors;
+    const name = `${first_name.slice(0, 1)}${last_name.slice(0, 1)}`;
+    return name.toUpperCase();
   };
-
 
   const handleSaveCourse = () => {
     if (courseTitle && courseCategory) {
       const formData = new FormData();
-      if (typeof courseImg === "object" && courseImg) {
+      if (typeof(courseImg) === "object" && courseImg) {
         formData.append("course_image", courseImg);
       }
       formData.append("title", courseTitle);
@@ -416,65 +423,69 @@ const CourseContent = ({
                 />
               </div>
               <div className="dropdown-section-for-cat-couthor">
-              <div className="category-section me-2">
-                <label className="mb-0 mt-1">Category</label>
-                <select onChange={handlecourseCategory} value={courseCategory}>
-                  <option value="">--Select Category--</option>
-                  {categoryData.length === 0 ||
-                  categoryData.detail == "No objects found"
-                    ? categoryData.detail
-                    : categoryData &&
-                      categoryData.map((category) => {
-                        return (
-                          <option value={category.id} key={category.id}>
-                            {category.title}
-                          </option>
-                        );
-                      })}
-                </select>
+                <div className="category-section me-2">
+                  <label className="mb-0 mt-1">Category</label>
+                  <select
+                    onChange={handlecourseCategory}
+                    value={courseCategory}
+                  >
+                    <option value="">--Select Category--</option>
+                    {categoryData.length === 0 ||
+                    categoryData.detail == "No objects found"
+                      ? categoryData.detail
+                      : categoryData &&
+                        categoryData.map((category) => {
+                          return (
+                            <option value={category.id} key={category.id}>
+                              {category.title}
+                            </option>
+                          );
+                        })}
+                  </select>
+                </div>
               </div>
-            </div>
             </div>
 
             <div className="coauthor-section me-2">
-                <label className="mb-0 mt-1">Co-Author</label>
-                <select onChange={(e) =>handleCoAuthor(e)} value={coAuthor}>
-                  <option value="">--Select Co-Author--</option>
-                  {userData.length !== 0 &&
-                    userData.map((user) => {
-                      if (user.role === "instructor") {
-                        return (
-                          <option value={user.id} key={user.id}>
-                            {`${user.first_name} ${user.last_name}`}
-                          </option>
-                        );
-                      } else {
-                        return null;
-                      }
-                    })}
-                </select>
-              </div>
-              <div className="coauther-selection">
-                <ul className="coauthor-list-section">
-                    {
-                      coautherData && coautherData.map((coAuthor, index) => {
-                        return (
-                          <li key={coAuthor.id} style={{display: 'flex'}}>
-                            <div className={`coauthor-name-icon coauthor-name-icon${index}`}>
-                            {getFirstAndLastName(coAuthor)}
-                            </div>
-                            <div className="coauthor-name-section ms-3">
-                            <strong>{`${coAuthor.first_name} ${coAuthor.last_name}`}</strong>
-                            </div>
-                            <div className="coauthor-remove-icon ms-5">
-                              <i className="bi bi-trash text-warining"></i>
-                            </div>
-                            </li>
-                        )
-                      })
+              <label className="mb-0 mt-1">Co-Author</label>
+              <select onChange={(e) => handleCoAuthor(e)} value={coAuthor}>
+                <option value="">--Select Co-Author--</option>
+                {userData.length !== 0 &&
+                  userData.map((user) => {
+                    if (user.role === "instructor") {
+                      return (
+                        <option value={user.id} key={user.id}>
+                          {`${user.first_name} ${user.last_name}`}
+                        </option>
+                      );
+                    } else {
+                      return null;
                     }
-                          </ul>
-              </div>
+                  })}
+              </select>
+            </div>
+            <div className="coauther-selection">
+              <ul className="coauthor-list-section">
+                {coAutherData &&
+                  coAutherData.map((coAuthor, index) => {
+                    return (
+                      <li key={coAuthor.id} style={{ display: "flex" }}>
+                        <div
+                          className={`coauthor-name-icon coauthor-name-icon${index}`}
+                        >
+                          {getFirstAndLastName(coAuthor)}
+                        </div>
+                        <div className="coauthor-name-section ms-3">
+                          <strong>{`${coAuthor.first_name} ${coAuthor.last_name}`}</strong>
+                        </div>
+                        <div className="coauthor-remove-icon ms-5">
+                          <i className="bi bi-trash text-warining"></i>
+                        </div>
+                      </li>
+                    );
+                  })}
+              </ul>
+            </div>
 
             {/* <div className="form-check form-switch visibility">
               <label htmlFor="IsActive" className=" course-unit-form-label">

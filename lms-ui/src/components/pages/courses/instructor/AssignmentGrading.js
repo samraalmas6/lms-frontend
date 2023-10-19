@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 import Collapse from "react-collapse";
-import "../styles/AssignmentTable.css";
-import "../styles/AssignmentGrading.css";
+import "../../../styles/AssignmentTable.css";
+import "../../../styles/AssignmentGrading.css";
 const AssignmentGrading = () => {
   const [courseContent, setCourseContent] = useState([]);
   const [courseCoauthors, setCourseCoauthors] = useState([])
