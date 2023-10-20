@@ -5,33 +5,6 @@ import img from "../../../content/Images/uploadImg.jpg";
 import { useNavigate } from "react-router-dom";
 import { CourseProbs } from "./AllCourses";
 
-export const coautherData = [
-  {
-    id: 1,
-    first_name: "Mohsen",
-    last_name: "Ali",
-  },
-  {
-    id: 2,
-    first_name: "Hammad",
-    last_name: "Sidiqi",
-  },
-  {
-    id: 3,
-    first_name: "Samra",
-    last_name: "Almas",
-  },
-  {
-    id: 4,
-    first_name: "Abeera",
-    last_name: "Arshad",
-  },
-  {
-    id: 5,
-    first_name: "Samara",
-    last_name: "Mohsin",
-  },
-];
 
 const CourseContent = ({
   courseTitle,
@@ -52,7 +25,7 @@ const CourseContent = ({
   userData,
 }) => {
   const navigate = useNavigate();
-  const { courseId, courseCoauthors } = useContext(CourseProbs);
+  const { courseId, courseCoauthors, setCourseCoauthors, courseCreator } = useContext(CourseProbs);
   const inpRef = useRef("");
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
@@ -62,7 +35,7 @@ const CourseContent = ({
   const [courseEnd, setCourseEnd] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
   const [coAuthor, setCoAuthor] = useState("");
-  const [coAuthors, setCoAuthors] = useState([])
+  const [coAuthors, setCoAuthors] = useState(courseCoauthors)
   const [coAutherData, setCoAuthorData] = useState([])
 
   // const [course, setCourse] = useState([courseData[0]]);
@@ -77,6 +50,7 @@ const CourseContent = ({
   const editorRef = useRef(null);
 
   useEffect(() => {
+    setCoAuthors(courseCoauthors)
     const getCoAuthorsData = () => {
       const coAuthors = userData.filter((user) => {
         return courseCoauthors.includes(user.id);
@@ -84,7 +58,7 @@ const CourseContent = ({
       setCoAuthorData(coAuthors)
     };
     getCoAuthorsData();
-  },[0]);
+  },[courseCoauthors]);
 
   const showModuleList = () => {
     setShowModuleContent(() => "show");
@@ -111,9 +85,9 @@ const CourseContent = ({
 
   const handleCoAuthor = (e) => {
     setCoAuthor(e.target.value);
-    setCoAuthors(pre => [...pre, e.target.value])
+    setCourseCoauthors(pre => [...pre, +e.target.value])
   };
-
+console.log('this is co-authors:',courseCoauthors);
   const handleDescription = (value, e) => {
     setCourseDes(value);
     setCourseDescription(e.getContent({ format: "text" }));
@@ -140,6 +114,7 @@ const CourseContent = ({
       updated_by: sessionStorage.getItem("user_id"),
       category: courseCategory,
       is_active: !visibility,
+      created_by: sessionStorage.getItem('user_id')
     };
     fetch(`http://127.0.0.1:8000/api/courses/${courseId}/`, {
       method: "PUT",
@@ -205,17 +180,12 @@ const CourseContent = ({
       formData.append("start_date", courseStart);
       formData.append("end_date", courseEnd);
       formData.append("category", [courseCategory]);
-      formData.append("author", sessionStorage.getItem("user_id"));
       formData.append("updated_by", sessionStorage.getItem("user_id"));
-      // const obj = {
-      //   title: courseTitle,
-      //   description: courseDescription,
-      //   start_date: courseStart,
-      //   end_date: courseEnd,
-      //   author: sessionStorage.getItem('user_id'),
-      //   updated_by: sessionStorage.getItem('user_id'),
-      //   category: [courseCategory],
-      // };
+      formData.append("created_by", courseCreator);
+      console.log('Post Coauthors:', courseCoauthors);
+      courseCoauthors.forEach(id => {
+        formData.append("editor", id);
+      });
       fetch(`http://127.0.0.1:8000/api/courses/${courseId}/`, {
         method: "PUT",
         body: formData,
@@ -468,6 +438,9 @@ const CourseContent = ({
               <ul className="coauthor-list-section">
                 {coAutherData &&
                   coAutherData.map((coAuthor, index) => {
+                    if(index === 0){
+                      return null
+                    }
                     return (
                       <li key={coAuthor.id} style={{ display: "flex" }}>
                         <div

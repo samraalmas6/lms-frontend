@@ -22,6 +22,7 @@ const AllCourse = ({ show, minDate }) => {
   const [uploadImg, setUploadImg] = useState("");
   const [visibility, setVisibility] = useState();
   const [courseDes, setCourseDes] = useState("");
+  const [courseCreator, setCourseCreator] = useState(sessionStorage.getItem("user_id"))
   const [courseCoauthors, setCourseCoauthors] = useState([]);
 
   const [courseId, setCourseId] = useState(null);
@@ -149,7 +150,8 @@ const AllCourse = ({ show, minDate }) => {
         end_date: courseEnd,
         updated_by: sessionStorage.getItem("user_id"),
         category: [courseCategory],
-        created_by: sessionStorage.getItem("user_id"),
+        created_by: courseCreator,
+        editor: [sessionStorage.getItem('user_id')]
       };
 
       fetch("http://127.0.0.1:8000/api/courses/", {
@@ -163,6 +165,7 @@ const AllCourse = ({ show, minDate }) => {
         if (response.status === 201) {
           response.json().then(function (result) {
             setCourseContent((pre) => [...pre, result]);
+            setCourseCreator(result.created_by)
             setCourseCategory("");
             setCourseTitle("");
             // window.location.reload();
@@ -178,6 +181,7 @@ const AllCourse = ({ show, minDate }) => {
     let totalUsers = 0;
     for (const team of teamData) {
       if (team.courses.includes(id)) {
+        
         totalUsers += team.users.length;
       }
     }
@@ -193,6 +197,7 @@ const AllCourse = ({ show, minDate }) => {
     // setCourseEnd(course.end_date)
     setCourseImg(course.course_image);
     setVisibility(course.is_active);
+    setCourseCreator(course.created_by);
     setCourseDes(`<p>${course.description}</p>`);
 
     fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
@@ -310,7 +315,7 @@ const AllCourse = ({ show, minDate }) => {
         >
           <div className="offcanvas-body">
             <CourseProbs.Provider
-              value={{ courseId, courseCoauthors, setCourseCoauthors }}
+              value={{ courseId, courseCoauthors, setCourseCoauthors, courseCreator }}
             >
               <CourseContent
                 courseTitle={courseTitle}
