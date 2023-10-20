@@ -84,7 +84,7 @@ const CourseContent = ({
       setCoAuthorData(coAuthors)
     };
     getCoAuthorsData();
-  });
+  },[0]);
 
   const showModuleList = () => {
     setShowModuleContent(() => "show");

@@ -5,7 +5,7 @@ import "../../../styles/AssignmentTable.css";
 import "../../../styles/AssignmentGrading.css";
 const AssignmentGrading = () => {
   const [courseContent, setCourseContent] = useState([]);
-  const [courseCoauthors, setCourseCoauthors] = useState([])
+  const [courseCoauthors, setCourseCoauthors] = useState([]);
   const [openIndex, setOpenIndex] = useState(null); //one collapsible at a time
   const [moduleContent, setModuleContent] = useState([]);
   const [unitContent, setUnitContent] = useState([]);
@@ -28,8 +28,8 @@ const AssignmentGrading = () => {
   const [isAssignmentOpen, setIsAssignmentOpen] = useState(
     Array(assignmentContent.length).fill(false)
   );
-  const toggleCourse = (course,index) => {
-    setCourseCoauthors(course.editor)
+  const toggleCourse = (course, index) => {
+    setCourseCoauthors(course.editor);
     const updatedIsCourseOpen = [...isCourseOpen];
     updatedIsCourseOpen[index] = !updatedIsCourseOpen[index];
     setIsCourseOpen(updatedIsCourseOpen);
@@ -136,7 +136,7 @@ const AssignmentGrading = () => {
 
   const handleGraderName = (id) => {
     const graderName = userData.filter((obj) => obj.id === id);
-    console.log('This is grader name', graderName);
+    console.log("This is grader name", graderName);
     if (graderName.length !== 0) {
       return `${graderName[0].first_name} ${graderName[0].last_name}`;
     } else {
@@ -297,7 +297,7 @@ const AssignmentGrading = () => {
       user: userId,
       status: updatedStatus,
       editor: courseCoauthors,
-      updated_by: sessionStorage.getItem('user_id')
+      updated_by: sessionStorage.getItem("user_id"),
     };
 
     fetch(`http://127.0.0.1:8000/api/assignment_gradings/${gradingId}/`, {
@@ -391,8 +391,12 @@ const AssignmentGrading = () => {
   // console.log("checking filter api : ", filteredData.assignment);
   // console.log("(assignmentSubmissionContent.submitted_link",assignmentSubmissionContent.submitted_link)
 
-  console.log("filter ka result:",assignmentSubmissionContent.filter((obj)=> obj.id === submissionId)?.submitted_link)
-  console.log('Co-Authors in Assignment Grading screen', courseCoauthors);
+  console.log(
+    "filter ka result:",
+    assignmentSubmissionContent.filter((obj) => obj.id === submissionId)
+      ?.submitted_link
+  );
+  console.log("Co-Authors in Assignment Grading screen", courseCoauthors);
   return (
     <div className="grading-screen-main-container">
       <div className="filters-main-container">
@@ -605,19 +609,22 @@ const AssignmentGrading = () => {
                                                                 </td>
                                                                 <td>
                                                                   {
-                                                                    userData.filter(
-                                                                      (obj) =>
-                                                                        obj.id ===
-                                                                        submission.submitted_by
-                                                                    )[0]
-                                                                      .first_name +
-                                                                      " " +
+                                                                    userData &&
                                                                       userData.filter(
                                                                         (obj) =>
                                                                           obj.id ===
                                                                           submission.submitted_by
                                                                       )[0]
-                                                                        .last_name
+                                                                        .first_name +
+                                                                        " " +
+                                                                        userData.filter(
+                                                                          (
+                                                                            obj
+                                                                          ) =>
+                                                                            obj.id ===
+                                                                            submission.submitted_by
+                                                                        )[0]
+                                                                          .last_name
                                                                     // handleSubmitterName(),
                                                                     // submission.submitted_by
                                                                   }
@@ -800,25 +807,26 @@ const AssignmentGrading = () => {
                                                             Pass
                                                           </option>
                                                           <option value="Not Passed">
-                                                          Not Passed
+                                                            Not Passed
                                                           </option>
                                                         </select>
                                                       </div>
                                                     </div>
                                                     <div className="popup-submit-button">
-                                                    <button
-                                                      onClick={() =>
-                                                        handleSubmit(
-                                                          submittedBy,
-                                                          gradingId,
-                                                          submissionId
-                                                        )
-                                                      }
-                                                      // className="popup-submit-button "
-                                                      type="button" class="btn btn-primary popup-submit-button"
-                                                    >
-                                                      Submit
-                                                    </button>
+                                                      <button
+                                                        onClick={() =>
+                                                          handleSubmit(
+                                                            submittedBy,
+                                                            gradingId,
+                                                            submissionId
+                                                          )
+                                                        }
+                                                        // className="popup-submit-button "
+                                                        type="button"
+                                                        class="btn btn-primary popup-submit-button"
+                                                      >
+                                                        Submit
+                                                      </button>
                                                     </div>
                                                   </div>
                                                 </div>
