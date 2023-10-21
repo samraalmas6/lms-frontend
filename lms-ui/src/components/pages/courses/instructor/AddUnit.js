@@ -1,7 +1,7 @@
 import React, { useContext, useId, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UnitProbs } from "./CourseUnit";
-import { CourseProbs } from "./AllCourses";
+import { CourseProbs } from "../../../../App";
 
 const AddUnit = ({}) => {
   const userId = sessionStorage.getItem("user_id");
@@ -80,6 +80,7 @@ const AddUnit = ({}) => {
     }
     setUnitSlide(file);
   };
+
 
   const handleAssignment = () => {
     // navigate('/assignment', { state: { courseId, unitId } });

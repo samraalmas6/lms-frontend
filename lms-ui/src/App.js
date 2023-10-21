@@ -4,7 +4,7 @@ import "./components/styles/Responsive.css";
 
 import SigninPage from "./components/content/SigninPage";
 import HomePage from './components/content/HomePage'
-import { useState } from "react";
+import { createContext, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import AddUser from "./components/pages/users/AddUser";
@@ -25,9 +25,16 @@ import AssignmentScreen from "./components/pages/courses/instructor/AssignmentSc
 import AssignmentGrading from "./components/pages/courses/instructor/AssignmentGrading";
 import Practice from "./components/hooks/Practice";
 import ForgetPassword from "./components/content/ForgetPassword";
+import CourseContent from "./components/pages/courses/instructor/CourseContent";
+
+
+export const CourseProbs = createContext(null);
 
 function App() {
-  const [showlogin, setShowLogin] = useState(false);
+
+  const [courseId, setCourseId] = useState(null);
+  const [courseCoauthors, setCourseCoauthors] = useState([]);
+  const [courseCreator, setCourseCreator] = useState(null);
 
   return (
     <div>
@@ -43,6 +50,7 @@ function App() {
        <Route element= {<VerificationPage />} path="/auth/verification"></Route>
        <Route element= {<ForgetPassword />} path="/auth/reset_password"></Route>
        </Routes>
+       <CourseProbs.Provider value={{ courseId, setCourseId, courseCoauthors, setCourseCoauthors, courseCreator, setCourseCreator }}>
 			<Routes>
 				<Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>}></Route>
         <Route path="/dashboard" element={<PrivateRoute><HomePage /></PrivateRoute>} ></Route>
@@ -53,6 +61,7 @@ function App() {
         <Route path="/allteams" element={<PrivateRoute><AllTeams /></PrivateRoute>}></Route>
         <Route path="/course/create" element={<PrivateRoute><CreateCourse /></PrivateRoute>}></Route>
         <Route path="/course/all" element={<PrivateRoute><AllCourse /></PrivateRoute>}></Route>
+        <Route path="/course/content" element={<PrivateRoute><CourseContent /></PrivateRoute>}></Route>
         <Route path="/course/my-courses" element={<PrivateRoute><MyCourses /></PrivateRoute>}></Route>
         <Route path="/course/create-assignment" element={<PrivateRoute><AssignmentScreen /></PrivateRoute>}></Route>
         <Route path="/course/my-assignments" element={<PrivateRoute><AssignmentView /></PrivateRoute>}></Route>
@@ -60,8 +69,9 @@ function App() {
         <Route path="/my-courses/show" element={<PrivateRoute><CourseTable /></PrivateRoute>}></Route>
         <Route path="/category/add" element={<PrivateRoute><AddCategory /></PrivateRoute>}></Route>
         <Route path="/category/all" element={<PrivateRoute><AllCategory /></PrivateRoute>}></Route>
+
       </Routes>
-      
+      </CourseProbs.Provider>
 
       </BrowserRouter>
 

@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import CourseUnit from "./CourseUnit";
-import { CourseProbs } from "./AllCourses";
+import { CourseProbs } from "../../../../App";
 export const ModuleProbs = createContext(null);
 
 const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {

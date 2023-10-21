@@ -1,12 +1,22 @@
-import React, { createContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import CourseContent from "./CourseContent";
-
-export const CourseProbs = createContext(null);
+import { useNavigate, Link } from "react-router-dom";
+import { CourseProbs } from "../../../../App";
 
 const AllCourse = ({ show, minDate }) => {
   const userId = sessionStorage.getItem("user_id");
   const userRole = sessionStorage.getItem("role");
+  const navigate = useNavigate();
+  const {
+    courseId,
+    setCourseId,
+    courseCoauthors,
+    setCourseCoauthors,
+    courseCreator,
+    setCourseCreator,
+  } = useContext(CourseProbs);
   //   Create Course Section
+  const [showContent, setShowContent] = useState("")
   const [courseContent, setCourseContent] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
   const [teamData, setTeamData] = useState([]);
@@ -22,10 +32,6 @@ const AllCourse = ({ show, minDate }) => {
   const [uploadImg, setUploadImg] = useState("");
   const [visibility, setVisibility] = useState();
   const [courseDes, setCourseDes] = useState("");
-  const [courseCreator, setCourseCreator] = useState(sessionStorage.getItem("user_id"))
-  const [courseCoauthors, setCourseCoauthors] = useState([]);
-
-  const [courseId, setCourseId] = useState(null);
 
   useEffect(() => {
     const getCourseData = () => {
@@ -150,8 +156,8 @@ const AllCourse = ({ show, minDate }) => {
         end_date: courseEnd,
         updated_by: sessionStorage.getItem("user_id"),
         category: [courseCategory],
-        created_by: courseCreator,
-        editor: [sessionStorage.getItem('user_id')]
+        created_by: userId,
+        editor: [sessionStorage.getItem("user_id")],
       };
 
       fetch("http://127.0.0.1:8000/api/courses/", {
@@ -165,7 +171,7 @@ const AllCourse = ({ show, minDate }) => {
         if (response.status === 201) {
           response.json().then(function (result) {
             setCourseContent((pre) => [...pre, result]);
-            setCourseCreator(result.created_by)
+            setCourseCreator(result.created_by);
             setCourseCategory("");
             setCourseTitle("");
             // window.location.reload();
@@ -181,7 +187,6 @@ const AllCourse = ({ show, minDate }) => {
     let totalUsers = 0;
     for (const team of teamData) {
       if (team.courses.includes(id)) {
-        
         totalUsers += team.users.length;
       }
     }
@@ -190,6 +195,7 @@ const AllCourse = ({ show, minDate }) => {
 
   const handleCourseContentData = (course) => {
     setCourseCoauthors(course.editor);
+    setCourseCreator(course.created_by)
     setCourseId(course.id);
     setCourseTitle(course.title);
     setCourseCategory(course.category);
@@ -197,7 +203,6 @@ const AllCourse = ({ show, minDate }) => {
     // setCourseEnd(course.end_date)
     setCourseImg(course.course_image);
     setVisibility(course.is_active);
-    setCourseCreator(course.created_by);
     setCourseDes(`<p>${course.description}</p>`);
 
     fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
@@ -216,6 +221,7 @@ const AllCourse = ({ show, minDate }) => {
         setModuleData([]);
       }
     });
+    // navigate('/course/content')
   };
 
   console.log("Course co-authors:", courseCoauthors);
@@ -306,17 +312,15 @@ const AllCourse = ({ show, minDate }) => {
           </div>
         </div>
         {/* This is for Course Content */}
-        <div
+        {/* <div
           className="offcanvas offcanvas-end"
           tabIndex="-1"
           style={{ width: "87%" }}
           id="offcanvasCourse"
           aria-labelledby="offcanvasRightLabel"
         >
-          <div className="offcanvas-body">
-            <CourseProbs.Provider
-              value={{ courseId, courseCoauthors, setCourseCoauthors, courseCreator }}
-            >
+          <div className="offcanvas-body"> */}
+                 {/* <Link to={'/course/content'}> */}
               <CourseContent
                 courseTitle={courseTitle}
                 setCourseTitle={setCourseTitle}
@@ -334,10 +338,12 @@ const AllCourse = ({ show, minDate }) => {
                 courseDes={courseDes}
                 setCourseDes={setCourseDes}
                 userData={userData}
+                showContent={showContent}
+                setShowContent={setShowContent}
               />
-            </CourseProbs.Provider>
-          </div>
-        </div>
+              {/* </Link> */}
+          {/* </div>
+        </div> */}
         <table className="table table-striped ">
           <thead className="table-info">
             <tr>
@@ -355,19 +361,23 @@ const AllCourse = ({ show, minDate }) => {
                   <tr
                     key={course.id}
                     role="button"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasCourse"
-                    aria-controls="offcanvasRight"
+                    // data-bs-toggle="offcanvas"
+                    // data-bs-target="#offcanvasCourse"
+                    // aria-controls="offcanvasRight"
                     onClick={() => {
+                      setShowContent('show')
                       handleCourseContentData(course);
                     }}
                   >
-                    <td>{course.title}</td>
-                    <td>{course.description}</td>
-                    <td>{getUSerFullName(course.created_by)}</td>
-                    <td>{getNumberOfUsers(course.id)}</td>
-                    <td>{course.created_at}</td>
+    
+                      <td>{course.title}</td>
+                      <td>{course.description}</td>
+                      <td>{getUSerFullName(course.created_by)}</td>
+                      <td>{getNumberOfUsers(course.id)}</td>
+                      <td>{course.created_at}</td>
+                    
                   </tr>
+                 
                 );
               })}
           </tbody>

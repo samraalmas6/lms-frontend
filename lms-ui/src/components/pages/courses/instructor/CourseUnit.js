@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { ModuleProbs } from "./CourseModule";
 import SingleUnit from "./SingleUnit";
 import AddUnit from "./AddUnit";
-import {CourseProbs} from "./AllCourses"
+import { CourseProbs } from "../../../../App";
 export const UnitProbs = createContext(null);
 
 const CourseUnit = ({ showUnit }) => {

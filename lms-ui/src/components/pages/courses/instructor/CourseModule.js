@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import CourseUnit from "./CourseUnit";
 import SingleModule from "./SingleModule";
-import { CourseProbs } from "./AllCourses";
+import { CourseProbs } from "../../../../App";
 
 export const ModuleProbs = createContext(null);
 

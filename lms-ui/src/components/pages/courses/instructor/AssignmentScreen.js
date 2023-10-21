@@ -252,7 +252,7 @@ const AssignmentScreen = () => {
       marks: marks,
       due_time: courseEnd,
       is_updated: true,
-      unit: 1, // Assuming a default unit value
+      unit: state.unitId, // Assuming a default unit value
       // Number_of_members: 1,
       updated_by: sessionStorage.getItem('user_id'),
       created_by: sessionStorage.getItem('user_id')
