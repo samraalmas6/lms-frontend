@@ -528,12 +528,13 @@ ul.resources {
 .link-btn{
   width: 107px;
   background-color: #0056b3;
-  margin-top: 5px;
-  margin-left: 74px;
+  margin-top: 17px;
+  margin-left: 87px;
   border-radius: 4px;
   color: white;
   border: none;
   height: 29px;
+  cursor: pointer;
   
 }
 /* .load-img{
@@ -592,9 +593,9 @@ background-color: #35172d;
 .close-icon
 {
   width: 1px;
-  font-size: 14px;
+  font-size: 18px;
   height: 0px;
-  margin-left: 224px;
+  margin-left: 237px;
 }
 .confirm-btn{
   cursor: pointer;
@@ -655,8 +656,8 @@ background-color: #35172d;
 }
 .fil-text{
   font-size: 16px;
-  margin-right: 82px;
-  margin-top: -32px;
+  margin-right: 22px;
+  margin-top: -29px;
 }
 .head{
 filter: brightness(1.2) saturate(328%) hue-rotate(400deg) contrast(1) grayscale(28%);
