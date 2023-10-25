@@ -458,7 +458,7 @@ const AssignmentGrading = () => {
             <li key={course.id} className="list-item">
               <div
                 // className="collapse-btn"
-                className="collapse-btn"
+                className="collapse-btn course"
                 onClick={() => {
                   toggleCourse(course, index);
                   // handleCourseModule(course.id);
@@ -503,13 +503,14 @@ const AssignmentGrading = () => {
                               .map((unit, unitIndex) => (
                                 <li key={unit.id} className="list-item">
                                   <div
-                                    className="collapse-btn unit"
+                                    className="collapse-btn unit bg-info"
                                     onClick={() => {
                                       toggleUnit(unitIndex);
                                     }}
                                   >
                                     {unit.title}
-                                    <i class="fas fa-angle-double-down"></i>
+                                    {/* <i class="fas fa-angle-double-down"></i> */}
+                                    <i class="fa fa-angle-down"></i>
                                   </div>
                                   <Collapse isOpened={isUnitOpen[unitIndex]}>
                                     <ul>
@@ -532,7 +533,8 @@ const AssignmentGrading = () => {
                                               }}
                                             >
                                               {assignment.title}
-                                              <i class="fas fa-angle-double-down"></i>
+                                              {/* <i class="fas fa-angle-double-down"></i> */}
+                                              <i class="fa fa-angle-down"></i>
                                             </div>
                                             <Collapse
                                               isOpened={
