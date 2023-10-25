@@ -374,7 +374,7 @@ console.log('Course co-authors:', courseCoauthors);
                     >
                       <td>{course.title}</td>
                       <td>{course.description}</td>
-                      <td>{getUSerFullName(course.created_by)}</td>
+                      <td>{getUSerFullName(course.author)}</td>
                       <td>{
                           getNumberOfUsers(course.id)
                         }</td>

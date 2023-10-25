@@ -1,9 +1,11 @@
 import React, { useContext, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { UnitProbs } from "./CourseUnit";
+import { CourseProbs } from './AllCourses';
 
 const AddUnit = ({}) => {
     const userId = sessionStorage.getItem('user_id');
+    const {courseId} = useContext(CourseProbs)
 
     const navigate = useNavigate();
     const videoFieldRef = useRef(null);
@@ -86,7 +88,7 @@ const AddUnit = ({}) => {
 
         // navigate('/assignment', { state: { courseId, unitId } });
 
-        navigate("/course/create-assignment",{ state: { unitId } });
+        navigate("/course/create-assignment",{ state: { unitId ,courseId } });
       };
 
 

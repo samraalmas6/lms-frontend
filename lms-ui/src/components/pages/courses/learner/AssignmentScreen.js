@@ -181,14 +181,15 @@ import paraIcon from "../../../content/Images/paragraph.svg";
 import FileUploadComponent from "../../../content/FileUploadComponent";
 import { Editor } from "@tinymce/tinymce-react";
 import "../../../styles/editor.css";
-import { useLocation, useNavigate,  } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const AssignmentScreen = () => {
+  const userId = sessionStorage.getItem("user_id");
 
-  const userId = sessionStorage.getItem('user_id')
-
-  const navigate = useNavigate()
-  const {state} = useLocation();
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  console.log(state.courseId)
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -202,8 +203,72 @@ const AssignmentScreen = () => {
   const [title, setTitle] = useState("");
   const [marks, setMarks] = useState("");
   const [content, setContent] = useState("");
-  const [selectedFile, setSelectedFile] = useState("")
+  const [selectedFile, setSelectedFile] = useState("");
+  const [groupSub, setGroupSub] = useState(false);
+  const [teamData, setTeamData] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [studentsInCourse, setStudentsInCourse] = useState([])
+  const [assignmentId,setAssignmentId] = useState();
+  const [ScreenView,setScreenView] = useState(false);
 
+
+  const courseID = state.courseId;
+
+  const getTeamData = () => {
+    fetch("http://127.0.0.1:8000/teams_list_data/", {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          // console.log(result);
+          setTeamData(result);
+          console.log("teamData: ", result);
+
+          for (const team of result) {        
+            if (team.courses.includes(courseID)) {
+              team.users.forEach(user => {
+                setStudentsInCourse(pre => [...pre, user])
+
+              })
+              console.log("users in a course",team.users)
+
+            }
+          } 
+
+        });
+      } else {
+        console.log(response);
+      }
+    });
+  };
+
+  const getUserData = () => {
+    fetch("http://127.0.0.1:8000/list_all_users/", {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          // console.log(result);
+          setUserData(result);
+          console.log("userData: ", result);
+        });
+      } else {
+        console.log(response);
+      }
+    });
+  };
+
+
+  useEffect(() => {
+    getTeamData();
+    getUserData();
+  }, [0]);
 
   // const handleContentChange = (event) => {
   //   handleEditorChange(content, editor);
@@ -212,7 +277,7 @@ const AssignmentScreen = () => {
   const handleEditorChange = (content, e) => {
     console.log("Content was updated:", content);
     // setContent(content);
-    setContent(e.getContent({ format: "text" }))
+    setContent(e.getContent({ format: "text" }));
   };
 
   const handleTitle = (event) => {
@@ -252,10 +317,11 @@ const AssignmentScreen = () => {
       marks: marks,
       due_time: courseEnd,
       is_updated: true,
-      unit: 1, // Assuming a default unit value
+      unit: state.unitId, // Assuming a default unit value
+      is_team_submission_allowed: groupSub,
       // Number_of_members: 1,
-      updated_by: sessionStorage.getItem('user_id'),
-      created_by: sessionStorage.getItem('user_id')
+      updated_by: sessionStorage.getItem("user_id"),
+      created_by: sessionStorage.getItem("user_id"),
     };
 
     fetch("http://127.0.0.1:8000/api/assignments/", {
@@ -269,14 +335,20 @@ const AssignmentScreen = () => {
       .then((response) => {
         if (response.status === 201) {
           response.json().then(function (result) {
-            console.log(result);
+            console.log("assignment posted: ",result
+            );
+            // if (result.is_team_submission_allowed === true){
+            //   setScreenView(true)
+            // }
             // Clear the input fields after successful submission
             setTitle("");
             setMarks("");
             setCourseStart("");
             setCourseEnd("");
-            setSelectedFile(null)
-            navigate(-1)
+            setSelectedFile(null);
+            setAssignmentId(result.id)
+            console.log("assignment id: ",assignmentId)
+            // navigate(-1);
           });
         } else {
           console.log(response);
@@ -290,6 +362,24 @@ const AssignmentScreen = () => {
         console.error("Error:", error);
       });
   }
+
+  const handleGroupSub = () => {
+    // console.log("group submission before",groupSub)
+    setGroupSub(!groupSub);
+    // console.log("group submission after",groupSub)
+  };
+
+  const handleBehavior = (e,submission_allowed) => {
+    if(submission_allowed){
+      console.log("partners need to be added");
+      alert("partners need to be added")
+    }
+    else{
+      handleSubmit(e)
+    }
+  }
+
+  console.log("assignment id: ",assignmentId)
 
   return (
     <div>
@@ -327,22 +417,24 @@ const AssignmentScreen = () => {
                       bullist numlist outdent indent | removeformat | help",
                   }}
                   // onEditorChange={handleEditorChange}
-                  onEditorChange={(value, evt) => handleEditorChange(value, evt)}
+                  onEditorChange={(value, evt) =>
+                    handleEditorChange(value, evt)
+                  }
                   value={content}
                 />
               </div>
-              <div>
+              {/* <div>
                 <FileUploadComponent />
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="file-upload-container">
             <FileUploadComponent onFileSelected={handleFileUpload} />
           </div>
-
-          <button onClick={handleSubmit}>Create Assignment</button>
+          {/* <button onClick={handleSubmit}>Create Assignment</button> */}
+          <button onClick={(e)=>{handleBehavior(e,groupSub)}}>Create Assignment</button>
         </div>
-       
+
         <div className="side-container">
           <div className="due-date-and-time">
             <div className="due-date-time">
@@ -358,7 +450,12 @@ const AssignmentScreen = () => {
             </div>
             <div className="due-date-time">
               <i className="far fa-clock"></i>
-              <input type="time" value={courseEnd} className="assignment-screen-input-field " onChange={handleCourseEnd} />
+              <input
+                type="time"
+                value={courseEnd}
+                className="assignment-screen-input-field "
+                onChange={handleCourseEnd}
+              />
             </div>
           </div>
           <div className="marks">
@@ -366,20 +463,28 @@ const AssignmentScreen = () => {
             <input
               type="text"
               placeholder="Enter Marks"
-              value={marks} 
+              value={marks}
               className="assignment-screen-input-field"
               onChange={handleMarks}
             />
           </div>
-          <div className="assignment-partners">
+          <div className="permission">
+            Group Submission Allowed
+            <label class="switch">
+              <input type="checkbox" onClick={handleGroupSub} />
+              <span class="slider round"></span>
+            </label>
+          </div>
+         {groupSub && <div className="assignment-partners">
             <div className="heading-container">
               <h3>Assignment Partners</h3>
               <div className="user-icon" onClick={handleClick}>
                 <i className="fas fa-thin fa-user-plus"></i>
               </div>
             </div>
-            {showComp && <AssignmentPartners />}
-          </div>
+            {showComp && <AssignmentPartners courseID={courseID} userData={userData} studentsInCourse={studentsInCourse}/>}
+          </div>} 
+         
         </div>
       </div>
     </div>
@@ -387,4 +492,3 @@ const AssignmentScreen = () => {
 };
 
 export default AssignmentScreen;
-

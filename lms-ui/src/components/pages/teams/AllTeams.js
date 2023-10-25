@@ -351,7 +351,7 @@ const AllTeams = ({ show }) => {
               // conuserData.filter((user, index) => {
               //   return result.added_users[index] === user.id
               // })
-              window.location.reload();
+              // window.location.reload();
               // setTeamData(result);
             });
           });
