@@ -1,13 +1,13 @@
 .submit-section {
   background-color: #ffff;
   width: 277px;
-  margin-top: -120px;
+  margin-top: -96px;
   box-shadow: 5px 8px 19px -3px rgb(177, 173, 173);
-  left: -134%;
+  left: -139%;
   border-radius: 5px;
   border: 2px solid #0056b3;
   height: auto;
-  position:relative;
+  position: relative;
 }
 /* 
 .toggle-submission-button{
@@ -54,7 +54,8 @@ background-color: aqua;
   margin-top: -7px;
 }
 .lnk-optn:hover{
-background-color: #5464f0;
+background-color: #0056b3;
+color:#fff;
 }
 .fas-fa-link{
   margin-left: 22px;
@@ -327,6 +328,10 @@ ul.resources {
   margin-right: 72px;
   margin-top: -26px;
 }
+.texeria:hover{
+  background-color: #0056b3;
+  color:#fff;
+}
 
 .texeria_two{
   margin-right: 72px;
@@ -354,12 +359,17 @@ ul.resources {
 }
 .confirmation-dialog{
   background-color: #fff;
-  margin-left: -589px;
-  margin-top: -46px;
+  margin-top: -300px;
   width: 393px;
-  /* border: 2px solid #0056b3; */
   box-shadow: 5px 8px 19px -3px rgb(173, 173, 177);
   position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: normal;
+  align-items: center;
+  flex-wrap: wrap;
+  left: -782px;
 
 }
 
@@ -391,19 +401,21 @@ ul.resources {
 }
 
 .custom-button {
-  background-color: #0056b3;
-  color: #fff;
-  padding: 7px 20px;
-  cursor: pointer;
-  border-radius: 5px;
-  width: 134px;
-  font-size: 15px;
-  margin-top: -148px;
-  margin-left: 66px;
+  background-color: #fff;
+    color: #0056b3;
+    padding: 7px 7px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 165px;
+    font-size: 15px;
+    margin-top: -148px;
+    margin-left: 18px;
+    border: 1px solid grey;
 }
 
 .custom-button:hover {
-  background-color: #448ddb;
+  background-color: #0056b3;
+  color:#fff
 }
 
 /* ****************************       Theses Css class should be change   ******************** */
@@ -506,11 +518,12 @@ ul.resources {
 }
 .link-place{
   background-color: #fff;
-  width: 270px;
+  width: 284px;
   margin-left: -598px;
-  margin-top: -75px;
-  height: 115px;
+  margin-top: -245px;
+  height: 139px;
   box-shadow: 5px 8px 19px -3px rgb(177, 173, 173);
+  position: absolute;
 }
 .link-btn{
   width: 107px;
@@ -559,11 +572,12 @@ ul.resources {
 .lnk-text{
   margin-top: -8px;
   margin-left: 47px;
-  width: 173px;
-  height: 36px;
+  width: 192px;
+  height: 42px;
   border-radius: 4px;
   border: 2px solid #adb5bd;
   font-family: ui-sans-serif;
+  border: 2px solid #0056b3;
 }
 .submission-options-dropdown{
   background-color: #fff;
@@ -730,3 +744,46 @@ margin-left: 1px;
   display: flex;
     width: 36px;
 }
+
+
+.edit-file-input input[type="file"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.edit-file-input span {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+.edit-file-input {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.edit-fil{
+
+  background-color: #fff;
+  color: #0056b3;
+  padding: 7px 7px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 172px;
+  font-size: 15px;
+  margin-top: 12px;
+  margin-left: 47px;
+  border: 1px solid grey;
+}
+
+.edit-fil:hover{
+  background-color: #0056b3;
+  color:#fff;
+  }

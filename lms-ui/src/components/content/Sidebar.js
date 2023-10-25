@@ -133,7 +133,7 @@ const Sidebar = () => {
                       Categories
                     </Link>
                   </li>
-                  {/* <li className="nav-item mb-2 ">
+                  {/*  <li className="nav-item mb-2 ">
                     <a
                       className="nav-link text-secondary"
                       href="/course/create"
@@ -146,23 +146,18 @@ const Sidebar = () => {
                       Courses
                     </Link>
                   </li>
-                  
 
-                
-
-                
-                  
-                  <li className="nav-item mb-2 ">
+                  { USER_Role === "instructor" && <li className="nav-item mb-2 ">
                     <Link
                       to="/course/assignment-hub"
                       className="nav-link text-secondary"
                     >
                       Assignment Hub
                     </Link>
-                  </li>
+                  </li> }
                 </ul>
               </li>
-{/*             
+              {/*             
               <li className="nav-item mb-2 ">
                 <a
                   className="nav-link text-secondary"

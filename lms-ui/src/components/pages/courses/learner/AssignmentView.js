@@ -4,35 +4,28 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import fil from "../../../content/Images/fil.png";
 
-function calculateSubmissionStatus(
-  dueDate,
-  isDone,
-  isResubmit,
-  isSubmitClicked
-) {
+function calculateSubmissionStatus(dueDate, isResubmit, isSubmitClicked) {
   const formattedSubmissionDate = new Date();
   const formattedDueDate = new Date(dueDate);
 
   if (isSubmitClicked) {
-    return <span className="submitted-status">Submitted</span>;
-  } else if (isDone) {
-    return <span className="done-status">Done</span>;
+    return 'Submitted';
   } else if (isResubmit) {
-    return <span className="resubmitted-status">Resubmitted</span>;
+    return 'Resubmitted';
   } else if (formattedSubmissionDate > formattedDueDate) {
-    return <span className="late-submission-status">Late Submission</span>;
+    return 'Late Submission';
   } else {
-    return <span className="not-submitted-status">Not Submitted</span>;
+    return 'Not Submitted';
   }
 }
 
 function AssignmentView({ selectedAssignments }) {
-  const [selectedAssignment, setSelectedAssignment] = useState(null);
+  const [selectedAssignment, setSelectedAssignment] =
+    useState(selectedAssignments);
   const [files, setFiles] = useState(null);
   const [link, setLink] = useState("");
   const [file, setFile] = useState(null);
   const [links, setLinks] = useState([]);
-  const [isDone, setIsDone] = useState(false);
   const [submissionOption, setSubmissionOption] = useState(null);
   const [showSubmissionOptions, setShowSubmissionOptions] = useState(false);
   const [isSubmitClicked, setIsSubmitClicked] = useState(false);
@@ -44,7 +37,7 @@ function AssignmentView({ selectedAssignments }) {
   const [apiData, setApiData] = useState([]);
   const [number, setNumber] = useState(0);
   const [assignmentid, setAssignmentid] = useState("");
-  const [feedbackData, setFeedbackData] = useState("feedback"); // State variable for feedback
+  const [feedbackData, setFeedbackData] = useState("feedback");
   const [gradeData, setGradeData] = useState(0);
   const [statusData, setStatusData] = useState([]);
   const [previousFiles, setPreviousFiles] = useState([]);
@@ -60,7 +53,7 @@ function AssignmentView({ selectedAssignments }) {
   const [submissionId, setSubmissionId] = useState(null);
   const [isEditClicked, setIsEditClicked] = useState(false);
   const [isEditButtonDisabled, setIsEditButtonDisabled] = useState(false);
-
+ const [showEditButton, setShowEditButton] = useState(true)
   // const assignments = [
   //   {
   //     id: 1,
@@ -103,7 +96,8 @@ function AssignmentView({ selectedAssignments }) {
     };
 
     getAssignmentData();
-  }, []);
+    // handleAssignment(selectedAssignment);
+  }, [selectedAssignment]);
 
   // useEffect(() => {
   //   const getGradingData = () => {
@@ -157,32 +151,32 @@ function AssignmentView({ selectedAssignments }) {
   // console.log("I m feedback data : ", feedbackData);
   // const marks = feedbackData ? feedbackData.marks : null;
 
-  const simulateSubmission = () => {
-    setTimeout(() => {
-      // Simulate pass or fail randomly
-      const isPassed = Math.random() < 0.5;
+  // const simulateSubmission = () => {
+  //   setTimeout(() => {
+  //     // Simulate pass or fail randomly
+  //     const isPassed = Math.random() < 0.5;
 
-      const feedback = isPassed
-        ? "Congratulations! You have passed the assignment."
-        : "Sorry, you have not passed the assignment. Please review and resubmit.";
+  //     const feedback = isPassed
+  //       ? "Congratulations! You have passed the assignment."
+  //       : "Sorry, you have not passed the assignment. Please review and resubmit.";
 
-      const grade = isPassed ? selectedAssignment.points : 0;
+  //     const grade = isPassed ? selectedAssignment.points : 0;
 
-      setInstructorFeedback(feedback);
-      setSelectedAssignment((prevSelectedAssignment) => ({
-        ...prevSelectedAssignment,
-        feedback,
-        grade,
-      }));
-      setIsSubmitClicked(true);
-    }, 2000);
-  };
+  //     setInstructorFeedback(feedback);
+  //     setSelectedAssignment((prevSelectedAssignment) => ({
+  //       ...prevSelectedAssignment,
+  //       feedback,
+  //       grade,
+  //     }));
+  //     setIsSubmitClicked(true);
+  //   }, 2000);
+  // };
 
   function handleAssignment(assignment) {
+    console.log("this is selected assignment:", assignment);
     setSelectedAssignment(assignment);
     setFiles([]);
     setLinks([]);
-    setIsDone(false);
     setSubmissionOption(null);
     setIsResubmit(false);
     setShowLink(false);
@@ -245,7 +239,8 @@ function AssignmentView({ selectedAssignments }) {
               setIsSubmitClicked(true);
               setShowAddNewSubmission(false);
             } else {
-              setIsSubmitClicked(false);
+              setShowEditButton(false)
+              // setIsSubmitClicked(false);
               setShowAddNewSubmission(false);
             }
 
@@ -284,7 +279,7 @@ function AssignmentView({ selectedAssignments }) {
   // }
 
   function fetchSubmissionByAssignment(assignmentId) {
-    console.log("assignment get:", assignmentId);
+
     fetch(
       `http://127.0.0.1:8000/api/assignments/${assignmentId}/assignment_submissions`,
       {
@@ -296,6 +291,7 @@ function AssignmentView({ selectedAssignments }) {
     )
       .then((response) => {
         if (response.status === 200) {
+          setIsSubmitClicked(true);
           return response.json();
         } else {
           console.error("Error fetching submission data:", response);
@@ -312,11 +308,13 @@ function AssignmentView({ selectedAssignments }) {
 
           setSubmissionId(submission.id);
           setLink(submission.submitted_link);
-          // setFiles(submission.content)
+          setFile(submission.content)
+          setFiles(submission.content)
           setShowAddNewSubmission(false);
         } else {
           console.log("No submissions found for this assignment");
           setShowAddNewSubmission(true);
+          setIsSubmitClicked(false);
         }
       })
       .catch((error) => {
@@ -326,28 +324,28 @@ function AssignmentView({ selectedAssignments }) {
 
   function handleToggleResubmit(submission) {
     setShowLink(true);
-    
+  
+
     console.log("getting status :", statusData);
     console.log("getting  :", isResubmit);
-    if (statusData === "pending") {
-      setIsResubmit(!isResubmit);
+    if (statusData === "Pending") {
+      console.log('submission ID', submission);
+      setIsResubmit(true);
+     setFiles([]);
+      setLinks([]);
+      // if (!isResubmit) {
+      fetchSubmissionByAssignment(submission);
+      // setSubmittedLink(submission.submitted_link);
+      setIsEditClicked(true);
+      setShowLink(true);
 
-      if (!isResubmit) {
-        fetchSubmissionByAssignment(submission);
-        // setSubmittedLink(submission.submitted_link);
-        setIsEditClicked(true);
-        setShowLink(true);
-
-        setFiles([]);
-        setLinks([]);
-
-        setIsDone(false);
-        setSubmissionOption(null);
-        setShowSubmissionOptions(false);
-        setIsSubmitClicked(false);
-        setIsConfirmButtonVisible(true);
-        setInstructorFeedback(null);
-      }
+ 
+      setSubmissionOption(null);
+      setShowSubmissionOptions(false);
+      setIsSubmitClicked(false);
+      setIsConfirmButtonVisible(true);
+      setInstructorFeedback(null);
+      // }
     }
   }
 
@@ -364,6 +362,7 @@ function AssignmentView({ selectedAssignments }) {
   function handleFileChange(event) {
     const selectedFile = event.target.files[0];
     // setFiles((pre) =>[...pre, selectedFiles]);
+    console.log('selected file',selectedFile);
     setFile(selectedFile);
     setIsFileInputVisible(true);
   }
@@ -380,84 +379,21 @@ function AssignmentView({ selectedAssignments }) {
   }
 
   function handleSubmit(event, request) {
+  
     event.preventDefault();
-    //   async function postData(obj) {
-    //     try {
-    //       const formData = new FormData();
-    //       formData.append("submitted_by", sessionStorage.getItem("user_id"));
-    //       formData.append("assignment", obj.assignment);
-    //       formData.append("submission_date", "2024-10-03T10:00:00Z");
-    //       formData.append("submitted_link", obj.submitted_link);
-    //       formData.append("content", obj.content);
-
-    //       postData(obj);
-
-    //       // Add other form data properties as needed
-    //       // formData.append("key", value);
-
-    //       const response = await fetch("http://127.0.0.1:8000/api/assignment_submissions/", {
-    //         method: "POST",
-    //         body: formData,
-    //         headers: {
-    //           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-    //         },
-    //       });
-
-    //       if (response.status === 201) {
-    //         const result = await response.json();
-    //         console.log(result.id);
-
-    //         const submissionId = result.id;
-    //         const newSubmissionId = result.id;
-    //         fetchSubmissionByAssignment(newSubmissionId);
-
-    //         const formattedSubmissionDate = new Date(obj.submission_date);
-    //         const formattedDueDate = new Date(selectedAssignment.due_date);
-
-    //         if (formattedSubmissionDate > formattedDueDate) {
-    //           console.log("Assignment submitted late");
-    //         }
-
-    //         const gradingURL = `http://127.0.0.1:8000/api/assignment_submissions/${submissionId}/assignment_gradings`;
-
-    //         const gradingResponse = await fetch(gradingURL, {
-    //           method: "GET",
-    //           headers: {
-    //             Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-    //           },
-    //         });
-
-    //         if (gradingResponse.status === 200) {
-    //           const gradingResult = await gradingResponse.json();
-    //           console.log(gradingResult[0].marks);
-    //           console.log(gradingResult[0].status);
-    //           console.log(gradingResult[0].comments);
-    //           setGradeData(gradingResult[0].marks);
-    //         } else {
-    //           console.log(gradingResponse);
-    //         }
-
-    //         setLink("");
-    //         setFile([]);
-    //       } else {
-    //         console.log(response);
-    //       }
-    //     } catch (error) {
-    //       console.error("Error:", error);
-    //     }
-    //   }
-
-    //   // Call the postData function when needed:
-
-    //   setShowConfirmationDialog(true);
-    // }
     let url = "";
     const formData = new FormData();
     formData.append("submitted_by", sessionStorage.getItem("user_id"));
     formData.append("assignment", assignmentid);
-    formData.append("submission_date", "2022-10-03T10:00:00Z");
+    // formData.append("submission_date", "2024-10-27T10:00:00Z");
+    const currentDateTime = new Date().toISOString();
+    formData.append("submission_date", currentDateTime);
     formData.append("submitted_link", link);
-    formData.append("content", files);
+    if(typeof(file) === 'object'){
+      formData.append("content", file);
+    }
+ 
+   
     // const obj = {
     //   submitted_by: sessionStorage.getItem("user_id"),
     //   assignment: assignmentid,
@@ -483,11 +419,18 @@ function AssignmentView({ selectedAssignments }) {
         });
 
         if (response.status === 201 || response.status === 200) {
+          setFile('')
+          setFiles('')
+          setLink('')
+          setLinks('')
+          setStatusData('Pending')
+          setShowEditButton(true)
           setShowLink(false);
           const result = await response.json();
           console.log(result.id);
           setShowAddNewSubmission(false);
           const submissionId = result.id;
+          setSubmissionId(result.id)
           // const newSubmissionId = result.id;
           // fetchSubmissionByAssignment(newSubmissionId);
 
@@ -530,7 +473,6 @@ function AssignmentView({ selectedAssignments }) {
 
           // Rest of your code
           setLink("");
-          // setFile([])
 
           const gradingURL = `http://127.0.0.1:8000/api/assignment_submissions/${submissionId}/assignment_gradings`;
 
@@ -571,7 +513,7 @@ function AssignmentView({ selectedAssignments }) {
   function handleConfirmSubmit() {
     setIsSubmitClicked(true);
     setShowConfirmationDialog(false);
-    simulateSubmission(); // Simulate submission and get feedback
+    // simulateSubmission(); // Simulate submission and get feedback
   }
 
   function handleCloseConfirmationDialog() {
@@ -614,14 +556,14 @@ function AssignmentView({ selectedAssignments }) {
                   </div>
                   <div className="detail-date">
                     <strong>Due date:</strong>
-                    {selectedAssignment.due_date.substr(0, 10)}
+                    {selectedAssignment.due_date}
                   </div>
                 </div>
               </div>
               <div className="detail-description">
                 {selectedAssignment.description}
               </div>
-              <div className="resource-files">
+              {/* <div className="resource-files">
                 {selectedAssignment.resourceFiles &&
                   selectedAssignment.resourceFiles.length > 0 && (
                     <>
@@ -641,7 +583,23 @@ function AssignmentView({ selectedAssignments }) {
                       </ul>
                     </>
                   )}
-              </div>
+              </div> */}
+               <div className="resource-files">
+      {selectedAssignment.content ? (
+        <>
+          <p>Attached Resource File:</p>
+          <a className="res" href={selectedAssignment.content} download>
+            <i
+              className="fas fa-file"
+              style={{ marginRight: "5px" }}
+            ></i>
+            {selectedAssignment.content}
+          </a>
+        </>
+      ) : (
+        <p>No attached resource file.</p>
+      )}
+    </div>
             </div>
           ) : (
             <p>Select an assignment to view details:</p>
@@ -650,34 +608,39 @@ function AssignmentView({ selectedAssignments }) {
             <div className="submit">
               <div className="submit-section">
                 <div className="uploaded-files">
-                  <div className="submission-status">
+                  {/* <div className="submission-status">
                     {calculateSubmissionStatus(
                       selectedAssignment.dueDate,
-                      isDone,
                       isResubmit,
                       isSubmitClicked
                     )}
                     <span className={`${submissionStatus}-status`}>
                       {submissionStatus}
                     </span>
-                  </div>
+                  </div> */}
+                  <div className="submission-status">
+ 
+  <span className={`${calculateSubmissionStatus(selectedAssignment.dueDate, isResubmit, isSubmitClicked).toLowerCase()}-status`}>
+    {calculateSubmissionStatus(selectedAssignment.dueDate, isResubmit, isSubmitClicked)}
+  </span>
+</div>
                   {/* {file.length > 0 && ( */}
-                    <>
-                      <ul className="uploa">
-                        {file && (
-                          <li className="upload">
-                            <img src={fil} alt="" className="pht" />
-                            <div className="fil-text">{file.name}</div>
-                            <span
-                              className="rem-fil"
-                              onClick={handleRemoveFile}
-                            >
-                              &#x2716;
-                            </span>
-                          </li>
-                        )}
-                      </ul>
-                    </>
+                  <>
+                    <ul className="uploa">
+                      {file && (
+                        
+                        <li className="upload">
+                          <img src={fil} alt="" className="pht" />
+                          <div className="fil-text">{
+                          typeof(file) === 'string' ? file.slice(36) : file.name
+                          }</div>
+                          <span className="rem-fil" onClick={handleRemoveFile}>
+                            &#x2716;
+                          </span>
+                        </li>
+                      )}
+                    </ul>
+                  </>
                   {/* )} */}
                 </div>
 
@@ -710,17 +673,19 @@ function AssignmentView({ selectedAssignments }) {
                   <div className="toggle-submission-button">
                     {isSubmitClicked && (
                       <div>
-                        <button
+                        {showEditButton && <button
                           type="button"
-                          onClick={() =>{
+                          onClick={() => {
                             setIsEditClicked(true);
-                          
-                             handleToggleResubmit(assignmentid)}}
+                            setShowEditButton(false)
+                            handleToggleResubmit(assignmentid);
+                          }}
                           disabled={isEditButtonDisabled}
                           className="resubmit-btn"
                         >
                           Edit
-                        </button>
+                        </button>}
+                        
                       </div>
                     )}
                     {showLink && (
@@ -734,15 +699,28 @@ function AssignmentView({ selectedAssignments }) {
                               placeholder="Enter link URL"
                               className="lnk-text"
                             />
-
+                            
+                            <div className="load-img">
+                                <label
+                                  htmlFor="fileInput"
+                                  className={`edit-fil ${
+                                    isFileInputVisible ? "hidden" : ""
+                                  }`}
+                                  onClick={toggleFileInput}
+                                >
+                                  <i className="fas fa-upload"></i> Upload File
+                                </label>
+                               
                             <input
                               type="file"
                               accept=".pdf,.doc,.docx"
                               onChange={(e) => handleFileChange(e)}
                               id="fileInput"
-                              //  className="upload-fil"
+                              // className="edit-fil"
                               // value={file}
+                              style={{display:"none"}}
                             />
+                            </div>
                           </>
                         )}
 
@@ -809,6 +787,7 @@ function AssignmentView({ selectedAssignments }) {
                                       id="fileInput"
                                       multiple
                                       // className="upload-fil"
+                                      style={{display:"none"}}
                                       // value={""}
                                     />
                                   </>

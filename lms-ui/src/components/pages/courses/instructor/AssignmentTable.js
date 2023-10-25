@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import assignmentData from "../content/Data/assignmentData";
+import assignmentData from "../../../content/Data/assignmentData";
 import "../styles/AssignmentTable.css"; // Import the CSS file
 
 function AssignmentTable() {

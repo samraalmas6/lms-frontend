@@ -21,8 +21,8 @@ import AllCategory from "./components/pages/category/AllCategory";
 import MyCourses from "./components/pages/courses/learner/MyCourses";
 import CourseTable from "./components/pages/courses/learner/CourseTable";
 import AssignmentView from "./components/pages/courses/learner/AssignmentView";
-import AssignmentScreen from "./components/pages/courses/learner/AssignmentScreen";
-import AssignmentGrading from "./components/pages/AssignmentGrading";
+import AssignmentScreen from "./components/pages/courses/instructor/AssignmentScreen";
+import AssignmentGrading from "./components/pages/courses/instructor/AssignmentGrading";
 import Practice from "./components/hooks/Practice";
 import ForgetPassword from "./components/content/ForgetPassword";
 
@@ -61,6 +61,7 @@ function App() {
         <Route path="/category/add" element={<PrivateRoute><AddCategory /></PrivateRoute>}></Route>
         <Route path="/category/all" element={<PrivateRoute><AllCategory /></PrivateRoute>}></Route>
       </Routes>
+      
 
       </BrowserRouter>
 

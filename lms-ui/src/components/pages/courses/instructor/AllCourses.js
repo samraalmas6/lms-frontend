@@ -1,35 +1,33 @@
 import React, { createContext, useEffect, useRef, useState } from "react";
 import CourseContent from "./CourseContent";
 
-export const CourseProbs = createContext(null)
+export const CourseProbs = createContext(null);
 
 const AllCourse = ({ show, minDate }) => {
-  const userId = sessionStorage.getItem("user_id")
-  const userRole = sessionStorage.getItem("role")
+  const userId = sessionStorage.getItem("user_id");
+  const userRole = sessionStorage.getItem("role");
   //   Create Course Section
   const [courseContent, setCourseContent] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
   const [teamData, setTeamData] = useState([]);
-  const [userData, setUserData] = useState([])
+  const [userData, setUserData] = useState([]);
 
   const [moduleData, setModuleData] = useState([]);
 
   const [courseCategory, setCourseCategory] = useState("");
   const [courseTitle, setCourseTitle] = useState("");
-  const [courseStart, setCourseStart] = useState('2023-09-08')
-  const [courseEnd, setCourseEnd] = useState('2023-10-08')
+  const [courseStart, setCourseStart] = useState("2023-09-08");
+  const [courseEnd, setCourseEnd] = useState("2023-10-08");
   const [courseImg, setCourseImg] = useState("");
   const [uploadImg, setUploadImg] = useState("");
   const [visibility, setVisibility] = useState();
   const [courseDes, setCourseDes] = useState("");
+  const [courseCreator, setCourseCreator] = useState(sessionStorage.getItem("user_id"))
   const [courseCoauthors, setCourseCoauthors] = useState([]);
-
-
 
   const [courseId, setCourseId] = useState(null);
 
   useEffect(() => {
-
     const getCourseData = () => {
       fetch("http://127.0.0.1:8000/api/courses/", {
         method: "GET",
@@ -37,29 +35,28 @@ const AllCourse = ({ show, minDate }) => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
-        if(response.status === 200){
-        response.json().then(function (result) {
-          console.log('Api course result', result);
-          // setCourseContent(result);
-          if(userRole === 'admin'){
-            setCourseContent(result);
-          }
-          else {
-            const obj = result.filter(course => {
-              return course.created_by == userId || course.editor.includes(+userId);
-            })
-            console.log('this is obj', obj, userId);
-            setCourseContent(obj)
-          }
-        });
-      }
-      else{
-        console.log(response);
-        setCourseContent([])
-      }
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log("Api course result", result);
+            // setCourseContent(result);
+            if (userRole === "admin") {
+              setCourseContent(result);
+            } else {
+              const obj = result.filter((course) => {
+                return (
+                  course.created_by == userId || course.editor.includes(+userId)
+                );
+              });
+              console.log("this is obj", obj, userId);
+              setCourseContent(obj);
+            }
+          });
+        } else {
+          console.log(response);
+          setCourseContent([]);
+        }
       });
     };
-
 
     const getCategoryData = () => {
       fetch("http://127.0.0.1:8000/api/categories", {
@@ -68,15 +65,14 @@ const AllCourse = ({ show, minDate }) => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
-        if(response.status === 200){
-        response.json().then(function (result) {
-          setCategoryData(result);
-        });
-      }
-      else{
-        console.log(response);
-        setCategoryData([])
-      }
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            setCategoryData(result);
+          });
+        } else {
+          console.log(response);
+          setCategoryData([]);
+        }
       });
     };
 
@@ -87,16 +83,15 @@ const AllCourse = ({ show, minDate }) => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
-        if(response.status === 200){
-        response.json().then(function (result) {
-          console.log("team data", result);
-          setTeamData(result);
-        });
-      }
-      else {
-        console.log(response);
-        setTeamData([])
-      }
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log("team data", result);
+            setTeamData(result);
+          });
+        } else {
+          console.log(response);
+          setTeamData([]);
+        }
       });
     };
 
@@ -107,36 +102,34 @@ const AllCourse = ({ show, minDate }) => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
-        if(response.status === 200){
-        response.json().then(function (result) {
-          console.log(result);
-          setUserData(result);
-          
-        });
-      }
-      else {
-        console.log(response);
-      }
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log(result);
+            setUserData(result);
+          });
+        } else {
+          console.log(response);
+        }
       });
     };
-    
+
     getCategoryData();
     getTeamData();
     getUsers();
     getCourseData();
-  
   }, [0]);
 
- 
   const getUSerFullName = (id) => {
-    if (id !== 'undefined' && userData.length !== 0) {
+    if (id !== "undefined" && userData.length !== 0) {
       const name = userData.filter((users) => users.id === id);
-      return `${name[0].first_name} ${name[0].last_name}`;
+      if (name.length !== 0) {
+        return `${name[0].first_name} ${name[0].last_name}`;
+      } else {
+        return "N/A";
+      }
+    } else {
+      return "N/A";
     }
-    else{
-      return "N/A"
-    }
-    
   };
 
   const handleCourseTitle = (e) => {
@@ -155,11 +148,11 @@ const AllCourse = ({ show, minDate }) => {
         description: `This is description for the ${courseTitle} course.`,
         start_date: courseStart,
         end_date: courseEnd,
-        updated_by: sessionStorage.getItem('user_id'),
+        updated_by: sessionStorage.getItem("user_id"),
         category: [courseCategory],
-        created_by: sessionStorage.getItem('user_id')
+        created_by: courseCreator,
+        editor: [sessionStorage.getItem('user_id')]
       };
-
 
       fetch("http://127.0.0.1:8000/api/courses/", {
         method: "POST",
@@ -171,7 +164,8 @@ const AllCourse = ({ show, minDate }) => {
       }).then((response) => {
         if (response.status === 201) {
           response.json().then(function (result) {
-            setCourseContent((pre) => [...pre, result])
+            setCourseContent((pre) => [...pre, result]);
+            setCourseCreator(result.created_by)
             setCourseCategory("");
             setCourseTitle("");
             // window.location.reload();
@@ -181,32 +175,29 @@ const AllCourse = ({ show, minDate }) => {
         }
       });
     }
-
-    
   };
 
-
   const getNumberOfUsers = (id) => {
-
     let totalUsers = 0;
     for (const team of teamData) {
       if (team.courses.includes(id)) {
+        
         totalUsers += team.users.length;
       }
     }
-return totalUsers
-   
-  }
+    return totalUsers;
+  };
 
   const handleCourseContentData = (course) => {
-    setCourseCoauthors(course.editor)
+    setCourseCoauthors(course.editor);
     setCourseId(course.id);
     setCourseTitle(course.title);
-    setCourseCategory(course.category)
+    setCourseCategory(course.category);
     // setCourseStart(course.start_date)
     // setCourseEnd(course.end_date)
-    setCourseImg(course.course_image)
-    setVisibility(course.is_active)
+    setCourseImg(course.course_image);
+    setVisibility(course.is_active);
+    setCourseCreator(course.created_by);
     setCourseDes(`<p>${course.description}</p>`);
 
     fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
@@ -215,20 +206,19 @@ return totalUsers
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if(response.status === 200) {
+      if (response.status === 200) {
         response.json().then(function (result) {
           console.log("Api result: ", result);
           setModuleData(result);
         });
-      }
-      else {
+      } else {
         console.log(response);
-        setModuleData([])
+        setModuleData([]);
       }
     });
   };
 
-console.log('Course co-authors:', courseCoauthors);
+  console.log("Course co-authors:", courseCoauthors);
   return (
     <div>
       <div className="all-course-content">
@@ -292,7 +282,7 @@ console.log('Course co-authors:', courseCoauthors);
                       categoryData.detail == "No objects found"
                         ? categoryData.detail
                         : categoryData &&
-                        categoryData.map((category) => {
+                          categoryData.map((category) => {
                             return (
                               <option value={category.id} key={category.id}>
                                 {category.title}
@@ -324,30 +314,31 @@ console.log('Course co-authors:', courseCoauthors);
           aria-labelledby="offcanvasRightLabel"
         >
           <div className="offcanvas-body">
-            <CourseProbs.Provider value={{courseId, courseCoauthors, setCourseCoauthors}} >
-            <CourseContent
-              courseTitle={courseTitle}
-              setCourseTitle={setCourseTitle}
-              courseCategory={courseCategory}
-              setCourseCategory={setCourseCategory}
-              courseImg={courseImg}
-              setCourseImg={setCourseImg}
-              moduleData={moduleData}
-              categoryData={categoryData}
-              setModuleData={setModuleData}
-              courseContent={courseContent}
-              setCourseId={setCourseId}
-              visibility= {visibility}
-              setVisibility={setVisibility}
-              courseDes={courseDes}
-              setCourseDes={setCourseDes}
-              userData={userData}
-            />
-             </CourseProbs.Provider>
+            <CourseProbs.Provider
+              value={{ courseId, courseCoauthors, setCourseCoauthors, courseCreator }}
+            >
+              <CourseContent
+                courseTitle={courseTitle}
+                setCourseTitle={setCourseTitle}
+                courseCategory={courseCategory}
+                setCourseCategory={setCourseCategory}
+                courseImg={courseImg}
+                setCourseImg={setCourseImg}
+                moduleData={moduleData}
+                categoryData={categoryData}
+                setModuleData={setModuleData}
+                courseContent={courseContent}
+                setCourseId={setCourseId}
+                visibility={visibility}
+                setVisibility={setVisibility}
+                courseDes={courseDes}
+                setCourseDes={setCourseDes}
+                userData={userData}
+              />
+            </CourseProbs.Provider>
           </div>
         </div>
         <table className="table table-striped ">
-
           <thead className="table-info">
             <tr>
               <th scope="col">Course Title</th>
@@ -359,29 +350,26 @@ console.log('Course co-authors:', courseCoauthors);
           </thead>
           <tbody>
             {courseContent.length !== 0 &&
-                courseContent.map((course) => {
-                  return (
-                    <tr
-                      key={course.id}
-                      role="button"
-                      data-bs-toggle="offcanvas"
-                      data-bs-target="#offcanvasCourse"
-                      aria-controls="offcanvasRight"
-                      onClick={() => {
-                        handleCourseContentData(course);
-
-                      }}
-                    >
-                      <td>{course.title}</td>
-                      <td>{course.description}</td>
-                      <td>{getUSerFullName(course.author)}</td>
-                      <td>{
-                          getNumberOfUsers(course.id)
-                        }</td>
-                      <td>{course.created_at}</td>
-                    </tr>
-                  );
-                })}
+              courseContent.map((course) => {
+                return (
+                  <tr
+                    key={course.id}
+                    role="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasCourse"
+                    aria-controls="offcanvasRight"
+                    onClick={() => {
+                      handleCourseContentData(course);
+                    }}
+                  >
+                    <td>{course.title}</td>
+                    <td>{course.description}</td>
+                    <td>{getUSerFullName(course.created_by)}</td>
+                    <td>{getNumberOfUsers(course.id)}</td>
+                    <td>{course.created_at}</td>
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       </div>
