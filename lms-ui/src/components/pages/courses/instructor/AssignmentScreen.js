@@ -224,6 +224,7 @@ const AssignmentScreen = () => {
   };
 
   const handleClick = () => {
+    
     setShowComp(!showComp);
   };
 

@@ -9,7 +9,7 @@ body {
 }
 .main-body {
   height: auto;
-  box-shadow: 4px 3px 21px -10px gray;
+  /* box-shadow: 4px 3px 21px -10px gray; */
   /* padding-left: 5px; */
 }
 

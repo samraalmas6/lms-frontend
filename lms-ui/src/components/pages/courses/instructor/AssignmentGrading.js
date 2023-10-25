@@ -81,7 +81,7 @@ const AssignmentGrading = () => {
   const [submittedBy, setSubmittedBy] = useState();
   const [gradingId, setGradingId] = useState();
   const [updatedStatus, setUpdatedStatus] = useState();
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState([]);
   const [overDue, setOverDue] = useState();
 
   useEffect(() => {
@@ -94,6 +94,7 @@ const AssignmentGrading = () => {
   }, [0]);
 
   const openPopup = (assignmentId, gradingId, submissionId, submitted_by) => {
+    console.log('this is gradingId', gradingId);
     setSelectedAssignment(assignmentId);
     setGradingId(gradingId);
     setSubmissionId(submissionId);
@@ -298,6 +299,7 @@ const AssignmentGrading = () => {
       status: updatedStatus,
       editor: courseCoauthors,
       updated_by: sessionStorage.getItem("user_id"),
+      assignment: 12
     };
 
     fetch(`http://127.0.0.1:8000/api/assignment_gradings/${gradingId}/`, {
@@ -609,7 +611,8 @@ const AssignmentGrading = () => {
                                                                 </td>
                                                                 <td>
                                                                   {
-                                                                    userData &&
+                                                                    userData.length !==
+                                                                      0 &&
                                                                       userData.filter(
                                                                         (obj) =>
                                                                           obj.id ===

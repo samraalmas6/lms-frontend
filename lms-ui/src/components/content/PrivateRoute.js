@@ -12,12 +12,12 @@ export default function PrivateRoute({ children }) {
     <div>
       <div className="container-fluid" id="main">
         <div className="row row-offcanvas row-offcanvas-left">
-          <div className="col-xxl-2 col-xl-3 col-lg-3 col-md-4 col-sm-4 col-xs-12 px-sm-2 col-lg-4 px-0 pe-0">
+          <div className="col-xxl-2 col-xl-2 col-lg-4 col-md-4 col-sm-5 col-xs-6 px-0 pe-0">
             <Sidebar />
           </div>
-          <div className="col-xxl-10 col-xl-9 col-lg-8 col-md-7 col-xs-12 col-sm-6 ps-1">
+          <div className="col-xxl-10 col-xl-10 col-lg-8 col-md-7 col-sm-6 col-xs-6 ps-1">
             <Navbar />
-            <div className="col pt-2 mt-2 main-body" style={{minHeight: '85vh'}}>{children}</div>
+            <div className="col p-0 mt-2 pt-2 main-body" style={{minHeight: '85vh'}}>{children}</div>
           </div>
         </div>
       </div>

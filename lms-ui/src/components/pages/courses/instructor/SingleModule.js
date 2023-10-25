@@ -7,9 +7,11 @@ import React, {
 } from "react";
 import CourseUnit from "./CourseUnit";
 import { CourseProbs } from "../../../../App";
+import Swal from 'sweetalert2';
 export const ModuleProbs = createContext(null);
 
 const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
+  const userId = sessionStorage.getItem("user_id")
   const startDateRefModule = useRef(null);
   const endDateRefModule = useRef(null);
   const { courseId } = useContext(CourseProbs);
@@ -73,6 +75,67 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
         console.log(response);
       }
     });
+  };
+
+  const handleDeleteModule = (module, deleted) => {
+    let action = ""
+    if(deleted) {
+      action = "Delete"
+    }
+    else {
+      action = "Restore" 
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: `${action}`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const obj = {
+          title: module.title,
+          is_updated: true,
+          is_delete: deleted,
+          created_by: module.created_by,
+          course: module.course,
+          updated_by: userId,
+        };
+    
+        fetch(`http://127.0.0.1:8000/api/modules/${module.id}/`, {
+          method: "PUT",
+          body: JSON.stringify(obj),
+          headers: {
+            Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }).then((response) => {
+          if (response.status === 200) {
+            response.json().then(function (result) {
+              console.log('Api result: ',result);
+              Swal.fire(
+                `${action}!`,
+                `${module.title} has been ${action}.`,
+                'success'
+              ).then(res => {
+                window.location.reload();
+              })
+              // setCourseContent((pre) => [...pre, result]);
+              // setCourseCreator(result.created_by);
+              // setCourseCategory("");
+              // setCourseTitle("");
+              // 
+            });
+          } else {
+            console.log(response);
+          }
+        });
+      }
+    })
+
+
   };
 
   return (
@@ -188,12 +251,21 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
                     </div>
                   </li>
                   <li>
-                    <i
-                      className="bi bi-trash text-danger"
-                      onClick={() => null}
-                      onMouseEnter={preventAccordionClose}
-                      onMouseLeave={preventAccordionOpen}
-                    ></i>
+
+                  {
+                          module.length !== 0 && module.is_delete ?  <i
+                          className="bi bi-recycle text-success"
+                          onMouseEnter={preventAccordionClose}
+                          onMouseLeave={preventAccordionOpen}
+                          onClick={() => handleDeleteModule(module, false)}
+                        ></i>:
+                        <i
+                          className="bi bi-trash text-danger"
+                          onClick={() => handleDeleteModule(module, true)}
+                          onMouseEnter={preventAccordionClose}
+                          onMouseLeave={preventAccordionOpen}
+                        ></i>
+                        }
                   </li>
                   <li>
                     <i

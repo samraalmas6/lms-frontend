@@ -14,7 +14,9 @@ export const Navbar = () => {
   }
 
   return (
-    <nav className="navbar navbar-expand-md mb-0 nav-bar">
+    <nav className="navbar navbar-expand-md mb-0 nav-bar"
+      style={{ height: '8%', boxShadow: "4px 3px 21px -10px gray"}}
+    >
       <div className="container-fluid">
         <Link to="/" className="navbar-brand" href="#">
           LMS

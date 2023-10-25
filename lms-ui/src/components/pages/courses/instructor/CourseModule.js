@@ -5,9 +5,10 @@ import { CourseProbs } from "../../../../App";
 
 export const ModuleProbs = createContext(null);
 
-const CourseModule = ({ moduleData, setModuleData, courseId }) => {
+const CourseModule = ({ moduleData, moduleCounter, setModuleData, courseId }) => {
   // ****************   Module Refs   *********************
   // ******************************************************
+console.log('this is module counter', moduleCounter);
 
   const startDateRefModule = useRef(null);
   const endDateRefModule = useRef(null);
@@ -15,9 +16,7 @@ const CourseModule = ({ moduleData, setModuleData, courseId }) => {
   const endDatePickerRefModule = useRef(null);
 
   const {courseCoauthors} = useContext(CourseProbs)
-  const [initModuleName, setInitModuleName] = useState(
-    moduleData.length === 0 ? Number(1) : Number(moduleData.length + 1)
-  );
+  const [initModuleName, setInitModuleName] = useState(0);
   const [moduleId, setModuleId] = useState(null);
 
   const [showAddModule, setShowAddModule] = useState(false);
@@ -38,9 +37,9 @@ const CourseModule = ({ moduleData, setModuleData, courseId }) => {
 
   useEffect(() => {
     setInitModuleName(
-      moduleData.length === 0 ? Number(1) : Number(moduleData.length + 1)
+     moduleCounter+1
     );
-  }, [moduleData]);
+  }, [moduleCounter]);
 
   const handleModuleTitle = (e) => {
     setModuleTitle(e.target.value);
@@ -124,7 +123,7 @@ const CourseModule = ({ moduleData, setModuleData, courseId }) => {
           setModuleId(() => result.id);
           // setModuleTitle("");
           setModuleDescription("");
-          // window.location.reload();
+          window.location.reload();
         });
       } else {
         console.log(response);
@@ -276,7 +275,7 @@ const CourseModule = ({ moduleData, setModuleData, courseId }) => {
                           setUnitTitle,
                         }}
                       >
-                        <CourseUnit showUnit={false} />
+                        {/* <CourseUnit showUnit={false} /> */}
                       </ModuleProbs.Provider>
                       <div className="saveModule-button-section">
                         {/* <button

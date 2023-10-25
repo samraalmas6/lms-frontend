@@ -136,8 +136,8 @@ const AllCategory = ({ show }) => {
     // console.log(categoryCourses);
   };
   return (
-    <div>
-      <div className="creat-course-btn">
+    <div style={{boxShadow: "4px 3px 21px -10px gray"}}>
+      <div className="creat-course-btn p-2">
         <button
           type="button"
           className="btn btn-primary ms-3 mb-2"
@@ -354,7 +354,7 @@ const AllCategory = ({ show }) => {
                     </tbody>
                   </table>
                 </div>
-                <div className="courseAddBtn catCourseBtn">
+                {/* <div className="courseAddBtn catCourseBtn">
                   <button
                     className="btn btn-primary me-3"
                     type="button"
@@ -365,7 +365,7 @@ const AllCategory = ({ show }) => {
                   >
                     Add Course
                   </button>
-                </div>
+                </div> */}
               </form>
             </div>
           </div>

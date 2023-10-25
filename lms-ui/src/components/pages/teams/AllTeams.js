@@ -390,8 +390,8 @@ const AllTeams = ({ show }) => {
   };
 
   return (
-    <div>
-      <div className="all-course-content">
+    <div className="" style={{boxShadow: "4px 3px 21px -10px gray"}}>
+      <div className="all-course-content pt-2">
         <div className="creat-course-btn">
           <button
             type="button"
@@ -810,8 +810,8 @@ const AllTeams = ({ show }) => {
                         </div>
                         <div className="allusers-name-section">
                           <span>
-                            {/* {user.first_name} {user.last_name} */}
-                            {user.name}
+                            {user.first_name} {user.last_name}
+                            {/* {user.name} */}
                           </span>
                           <span className="designation">{user.country}</span>
                         </div>

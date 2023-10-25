@@ -2,53 +2,85 @@ import { Editor } from "@tinymce/tinymce-react";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import CourseModule from "./CourseModule";
 import img from "../../../content/Images/uploadImg.jpg";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CourseProbs } from "../../../../App";
+import Swal from 'sweetalert2';
 
-const CourseContent = ({
-  courseTitle,
-  setCourseTitle,
-  courseCategory,
-  setCourseCategory,
-  courseImg,
-  setCourseImg,
-  moduleData,
-  categoryData,
-  setModuleData,
-  courseContent,
-  setCourseId,
-  visibility,
-  setVisibility,
-  courseDes,
-  setCourseDes,
-  userData,
-  showContent,
-  setShowContent,
-}) => {
-  const navigate = useNavigate();
-  const { courseId, courseCoauthors, setCourseCoauthors, courseCreator } =
+const CourseContent = ({}) => {
+  const { courseId,setCourseId, courseCoauthors, setCourseCoauthors, courseCreator } =
     useContext(CourseProbs);
+  const userId = sessionStorage.getItem("user_id")
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  console.log("state", state);
+  const [courseContent, setCourseContent] = useState([]);
+  const [categoryData, setCategoryData] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [moduleData, setModuleData] = useState([]);
+  const [moduleCounter, setModuleCounter] = useState(0)
+  const [course, setCourse] = useState([]);
+
   const inpRef = useRef("");
+  const editorRef = useRef(null);
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
-  const startDatePickerRef = useRef(null);
-  const endDatePickerRef = useRef(null);
   const [courseStart, setCourseStart] = useState("");
   const [courseEnd, setCourseEnd] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
   const [coAuthor, setCoAuthor] = useState("");
   const [coAutherData, setCoAuthorData] = useState([]);
 
-  // const [course, setCourse] = useState([courseData[0]]);
+  const [courseCategory, setCourseCategory] = useState("");
+  const [courseTitle, setCourseTitle] = useState("");
+  const [courseImg, setCourseImg] = useState("");
+  const [visibility, setVisibility] = useState();
+  const [courseDes, setCourseDes] = useState("");
 
-  console.log("this is visibility", visibility);
-  const [showModule, setShowModule] = useState(false);
+  useEffect(() => {
+    const getModuleData = (id) => {
 
-  const [showModuleContent, setShowModuleContent] = useState("");
+      fetch(`http://127.0.0.1:8000/api/courses/${id}/modules`, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log("Api result: ", result);
+            setModuleCounter(result.length)
+            setCourseCoauthors(result[0].editor)
+            setCourseId(id)
+            const obj = result.filter(module => {
+              // setCourse(result.course)
+              return module.is_delete === false
+            })
+            setModuleData(obj);
+           
+          });
+        } else {
+          console.log(response);
+          setModuleData([]);
+        }
+      });
+    }
 
-  // const [moduleData, setModuleData] = useState([]);
+    getModuleData(state.course.id);
+    setCourse(state.course);
+    setCourseContent(state.courseContent);
+    setCategoryData(state.categoryData);
+    setUserData(state.userData);
+  }, [state.course]);
 
-  const editorRef = useRef(null);
+  useEffect(() => {
+    setCourseTitle(course.title);
+    setCourseStart(course.start_date);
+    setCourseEnd(course.end_date);
+    setCourseDes(course.description);
+    setCourseCategory(course.category);
+    setCourseImg(course.course_image);
+    setVisibility(course.is_active);
+  }, [course]);
 
   useEffect(() => {
     const getCoAuthorsData = () => {
@@ -57,22 +89,14 @@ const CourseContent = ({
     getCoAuthorsData();
   }, [courseCoauthors]);
 
-  const showModuleList = () => {
-    setShowModuleContent(() => "show");
-  };
-
   const handleCourseTitle = (e) => {
     setCourseTitle(e.target.value);
   };
 
   const handlCourseStart = (e) => {
-    startDateRef.current.removeAttribute("className", "course-start-field");
-    startDatePickerRef.current.setAttribute("className", "course-start-field");
     setCourseStart(e.target.value);
   };
   const handlCourseEnd = (e) => {
-    endDateRef.current.removeAttribute("className", "course-end-field");
-    endDatePickerRef.current.setAttribute("className", "course-end-field");
     setCourseEnd(e.target.value);
   };
 
@@ -141,14 +165,9 @@ const CourseContent = ({
   };
 
   const handleCourseContent = (course) => {
+    setCourse(course);
     setCourseId(course.id);
-    setCourseTitle(course.title);
-    setCourseCategory(course.category);
-    setCourseStart(course.start_date);
-    setCourseEnd(course.end_date);
-    setCourseImg(course.course_image);
-    setCourseDes(`<p>${course.description}</p>`);
-    setVisibility(() => course.is_active);
+    setCourseCoauthors(course.editor);
 
     fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
       method: "GET",
@@ -159,7 +178,11 @@ const CourseContent = ({
       if (response.status === 200) {
         response.json().then(function (result) {
           console.log("Api result: ", result);
-          setModuleData(result);
+          const obj = result.filter(module => {
+            return module.is_delete === false
+          })
+          setModuleCounter(result.length)
+          setModuleData(obj);
         });
       } else {
         console.log(response);
@@ -172,11 +195,15 @@ const CourseContent = ({
     const coAuthors = userData.filter((user) => {
       return user.id === id;
     });
-    const name = `${coAuthors[0].first_name.slice(
-      0,
-      1
-    )}${coAuthors[0].last_name.slice(0, 1)}`;
-    return name.toUpperCase();
+    if (coAuthors.length !== 0) {
+      const name = `${coAuthors[0].first_name.slice(
+        0,
+        1
+      )}${coAuthors[0].last_name.slice(0, 1)}`;
+      return name.toUpperCase();
+    } else {
+      return null;
+    }
   };
 
   const getFirstAndLastName = (id) => {
@@ -184,6 +211,68 @@ const CourseContent = ({
       return user.id === id;
     });
     return `${coAuthors[0].first_name} ${coAuthors[0].last_name}`;
+  };
+
+  const handleDeleteCourse = (course, deleted) => {
+    let action = ""
+    if(deleted) {
+      action = "Delete"
+    }
+    else {
+      action = "Restore" 
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: `${action}`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const obj = {
+          title: course.title,
+          is_updated: true,
+          is_delete: deleted,
+          created_by: course.created_by,
+          editor: [2, 24],
+          category: [1],
+          updated_by: userId,
+        };
+    
+        fetch(`http://127.0.0.1:8000/api/courses/${course.id}/`, {
+          method: "PUT",
+          body: JSON.stringify(obj),
+          headers: {
+            Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }).then((response) => {
+          if (response.status === 200) {
+            response.json().then(function (result) {
+              console.log('Api result: ',result);
+              Swal.fire(
+                `${action}!`,
+                `${course.title} has been ${action}.`,
+                'success'
+              ).then(res => {
+               navigate(-1)
+              })
+              // setCourseContent((pre) => [...pre, result]);
+              // setCourseCreator(result.created_by);
+              // setCourseCategory("");
+              // setCourseTitle("");
+              // 
+            });
+          } else {
+            console.log(response);
+          }
+        });
+      }
+    })
+
+
   };
 
   const handleSaveCourse = () => {
@@ -216,7 +305,7 @@ const CourseContent = ({
             console.log(result);
             setCourseCategory("");
             setCourseTitle("");
-            window.location.reload();
+            navigate(-1)
           });
         } else {
           console.log(response);
@@ -228,7 +317,7 @@ const CourseContent = ({
   return (
     <div>
       <div
-        className={`offcanvas offcanvas-end ${showContent}`}
+        className={`offcanvas offcanvas-end ${"show"}`}
         tabIndex="-1"
         style={{ width: "84%" }}
         id="offcanvasCourse"
@@ -319,7 +408,7 @@ const CourseContent = ({
                     className="btn-close ms-2  me-2"
                     data-bs-dismiss="offcanvas"
                     aria-label="Close"
-                    onClick={() => setShowContent("")}
+                    onClick={() => navigate(-1)}
                   ></button>
                   <div className="dropdown-menu option-main-container">
                     <ul className="option-ul" style={{ display: "flex" }}>
@@ -337,10 +426,17 @@ const CourseContent = ({
                         </div>
                       </li>
                       <li>
+                        {
+                          course.length !== 0 && course.is_delete ?  <i
+                          className="bi bi-recycle text-success"
+                          onClick={() => handleDeleteCourse(course, false)}
+                        ></i>:
                         <i
                           className="bi bi-trash text-danger"
-                          onClick={() => null}
+                          onClick={() => handleDeleteCourse(course, true)}
                         ></i>
+                        }
+                        
                       </li>
                       <li>
                         <i className="bi bi-copy text-info"></i>
@@ -396,78 +492,104 @@ const CourseContent = ({
                       }}
                     />
                   </div>
-                  <div className="dropdown-section-for-cat-couthor">
-                    <div className="coauthor-section">
+                  <div className="course-content-cat-auth">
+                    <div className="category-section mb-4">
                       <label className="mb-0 mt-1 course-content-label">
-                        Co-Author
+                        Category
                       </label>
                       <select
-                        onChange={(e) => handleCoAuthor(e)}
-                        value={coAuthor}
+                        onChange={handlecourseCategory}
+                        value={courseCategory}
                       >
-                        <option value="">--Select Co-Author--</option>
-                        {userData.length !== 0 &&
-                          userData.map((user) => {
-                            if (
-                              user.role === "instructor" &&
-                              user.id !== courseCreator &&
-                              !coAutherData.includes(user.id)
-                            ) {
+                        <option value="">--Select Category--</option>
+                        {categoryData.length === 0 ||
+                        categoryData.detail == "No objects found"
+                          ? categoryData.detail
+                          : categoryData &&
+                            categoryData.map((category) => {
                               return (
-                                <option value={user.id} key={user.id}>
-                                  {`${user.first_name} ${user.last_name}`}
+                                <option value={category.id} key={category.id}>
+                                  {category.title}
                                 </option>
                               );
-                            } else {
-                              return null;
-                            }
-                          })}
+                            })}
                       </select>
                     </div>
+                    <div className="dropdown-section-for-cat-couthor">
+                      <div className="coauthor-section">
+                        <label className="mb-0 mt-1 course-content-label">
+                          Co-Author
+                        </label>
+                        <select
+                          onChange={(e) => handleCoAuthor(e)}
+                          value={coAuthor}
+                        >
+                          <option value="">--Select Co-Author--</option>
+                          {userData.length !== 0 &&
+                            userData.map((user) => {
+                              if (
+                                user.role === "instructor" &&
+                                user.id !== courseCreator &&
+                                !coAutherData.includes(user.id)
+                              ) {
+                                return (
+                                  <option value={user.id} key={user.id}>
+                                    {`${user.first_name} ${user.last_name}`}
+                                  </option>
+                                );
+                              } else {
+                                return null;
+                              }
+                            })}
+                        </select>
+                      </div>
 
-                    <div className="coauther-selection">
-                      <ul className="coauthor-list-section">
-                        {coAutherData &&
-                          coAutherData.map((coAuthor, index) => {
-                            if (index === 0) {
-                              return null;
-                            }
-                            return (
-                              <li
-                                key={coAuthor}
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <div
-                                  className=""
+                      <div className="coauther-selection">
+                        <ul className="coauthor-list-section">
+                          {coAutherData &&
+                            coAutherData.map((coAuthor, index) => {
+                              if (index === 0) {
+                                return null;
+                              }
+                              return (
+                                <li
+                                  key={coAuthor}
                                   style={{
                                     display: "flex",
+                                    justifyContent: "space-between",
                                     alignItems: "center",
                                   }}
                                 >
                                   <div
-                                    className={`coauthor-name-icon coauthor-name-icon${index} me-2`}
+                                    className=""
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                    }}
                                   >
-                                    {getFirstAndLastNameIcon(coAuthor)}
+                                    <div
+                                      className={`coauthor-name-icon coauthor-name-icon${index} me-2`}
+                                    >
+                                      {getFirstAndLastNameIcon(coAuthor)}
+                                    </div>
+                                    <div className="coauthor-name-section ">
+                                      <span>
+                                        {getFirstAndLastName(coAuthor)}
+                                      </span>
+                                    </div>
                                   </div>
-                                  <div className="coauthor-name-section ">
-                                    <span>{getFirstAndLastName(coAuthor)}</span>
-                                  </div>
-                                </div>
 
-                                <div className="coauthor-remove-icon ">
-                                  <i
-                                    className="bi bi-trash text-warining remove-coauthor-icon"
-                                    onClick={() => removeCoAuthor(coAuthor)}
-                                  ></i>
-                                </div>
-                              </li>
-                            );
-                          })}
-                      </ul>
+                                  <div className="coauthor-remove-icon ">
+                                    <i
+                                      className="bi bi-trash text-warining remove-coauthor-icon"
+                                      onClick={() => removeCoAuthor(coAuthor)}
+                                    ></i>
+                                  </div>
+                                </li>
+                              );
+                            })}
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -501,78 +623,46 @@ const CourseContent = ({
                     />
                   </div>
 
-                  <div className="category-section me-2 ms-5">
-                    <label className="mb-0 mt-1 course-content-label">
-                      Category
-                    </label>
-                    <select
-                      onChange={handlecourseCategory}
-                      value={courseCategory}
-                    >
-                      <option value="">--Select Category--</option>
-                      {categoryData.length === 0 ||
-                      categoryData.detail == "No objects found"
-                        ? categoryData.detail
-                        : categoryData &&
-                          categoryData.map((category) => {
-                            return (
-                              <option value={category.id} key={category.id}>
-                                {category.title}
-                              </option>
-                            );
-                          })}
-                    </select>
-                    <div
-                      className="w-100"
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <div className=""  style={{
-                        display: "flex",
-                        flexDirection: 'column',
-                        alignItems: 'start'
-                      }}>
-                        <label className="course-content-label w-100">
+                  <div className="category-section me-2 ms-0 w-50">
+                    <div className="">
+                      <label className="course-content-label w-100 m-0 mt-3">
                         Course Start Date
-                        </label>
-                        <input
-                          type="date"
-                          value={courseStart}
-                          className="course-start-field"
-                          id="course-date-field"
-                          onChange={(e) => handlCourseStart(e)}
-                          ref={startDateRef}
-                        />
-                        <span 
+                      </label>
+                      <input
+                        type="date"
+                        value={courseStart}
+                        className="course-start-field"
+                        id="course-date-field"
+                        onChange={(e) => handlCourseStart(e)}
+                        ref={startDateRef}
+                      />
+                      <span
                         onClick={() => {
-                          startDateRef.current.showPicker()
+                          startDateRef.current.showPicker();
                         }}
-                        className=" text-center course-content-date w-100">{courseStart ? courseStart : "YYYY-MM-DD"}</span>
-                      </div>
-                      <div className=""
-                      style={{
-                        display: "flex",
-                        flexDirection: 'column',
-                        alignItems: 'start'
-                        // justifyContent: "space-between",
-                      }}>
-                        <label className="course-content-label w-100">
-                          Course End Date
-                        </label>
-                        <input
-                          type="date"
-                          value={courseEnd}
-                          onChange={(e) => handlCourseEnd(e)}
-                          className="course-end-field"
-                          id="course-date-field"
-                          ref={endDateRef}
-                        />
-                        <span 
-                         onClick={() => endDateRef.current.showPicker()}
-                        className=" text-center course-content-date w-100">{courseEnd ?  courseEnd : "YYYY-MM-DD"}</span>
-                      </div>
+                        className=" text-center course-content-date w-100"
+                      >
+                        {courseStart ? courseStart : "YYYY-MM-DD"}
+                      </span>
+                    </div>
+                    <div className="">
+                      <label className="course-content-label m-0 w-100 mt-3">
+                        Course End Date
+                      </label>
+                      <input
+                        type="date"
+                        value={courseEnd}
+                        onChange={(e) => handlCourseEnd(e)}
+                        className="course-end-field"
+                        id="course-date-field"
+                        ref={endDateRef}
+                      />
+                      <span
+                        onClick={() => endDateRef.current.showPicker()}
+                        className=" text-center course-content-date w-100"
+                      >
+                        {courseEnd ? courseEnd : "YYYY-MM-DD"}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -593,6 +683,7 @@ const CourseContent = ({
                 <hr style={{ margin: "20px 0px 20px 0px" }} />
                 <div className="course-module-section">
                   <CourseModule
+                    moduleCounter={moduleCounter}
                     moduleData={moduleData}
                     setModuleData={setModuleData}
                     courseId={courseId}

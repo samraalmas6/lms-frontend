@@ -1,6 +1,13 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import CourseContent from "./CourseContent";
 import { useNavigate, Link } from "react-router-dom";
+import Swal from 'sweetalert2';
 import { CourseProbs } from "../../../../App";
 
 const AllCourse = ({ show, minDate }) => {
@@ -16,22 +23,16 @@ const AllCourse = ({ show, minDate }) => {
     setCourseCreator,
   } = useContext(CourseProbs);
   //   Create Course Section
-  const [showContent, setShowContent] = useState("")
+  const [showContent, setShowContent] = useState("");
   const [courseContent, setCourseContent] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
   const [teamData, setTeamData] = useState([]);
   const [userData, setUserData] = useState([]);
 
   const [moduleData, setModuleData] = useState([]);
-
+  const [singleCourse, setSingleCourse] = useState([]);
   const [courseCategory, setCourseCategory] = useState("");
   const [courseTitle, setCourseTitle] = useState("");
-  const [courseStart, setCourseStart] = useState("2023-09-08");
-  const [courseEnd, setCourseEnd] = useState("2023-10-08");
-  const [courseImg, setCourseImg] = useState("");
-  const [uploadImg, setUploadImg] = useState("");
-  const [visibility, setVisibility] = useState();
-  const [courseDes, setCourseDes] = useState("");
 
   useEffect(() => {
     const getCourseData = () => {
@@ -50,7 +51,7 @@ const AllCourse = ({ show, minDate }) => {
             } else {
               const obj = result.filter((course) => {
                 return (
-                  course.created_by == userId || course.editor.includes(+userId)
+                  ( course.created_by == userId || course.editor.includes(+userId)) && course.is_delete === false
                 );
               });
               console.log("this is obj", obj, userId);
@@ -152,8 +153,6 @@ const AllCourse = ({ show, minDate }) => {
       const obj = {
         title: courseTitle,
         description: `This is description for the ${courseTitle} course.`,
-        start_date: courseStart,
-        end_date: courseEnd,
         updated_by: sessionStorage.getItem("user_id"),
         category: [courseCategory],
         created_by: userId,
@@ -193,41 +192,113 @@ const AllCourse = ({ show, minDate }) => {
     return totalUsers;
   };
 
+  const handleDeleteCourse = (course, deleted) => {
+    let action = ""
+    if(deleted) {
+      action = "Delete"
+    }
+    else {
+      action = "Restore" 
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: `${action}`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const obj = {
+          title: course.title,
+          is_updated: true,
+          is_delete: deleted,
+          created_by: course.created_by,
+          editor: [2, 24],
+          category: [1],
+          updated_by: userId,
+        };
+    
+        fetch(`http://127.0.0.1:8000/api/courses/${course.id}/`, {
+          method: "PUT",
+          body: JSON.stringify(obj),
+          headers: {
+            Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }).then((response) => {
+          if (response.status === 200) {
+            response.json().then(function (result) {
+              console.log('Api result: ',result);
+              Swal.fire(
+                `${action}!`,
+                `${course.title} has been ${action}.`,
+                'success'
+              ).then(res => {
+                window.location.reload();
+              })
+              // setCourseContent((pre) => [...pre, result]);
+              // setCourseCreator(result.created_by);
+              // setCourseCategory("");
+              // setCourseTitle("");
+              // 
+            });
+          } else {
+            console.log(response);
+          }
+        });
+      }
+    })
+
+
+  };
+
   const handleCourseContentData = (course) => {
+    setSingleCourse(course);
     setCourseCoauthors(course.editor);
-    setCourseCreator(course.created_by)
+    setCourseCreator(course.created_by);
     setCourseId(course.id);
     setCourseTitle(course.title);
     setCourseCategory(course.category);
+
+    navigate(`/course/content/${course.id}`, {
+      state: {
+        courseContent,
+        categoryData,
+        userData,
+        course,
+      },
+    });
+
     // setCourseStart(course.start_date)
     // setCourseEnd(course.end_date)
-    setCourseImg(course.course_image);
-    setVisibility(course.is_active);
-    setCourseDes(`<p>${course.description}</p>`);
-
-    fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
-      method: "GET",
-      headers: {
-        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-      },
-    }).then((response) => {
-      if (response.status === 200) {
-        response.json().then(function (result) {
-          console.log("Api result: ", result);
-          setModuleData(result);
-        });
-      } else {
-        console.log(response);
-        setModuleData([]);
-      }
-    });
-    // navigate('/course/content')
+    // fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+    //   },
+    // }).then((response) => {
+    //   if (response.status === 200) {
+    //     response.json().then(function (result) {
+    //       console.log("Api result: ", result);
+    //       const obj = result.filter(module => {
+    //         return module.is_delete === false
+    //       })
+    //       setModuleData(obj);
+        
+    //     });
+    //   } else {
+    //     console.log(response);
+    //     setModuleData([]);
+    //   }
+    // });
   };
 
   console.log("Course co-authors:", courseCoauthors);
   return (
-    <div>
-      <div className="all-course-content">
+    <div className="">
+      <div className="all-course-content pt-2">
         <div className="creat-course-btn">
           <button
             type="button"
@@ -311,39 +382,19 @@ const AllCourse = ({ show, minDate }) => {
             </div>
           </div>
         </div>
-        {/* This is for Course Content */}
-        {/* <div
-          className="offcanvas offcanvas-end"
-          tabIndex="-1"
-          style={{ width: "87%" }}
-          id="offcanvasCourse"
-          aria-labelledby="offcanvasRightLabel"
-        >
-          <div className="offcanvas-body"> */}
-                 {/* <Link to={'/course/content'}> */}
-              <CourseContent
-                courseTitle={courseTitle}
-                setCourseTitle={setCourseTitle}
-                courseCategory={courseCategory}
-                setCourseCategory={setCourseCategory}
-                courseImg={courseImg}
-                setCourseImg={setCourseImg}
+
+        {/* <CourseContent
+                singleCourse={singleCourse}
+                setSingleCourse={setSingleCourse}
                 moduleData={moduleData}
                 categoryData={categoryData}
                 setModuleData={setModuleData}
                 courseContent={courseContent}
                 setCourseId={setCourseId}
-                visibility={visibility}
-                setVisibility={setVisibility}
-                courseDes={courseDes}
-                setCourseDes={setCourseDes}
                 userData={userData}
                 showContent={showContent}
                 setShowContent={setShowContent}
-              />
-              {/* </Link> */}
-          {/* </div>
-        </div> */}
+              /> */}
         <table className="table table-striped ">
           <thead className="table-info">
             <tr>
@@ -351,13 +402,19 @@ const AllCourse = ({ show, minDate }) => {
               <th scope="col">Description</th>
               <th scope="col">Author</th>
               <th scope="col">Users Enrolled</th>
-              <th scope="col">Last Update</th>
+              <th scope="col">Created</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
             {courseContent.length !== 0 &&
               courseContent.map((course) => {
+                let deletedCourse = "";
+                if(course.is_delete === true ){
+                  deletedCourse = "course-delete"
+                }
                 return (
+
                   <tr
                     key={course.id}
                     role="button"
@@ -365,19 +422,50 @@ const AllCourse = ({ show, minDate }) => {
                     // data-bs-target="#offcanvasCourse"
                     // aria-controls="offcanvasRight"
                     onClick={() => {
-                      setShowContent('show')
+                      setShowContent("show");
                       handleCourseContentData(course);
                     }}
                   >
-    
-                      <td>{course.title}</td>
-                      <td>{course.description}</td>
-                      <td>{getUSerFullName(course.created_by)}</td>
-                      <td>{getNumberOfUsers(course.id)}</td>
-                      <td>{course.created_at}</td>
-                    
+                    <td  className={deletedCourse}>{course.title}</td>
+                    <td  className={deletedCourse}>{course.description}</td>
+                    <td  className={deletedCourse}>{getUSerFullName(course.created_by)}</td>
+                    <td className={`text-center ${deletedCourse}`}>
+                      {getNumberOfUsers(course.id)}
+                    </td>
+                    <td  className={deletedCourse}>{course.created_at}</td>
+                    <td style={{ display: "flex" }}>
+                      <i class="bi bi-pencil-square text-success me-3"></i>
+                      {
+                        course.is_delete ?
+                        <i
+                        className="bi bi-recycle text-info"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDeleteCourse(course, false)
+                        }}
+                      ></i> :
+                        <i
+                        className="bi bi-trash text-danger"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDeleteCourse(course, true)
+                        }}
+                      ></i>
+                      }
+
+                      {/* <div className="form-check form-switch">
+                          <input
+                            className="form-check-input "
+                            type="checkbox"
+                            role="switch"
+                            checked={visibility}
+                            value={visibility}
+                            onChange={handleVisibility}
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div> */}
+                    </td>
                   </tr>
-                 
                 );
               })}
           </tbody>

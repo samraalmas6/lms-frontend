@@ -1,8 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import AddUnit from "./AddUnit";
 import { ModuleProbs } from "./CourseModule";
+import Swal from 'sweetalert2';
+import { useNavigate } from "react-router-dom";
 
 const SingleUnit = ({ unit, setUnitId }) => {
+  const userId = sessionStorage.getItem("user_id")
+  const navigate = useNavigate()
   const { moduleId } = useContext(ModuleProbs);
   const accordion = useRef(null);
 
@@ -199,6 +203,66 @@ const SingleUnit = ({ unit, setUnitId }) => {
     
   };
 
+  const handleDeleteUnit = (unit, deleted) => {
+    let action = ""
+    if(deleted) {
+      action = "Delete"
+    }
+    else {
+      action = "Restore" 
+    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: `${action}`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const obj = {
+          title: unit.title,
+          is_updated: true,
+          is_delete: deleted,
+          created_by: unit.created_by,
+          module: unit.module,
+          updated_by: userId,
+        };
+    
+        fetch(`http://127.0.0.1:8000/api/units/${unit.id}/`, {
+          method: "PUT",
+          body: JSON.stringify(obj),
+          headers: {
+            Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }).then((response) => {
+          if (response.status === 200) {
+            response.json().then(function (result) {
+              console.log('Api result: ',result);
+              Swal.fire(
+                `${action}!`,
+                `${unit.title} has been ${action}.`,
+                'success'
+              ).then(res => {
+               navigate(-1)
+              })
+              // setCourseContent((pre) => [...pre, result]);
+              // setCourseCreator(result.created_by);
+              // setCourseCategory("");
+              // setCourseTitle("");
+              // 
+            });
+          } else {
+            console.log(response);
+          }
+        });
+      }
+    })
+
+
+  };
   return (
     <div
       type="button"
@@ -296,12 +360,20 @@ const SingleUnit = ({ unit, setUnitId }) => {
                     </div>
                   </li>
                   <li>
-                    <i
-                      className="bi bi-trash text-danger"
-                      onClick={() => null}
-                      onMouseEnter={preventAccordionClose}
-                      onMouseLeave={preventAccordionOpen}
-                    ></i>
+                  {
+                          unit.length !== 0 && unit.is_delete ?  <i
+                          className="bi bi-recycle text-success"
+                          onMouseEnter={preventAccordionClose}
+                          onMouseLeave={preventAccordionOpen}
+                          onClick={() => handleDeleteUnit(unit, false)}
+                        ></i>:
+                        <i
+                          className="bi bi-trash text-danger"
+                          onClick={() => handleDeleteUnit(unit, true)}
+                          onMouseEnter={preventAccordionClose}
+                          onMouseLeave={preventAccordionOpen}
+                        ></i>
+                        }
                   </li>
                   <li>
                     <i

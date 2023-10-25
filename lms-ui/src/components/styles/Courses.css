@@ -120,19 +120,10 @@
     color: black;
     border: none;
     /* border-bottom: 3px solid gray; */
-    box-shadow: 0px 4px 9px -8px gray;
+    /* box-shadow: 0px 4px 9px -8px gray; */
     margin-top: 0px;
     margin-bottom: 10px;
     font-weight: 600;
-}
-.add-module-btn:hover, .add-unit-btn:hover {
-    background-color: #faf8f8;
-    /* outline: none !important;
-    border: none !important; */
-}
-.add-module-btn:focus, .add-unit-btn:focus {
-    
-    box-shadow: 0px 4px 15px -7px gray;
 }
 .all-course-content {
     box-shadow: 4px 5px 15px -3px gray;
@@ -186,7 +177,7 @@
 }
 .course-form-section {
     width: 86%;
-        box-shadow: 2px 0px 6px -4px gray;
+    box-shadow: 4px 3px 21px -10px gray;
     padding: 0px;
     overflow: auto;
 }
@@ -214,7 +205,9 @@ body::-webkit-scrollbar {
 }
 .course-content-editor {
     width: 75%;
-    
+}
+.course-content-cat-auth{
+    width: 25%;
 }
 .coverImage {
 max-width: 20%;
@@ -243,15 +236,9 @@ max-width: 20%;
 
 }
 .dropdown-section-for-cat-couthor{
-    width: 25%;
-}
-.category-section, .coauthor-section {
     width: 100%;
 }
-.category-section {
-    width: 50%;
-}
-.coauther-selection{
+.category-section, .coauthor-section, .coauther-selection{
     width: 100%;
 }
 .course-content-label {
@@ -474,6 +461,7 @@ hr {
     border: none;
     border-radius: 8px 3px;
     background-color: #fef5f5;
+    cursor: pointer;
 }
 .course-heading-section {
     width: 80%;
@@ -517,6 +505,7 @@ hr {
     display: flex;
     justify-content: end;
     margin: 0px;
+    
 }
 .add-unit-btn button, .add-module-btn button {
     margin: 4px 0px;
@@ -755,4 +744,9 @@ hr {
   .course-content-date {
     padding: 8px 7px;
     border-radius: 7px;
+  }
+  .course-delete {
+    text-decoration: line-through;
+    color: #c3c1c1 !important;
+    /* background-color: #cfcfcf !important; */
   }

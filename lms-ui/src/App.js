@@ -61,7 +61,7 @@ function App() {
         <Route path="/allteams" element={<PrivateRoute><AllTeams /></PrivateRoute>}></Route>
         <Route path="/course/create" element={<PrivateRoute><CreateCourse /></PrivateRoute>}></Route>
         <Route path="/course/all" element={<PrivateRoute><AllCourse /></PrivateRoute>}></Route>
-        <Route path="/course/content" element={<PrivateRoute><CourseContent /></PrivateRoute>}></Route>
+        <Route path="/course/content/:courseId" element={<PrivateRoute><CourseContent /></PrivateRoute>}></Route>
         <Route path="/course/my-courses" element={<PrivateRoute><MyCourses /></PrivateRoute>}></Route>
         <Route path="/course/create-assignment" element={<PrivateRoute><AssignmentScreen /></PrivateRoute>}></Route>
         <Route path="/course/my-assignments" element={<PrivateRoute><AssignmentView /></PrivateRoute>}></Route>

@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 const AllUsers = () => {
   const [showBlock, setShowBlock] = useState(false);
   const [userData, setUserData] = useState([])
+  const [visibility, setVisibility] = useState(false);
 
   useEffect(() => {
     const getUsers = () => {
@@ -33,8 +34,33 @@ const AllUsers = () => {
     setShowBlock((prev) => !prev);
   };
 
+  const handleVisibility = (email, active) => {
+ 
+    const obj = {
+      email: email,
+      is_active: !active
+    }
+    fetch('http://127.0.0.1:8000/update_user/',  {
+      method: "PUT",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      }).then((response) => { 
+        if(response.status === 200){
+        response.json().then(function (result) {
+          console.log(result);
+          window.location.reload();
+        });
+      }
+      else {
+        console.log(response);
+      }
+      });
+  }
   return (
-    <div className="main">
+    <div className="main pt-2" style={{ boxShadow: "4px 3px 21px -10px gray" }}>
       <form className="all-usersform">
         <input
           type="search"
@@ -91,12 +117,15 @@ const AllUsers = () => {
                     <td>
                       <div className="form-check form-switch">
                         <input
-                          className="form-check-input"
-                          type="checkbox"
-                          role="switch"
-                          readOnly
-                          checked={user.is_active}
-                          id="flexSwitchCheckDefault"
+                        className="form-check-input "
+                        type="checkbox"
+                        role="switch"
+                        checked={user.is_active}
+                        value={user.is_active}
+                        onChange={() => {
+                          handleVisibility(user.email, user.is_active)}
+                        }
+                        id="flexSwitchCheckDefault"
                         />
                       </div>
                     </td>
