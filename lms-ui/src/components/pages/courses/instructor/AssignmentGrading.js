@@ -413,7 +413,7 @@ const AssignmentGrading = () => {
         <div className="filter-container">
           {/* <label>Filter by:</label> */}
           <button
-            className={`filter-button all ${
+            className={`filter-button all btn-secondary ${
               assignmentFilter === null ? "active-all" : ""
             }`}
             // onClick={() => setAssignmentFilter(null)}
@@ -423,7 +423,7 @@ const AssignmentGrading = () => {
             All
           </button>
           <button
-            className={`filter-button passed ${
+            className={`btn-success${
               assignmentFilter === "pass" ? "active-pass" : ""
             }`}
             // onClick={() => setAssignmentFilter("pass")}
@@ -433,7 +433,7 @@ const AssignmentGrading = () => {
             Passed
           </button>
           <button
-            className={`filter-button failed ${
+            className={`btn-danger ${
               assignmentFilter === "not pass" ? "active-fail" : ""
             }`}
             // onClick={() => setAssignmentFilter("not pass")}
@@ -442,7 +442,7 @@ const AssignmentGrading = () => {
             Not Passed
           </button>
           <button
-            className={`filter-button pending ${
+            className={`btn-info ${
               assignmentFilter === "pending" ? "active-pending" : ""
             }`}
             // onClick={() => setAssignmentFilter("pending")}
