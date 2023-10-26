@@ -4,20 +4,36 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import fil from "../../../content/Images/fil.png";
 
-function calculateSubmissionStatus(dueDate, isResubmit, isSubmitClicked) {
-  const formattedSubmissionDate = new Date();
-  const formattedDueDate = new Date(dueDate);
+// function calculateSubmissionStatus(dueDate, isResubmit, isSubmitClicked) {
+//   const formattedSubmissionDate = new Date();
+//   const formattedDueDate = new Date(dueDate);
 
-  if (isSubmitClicked) {
-    return <span className="submitted-status">Submitted</span>;
+//   if (isSubmitClicked) {
+//     return 'Submitted';
+//   } else if (isResubmit) {
+//     return 'Resubmitted';
+//   } else if (formattedSubmissionDate > formattedDueDate) {
+//     return 'Late Submission';
+//   } else {
+//     return 'Not Submitted';
+//   }
+// }
+
+function calculateSubmissionStatus(due_date, isResubmit, isSubmitClicked) {
+  const currentDateTime = new Date();
+  const formattedDueDate = new Date(due_date);
+
+  if (isSubmitClicked && currentDateTime > formattedDueDate) {
+    return <span style={{ color: 'red' }}>Late Submission</span>;
+  } else if (isSubmitClicked) {
+    return "Submitted";
   } else if (isResubmit) {
-    return <span className="resubmitted-status">Resubmitted</span>;
-  } else if (formattedSubmissionDate > formattedDueDate) {
-    return <span className="late-submission-status">Late Submission</span>;
+    return "Resubmitted";
   } else {
-    return <span className="not-submitted-status">Not Submitted</span>;
+    return "Not Submitted";
   }
 }
+
 
 function AssignmentView({ selectedAssignments }) {
   const [selectedAssignment, setSelectedAssignment] =
@@ -37,7 +53,7 @@ function AssignmentView({ selectedAssignments }) {
   const [apiData, setApiData] = useState([]);
   const [number, setNumber] = useState(0);
   const [assignmentid, setAssignmentid] = useState("");
-  const [feedbackData, setFeedbackData] = useState("feedback"); // State variable for feedback
+  const [feedbackData, setFeedbackData] = useState("feedback");
   const [gradeData, setGradeData] = useState(0);
   const [statusData, setStatusData] = useState([]);
   const [previousFiles, setPreviousFiles] = useState([]);
@@ -54,23 +70,7 @@ function AssignmentView({ selectedAssignments }) {
   const [isEditClicked, setIsEditClicked] = useState(false);
   const [isEditButtonDisabled, setIsEditButtonDisabled] = useState(false);
  const [showEditButton, setShowEditButton] = useState(true)
-  // const assignments = [
-  //   {
-  //     id: 1,
-  //     title: "Assignment 1",
-  //     description: "Complete the first assignment.",
-  //     dueDate: "2023-09-30 14:00",
-  //     points: 90,
-  //     resourceFiles: ["https://example.com/your-pdf-file.pdf", "file2.doc"],
-  //     submissionLinks: [
-  //       "https://example.com/your-file-url",
-  //       "https://anotherlink.com",
-  //     ],
-  //     feedback: "", // Add feedback property
-  //     grade: null, // Add grade property
-  //   },
-  //   // Add more assignments here.
-  // ];
+
 
   useEffect(() => {
     const getAssignmentData = () => {
@@ -96,7 +96,7 @@ function AssignmentView({ selectedAssignments }) {
     };
 
     getAssignmentData();
-    handleAssignment(selectedAssignment);
+    // handleAssignment(selectedAssignment);
   }, [selectedAssignment]);
 
   // useEffect(() => {
@@ -174,7 +174,7 @@ function AssignmentView({ selectedAssignments }) {
 
   function handleAssignment(assignment) {
     console.log("this is selected assignment:", assignment);
-    // setSelectedAssignment(assignment);
+    setSelectedAssignment(assignment);
     setFiles([]);
     setLinks([]);
     setSubmissionOption(null);
@@ -385,7 +385,9 @@ function AssignmentView({ selectedAssignments }) {
     const formData = new FormData();
     formData.append("submitted_by", sessionStorage.getItem("user_id"));
     formData.append("assignment", assignmentid);
-    formData.append("submission_date", "2022-10-03T10:00:00Z");
+    // formData.append("submission_date", "2024-10-27T10:00:00Z");
+    const currentDateTime = new Date().toISOString();
+    formData.append("submission_date", currentDateTime);
     formData.append("submitted_link", link);
     if(typeof(file) === 'object'){
       formData.append("content", file);
@@ -523,7 +525,7 @@ function AssignmentView({ selectedAssignments }) {
     <>
       <div className="app">
         <div className="assignment-view">
-          {/* <div className="assignment-list">
+          <div className="assignment-list">
             {apiData.map((assignment) => (
               <div
                 key={assignment.id}
@@ -535,7 +537,7 @@ function AssignmentView({ selectedAssignments }) {
                 {assignment.title}
               </div>
             ))}
-          </div> */}
+          </div>
           {selectedAssignment ? (
             <div className="detail">
               <div className="title-date">
@@ -562,7 +564,7 @@ function AssignmentView({ selectedAssignments }) {
               <div className="detail-description">
                 {selectedAssignment.description}
               </div>
-              <div className="resource-files">
+              {/* <div className="resource-files">
                 {selectedAssignment.resourceFiles &&
                   selectedAssignment.resourceFiles.length > 0 && (
                     <>
@@ -582,7 +584,23 @@ function AssignmentView({ selectedAssignments }) {
                       </ul>
                     </>
                   )}
-              </div>
+              </div> */}
+               <div className="resource-files">
+      {selectedAssignment.content ? (
+        <>
+          <p>Attached Resource File:</p>
+          <a className="res" href={selectedAssignment.content} download>
+            <i
+              className="fas fa-file"
+              style={{ marginRight: "5px" }}
+            ></i>
+            {selectedAssignment.content}
+          </a>
+        </>
+      ) : (
+        <p>No attached resource file.</p>
+      )}
+    </div>
             </div>
           ) : (
             <p>Select an assignment to view details:</p>
@@ -591,7 +609,7 @@ function AssignmentView({ selectedAssignments }) {
             <div className="submit">
               <div className="submit-section">
                 <div className="uploaded-files">
-                  <div className="submission-status">
+                  {/* <div className="submission-status">
                     {calculateSubmissionStatus(
                       selectedAssignment.dueDate,
                       isResubmit,
@@ -600,7 +618,13 @@ function AssignmentView({ selectedAssignments }) {
                     <span className={`${submissionStatus}-status`}>
                       {submissionStatus}
                     </span>
-                  </div>
+                  </div> */}
+                  <div className="submission-status">
+ 
+  <span className={`${calculateSubmissionStatus(selectedAssignment.dueDate, isResubmit, isSubmitClicked).toLowerCase()}-status`}>
+    {calculateSubmissionStatus(selectedAssignment.due_date, isResubmit, isSubmitClicked)}
+  </span>
+</div>
                   {/* {file.length > 0 && ( */}
                   <>
                     <ul className="uploa">
@@ -611,9 +635,7 @@ function AssignmentView({ selectedAssignments }) {
                           <div className="fil-text">{
                           typeof(file) === 'string' ? file.slice(36) : file.name
                           }</div>
-                          <span className="rem-fil" onClick={handleRemoveFile}>
-                            &#x2716;
-                          </span>
+                          
                         </li>
                       )}
                     </ul>
@@ -676,15 +698,28 @@ function AssignmentView({ selectedAssignments }) {
                               placeholder="Enter link URL"
                               className="lnk-text"
                             />
-
+                            
+                            <div className="load-img">
+                                <label
+                                  htmlFor="fileInput"
+                                  className={`edit-fil ${
+                                    isFileInputVisible ? "hidden" : ""
+                                  }`}
+                                  onClick={toggleFileInput}
+                                >
+                                  <i className="fas fa-upload"></i> Upload File
+                                </label>
+                               
                             <input
                               type="file"
                               accept=".pdf,.doc,.docx"
                               onChange={(e) => handleFileChange(e)}
                               id="fileInput"
-                              //  className="upload-fil"
+                              // className="edit-fil"
                               // value={file}
+                              style={{display:"none"}}
                             />
+                            </div>
                           </>
                         )}
 
@@ -751,6 +786,7 @@ function AssignmentView({ selectedAssignments }) {
                                       id="fileInput"
                                       multiple
                                       // className="upload-fil"
+                                      style={{display:"none"}}
                                       // value={""}
                                     />
                                   </>
@@ -883,340 +919,4 @@ function AssignmentView({ selectedAssignments }) {
 }
 
 export default AssignmentView;
-// return (
-//   <>
-//     <div className="app">
-//       <div className="assignment-view">
-//         <div className="assignment-list">
-//           {apiData.map((assignment) => (
-//             <div
-//               key={assignment.id}
-//               className={`assignment-item ${
-//                 selectedAssignment === assignment ? "selected" : ""
-//               }`}
-//               onClick={() => handleAssignment(assignment)}
-//             >
-//               {assignment.title}
-//             </div>
-//           ))}
-//         </div>
-//         {selectedAssignment ? (
-//           <div className="detail">
-//             <div className="title-date">
-//               <div className="detail-title">
-//                 <i className="fas fa-file-pen"></i>
-//                 <img src={fil} alt="" className="head" />{" "}
-//                 {selectedAssignment.title}
-//               </div>
-//               <div className="detail-points-and-date">
-//                 <div className="detail-points">
-//                   <strong>Marks:</strong>
-//                   {number}
-//                 </div>
-//                 <div className="detail-create">
-//                   <strong>Created At:</strong>
-//                   {selectedAssignment.created_at}
-//                 </div>
-//                 <div className="detail-date">
-//                   <strong>Due date:</strong>
-//                   {selectedAssignment.due_date.substr(0, 10)}
-//                 </div>
-//               </div>
-//             </div>
-//             <div className="detail-description">
-//               {selectedAssignment.description}
-//             </div>
-//             <div className="resource-files">
-//               {selectedAssignment.resourceFiles &&
-//                 selectedAssignment.resourceFiles.length > 0 && (
-//                   <>
-//                     <p>Attached Resource Files:</p>
-//                     <ul className="resources">
-//                       {selectedAssignment.resourceFiles.map((file, index) => (
-//                         <li key={index}>
-//                           <a className="res" href={file} download>
-//                             <i
-//                               className="fas fa-file"
-//                               style={{ marginRight: "5px" }}
-//                             ></i>
-//                             {file}
-//                           </a>
-//                         </li>
-//                       ))}
-//                     </ul>
-//                   </>
-//                 )}
-//             </div>
-//           </div>
-//         ) : (
-//           <p>Select an assignment to view details:</p>
-//         )}
-//         {selectedAssignment && (
-//           <div className="submit">
-//             <div className="submit-section">
-//               <div className="uploaded-files">
-//                 <div className="submission-status">
-//                   {calculateSubmissionStatus(
-//                     selectedAssignment.dueDate,
-//                     isDone,
-//                     isResubmit,
-//                     isSubmitClicked
-//                   )}
-//                   <span className={`${submissionStatus}-status`}>
-//                     {submissionStatus}
-//                   </span>
-//                 </div>
-//                 {files.length > 0 && (
-//                   <>
-//                     <ul className="uploa">
-//                       {files.map((file, index) => (
-//                         <li className="upload" key={index}>
-//                           <img src={fil} alt="" className="pht" />
-//                           <div className="fil-text">{file.name}</div>
-//                           <span
-//                             className="rem-fil"
-//                             onClick={() => handleRemoveFile(index)}
-//                           >
-//                             &#x2716;
-//                           </span>
-//                         </li>
-//                       ))}
-//                     </ul>
-//                   </>
-//                 )}
-//               </div>
-//               <div className="submitted-links">
-//                 {links.length > 0 && (
-//                   <>
-//                     <ul>
-//                       {links.map((link, index) => (
-//                         <li key={index} className="lnk-upld">
-//                           <a
-//                             href={link}
-//                             target="_blank"
-//                             rel="noopener noreferrer"
-//                           >
-//                             {link}
-//                           </a>
-//                           <span
-//                             className="rem-link"
-//                             onClick={() => handleRemoveLink(index)}
-//                           >
-//                             &#x2716;
-//                           </span>
-//                         </li>
-//                       ))}
-//                     </ul>
-//                   </>
-//                 )}
-//               </div>
-//               <div className="feedback-section">
-//                 <div className="toggle-submission-button">
-//                   {isSubmitClicked ? (
-//                     <div>
 
-//                     <button
-//                       type="button"
-//                       onClick={() => handleToggleResubmit(assignmentid)}
-//                       className="resubmit-btn"
-//                     >
-//                       Edit
-//                     </button>
-//                     </div>
-//                   ) : (
-
-//                     <>
-//                      <input
-//                      type="text"
-//                      value={link}
-//                      // value={submissionOption === "link" ? link : previousLink}
-//                      onChange={(e) => setLink(e.target.value)}
-//                      placeholder="Enter link URL"
-//                      className="lnk-text"
-//                    />
-//                     {isEditClicked && (
-//                       <input
-//                         type="text"
-//                         value={link}
-//                         onChange={(e) => setLink(e.target.value)}
-//                         placeholder="Enter link URL"
-//                         className="lnk-text"
-//                       />
-//                     )}
-
-//                       <div className="add-create-dropdown">
-
-//                         <button
-//                           type="button"
-//                           onClick={() =>
-//                             setShowSubmissionOptions(!showSubmissionOptions)
-//                           }
-//                           className="add-create"
-//                         >
-//                           <FontAwesomeIcon icon={faPlus} /> Add or create
-//                         </button>
-//                         {showSubmissionOptions && (
-//                           <div className="submission-options-dropdown">
-//                             <div>
-//                               <button
-//                                 type="button"
-//                                 onClick={() => setSubmissionOption("link")}
-//                                 className="lnk-optn"
-//                               >
-//                                 <i
-//                                   className=" lnk  fas fa-link"
-//                                   style={{
-//                                     position: "relative",
-//                                     top: "-2px",
-//                                     left: "-108px",
-//                                   }}
-//                                 ></i>
-//                                 <div className="texeria"> Link</div>
-//                               </button>
-//                             </div>
-//                             <div className="texeria-two">
-//                               <button
-//                                 type="button"
-//                                 onClick={() => setSubmissionOption("file")}
-//                                 className="lnk-optn"
-//                               >
-//                                 {/* <i className=" fil fas fa-paperclip"></i>{" "} */}
-//                                 {/* <div className="texeria">File</div> */}
-//                                 <label
-//                                   htmlFor="fileInput"
-//                                   className={` ${
-//                                     isFileInputVisible ? "hidden" : ""
-//                                   }`}
-//                                   onClick={toggleFileInput}
-//                                 >
-//                                   <i className=" fil fas fa-paperclip"></i>{" "}
-//                                   <div className="texeria-tex">
-//                                     Upload File
-//                                   </div>
-//                                 </label>
-//                               </button>
-//                             </div>
-//                           </div>
-//                         )}
-//                       </div>
-//                       {submissionOption === "link" && (
-//                         <div className="link-place">
-//                           <div
-//                             className="close-icon"
-//                             onClick={() => setSubmissionOption(null)}
-//                           >
-//                             <FontAwesomeIcon icon={faTimes} />
-//                           </div>
-//                           <input
-//                             type="text"
-//                             value={link}
-//                             // value={submissionOption === "link" ? link : previousLink}
-//                             onChange={(e) => setLink(e.target.value)}
-//                             placeholder="Enter link URL"
-//                             className="lnk-text"
-//                           />
-//                           <button
-//                             type="button"
-//                             onClick={handleLinkChange}
-//                             className="link-btn"
-//                           >
-//                             Submit Link
-//                           </button>
-//                         </div>
-//                       )}
-//                       {submissionOption === "file" && (
-//                         <>
-//                           {!isSubmitClicked && (
-//                             <div className="load-img">
-//                               {/* <label
-//                                 htmlFor="fileInput"
-//                                 className={`custom-button ${
-//                                   isFileInputVisible ? "hidden" : ""
-//                                 }`}
-//                                 onClick={toggleFileInput}
-//                               >
-//                                 <i className="fas fa-upload"></i> Upload File
-//                               </label> */}
-//                               {isFileInputVisible && (
-//                                 <>
-//                                   <input
-//                                     type="file"
-//                                     accept=".pdf,.doc,.docx"
-//                                     onChange={handleFileChange}
-//                                     id="fileInput"
-//                                     multiple
-//                                     className="upload-fil"
-//                                     value={file}
-//                                   />
-//                                 </>
-//                               )}
-//                             </div>
-//                           )}
-//                           {!isFileInputVisible && <></>}
-//                         </>
-//                       )}
-//                       {isConfirmButtonVisible && (
-//                         <button
-//                           type="button"
-//                           onClick={handleSubmit}
-//                           className="save-btn"
-//                           disabled={!selectedAssignment}
-//                         >
-//                           Submit
-//                         </button>
-//                       )}
-//                       {showConfirmationDialog && (
-//                         <div className="confirmation-dialog">
-//                           <p>
-//                             Are you sure you want to submit this assignment?
-//                           </p>
-//                           <button
-//                             type="button"
-//                             onClick={handleConfirmSubmit}
-//                             className="confirm-btn"
-//                           >
-//                             Confirm
-//                           </button>
-//                           <button
-//                             type="button"
-//                             onClick={handleCloseConfirmationDialog}
-//                             className="cancel-btn"
-//                           >
-//                             Cancel
-//                           </button>
-//                         </div>
-//                       )}
-//                     </>
-//                   )}
-//                 </div>
-//               </div>
-//               {/* Display Feedback and Grade */}
-//               <>
-//                 {/* {isSubmitClicked && feedbackData !== null && ( */}
-//                 <div className="feedback-and-grade">
-//                   <div className="feedback-and-grad">
-//                     <div className="feedback-fb">
-//                       <strong>Comments:</strong>{" "}
-//                       {gradeData ? feedbackData : "No feedback yet"}
-//                     </div>
-//                     <div className="grade-gd">
-//                       <strong>Grade:</strong>{" "}
-//                       {gradeData
-//                         ? `${gradeData} / ${number}`
-//                         : "Not graded yet"}
-//                     </div>
-//                     <div className="status">
-//                       <strong>Status:</strong>{" "}
-//                       {gradeData ? statusData : "pending"}
-//                     </div>
-//                   </div>
-//                 </div>
-//                 {/* )} */}
-//               </>
-//             </div>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   </>
-// );

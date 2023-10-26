@@ -415,7 +415,7 @@ const AssignmentGrading = () => {
         <div className="filter-container">
           {/* <label>Filter by:</label> */}
           <button
-            className={`filter-button all ${
+            className={`filter-button all btn-secondary ${
               assignmentFilter === null ? "active-all" : ""
             }`}
             // onClick={() => setAssignmentFilter(null)}
@@ -425,7 +425,7 @@ const AssignmentGrading = () => {
             All
           </button>
           <button
-            className={`filter-button passed ${
+            className={`btn-success${
               assignmentFilter === "pass" ? "active-pass" : ""
             }`}
             // onClick={() => setAssignmentFilter("pass")}
@@ -435,7 +435,7 @@ const AssignmentGrading = () => {
             Passed
           </button>
           <button
-            className={`filter-button failed ${
+            className={`btn-danger ${
               assignmentFilter === "not pass" ? "active-fail" : ""
             }`}
             // onClick={() => setAssignmentFilter("not pass")}
@@ -444,7 +444,7 @@ const AssignmentGrading = () => {
             Not Passed
           </button>
           <button
-            className={`filter-button pending ${
+            className={`btn-info ${
               assignmentFilter === "pending" ? "active-pending" : ""
             }`}
             // onClick={() => setAssignmentFilter("pending")}
@@ -460,7 +460,7 @@ const AssignmentGrading = () => {
             <li key={course.id} className="list-item">
               <div
                 // className="collapse-btn"
-                className="collapse-btn"
+                className="collapse-btn course"
                 onClick={() => {
                   toggleCourse(course, index);
                   // handleCourseModule(course.id);
@@ -505,13 +505,14 @@ const AssignmentGrading = () => {
                               .map((unit, unitIndex) => (
                                 <li key={unit.id} className="list-item">
                                   <div
-                                    className="collapse-btn unit"
+                                    className="collapse-btn unit bg-info"
                                     onClick={() => {
                                       toggleUnit(unitIndex);
                                     }}
                                   >
                                     {unit.title}
-                                    <i class="fas fa-angle-double-down"></i>
+                                    {/* <i class="fas fa-angle-double-down"></i> */}
+                                    <i class="fa fa-angle-down"></i>
                                   </div>
                                   <Collapse isOpened={isUnitOpen[unitIndex]}>
                                     <ul>
@@ -534,7 +535,8 @@ const AssignmentGrading = () => {
                                               }}
                                             >
                                               {assignment.title}
-                                              <i class="fas fa-angle-double-down"></i>
+                                              {/* <i class="fas fa-angle-double-down"></i> */}
+                                              <i class="fa fa-angle-down"></i>
                                             </div>
                                             <Collapse
                                               isOpened={
