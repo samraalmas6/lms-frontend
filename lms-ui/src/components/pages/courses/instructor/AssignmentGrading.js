@@ -464,11 +464,13 @@ const AssignmentGrading = () => {
                   // handleCourseModule(course.id);
                 }}
               >
-                {course.title}
-                {/* <i class="fas fa-angle-double-down collapse-icon"></i> */}
+                <div className="course-line btn-warning"></div>
                 <div className="collapse-icon-course">
                   <i class="fa fa-chevron-circle-down"></i>
                 </div>
+                {course.title}
+                {/* <i class="fas fa-angle-double-down collapse-icon"></i> */}
+             
                 {/* ​<i class="fas fa-toggle-down"></i>
                 <i class="fa fa-hand-o-down"></i> */}
                 {/* <div class="toggle-btn-content">
@@ -493,8 +495,10 @@ const AssignmentGrading = () => {
                             toggleModule(moduleIndex);
                           }}
                         >
+                          <div className="module-line"></div>
+                          {/* <i class="fas fa-angle-double-down"></i> */}
+                          <i class="fa fa-angle-down"></i>
                           {module.title}
-                          <i class="fas fa-angle-double-down"></i>
                         </div>
                         <Collapse isOpened={isModuleOpen[moduleIndex]}>
                           <ul>
@@ -503,14 +507,15 @@ const AssignmentGrading = () => {
                               .map((unit, unitIndex) => (
                                 <li key={unit.id} className="list-item">
                                   <div
-                                    className="collapse-btn unit bg-info"
+                                    className="collapse-btn unit"
                                     onClick={() => {
                                       toggleUnit(unitIndex);
                                     }}
                                   >
+                                    <div className="unit-line btn-success"></div>
+                                    <i class="fa fa-angle-down"></i>
                                     {unit.title}
                                     {/* <i class="fas fa-angle-double-down"></i> */}
-                                    <i class="fa fa-angle-down"></i>
                                   </div>
                                   <Collapse isOpened={isUnitOpen[unitIndex]}>
                                     <ul>
@@ -532,9 +537,11 @@ const AssignmentGrading = () => {
                                                 );
                                               }}
                                             >
+                                              <div className="ass-line btn-primary"></div>
+                                              <i class="fa fa-angle-down"></i>
+
                                               {assignment.title}
                                               {/* <i class="fas fa-angle-double-down"></i> */}
-                                              <i class="fa fa-angle-down"></i>
                                             </div>
                                             <Collapse
                                               isOpened={
