@@ -83,6 +83,7 @@ const AssignmentGrading = () => {
   const [updatedStatus, setUpdatedStatus] = useState();
   const [userData, setUserData] = useState();
   const [overDue, setOverDue] = useState();
+  // const [gradingStatus, setGradingStatus] = useState("");
 
   useEffect(() => {
     // Initialize userStatusMap with "Pending" for each assignment
@@ -93,13 +94,20 @@ const AssignmentGrading = () => {
     setUserStatusMap(initialStatusMap);
   }, [0]);
 
-  const openPopup = (assignmentId, gradingId, submissionId, submitted_by) => {
+  const openPopup = (
+    assignmentId,
+    gradingId,
+    submissionId,
+    submitted_by,
+    gradingStatus
+  ) => {
     setSelectedAssignment(assignmentId);
     setGradingId(gradingId);
     setSubmissionId(submissionId);
     setSubmittedBy(submitted_by);
     setFeedback(userFeedbackMap[assignmentId]?.feedback || ""); // Load existing feedback if available
     setGrade(userFeedbackMap[assignmentId]?.grade || ""); // Load existing grade if available
+    // setGradingStatus(gradingStatus)
   };
 
   // console.log("this is grade : .......", grade);
@@ -470,7 +478,7 @@ const AssignmentGrading = () => {
                 </div>
                 {course.title}
                 {/* <i class="fas fa-angle-double-down collapse-icon"></i> */}
-             
+
                 {/* ​<i class="fas fa-toggle-down"></i>
                 <i class="fa fa-hand-o-down"></i> */}
                 {/* <div class="toggle-btn-content">
@@ -683,7 +691,11 @@ const AssignmentGrading = () => {
                                                                 </td>
                                                                 <td>
                                                                   {
-                                                                    grading?.status
+                                                                    <div>
+                                                                      {
+                                                                        grading?.status
+                                                                      }
+                                                                    </div>
                                                                   }
                                                                 </td>
                                                                 <td>
@@ -695,6 +707,7 @@ const AssignmentGrading = () => {
                                                                         grading.id,
                                                                         submission.id,
                                                                         submission.submitted_by
+                                                                        // grading.status
                                                                       )
                                                                     }
                                                                   >
@@ -812,11 +825,11 @@ const AssignmentGrading = () => {
                                                           >
                                                             select status
                                                           </option>
-                                                          <option value="Pass">
-                                                            Pass
+                                                          <option value="pass">
+                                                            pass
                                                           </option>
-                                                          <option value="Not Passed">
-                                                            Not Passed
+                                                          <option value="fail">
+                                                            fail
                                                           </option>
                                                         </select>
                                                       </div>
