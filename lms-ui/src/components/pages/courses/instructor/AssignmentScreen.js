@@ -173,7 +173,7 @@
 // export default AssignmentScreen;
 
 // --------------xxxxxxxxxxxxx-------------------
-import React, { useState } from "react";
+import React, { createContext, useState } from "react";
 import AssignmentPartners from "./AssignmentPartners";
 import "../../../styles/AssignmentScreen.css";
 // import AssigDesc from "./AssigDesc";
@@ -184,12 +184,13 @@ import "../../../styles/editor.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
+export const AssignmentProbs = createContext(null);
 const AssignmentScreen = () => {
   const userId = sessionStorage.getItem("user_id");
 
   const navigate = useNavigate();
   const { state } = useLocation();
-  console.log(state.courseId)
+  console.log(state.courseId);
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -205,12 +206,13 @@ const AssignmentScreen = () => {
   const [content, setContent] = useState("");
   const [selectedFile, setSelectedFile] = useState("");
   const [groupSub, setGroupSub] = useState(false);
+  const [teamSubmission, setTeamSubmission] = useState(false);
   const [teamData, setTeamData] = useState([]);
   const [userData, setUserData] = useState([]);
-  const [studentsInCourse, setStudentsInCourse] = useState([])
-  const [assignmentId,setAssignmentId] = useState();
-  const [ScreenView,setScreenView] = useState(false);
-
+  const [studentsInCourse, setStudentsInCourse] = useState([]);
+  const [assignmentId, setAssignmentId] = useState();
+  const [ScreenView, setScreenView] = useState(false);
+  const [newCreatedAssignment, setNewCreatedAssignment] = useState([])
 
   const courseID = state.courseId;
 
@@ -227,17 +229,14 @@ const AssignmentScreen = () => {
           setTeamData(result);
           console.log("teamData: ", result);
 
-          for (const team of result) {        
+          for (const team of result) {
             if (team.courses.includes(courseID)) {
-              team.users.forEach(user => {
-                setStudentsInCourse(pre => [...pre, user])
-
-              })
-              console.log("users in a course",team.users)
-
+              team.users.forEach((user) => {
+                setStudentsInCourse((pre) => [...pre, user]);
+              });
+              console.log("users in a course", team.users);
             }
-          } 
-
+          }
         });
       } else {
         console.log(response);
@@ -264,8 +263,8 @@ const AssignmentScreen = () => {
     });
   };
 
-
   useEffect(() => {
+    
     getTeamData();
     getUserData();
   }, [0]);
@@ -288,8 +287,7 @@ const AssignmentScreen = () => {
     setMarks(e.target.value);
   };
 
-  const handleClick = () => {
-    
+  const handlePlusClick = () => {
     setShowComp(!showComp);
   };
 
@@ -319,7 +317,7 @@ const AssignmentScreen = () => {
       due_time: courseEnd,
       is_updated: true,
       unit: state.unitId, // Assuming a default unit value
-      is_team_submission_allowed: groupSub,
+      is_team_submission_allowed: teamSubmission,
       // Number_of_members: 1,
       updated_by: sessionStorage.getItem("user_id"),
       created_by: sessionStorage.getItem("user_id"),
@@ -336,20 +334,25 @@ const AssignmentScreen = () => {
       .then((response) => {
         if (response.status === 201) {
           response.json().then(function (result) {
-            console.log("assignment posted: ",result
-            );
+            console.log("assignment posted: ", result);
             // if (result.is_team_submission_allowed === true){
             //   setScreenView(true)
             // }
             // Clear the input fields after successful submission
+            setNewCreatedAssignment(result)
             setTitle("");
             setMarks("");
             setCourseStart("");
             setCourseEnd("");
             setSelectedFile(null);
-            setAssignmentId(result.id)
-            console.log("assignment id: ",assignmentId)
-            // navigate(-1);
+            setAssignmentId(result.id);
+            console.log("assignment id: ", assignmentId);
+            if (result.is_team_submission_allowed === true) {
+              setGroupSub(true);
+            } else {
+              navigate(-1);
+            }
+            //
           });
         } else {
           console.log(response);
@@ -365,127 +368,162 @@ const AssignmentScreen = () => {
   }
 
   const handleGroupSub = () => {
+    setTeamSubmission(!teamSubmission);
     // console.log("group submission before",groupSub)
-    setGroupSub(!groupSub);
+    // setGroupSub(!groupSub);
     // console.log("group submission after",groupSub)
   };
 
-  const handleBehavior = (e,submission_allowed) => {
-    if(submission_allowed){
-      console.log("partners need to be added");
-      alert("partners need to be added")
-    }
-    else{
-      handleSubmit(e)
-    }
-  }
+  const handleBehavior = (e, submission_allowed) => {
+    // if (submission_allowed) {
+    //   console.log("partners need to be added");
+    //   alert("partners need to be added");
+    // } else {
+    //   handleSubmit(e);
+    // }
+    handleSubmit(e);
+  };
 
-  console.log("assignment id: ",assignmentId)
+  console.log("assignment id: ", assignmentId);
 
   return (
     <div>
       <div className="main-container">
-        <div className="assignment-details">
-          <form>
-            <i className="fas fa-pen"></i>
-            <input
-              type="text"
-              placeholder="Title"
-              value={title}
-              // className="assignment-screen-input-field "
-              onChange={handleTitle}
-            />
-          </form>
-          <div className="editor-container">
-            <div>
-              <img src={paraIcon} alt="" />
-            </div>
-            <div className="description-container">
+        {!groupSub ? (
+          <div className="assignment-details">
+            <form>
+              <i className="fas fa-pen"></i>
+              <input
+                type="text"
+                placeholder="Title"
+                value={title}
+                // className="assignment-screen-input-field "
+                onChange={handleTitle}
+              />
+            </form>
+            <div className="editor-container">
               <div>
-                <Editor
-                  initialValue="<p>This is the initial content of the editor</p>"
-                  init={{
-                    height: 500,
-                    menubar: false,
-                    plugins: [
-                      "advlist autolink lists link image charmap print preview anchor",
-                      "searchreplace visualblocks code fullscreen",
-                      "insertdatetime media table paste code help wordcount",
-                    ],
-                    toolbar:
-                      "undo redo | formatselect | bold italic backcolor | \
+                <img src={paraIcon} alt="" />
+              </div>
+              <div className="description-container">
+                <div>
+                  <Editor
+                    initialValue="<p>This is the initial content of the editor</p>"
+                    init={{
+                      height: 500,
+                      menubar: false,
+                      plugins: [
+                        "advlist autolink lists link image charmap print preview anchor",
+                        "searchreplace visualblocks code fullscreen",
+                        "insertdatetime media table paste code help wordcount",
+                      ],
+                      toolbar:
+                        "undo redo | formatselect | bold italic backcolor | \
                       alignleft aligncenter alignright alignjustify | \
                       bullist numlist outdent indent | removeformat | help",
-                  }}
-                  // onEditorChange={handleEditorChange}
-                  onEditorChange={(value, evt) =>
-                    handleEditorChange(value, evt)
-                  }
-                  value={content}
-                />
-              </div>
-              {/* <div>
+                    }}
+                    // onEditorChange={handleEditorChange}
+                    onEditorChange={(value, evt) =>
+                      handleEditorChange(value, evt)
+                    }
+                    value={content}
+                  />
+                </div>
+                {/* <div>
                 <FileUploadComponent />
               </div> */}
-            </div>
-          </div>
-          <div className="file-upload-container">
-            <FileUploadComponent onFileSelected={handleFileUpload} />
-          </div>
-          {/* <button onClick={handleSubmit}>Create Assignment</button> */}
-          <button onClick={(e)=>{handleBehavior(e,groupSub)}}>Create Assignment</button>
-        </div>
-
-        <div className="side-container">
-          <div className="due-date-and-time">
-            <div className="due-date-time">
-              <i className="fas fa-calendar-alt"></i>
-              <input
-                type="date"
-                placeholder="Start Date"
-                min={minDate}
-                value={courseStart}
-                className="assignment-screen-input-field "
-                onChange={handleCourseStart}
-              />
-            </div>
-            <div className="due-date-time">
-              <i className="far fa-clock"></i>
-              <input
-                type="time"
-                value={courseEnd}
-                className="assignment-screen-input-field "
-                onChange={handleCourseEnd}
-              />
-            </div>
-          </div>
-          <div className="marks">
-            <i className="fas fa-thin fa-star fa-lg"></i>
-            <input
-              type="text"
-              placeholder="Enter Marks"
-              value={marks}
-              className="assignment-screen-input-field"
-              onChange={handleMarks}
-            />
-          </div>
-          <div className="permission">
-            Group Submission Allowed
-            <label class="switch">
-              <input type="checkbox" onClick={handleGroupSub} />
-              <span class="slider round"></span>
-            </label>
-          </div>
-         {groupSub && <div className="assignment-partners">
-            <div className="heading-container">
-              <h3>Assignment Partners</h3>
-              <div className="user-icon" onClick={handleClick}>
-                <i className="fas fa-thin fa-user-plus"></i>
               </div>
             </div>
-            {showComp && <AssignmentPartners courseID={courseID} userData={userData} studentsInCourse={studentsInCourse}/>}
-          </div>} 
-         
+            <div className="file-upload-container">
+              <FileUploadComponent onFileSelected={handleFileUpload} />
+            </div>
+            {/* <button onClick={handleSubmit}>Create Assignment</button> */}
+            <button
+              onClick={(e) => {
+                handleBehavior(e, groupSub);
+              }}
+            >
+              Create Assignment
+            </button>
+          </div>
+        ) : (
+          <div className="assignment-name-section">
+            <h3>{newCreatedAssignment.title}</h3>
+            <p>{newCreatedAssignment.description}</p>
+            <div className="" style={{ display: 'flex', flexDirection: 'column'}}>
+            <span>Due Date:</span><span>{newCreatedAssignment.due_date}</span>
+            <span>Due Time:</span><span>{newCreatedAssignment.due_time}</span>
+            <span>Marks:</span><span>{newCreatedAssignment.marks}</span>
+            <span>Unit:</span><span>{newCreatedAssignment.unit}</span>
+            </div>
+            
+          </div>
+        )}
+        <div className="side-container">
+          {!groupSub && (
+            <>
+              <div className="due-date-and-time">
+                <div className="due-date-time">
+                  <i className="fas fa-calendar-alt"></i>
+                  <input
+                    type="date"
+                    placeholder="Start Date"
+                    min={minDate}
+                    value={courseStart}
+                    className="assignment-screen-input-field "
+                    onChange={handleCourseStart}
+                  />
+                </div>
+                <div className="due-date-time">
+                  <i className="far fa-clock"></i>
+                  <input
+                    type="time"
+                    value={courseEnd}
+                    className="assignment-screen-input-field "
+                    onChange={handleCourseEnd}
+                  />
+                </div>
+              </div>
+              <div className="marks">
+                <i className="fas fa-thin fa-star fa-lg"></i>
+                <input
+                  type="text"
+                  placeholder="Enter Marks"
+                  value={marks}
+                  className="assignment-screen-input-field"
+                  onChange={handleMarks}
+                />
+              </div>
+              <div className="permission">
+                Group Submission Allowed
+                <label class="switch">
+                  <input type="checkbox" onClick={handleGroupSub} />
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </>
+          )}
+          {groupSub && (
+            <div className="assignment-partners">
+              <div className="heading-container">
+                <span>Assignment Partners</span>
+                <div className="user-icon" onClick={handlePlusClick}>
+                  <i className="fas fa-thin fa-plus"></i>
+                </div>
+              </div>
+              {showComp && (
+                <AssignmentProbs.Provider value={userData}>
+                  <AssignmentPartners
+                    courseID={courseID}
+                    assignmentId={assignmentId}
+                    userData={userData}
+                    studentsInCourse={studentsInCourse}
+                    setStudentsInCourse= {setStudentsInCourse}
+                  />
+                </AssignmentProbs.Provider>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

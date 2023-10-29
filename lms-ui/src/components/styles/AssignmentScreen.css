@@ -123,12 +123,16 @@
       padding: 15px;
       border-radius: 5px;
   }
-  .side-container .assignment-partners .heading-container{
+  .side-container .assignment-partners{
       display: flex;
       flex-direction:column;
       justify-content: flex-start;
       /* align-items: center; */
       /* background-color: #E6E6E3; */
+  }
+  .heading-container {
+    display: flex;
+    justify-content: space-between;
   }
   .fa-calendar-alt, .fa-clock{
     font-size: 20px;
@@ -208,4 +212,7 @@
     gap: 82px;
     /* justify-content: space-around; */
     align-items: center;
+  }
+  .assignment-name-section {
+    width: 80%;
   }

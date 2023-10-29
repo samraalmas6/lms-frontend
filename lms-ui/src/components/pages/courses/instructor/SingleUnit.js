@@ -203,6 +203,11 @@ const SingleUnit = ({ unit, setUnitId }) => {
     
   };
 
+  const handleAssignmentClick = (id) => {
+    navigate("/course/create-assignment", { state: { assignmentId: id, showContent: true } });
+
+  }
+
   const handleDeleteUnit = (unit, deleted) => {
     let action = ""
     if(deleted) {
@@ -571,7 +576,9 @@ const SingleUnit = ({ unit, setUnitId }) => {
                             ? `${userData[userId].first_name} ${userData[userId].last_name}`
                             : "none";
                           return (
-                            <tr key={assignment.id}>
+                            <tr key={assignment.id}
+                              onClick={() => handleAssignmentClick(assignment.id)}
+                            >
                               <td>{index + 1}</td>
                               <td>{assignment.title.slice(0, 20)}...</td>
                               <td>{assignment.description}</td>

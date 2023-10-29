@@ -59,7 +59,7 @@
     display: flex;
   }
   .name-icon {
-    background-color: cornflowerblue;
+    background-color: #0ab4ff;
     width: 50px;
     height: 50px;
     border-radius: 100%;
@@ -71,21 +71,38 @@
     justify-content: center;
     align-items: center;
   }
+
+  .student-name-icon {
+    margin-left: -8%;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 0px;
+  }
+  .name-icon0 {
+    background-color: #8ed6df;
+    color: black;
+  }
   .name-icon1 {
-    background-color: black;
+    background-color: #0ab4ff;
   }
   .name-icon2 {
-    background-color: green;
+    background-color: #f57c01;
   }
   .name-icon3 {
-    background-color: purple;
+    background-color: #ff7fab;
   }
   .name-icon4 {
-    background-color: orange;
+    background-color: #3e2724;
   }
   .name-icon5 {
-    background-color: yellow;
+    background-color: #006063;
     color: black;
+  }
+  .name-icon6 {
+    background-color: #ff0051;
+  }
+  .name-icon7 {
+    background-color: #80e580;
   }
 
   .group-name-list {
@@ -150,4 +167,29 @@
     display: flex;
     align-items: baseline;
     gap: 8px;
+  }
+  .student-name-list {
+    display: flex;
+    padding-left: 10px;
+    margin: 0px;
+    border: 2px solid #f1f1f1;
+    border-bottom: none;
+    width: 70%;
+    align-items: center;
+    border-radius: 4px;
+    overflow-x: auto;
+  }
+  .user-icon {
+    display: flex;
+    justify-content: space-between;
+  }
+  .user-icon .right-side-panel-icon {
+    font-size: 36px;
+  }
+  .remove-group-icon {
+    position: absolute;
+    top: 8%;
+    right: 18%;
+    font-size: 26px;
+    font-weight: 500;
   }

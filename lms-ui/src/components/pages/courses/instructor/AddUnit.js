@@ -5,7 +5,7 @@ import { CourseProbs } from "../../../../App";
 
 const AddUnit = ({}) => {
   const userId = sessionStorage.getItem("user_id");
-  const { courseCoauthors } = useContext(CourseProbs);
+  const { courseCoauthors, courseId } = useContext(CourseProbs);
   const navigate = useNavigate();
   const videoFieldRef = useRef(null);
   const videoAddRef = useRef(null);
@@ -85,7 +85,7 @@ const AddUnit = ({}) => {
   const handleAssignment = () => {
     // navigate('/assignment', { state: { courseId, unitId } });
 
-    navigate("/course/create-assignment", { state: { unitId } });
+    navigate("/course/create-assignment", { state: { unitId,courseId  } });
   };
 
   const handleUploadVideo = (e) => {

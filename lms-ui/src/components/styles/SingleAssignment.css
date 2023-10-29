@@ -1,0 +1,32 @@
+.assignment-title{
+    font-weight: 600;
+    border-bottom: 1px solid #d7d5d5;
+    padding-left: 20px;
+    font-size: 20px;
+}
+.group-title {
+    border-bottom: 1px solid #d5cccc;
+    margin-left: 40px;
+    font-weight: 500;
+    font-size: 15px;
+    padding-bottom: 7px;
+    margin-top: 10px;
+}
+.learner-name-icon {
+    margin-right: -5%;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 0px;
+  }
+  .learner-name-list {
+    display: flex;
+    padding-left: 10px;
+    margin: 0px;
+    /* border: 2px solid #f1f1f1; */
+    border-bottom: none;
+    width: 70%;
+    align-items: center;
+    border-radius: 4px;
+    overflow-x: auto;
+  }
+  
