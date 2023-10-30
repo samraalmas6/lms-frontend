@@ -19,9 +19,9 @@ import fil from "../../../content/Images/fil.png";
 //   }
 // }
 
-function calculateSubmissionStatus(due_date, isResubmit, isSubmitClicked) {
+function calculateSubmissionStatus(dueDate, isResubmit, isSubmitClicked) {
   const currentDateTime = new Date();
-  const formattedDueDate = new Date(due_date);
+  const formattedDueDate = new Date(dueDate);
 
   if (isSubmitClicked && currentDateTime > formattedDueDate) {
     return <span style={{ color: 'red' }}>Late Submission</span>;
