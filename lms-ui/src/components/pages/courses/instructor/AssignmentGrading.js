@@ -83,6 +83,7 @@ const AssignmentGrading = () => {
   const [updatedStatus, setUpdatedStatus] = useState();
   const [userData, setUserData] = useState([]);
   const [overDue, setOverDue] = useState();
+  // const [gradingStatus, setGradingStatus] = useState("");
 
   useEffect(() => {
     // Initialize userStatusMap with "Pending" for each assignment
@@ -93,14 +94,20 @@ const AssignmentGrading = () => {
     setUserStatusMap(initialStatusMap);
   }, [0]);
 
-  const openPopup = (assignmentId, gradingId, submissionId, submitted_by) => {
-    console.log('this is gradingId', gradingId);
+  const openPopup = (
+    assignmentId,
+    gradingId,
+    submissionId,
+    submitted_by,
+    gradingStatus
+  ) => {
     setSelectedAssignment(assignmentId);
     setGradingId(gradingId);
     setSubmissionId(submissionId);
     setSubmittedBy(submitted_by);
     setFeedback(userFeedbackMap[assignmentId]?.feedback || ""); // Load existing feedback if available
     setGrade(userFeedbackMap[assignmentId]?.grade || ""); // Load existing grade if available
+    // setGradingStatus(gradingStatus)
   };
 
   // console.log("this is grade : .......", grade);
@@ -466,11 +473,13 @@ const AssignmentGrading = () => {
                   // handleCourseModule(course.id);
                 }}
               >
-                {course.title}
-                {/* <i class="fas fa-angle-double-down collapse-icon"></i> */}
+                <div className="course-line btn-warning"></div>
                 <div className="collapse-icon-course">
                   <i class="fa fa-chevron-circle-down"></i>
                 </div>
+                {course.title}
+                {/* <i class="fas fa-angle-double-down collapse-icon"></i> */}
+
                 {/* ​<i class="fas fa-toggle-down"></i>
                 <i class="fa fa-hand-o-down"></i> */}
                 {/* <div class="toggle-btn-content">
@@ -495,8 +504,10 @@ const AssignmentGrading = () => {
                             toggleModule(moduleIndex);
                           }}
                         >
+                          <div className="module-line"></div>
+                          {/* <i class="fas fa-angle-double-down"></i> */}
+                          <i class="fa fa-angle-down"></i>
                           {module.title}
-                          <i class="fas fa-angle-double-down"></i>
                         </div>
                         <Collapse isOpened={isModuleOpen[moduleIndex]}>
                           <ul>
@@ -505,14 +516,15 @@ const AssignmentGrading = () => {
                               .map((unit, unitIndex) => (
                                 <li key={unit.id} className="list-item">
                                   <div
-                                    className="collapse-btn unit bg-info"
+                                    className="collapse-btn unit"
                                     onClick={() => {
                                       toggleUnit(unitIndex);
                                     }}
                                   >
+                                    <div className="unit-line btn-success"></div>
+                                    <i class="fa fa-angle-down"></i>
                                     {unit.title}
                                     {/* <i class="fas fa-angle-double-down"></i> */}
-                                    <i class="fa fa-angle-down"></i>
                                   </div>
                                   <Collapse isOpened={isUnitOpen[unitIndex]}>
                                     <ul>
@@ -534,9 +546,11 @@ const AssignmentGrading = () => {
                                                 );
                                               }}
                                             >
+                                              <div className="ass-line btn-primary"></div>
+                                              <i class="fa fa-angle-down"></i>
+
                                               {assignment.title}
                                               {/* <i class="fas fa-angle-double-down"></i> */}
-                                              <i class="fa fa-angle-down"></i>
                                             </div>
                                             <Collapse
                                               isOpened={
@@ -679,7 +693,11 @@ const AssignmentGrading = () => {
                                                                 </td>
                                                                 <td>
                                                                   {
-                                                                    grading?.status
+                                                                    <div>
+                                                                      {
+                                                                        grading?.status
+                                                                      }
+                                                                    </div>
                                                                   }
                                                                 </td>
                                                                 <td>
@@ -691,6 +709,7 @@ const AssignmentGrading = () => {
                                                                         grading.id,
                                                                         submission.id,
                                                                         submission.submitted_by
+                                                                        // grading.status
                                                                       )
                                                                     }
                                                                   >
@@ -808,11 +827,11 @@ const AssignmentGrading = () => {
                                                           >
                                                             select status
                                                           </option>
-                                                          <option value="Pass">
-                                                            Pass
+                                                          <option value="pass">
+                                                            pass
                                                           </option>
-                                                          <option value="Not Passed">
-                                                            Not Passed
+                                                          <option value="fail">
+                                                            fail
                                                           </option>
                                                         </select>
                                                       </div>
