@@ -68,7 +68,7 @@ const SigninPage = () => {
           "Content-type": "application/json",
         },
       }).then((response) => {
-        if (response.status == 200) {
+        if (response.status === 200) {
           sessionStorage.clear();
           response.json().then(function (result) {
             console.log(result);
@@ -77,7 +77,7 @@ const SigninPage = () => {
             sessionStorage.setItem("user_id", result.id);
             sessionStorage.setItem('first_name', result.first_name);
             sessionStorage.setItem('last_name', result.last_name);
-            sessionStorage.setItem('role', 'admin');
+            sessionStorage.setItem('role', result.role);
             // sessionStorage.setItem('role', result.role);
 
 
