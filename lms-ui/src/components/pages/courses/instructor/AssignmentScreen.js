@@ -263,6 +263,34 @@ const AssignmentScreen = () => {
     });
   };
 
+  const handleCreateGroup = (id) => {
+
+    const obj = {
+      assignment: id
+    }
+
+    fetch("http://localhost:8000/api/assignment_partners_group/", {
+      method: "POST",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      if (response.status === 201) {
+        response.json().then(function (result) {
+          console.log('Group created',result);
+          // handlePartner(result.id)
+          // setGroupId(result.id);
+          // setShowUserIcon(!showUserICon);
+          // setShowContent(true);
+        });
+      } else {
+        console.log(response);
+      }
+    });
+  }
+
   useEffect(() => {
     
     getTeamData();
@@ -346,11 +374,12 @@ const AssignmentScreen = () => {
             setCourseEnd("");
             setSelectedFile(null);
             setAssignmentId(result.id);
+            handleCreateGroup(result.id);
             console.log("assignment id: ", assignmentId);
             if (result.is_team_submission_allowed === true) {
               setGroupSub(true);
             } else {
-              navigate(-1);
+              // navigate(-1);
             }
             //
           });

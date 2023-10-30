@@ -1,6 +1,10 @@
+.partner-section-container {
+  height: 90%;
+}
 .main_container {
     max-width: 600px;
     margin: 0 auto;
+    height: 100%;
     padding: 20px;
     display: flex;
     flex-direction: column;
