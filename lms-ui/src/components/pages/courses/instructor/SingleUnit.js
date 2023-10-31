@@ -1,18 +1,21 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import AddUnit from "./AddUnit";
 import { ModuleProbs } from "./CourseModule";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 const SingleUnit = ({ unit, setUnitId }) => {
-  const userId = sessionStorage.getItem("user_id")
-  const navigate = useNavigate()
+  const userId = sessionStorage.getItem("user_id");
+  const navigate = useNavigate();
   const { moduleId } = useContext(ModuleProbs);
   const accordion = useRef(null);
 
   const startDateRefUnit = useRef(null);
   const endDateRefUnit = useRef(null);
   const [showUnitContent, setShowUnitContent] = useState(false);
+  const [fileShow, setFileShow] = useState(false);
+  const [vidoShow, setVideoShow] = useState(false);
+  const [assignmentShow, setAssignmentShow] = useState(false);
 
   const [unitFiles, setUnitFiles] = useState([]);
   const [unitVideos, setUnitVideos] = useState([]);
@@ -34,19 +37,17 @@ const SingleUnit = ({ unit, setUnitId }) => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
-        if(response.status === 200){
-        response.json().then(function (result) {
-          console.log(result);
-          setUserData(result);
-          
-        });
-      }
-      else {
-        console.log(response);
-      }
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log(result);
+            setUserData(result);
+          });
+        } else {
+          console.log(response);
+        }
       });
     };
-    getUsers()
+    getUsers();
   }, []);
 
   const handlUnitStart = (e) => {
@@ -149,7 +150,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
       if (response.status === 200) {
         response.json().then(function (result) {
           setUnitAssignment(result);
-          
+
           // Fetch user data for each assignment
           result.forEach((assignment) => {
             const userId = assignment.updated_by;
@@ -162,68 +163,64 @@ const SingleUnit = ({ unit, setUnitId }) => {
       }
     });
 
+    // Function to fetch user data for a specific ID
+    // const fetchUserData = async (id) => {
+    //   try {
+    //     const response = await fetch(
+    //       `http://127.0.0.1:8000/list_single_user/${id}/`,
+    //       {
+    //         method: "GET",
+    //         headers: {
+    //           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+    //         },
+    //       }
+    //     );
 
-        // Function to fetch user data for a specific ID
-        // const fetchUserData = async (id) => {
-        //   try {
-        //     const response = await fetch(
-        //       `http://127.0.0.1:8000/list_single_user/${id}/`,
-        //       {
-        //         method: "GET",
-        //         headers: {
-        //           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-        //         },
-        //       }
-        //     );
-    
-        //     if (response.status === 200) {
-        //       const user = await response.json();
-        //       setUserData((prevUserData) => ({
-        //         ...prevUserData,
-        //         [id]: user,
-        //       }));
-        //     } else {
-        //       console.error("Error fetching user data:", response);
-        //     }
-        //   } catch (error) {
-        //     console.error("Error fetching user data:", error);
-        //   }
-        // };
-
+    //     if (response.status === 200) {
+    //       const user = await response.json();
+    //       setUserData((prevUserData) => ({
+    //         ...prevUserData,
+    //         [id]: user,
+    //       }));
+    //     } else {
+    //       console.error("Error fetching user data:", response);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching user data:", error);
+    //   }
+    // };
   };
 
   const getUSerFullName = (id) => {
     if (id) {
       const name = userData.filter((users) => users.id === id);
       return `${name[0].first_name} ${name[0].last_name}`;
+    } else {
+      return "N/A";
     }
-    else{
-      return "N/A"
-    }
-    
   };
 
   const handleAssignmentClick = (id) => {
-    navigate("/course/create-assignment", { state: { assignmentId: id, showContent: true } });
-
-  }
+    navigate("/course/create-assignment", {
+      state: { assignmentId: id, showContent: true },
+    });
+  };
 
   const handleDeleteUnit = (unit, deleted) => {
-    let action = ""
-    if(deleted) {
-      action = "Delete"
-    }
-    else {
-      action = "Restore" 
+    let action = "";
+    if (deleted) {
+      action = "Delete";
+    } else {
+      action = "Restore";
     }
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: `${action}`
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: `${action}`,
     }).then((result) => {
       if (result.isConfirmed) {
         const obj = {
@@ -234,7 +231,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
           module: unit.module,
           updated_by: userId,
         };
-    
+
         fetch(`http://127.0.0.1:8000/api/units/${unit.id}/`, {
           method: "PUT",
           body: JSON.stringify(obj),
@@ -245,28 +242,26 @@ const SingleUnit = ({ unit, setUnitId }) => {
         }).then((response) => {
           if (response.status === 200) {
             response.json().then(function (result) {
-              console.log('Api result: ',result);
+              console.log("Api result: ", result);
               Swal.fire(
                 `${action}!`,
                 `${unit.title} has been ${action}.`,
-                'success'
-              ).then(res => {
-               navigate(-1)
-              })
+                "success"
+              ).then((res) => {
+                navigate(-1);
+              });
               // setCourseContent((pre) => [...pre, result]);
               // setCourseCreator(result.created_by);
               // setCourseCategory("");
               // setCourseTitle("");
-              // 
+              //
             });
           } else {
             console.log(response);
           }
         });
       }
-    })
-
-
+    });
   };
   return (
     <div
@@ -295,7 +290,8 @@ const SingleUnit = ({ unit, setUnitId }) => {
           <div className="module-heading-container">
             <div className="">
               <span className="me-3">Unit</span>
-              <input
+              <span>{unitTitle}</span>
+              {/* <input
                 type="text"
                 placeholder="Unit Title"
                 value={unitTitle}
@@ -304,7 +300,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
                 required
                 onMouseEnter={preventAccordionClose}
                 onMouseLeave={preventAccordionOpen}
-              />
+              /> */}
             </div>
             <div className="">
               <label>Start Date:</label>
@@ -365,20 +361,21 @@ const SingleUnit = ({ unit, setUnitId }) => {
                     </div>
                   </li>
                   <li>
-                  {
-                          unit.length !== 0 && unit.is_delete ?  <i
-                          className="bi bi-recycle text-success"
-                          onMouseEnter={preventAccordionClose}
-                          onMouseLeave={preventAccordionOpen}
-                          onClick={() => handleDeleteUnit(unit, false)}
-                        ></i>:
-                        <i
-                          className="bi bi-trash text-danger"
-                          onClick={() => handleDeleteUnit(unit, true)}
-                          onMouseEnter={preventAccordionClose}
-                          onMouseLeave={preventAccordionOpen}
-                        ></i>
-                        }
+                    {unit.length !== 0 && unit.is_delete ? (
+                      <i
+                        className="bi bi-recycle text-success"
+                        onMouseEnter={preventAccordionClose}
+                        onMouseLeave={preventAccordionOpen}
+                        onClick={() => handleDeleteUnit(unit, false)}
+                      ></i>
+                    ) : (
+                      <i
+                        className="bi bi-trash text-danger"
+                        onClick={() => handleDeleteUnit(unit, true)}
+                        onMouseEnter={preventAccordionClose}
+                        onMouseLeave={preventAccordionOpen}
+                      ></i>
+                    )}
                   </li>
                   <li>
                     <i
@@ -410,215 +407,264 @@ const SingleUnit = ({ unit, setUnitId }) => {
               }}
             ></div>
             <div className="file-content">
-              <table className="table table-striped ">
-                <caption className="caption-top mb-0 text-success">
-                  <strong>Unit Files</strong>
-                </caption>
-                {unitFiles.length === 0 ? (
-                  "No File Found"
-                ) : (
-                  <>
-                    <thead className="table-light">
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">type</th>
-                        <th scope="col">File</th>
-                        <th scope="col">Created At</th>
-                        <th scope="col">Action</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {unitFiles &&
-                        unitFiles.map((file, index) => {
-                          return (
-                            <tr key={file.id}>
-                              <td>{index + 1}</td>
-                              <td>{file.title.slice(0, 20)}...</td>
-                              <td>{file.file.split(".").slice(-1)}</td>
-                              <td>
-                                <a href={file.file} target="_blank">
-                                  {file.file.substr(34)}
-                                </a>
-                              </td>
-                              <td>{file.created_at}</td>
-                              <td colspan="2">
-                                {/* {String(file.is_active).toUpperCase()} */}
-                                <ul className="unit-content-file-vidoe-options">
-                                  <li>
-                                    <div className="form-check form-switch visibility">
-                                      <input
-                                        className="form-check-input "
-                                        type="checkbox"
-                                        role="switch"
-                                        value={visibility}
-                                        onChange={handleVisibility}
-                                        id="flexSwitchCheckDefault"
-                                      />
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <i
-                                      className="bi bi-trash text-danger"
-                                      onClick={() => null}
-                                    ></i>
-                                  </li>
-                                  <li>
-                                    <i className="bi bi-copy text-info"></i>
-                                  </li>
-                                </ul>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                    </tbody>
-                  </>
-                )}
-              </table>
-              <hr />
+              <div
+                className="caption-top mb-0 text-success unit-file-heading mb-3"
+                onClick={() => setFileShow(!fileShow)}
+              >
+                <div
+                  className=""
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <div className="course-line btn-info"></div>
+                  <strong className="text-info">Unit Files</strong>
+                  <div className="collapse-icon-course ms-3">
+                    <i class="fa fa-chevron-circle-down text-info"></i>
+                  </div>
+                </div>
+
+                <div className="course-line btn-info"></div>
+              </div>
+              {fileShow && (
+                <table className="table table-striped ">
+                  {unitFiles.length === 0 ? (
+                    "No File Found"
+                  ) : (
+                    <>
+                      <thead className="table-light">
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Title</th>
+                          <th scope="col">type</th>
+                          <th scope="col">File</th>
+                          <th scope="col">Created At</th>
+                          <th scope="col">Action</th>
+                          <th scope="col"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {unitFiles &&
+                          unitFiles.map((file, index) => {
+                            return (
+                              <tr key={file.id}>
+                                <td>{index + 1}</td>
+                                <td>{file.title.slice(0, 20)}...</td>
+                                <td>{file.file.split(".").slice(-1)}</td>
+                                <td>
+                                  <a href={file.file} target="_blank">
+                                    {file.file.substr(34)}
+                                  </a>
+                                </td>
+                                <td>{file.created_at}</td>
+                                <td colspan="2">
+                                  {/* {String(file.is_active).toUpperCase()} */}
+                                  <ul className="unit-content-file-vidoe-options">
+                                    <li>
+                                      <div className="form-check form-switch visibility">
+                                        <input
+                                          className="form-check-input "
+                                          type="checkbox"
+                                          role="switch"
+                                          value={visibility}
+                                          onChange={handleVisibility}
+                                          id="flexSwitchCheckDefault"
+                                        />
+                                      </div>
+                                    </li>
+                                    <li>
+                                      <i
+                                        className="bi bi-trash text-danger"
+                                        onClick={() => null}
+                                      ></i>
+                                    </li>
+                                    <li>
+                                      <i className="bi bi-copy text-info"></i>
+                                    </li>
+                                  </ul>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </>
+                  )}
+                </table>
+              )}
 
               {/************ Video Section ****************/}
+              <div
+                className="caption-top mb-0 text-success unit-video-heading mb-3"
+                onClick={() => setVideoShow(!vidoShow)}
+              >
+                <div
+                  className=""
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <div className="course-line btn-success"></div>
+                  <strong className="text-success">Unit Videos</strong>
+                  <div className="collapse-icon-course ms-3">
+                    <i class="fa fa-chevron-circle-down text-success"></i>
+                  </div>
+                </div>
 
-              <table className="table table-striped ">
-                <caption className="caption-top mb-0 text-warning">
-                  <strong>Unit Videos</strong>
-                </caption>
-                {unitVideos.length === 0 ? (
-                  "No Video Found"
-                ) : (
-                  <>
-                    <thead className="table-light">
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Video</th>
-                        <th scope="col">Created At</th>
-                        <th scope="col">Updated By</th>
-                        <th scope="col">Action</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {unitVideos &&
-                        unitVideos.map((video, index) => {
-                          return (
-                            <tr key={video.id}>
-                              <td>{index + 1}</td>
-                              <td>{video.title.slice(0, 20)}...</td>
-                              <td>
-                                <a href={video.url} target="_blank">
-                                  {video.url}
-                                </a>
-                              </td>
-                              <td>{video.created_at}</td>
-                              <td>{getUSerFullName(video.updated_by)}</td>
-                              <td colspan="2">
-                                {/* {String(file.is_active).toUpperCase()} */}
-                                <ul className="unit-content-file-vidoe-options">
-                                  <li>
-                                    <div className="form-check form-switch visibility">
-                                      <input
-                                        className="form-check-input "
-                                        type="checkbox"
-                                        role="switch"
-                                        value={visibility}
-                                        onChange={handleVisibility}
-                                        id="flexSwitchCheckDefault"
-                                      />
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <i
-                                      className="bi bi-trash text-danger"
-                                      onClick={() => null}
-                                    ></i>
-                                  </li>
-                                  <li>
-                                    <i className="bi bi-copy text-info"></i>
-                                  </li>
-                                </ul>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                    </tbody>
-                  </>
-                )}
-              </table>
+                <div className="course-line btn-success"></div>
+              </div>
+              {vidoShow && (
+                <table className="table table-striped ">
+                  {unitVideos.length === 0 ? (
+                    "No Video Found"
+                  ) : (
+                    <>
+                      <thead className="table-light">
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Title</th>
+                          <th scope="col">Video</th>
+                          <th scope="col">Created At</th>
+                          <th scope="col">Updated By</th>
+                          <th scope="col">Action</th>
+                          <th scope="col"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {unitVideos &&
+                          unitVideos.map((video, index) => {
+                            return (
+                              <tr key={video.id}>
+                                <td>{index + 1}</td>
+                                <td>{video.title.slice(0, 20)}...</td>
+                                <td>
+                                  <a href={video.url} target="_blank">
+                                    {video.url}
+                                  </a>
+                                </td>
+                                <td>{video.created_at}</td>
+                                <td>{getUSerFullName(video.updated_by)}</td>
+                                <td colspan="2">
+                                  {/* {String(file.is_active).toUpperCase()} */}
+                                  <ul className="unit-content-file-vidoe-options">
+                                    <li>
+                                      <div className="form-check form-switch visibility">
+                                        <input
+                                          className="form-check-input "
+                                          type="checkbox"
+                                          role="switch"
+                                          value={visibility}
+                                          onChange={handleVisibility}
+                                          id="flexSwitchCheckDefault"
+                                        />
+                                      </div>
+                                    </li>
+                                    <li>
+                                      <i
+                                        className="bi bi-trash text-danger"
+                                        onClick={() => null}
+                                      ></i>
+                                    </li>
+                                    <li>
+                                      <i className="bi bi-copy text-info"></i>
+                                    </li>
+                                  </ul>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </>
+                  )}
+                </table>
+              )}
 
               {/************ Assignment Section ****************/}
+              <div
+                className="caption-top mb-0 text-success unit-assignment-heading mb-3"
+                onClick={() => setAssignmentShow(!assignmentShow)}
+              >
+                              <div
+                  className=""
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <div className="course-line btn-secondary"></div>
+                  <strong className="text-secondary">Unit Assignments</strong>
+                  <div className="collapse-icon-course ms-3">
+                    <i class="fa fa-chevron-circle-down text-secondary"></i>
+                  </div>
+                </div>
 
-              <table className="table table-striped ">
-                <caption className="caption-top mb-0 text-success">
-                  <strong>Unit Assignments</strong>
-                </caption>
-                {unitAssignment.length === 0 ? (
-                  "No Assignment Found"
-                ) : (
-                  <>
-                    <thead className="table-light">
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Due Date</th>
-                        <th scope="col">Updated By</th>
-                        <th scope="col">Action</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {unitAssignment &&
-                        unitAssignment.map((assignment, index) => {
-                          const userId = assignment.updated_by;
-                          const userName = userData[userId]
-                            ? `${userData[userId].first_name} ${userData[userId].last_name}`
-                            : "none";
-                          return (
-                            <tr key={assignment.id}
-                              onClick={() => handleAssignmentClick(assignment.id)}
-                            >
-                              <td>{index + 1}</td>
-                              <td>{assignment.title.slice(0, 20)}...</td>
-                              <td>{assignment.description}</td>
-                              <td>{assignment.due_date}</td>
-                              {/* <td>{assignment.updated_by}</td> */}
-                              <td>{getUSerFullName(assignment.updated_by)}</td>
-                              <td colspan="2">
-                                {/* {String(file.is_active).toUpperCase()} */}
-                                <ul className="unit-content-file-vidoe-options">
-                                  <li>
-                                    <div className="form-check form-switch visibility">
-                                      <input
-                                        className="form-check-input "
-                                        type="checkbox"
-                                        role="switch"
-                                        value={visibility}
-                                        onChange={handleVisibility}
-                                        id="flexSwitchCheckDefault"
-                                      />
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <i
-                                      className="bi bi-trash text-danger"
-                                      onClick={() => null}
-                                    ></i>
-                                  </li>
-                                  <li>
-                                    <i className="bi bi-copy text-info"></i>
-                                  </li>
-                                </ul>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                    </tbody>
-                  </>
-                )}
-              </table>
-
+                <div className="course-line btn-secondary"></div>
+              </div>
+              {assignmentShow && (
+                <table className="table table-striped ">
+                  {unitAssignment.length === 0 ? (
+                    "No Assignment Found"
+                  ) : (
+                    <>
+                      <thead className="table-light">
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Title</th>
+                          <th scope="col">Description</th>
+                          <th scope="col">Due Date</th>
+                          <th scope="col">Updated By</th>
+                          <th scope="col">Action</th>
+                          <th scope="col"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {unitAssignment &&
+                          unitAssignment.map((assignment, index) => {
+                            const userId = assignment.updated_by;
+                            const userName = userData[userId]
+                              ? `${userData[userId].first_name} ${userData[userId].last_name}`
+                              : "none";
+                            return (
+                              <tr
+                                key={assignment.id}
+                                onClick={() =>
+                                  handleAssignmentClick(assignment.id)
+                                }
+                              >
+                                <td>{index + 1}</td>
+                                <td>{assignment.title.slice(0, 20)}...</td>
+                                <td>{assignment.description}</td>
+                                <td>{assignment.due_date}</td>
+                                {/* <td>{assignment.updated_by}</td> */}
+                                <td>
+                                  {getUSerFullName(assignment.updated_by)}
+                                </td>
+                                <td colspan="2">
+                                  {/* {String(file.is_active).toUpperCase()} */}
+                                  <ul className="unit-content-file-vidoe-options">
+                                    <li>
+                                      <div className="form-check form-switch visibility">
+                                        <input
+                                          className="form-check-input "
+                                          type="checkbox"
+                                          role="switch"
+                                          value={visibility}
+                                          onChange={handleVisibility}
+                                          id="flexSwitchCheckDefault"
+                                        />
+                                      </div>
+                                    </li>
+                                    <li>
+                                      <i
+                                        className="bi bi-trash text-danger"
+                                        onClick={() => null}
+                                      ></i>
+                                    </li>
+                                    <li>
+                                      <i className="bi bi-copy text-info"></i>
+                                    </li>
+                                  </ul>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </>
+                  )}
+                </table>
+              )}
               {/* <ul className="outer-ul">
               {unitFiles.length === 0 ||
               unitFiles.detail ==
@@ -691,7 +737,12 @@ const SingleUnit = ({ unit, setUnitId }) => {
               ></i>
             </div>
 
-            {showUnitContent && <AddUnit />}
+            {showUnitContent && (
+              <AddUnit
+                setUnitVideos={setUnitVideos}
+                setUnitFiles={setUnitFiles}
+              />
+            )}
           </div>
           <div className="slide-section"></div>
           <div className="pdf-section"></div>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { UnitProbs } from "./CourseUnit";
 import { CourseProbs } from "../../../../App";
 
-const AddUnit = ({}) => {
+const AddUnit = ({setUnitVideos, setUnitFiles}) => {
   const userId = sessionStorage.getItem("user_id");
   const { courseCoauthors, courseId } = useContext(CourseProbs);
   const navigate = useNavigate();
@@ -113,7 +113,7 @@ const AddUnit = ({}) => {
             console.log(result);
             setVideoTitle("");
             setVidoUrl("");
-
+            setUnitVideos(pre => [...pre, result])
             // setModuleDescription("");
             // window.location.reload();
           });
@@ -163,10 +163,11 @@ const AddUnit = ({}) => {
         // "Content-type": "application/json; charset=UTF-8",
       },
     }).then((response) => {
-      if (response.status == 201) {
+      if (response.status === 201) {
         response.json().then(function (result) {
           setUnitPDF(null);
           setUnitSlide(null);
+          setUnitFiles(pre => [...pre, result])
           // setVidoUrl("");
           // setModuleDescription("");
           // window.location.reload();

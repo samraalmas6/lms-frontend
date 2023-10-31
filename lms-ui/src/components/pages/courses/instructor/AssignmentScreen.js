@@ -379,7 +379,7 @@ const AssignmentScreen = () => {
             if (result.is_team_submission_allowed === true) {
               setGroupSub(true);
             } else {
-              // navigate(-1);
+              navigate(-1);
             }
             //
           });

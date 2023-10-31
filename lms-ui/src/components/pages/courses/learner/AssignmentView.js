@@ -96,7 +96,7 @@ function AssignmentView({ selectedAssignments }) {
     };
 
     getAssignmentData();
-    // handleAssignment(selectedAssignment);
+    handleAssignment(selectedAssignment);
   }, [selectedAssignment]);
 
   // useEffect(() => {
@@ -525,7 +525,7 @@ function AssignmentView({ selectedAssignments }) {
     <>
       <div className="app">
         <div className="assignment-view">
-          <div className="assignment-list">
+          {/* <div className="assignment-list">
             {apiData.map((assignment) => (
               <div
                 key={assignment.id}
@@ -537,7 +537,7 @@ function AssignmentView({ selectedAssignments }) {
                 {assignment.title}
               </div>
             ))}
-          </div>
+          </div> */}
           {selectedAssignment ? (
             <div className="detail">
               <div className="title-date">

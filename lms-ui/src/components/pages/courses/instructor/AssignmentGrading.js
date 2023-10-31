@@ -4,6 +4,9 @@ import Collapse from "react-collapse";
 import "../../../styles/AssignmentTable.css";
 import "../../../styles/AssignmentGrading.css";
 const AssignmentGrading = () => {
+  const userId = sessionStorage.getItem("user_id");
+  const userRole = sessionStorage.getItem("role");
+
   const [courseContent, setCourseContent] = useState([]);
   const [courseCoauthors, setCourseCoauthors] = useState([]);
   const [openIndex, setOpenIndex] = useState(null); //one collapsible at a time
@@ -190,6 +193,7 @@ const AssignmentGrading = () => {
   //   return true;
   // });
 
+  console.log('User Role', userRole);
   const getCourseData = () => {
     fetch("http://127.0.0.1:8000/api/courses", {
       method: "GET",
@@ -200,7 +204,19 @@ const AssignmentGrading = () => {
       if (response.status === 200) {
         response.json().then(function (result) {
           // console.log(result);
-          setCourseContent(result);
+          if (userRole === "admin") {
+            setCourseContent(result);
+          } else {
+            const obj = result.filter((course) => {
+              return (
+                (course.created_by === userId ||
+                  course.editor.includes(+userId)) &&
+                course.is_delete === false
+              );
+            });
+            console.log("this is obj", obj, userId);
+            setCourseContent(obj);
+          }
         });
       } else {
         // console.log(response);
@@ -302,11 +318,11 @@ const AssignmentGrading = () => {
       comments: feedback,
       assignment_submission: submissionId,
       grader: sessionStorage.getItem("user_id"),
-      user: userId,
+      user: sessionStorage.getItem("user_id"),
       status: updatedStatus,
       editor: courseCoauthors,
       updated_by: sessionStorage.getItem("user_id"),
-      assignment: 12
+      assignment: 67,
     };
 
     fetch(`http://127.0.0.1:8000/api/assignment_gradings/${gradingId}/`, {
@@ -827,10 +843,10 @@ const AssignmentGrading = () => {
                                                           >
                                                             select status
                                                           </option>
-                                                          <option value="pass">
+                                                          <option value="Pass">
                                                             pass
                                                           </option>
-                                                          <option value="fail">
+                                                          <option value="Not Passed">
                                                             fail
                                                           </option>
                                                         </select>
