@@ -71,15 +71,14 @@ const ModuleCard = ({
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if(response.status === 200){
-      response.json().then(function (result) {
-        console.log("Units", result);
-        setUnitPDF(result);
-      });
-    }
-    else {
-      console.log(response);
-    }
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log("Units", result);
+          setUnitPDF(result);
+        });
+      } else {
+        console.log(response);
+      }
     });
     fetch(`http://127.0.0.1:8000/api/units/${unit.id}/assignments/`, {
       method: "GET",
@@ -87,15 +86,14 @@ const ModuleCard = ({
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if(response.status === 200){
-      response.json().then(function (result) {
-        console.log("Units", result);
-        setUnitAssignment(result);
-      });
-    }
-    else {
-      console.log(response);
-    }
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log("Units", result);
+          setUnitAssignment(result);
+        });
+      } else {
+        console.log(response);
+      }
     });
   };
 
@@ -206,7 +204,8 @@ const ModuleCard = ({
         <div className="module-list">
           <ul className="module-content">
             {/* {module.lessons.map((lesson) => { */}
-            {moduleUnit.length === 0 ? "No Unit Found for this Module"
+            {moduleUnit.length === 0
+              ? "No Unit Found for this Module"
               : moduleUnit &&
                 moduleUnit.map((unit, index) => {
                   const lessonAssignments = unit.assignments || [];
@@ -231,26 +230,19 @@ const ModuleCard = ({
                             selectedLesson === unit ? "active" : ""
                           } upper-row`}
                         >
-                          <li className="lecture-sno">{index + 1}</li>
+                          {/* <li className="lecture-sno">{index + 1}</li> */}
                           <li
                             className="lecture-name"
                             onClick={() => handleUnitPDF(unit)}
                           >
-                            {" "}
-                            {unit.title}
-                          </li>
-                          <li>
-                            {" "}
-                            {/* <i
-                          className={`fas fa-caret-up ${
-                            isExpanded ? "fa-rotate-180" : ""
-                          } arrow`}
-                        ></i> */}
-                            <i
-                              className={`fas fa-thin fa-chevron-down ${
-                                isExpanded ? "fa-rotate-180" : ""
-                              }arrow`}
-                            ></i>
+                            <div>{unit.title}</div>
+                            <div>
+                              <i
+                                className={`fas fa-thin fa-chevron-down ${
+                                  isExpanded ? "fa-rotate-180" : ""
+                                }arrow`}
+                              ></i>
+                            </div>
                           </li>
                         </li>
                         <div
@@ -278,73 +270,79 @@ const ModuleCard = ({
                                 <li>{unit.title}</li>
                               </div>
                               <div className="lecture-pdf">
-                                {unitPDF.length === 0 
-                                  ? "No Document"
-                                  : unitPDF &&
-                                    unitPDF.map((pdf) => {
-                                      return (
-                                        <div
-                                          className=""
-                                          onClick={() => {
-                                            handleViewPdf(pdf.file);
-                                            console.log("pdf url ", pdf.file);
-                                          }}
-                                        >
-                                          <i class="fas fa-solid fa-file-pdf"></i>
-                                          <li>{pdf.title}</li>
-                                        </div>
-                                      );
-                                    })}
+                                {unitPDF.length === 0 ? (
+                                  <div className="NoDoc-pdf-container">
+                                    <div>
+                                      <i class="fas fa-solid fa-file-pdf"></i>
+                                    </div>
+                                    <div>
+                                      No Document
+                                    </div>
+                                  </div>
+                                ) : (
+                                  unitPDF &&
+                                  unitPDF.map((pdf) => {
+                                    return (
+                                      <div
+                                        className=""
+                                        onClick={() => {
+                                          handleViewPdf(pdf.file);
+                                          console.log("pdf url ", pdf.file);
+                                        }}
+                                      >
+                                        <i class="fas fa-solid fa-file-pdf"></i>
+                                        <li>{pdf.title}</li>
+                                      </div>
+                                    );
+                                  })
+                                )}
                               </div>
-                              <div
+                              <div className="assignment-container"
                                 onClick={() => setShowAssignment((pre) => !pre)}
                               >
-                                {unitAssignment.length === 0
-                                  ? "No Assignment"
-                                  : unitAssignment &&
-                                    unitAssignment.map((assignment) => {
-                                      return (
-                                        <span
-                                          onClick={() =>
-                                            // navigate("/course/my-assignments")
-                                            handleAssignmentClick(assignment)
-                                          }
-                                        >
-                                          {assignment.title}
-                                        </span>
-                                      );
-                                    })}
+                                {unitAssignment.length === 0 ? (
+                                  <div className="NoDoc-pdf-container">
+                                    <div>
+                                      <i class="far fa-file-alt"></i>
+                                    </div>
+                                    <div>
+                                      No Assignment
+                                    </div>
+                                  </div>
+                                ) : (
+                                  unitAssignment &&
+                                  unitAssignment.map((assignment) => {
+                                    return (
+                                      <div
+                                        className="NoDoc-pdf-container"
+                                        onClick={() =>
+                                          // navigate("/course/my-assignments")
+                                          handleAssignmentClick(assignment)
+                                        }
+                                      >
+                                        <div>
+                                          <i class="far fa-file-alt"></i>
+                                        </div>
+                                        <div className="assignment-pdf">{assignment.title}</div>
+                                      </div>
+                                    );
+                                  })
+                                )}
+                              </div>
+                              <div className="additional-resources-container">
+                                    <div>
+                                    <i class='fas fa-folder'></i>
+                                    </div>
+                                    <div>
+                                      Resources
+                                    </div>
                               </div>
                             </div>
                           </li>
-                          <li>
-                            {/* {Array.isArray(assignments) && assignments.length > 0 ? (
-            assignments.map((assignment) => (
-    <div
-      key={assignment.id}
-      className={`assignment-item ${
-        selectedAssignment === assignment ? "selected" : ""
-      }`}
-      onClick={() => handleAssignmentClick(assignment)}
-    >
-      {assignment.title}
-    </div>
-  ))
-) : (
-  <p>No assignments available.</p>
-)} */}
-                          </li>
-                          <li>
-                            {/* <DocViewer
-                          documents={lesson.file_uri}
-                          pluginRenderers={DocViewerRenderers}
-                          style={{ height: 1000 }}
-                        /> */}
-                          </li>
-
-
+                          <li></li>
+                          <li></li>
                         </div>
-
+                        {/* 
                         <div className="lesson-resources">
                       <button
                         onClick={() => toggleResources('lesson.id, lesson.resources')}
@@ -352,13 +350,13 @@ const ModuleCard = ({
                       >
                          Resources
                       </button>
-                    </div>
+                    </div> */}
 
-                    {lessonResources['lesson.id'] && (
+                        {/* {lessonResources['lesson.id'] && (
                       <div className="resources-popup">
                         
                         <div className="resources-list">
-                          {/* {lesson.resources.map((resource, index) => (
+                          {lesson.resources.map((resource, index) => (
                             <div
                               key={index}
                               className="resource-item"
@@ -371,11 +369,10 @@ const ModuleCard = ({
                                 {resource.title}
                               </a>
                             </div>
-                          ))} */}
+                          ))}
                         </div>
                       </div>
-                    )}
-
+                    )} */}
                       </div>
                     </div>
                   );
