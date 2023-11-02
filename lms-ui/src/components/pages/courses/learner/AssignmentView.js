@@ -24,7 +24,7 @@ function calculateSubmissionStatus(due_date, isResubmit, isSubmitClicked) {
   const formattedDueDate = new Date(due_date);
 
   if (isSubmitClicked && currentDateTime > formattedDueDate) {
-    return <span style={{ color: 'red' }}>Late Submission</span>;
+    return <span style={{ color: "red" }}>Late Submission</span>;
   } else if (isSubmitClicked) {
     return "Submitted";
   } else if (isResubmit) {
@@ -33,7 +33,6 @@ function calculateSubmissionStatus(due_date, isResubmit, isSubmitClicked) {
     return "Not Submitted";
   }
 }
-
 
 function AssignmentView({ selectedAssignments }) {
   const [selectedAssignment, setSelectedAssignment] =
@@ -69,8 +68,8 @@ function AssignmentView({ selectedAssignments }) {
   const [submissionId, setSubmissionId] = useState(null);
   const [isEditClicked, setIsEditClicked] = useState(false);
   const [isEditButtonDisabled, setIsEditButtonDisabled] = useState(false);
- const [showEditButton, setShowEditButton] = useState(true)
-
+  const [showEditButton, setShowEditButton] = useState(true);
+  const [requestMethod, setRequestMethod] = useState("POST");
 
   useEffect(() => {
     const getAssignmentData = () => {
@@ -96,7 +95,7 @@ function AssignmentView({ selectedAssignments }) {
     };
 
     getAssignmentData();
-    // handleAssignment(selectedAssignment);
+    handleAssignment(selectedAssignment);
   }, [selectedAssignment]);
 
   // useEffect(() => {
@@ -239,7 +238,7 @@ function AssignmentView({ selectedAssignments }) {
               setIsSubmitClicked(true);
               setShowAddNewSubmission(false);
             } else {
-              setShowEditButton(false)
+              setShowEditButton(false);
               // setIsSubmitClicked(false);
               setShowAddNewSubmission(false);
             }
@@ -279,7 +278,6 @@ function AssignmentView({ selectedAssignments }) {
   // }
 
   function fetchSubmissionByAssignment(assignmentId) {
-
     fetch(
       `http://127.0.0.1:8000/api/assignments/${assignmentId}/assignment_submissions`,
       {
@@ -308,8 +306,8 @@ function AssignmentView({ selectedAssignments }) {
 
           setSubmissionId(submission.id);
           setLink(submission.submitted_link);
-          setFile(submission.content)
-          setFiles(submission.content)
+          setFile(submission.content);
+          setFiles(submission.content);
           setShowAddNewSubmission(false);
         } else {
           console.log("No submissions found for this assignment");
@@ -324,14 +322,13 @@ function AssignmentView({ selectedAssignments }) {
 
   function handleToggleResubmit(submission) {
     setShowLink(true);
-  
 
     console.log("getting status :", statusData);
     console.log("getting  :", isResubmit);
     if (statusData === "Pending") {
-      console.log('submission ID', submission);
+      console.log("submission ID", submission);
       setIsResubmit(true);
-     setFiles([]);
+      setFiles([]);
       setLinks([]);
       // if (!isResubmit) {
       fetchSubmissionByAssignment(submission);
@@ -339,7 +336,6 @@ function AssignmentView({ selectedAssignments }) {
       setIsEditClicked(true);
       setShowLink(true);
 
- 
       setSubmissionOption(null);
       setShowSubmissionOptions(false);
       setIsSubmitClicked(false);
@@ -362,7 +358,7 @@ function AssignmentView({ selectedAssignments }) {
   function handleFileChange(event) {
     const selectedFile = event.target.files[0];
     // setFiles((pre) =>[...pre, selectedFiles]);
-    console.log('selected file',selectedFile);
+    console.log("selected file", selectedFile);
     setFile(selectedFile);
     setIsFileInputVisible(true);
   }
@@ -378,22 +374,39 @@ function AssignmentView({ selectedAssignments }) {
     setLinks(updatedLinks);
   }
 
-  function handleSubmit(event, request) {
-  
-    event.preventDefault();
+  // function handleSubmit(event, request) {
+  //   event.preventDefault();
+  //   let url = "";
+  //   const formData = new FormData();
+  //   formData.append("submitted_by", sessionStorage.getItem("user_id"));
+  //   formData.append("assignment", assignmentid);
+  //   // formData.append("submission_date", "2024-10-27T10:00:00Z");
+  //   const currentDateTime = new Date().toISOString();
+  //   formData.append("submission_date", currentDateTime);
+  //   formData.append("submitted_link", link);
+  //   // if (link) {
+  //   //   formData.append("submitted_link", link);
+  //   // }
+  //   if (typeof file === "object") {
+  //     formData.append("content", file);
+  //   }
+
+  function handleRequestPost(method) {
+    setRequestMethod(method);
+    setShowConfirmationDialog(true);
+  }
+
+  function handleSubmit(request) {
     let url = "";
     const formData = new FormData();
     formData.append("submitted_by", sessionStorage.getItem("user_id"));
     formData.append("assignment", assignmentid);
-    // formData.append("submission_date", "2024-10-27T10:00:00Z");
     const currentDateTime = new Date().toISOString();
     formData.append("submission_date", currentDateTime);
     formData.append("submitted_link", link);
-    if(typeof(file) === 'object'){
+    if (typeof file === "object" && file != null) {
       formData.append("content", file);
     }
- 
-   
     // const obj = {
     //   submitted_by: sessionStorage.getItem("user_id"),
     //   assignment: assignmentid,
@@ -419,19 +432,18 @@ function AssignmentView({ selectedAssignments }) {
         });
 
         if (response.status === 201 || response.status === 200) {
-          
-          setFile('')
-          setFiles('')
-          setLink('')
-          setLinks('')
-          setStatusData('Pending')
-          setShowEditButton(true)
+          setFile("");
+          setFiles("");
+          setLink("");
+          setLinks("");
+          setStatusData("Pending");
+          setShowEditButton(true);
           setShowLink(false);
           const result = await response.json();
           console.log(result.id);
           setShowAddNewSubmission(false);
           const submissionId = result.id;
-          setSubmissionId(result.id)
+          setSubmissionId(result.id);
           // const newSubmissionId = result.id;
           // fetchSubmissionByAssignment(newSubmissionId);
 
@@ -507,13 +519,12 @@ function AssignmentView({ selectedAssignments }) {
 
     // Call the postData function when needed:
     postData(formData);
-
-    setShowConfirmationDialog(true);
   }
 
   function handleConfirmSubmit() {
     setIsSubmitClicked(true);
     setShowConfirmationDialog(false);
+    handleSubmit(requestMethod);
     // simulateSubmission(); // Simulate submission and get feedback
   }
 
@@ -525,7 +536,7 @@ function AssignmentView({ selectedAssignments }) {
     <>
       <div className="app">
         <div className="assignment-view">
-          <div className="assignment-list">
+          {/* <div className="assignment-list">
             {apiData.map((assignment) => (
               <div
                 key={assignment.id}
@@ -537,7 +548,7 @@ function AssignmentView({ selectedAssignments }) {
                 {assignment.title}
               </div>
             ))}
-          </div>
+          </div> */}
           {selectedAssignment ? (
             <div className="detail">
               <div className="title-date">
@@ -585,22 +596,26 @@ function AssignmentView({ selectedAssignments }) {
                     </>
                   )}
               </div> */}
-               <div className="resource-files">
-      {selectedAssignment.content ? (
-        <>
-          <p>Attached Resource File:</p>
-          <a className="res" href={selectedAssignment.content} download>
-            <i
-              className="fas fa-file"
-              style={{ marginRight: "5px" }}
-            ></i>
-            {selectedAssignment.content}
-          </a>
-        </>
-      ) : (
-        <p>No attached resource file.</p>
-      )}
-    </div>
+              <div className="resource-files">
+                {selectedAssignment.content ? (
+                  <>
+                    <p>Attached Resource File:</p>
+                    <a
+                      className="res"
+                      href={selectedAssignment.content}
+                      download
+                    >
+                      <i
+                        className="fas fa-file"
+                        style={{ marginRight: "5px" }}
+                      ></i>
+                      {selectedAssignment.content}
+                    </a>
+                  </>
+                ) : (
+                  <p>No attached resource file.</p>
+                )}
+              </div>
             </div>
           ) : (
             <p>Select an assignment to view details:</p>
@@ -620,26 +635,38 @@ function AssignmentView({ selectedAssignments }) {
                     </span>
                   </div> */}
                   <div className="submission-status">
- 
-  <span className={`${calculateSubmissionStatus(selectedAssignment.dueDate, isResubmit, isSubmitClicked).toLowerCase()}-status`}>
-    {calculateSubmissionStatus(selectedAssignment.due_date, isResubmit, isSubmitClicked)}
-  </span>
-</div>
+                    <span
+                      className={`${calculateSubmissionStatus(
+                        selectedAssignment.dueDate,
+                        isResubmit,
+                        isSubmitClicked
+                      ).toLowerCase()}-status`}
+                    >
+                      {calculateSubmissionStatus(
+                        selectedAssignment.due_date,
+                        isResubmit,
+                        isSubmitClicked
+                      )}
+                    </span>
+                  </div>
                   {/* {file.length > 0 && ( */}
                   <>
                     <ul className="uploa">
                       {file && (
-                        
                         <li className="upload">
-                          <img src={fil} alt="" className="pht" />
-                          <div className="fil-text">{
-                          typeof(file) === 'string' ? file.slice(36) : file.name
-                          }</div>
-                          
+                          <a href={file} download>
+                            <img src={fil} alt="" className="pht" />
+                            <div className="fil-text">
+                              {typeof file === "string"
+                                ? file.slice(36)
+                                : file.name}
+                            </div>
+                          </a>
                         </li>
                       )}
                     </ul>
                   </>
+
                   {/* )} */}
                 </div>
 
@@ -672,19 +699,20 @@ function AssignmentView({ selectedAssignments }) {
                   <div className="toggle-submission-button">
                     {isSubmitClicked && (
                       <div>
-                        {showEditButton && <button
-                          type="button"
-                          onClick={() => {
-                            setIsEditClicked(true);
-                            setShowEditButton(false)
-                            handleToggleResubmit(assignmentid);
-                          }}
-                          disabled={isEditButtonDisabled}
-                          className="resubmit-btn"
-                        >
-                          Edit
-                        </button>}
-                        
+                        {showEditButton && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsEditClicked(true);
+                              setShowEditButton(false);
+                              handleToggleResubmit(assignmentid);
+                            }}
+                            disabled={isEditButtonDisabled}
+                            className="resubmit-btn"
+                          >
+                            Edit
+                          </button>
+                        )}
                       </div>
                     )}
                     {showLink && (
@@ -698,27 +726,27 @@ function AssignmentView({ selectedAssignments }) {
                               placeholder="Enter link URL"
                               className="lnk-text"
                             />
-                            
+
                             <div className="load-img">
-                                <label
-                                  htmlFor="fileInput"
-                                  className={`edit-fil ${
-                                    isFileInputVisible ? "hidden" : ""
-                                  }`}
-                                  onClick={toggleFileInput}
-                                >
-                                  <i className="fas fa-upload"></i> Upload File
-                                </label>
-                               
-                            <input
-                              type="file"
-                              accept=".pdf,.doc,.docx"
-                              onChange={(e) => handleFileChange(e)}
-                              id="fileInput"
-                              // className="edit-fil"
-                              // value={file}
-                              style={{display:"none"}}
-                            />
+                              <label
+                                htmlFor="fileInput"
+                                className={`edit-fil ${
+                                  isFileInputVisible ? "hidden" : ""
+                                }`}
+                                onClick={toggleFileInput}
+                              >
+                                <i className="fas fa-upload"></i> Upload File
+                              </label>
+
+                              <input
+                                type="file"
+                                accept=".pdf,.doc,.docx"
+                                onChange={(e) => handleFileChange(e)}
+                                id="fileInput"
+                                // className="edit-fil"
+                                // value={file}
+                                style={{ display: "none" }}
+                              />
                             </div>
                           </>
                         )}
@@ -727,9 +755,11 @@ function AssignmentView({ selectedAssignments }) {
                           type="button"
                           onClick={(e) => {
                             setIsEditButtonDisabled(false);
-                            handleSubmit(e, "PUT");
+                            // handleSubmit(e, "PUT");
+                            e.preventDefault();
+                            handleRequestPost("PUT");
                           }}
-                          className="save-btn"
+                          className="resubmit-btn"
                           disabled={!selectedAssignment}
                         >
                           Resubmit
@@ -743,6 +773,7 @@ function AssignmentView({ selectedAssignments }) {
                           onClick={() =>
                             setShowSubmissionOptions(!showSubmissionOptions)
                           }
+                          
                           className="add-create"
                         >
                           <FontAwesomeIcon icon={faPlus} /> Add or create
@@ -786,7 +817,7 @@ function AssignmentView({ selectedAssignments }) {
                                       id="fileInput"
                                       multiple
                                       // className="upload-fil"
-                                      style={{display:"none"}}
+                                      style={{ display: "none" }}
                                       // value={""}
                                     />
                                   </>
@@ -798,7 +829,11 @@ function AssignmentView({ selectedAssignments }) {
                         {isConfirmButtonVisible && (
                           <button
                             type="button"
-                            onClick={(e) => handleSubmit(e, "POST")}
+                            // onClick={(e) => handleSubmit(e, "POST")}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleRequestPost("POST");
+                            }}
                             className="save-btn"
                             disabled={!selectedAssignment}
                           >
@@ -901,9 +936,33 @@ function AssignmentView({ selectedAssignments }) {
                           ? `${gradeData} / ${number}`
                           : "Not graded yet"}
                       </div>
-                      <div className="status">
+                      {/* <div className="status">
                         <strong>Status:</strong>{" "}
                         {gradeData ? statusData : "pending"}
+                      </div> */}
+
+                      <div className="status">
+                        {/* <strong>Status:</strong>{" "} */}
+                        {gradeData ? (
+                          statusData === "Pass" ? (
+                            <div className="status-pass">
+                              <div className="status-bulb green"></div>
+                              <strong className="status-list">Pass</strong>
+                            </div>
+                          ) : (
+                            <div className="status-fail">
+                              <div className="status-bulb red"></div>
+                              <strong className="status-list">
+                                Not Passed
+                              </strong>
+                            </div>
+                          )
+                        ) : (
+                          <div className="status-pending">
+                            <div className="status-bulb yellow"></div>
+                            <strong className="status-list">Pending</strong>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -919,4 +978,3 @@ function AssignmentView({ selectedAssignments }) {
 }
 
 export default AssignmentView;
-

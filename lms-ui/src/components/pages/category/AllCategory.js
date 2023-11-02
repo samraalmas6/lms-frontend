@@ -76,6 +76,7 @@ const AllCategory = ({ show }) => {
       parent: parentCat,
       created_by: sessionStorage.getItem("user_id"),
       updated_by: sessionStorage.getItem("user_id"),
+      user:sessionStorage.getItem("user_id"),
       // updated_by: sessionStorage.getItem('name')
     };
 

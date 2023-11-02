@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import CourseContent from "./CourseContent";
 import { useNavigate, Link } from "react-router-dom";
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 import { CourseProbs } from "../../../../App";
 
 const AllCourse = ({ show, minDate }) => {
@@ -200,16 +200,16 @@ const AllCourse = ({ show, minDate }) => {
     else {
       action = "Restore" 
     }
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: `${action}`
-    }).then((result) => {
-      if (result.isConfirmed) {
+    // Swal.fire({
+    //   title: 'Are you sure?',
+    //   text: "You won't be able to revert this!",
+    //   icon: 'warning',
+    //   showCancelButton: true,
+    //   confirmButtonColor: '#d33',
+    //   cancelButtonColor: '#3085d6',
+    //   confirmButtonText: `${action}`
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
         const obj = {
           title: course.title,
           is_updated: true,
@@ -231,13 +231,13 @@ const AllCourse = ({ show, minDate }) => {
           if (response.status === 200) {
             response.json().then(function (result) {
               console.log('Api result: ',result);
-              Swal.fire(
-                `${action}!`,
-                `${course.title} has been ${action}.`,
-                'success'
-              ).then(res => {
-                window.location.reload();
-              })
+              // Swal.fire(
+              //   `${action}!`,
+              //   `${course.title} has been ${action}.`,
+              //   'success'
+              // ).then(res => {
+              //   window.location.reload();
+              // })
               // setCourseContent((pre) => [...pre, result]);
               // setCourseCreator(result.created_by);
               // setCourseCategory("");
@@ -248,8 +248,8 @@ const AllCourse = ({ show, minDate }) => {
             console.log(response);
           }
         });
-      }
-    })
+      // }
+    // })
 
 
   };

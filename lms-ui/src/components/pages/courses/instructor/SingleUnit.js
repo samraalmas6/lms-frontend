@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import AddUnit from "./AddUnit";
 import { ModuleProbs } from "./CourseModule";
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
 
 const SingleUnit = ({ unit, setUnitId }) => {
@@ -216,16 +216,16 @@ const SingleUnit = ({ unit, setUnitId }) => {
     else {
       action = "Restore" 
     }
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: `${action}`
-    }).then((result) => {
-      if (result.isConfirmed) {
+    // Swal.fire({
+    //   title: 'Are you sure?',
+    //   text: "You won't be able to revert this!",
+    //   icon: 'warning',
+    //   showCancelButton: true,
+    //   confirmButtonColor: '#d33',
+    //   cancelButtonColor: '#3085d6',
+    //   confirmButtonText: `${action}`
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
         const obj = {
           title: unit.title,
           is_updated: true,
@@ -246,13 +246,13 @@ const SingleUnit = ({ unit, setUnitId }) => {
           if (response.status === 200) {
             response.json().then(function (result) {
               console.log('Api result: ',result);
-              Swal.fire(
-                `${action}!`,
-                `${unit.title} has been ${action}.`,
-                'success'
-              ).then(res => {
-               navigate(-1)
-              })
+              // Swal.fire(
+              //   `${action}!`,
+              //   `${unit.title} has been ${action}.`,
+              //   'success'
+              // ).then(res => {
+              //  navigate(-1)
+              // })
               // setCourseContent((pre) => [...pre, result]);
               // setCourseCreator(result.created_by);
               // setCourseCategory("");
@@ -263,8 +263,8 @@ const SingleUnit = ({ unit, setUnitId }) => {
             console.log(response);
           }
         });
-      }
-    })
+    //   }
+    // })
 
 
   };

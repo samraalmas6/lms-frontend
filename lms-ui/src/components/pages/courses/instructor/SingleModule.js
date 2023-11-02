@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import CourseUnit from "./CourseUnit";
 import { CourseProbs } from "../../../../App";
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 export const ModuleProbs = createContext(null);
 
 const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
@@ -85,16 +85,16 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
     else {
       action = "Restore" 
     }
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: `${action}`
-    }).then((result) => {
-      if (result.isConfirmed) {
+    // Swal.fire({
+    //   title: 'Are you sure?',
+    //   text: "You won't be able to revert this!",
+    //   icon: 'warning',
+    //   showCancelButton: true,
+    //   confirmButtonColor: '#d33',
+    //   cancelButtonColor: '#3085d6',
+    //   confirmButtonText: `${action}`
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
         const obj = {
           title: module.title,
           is_updated: true,
@@ -115,13 +115,13 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
           if (response.status === 200) {
             response.json().then(function (result) {
               console.log('Api result: ',result);
-              Swal.fire(
-                `${action}!`,
-                `${module.title} has been ${action}.`,
-                'success'
-              ).then(res => {
-                window.location.reload();
-              })
+              // Swal.fire(
+              //   `${action}!`,
+              //   `${module.title} has been ${action}.`,
+              //   'success'
+              // ).then(res => {
+              //   window.location.reload();
+              // })
               // setCourseContent((pre) => [...pre, result]);
               // setCourseCreator(result.created_by);
               // setCourseCategory("");
@@ -132,8 +132,8 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
             console.log(response);
           }
         });
-      }
-    })
+    //   }
+    // })
 
 
   };
