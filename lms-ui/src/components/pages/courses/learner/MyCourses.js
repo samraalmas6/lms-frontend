@@ -13,9 +13,8 @@ const MyCourses = () => {
   const [courseContent, setCourseContent] = useState([]);
   // const [unitContent, setUnitContent] = useState([]);
   const [userData, setUserData] = useState([]);
-  const [authorData, setAuthorData] = useState([])
-
-
+  const [authorData, setAuthorData] = useState([]);
+  const [categoryData, setCategoryData] = useState([]);
 
   console.log("I have come to my-courses screen");
   useEffect(() => {
@@ -66,7 +65,7 @@ const MyCourses = () => {
               }
               // console.log("coursesData: ",result)
             }
-            console.log("courses:",courses)
+            console.log("courses:", courses);
             setCourseContent(courses);
           });
         }
@@ -101,7 +100,7 @@ const MyCourses = () => {
       }).then((response) => {
         if (response.status === 200) {
           response.json().then(function (result) {
-            console.log("authors data: ",result);
+            console.log("authors data: ", result);
             setAuthorData(result);
           });
         } else {
@@ -120,7 +119,7 @@ const MyCourses = () => {
       }).then((response) => {
         if (response.status === 200) {
           response.json().then(function (result) {
-            console.log("user data: ",result);
+            console.log("user data: ", result);
             setUserData(result);
           });
         } else {
@@ -130,10 +129,25 @@ const MyCourses = () => {
     };
     getUsers();
 
-
+    const getCategoriesData = () => {
+      fetch("http://127.0.0.1:8000/api/categories/", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log("category data: ", result);
+            setCategoryData(result);
+          });
+        } else {
+          console.log(response);
+        }
+      });
+    };
+    getCategoriesData();
   }, [0]);
-
-  
 
   const handleViewToggle = () => {
     setShowBlock((prev) => !prev);
@@ -144,24 +158,31 @@ const MyCourses = () => {
   };
 
   const getUSerFullName = (id) => {
-    if (authorData.length !== 0){
-    const author = authorData.filter((author) => {
-      return author.id === id;
-    });
-  
-    if (author.length !== 0 && userData.length !== 0) {
-      const user = userData.filter(
-        (users) => users.id === author[0].created_by
-      );
-      if (user.length !== 0) {
-        return `${user[0].first_name} ${user[0].last_name}`;
+    if (authorData.length !== 0) {
+      const author = authorData.filter((author) => {
+        return author.id === id;
+      });
+
+      if (author.length !== 0 && userData.length !== 0) {
+        const user = userData.filter(
+          (users) => users.id === author[0].created_by
+        );
+        if (user.length !== 0) {
+          return `${user[0].first_name} ${user[0].last_name}`;
+        } else {
+          return "N/A";
+        }
       } else {
         return "N/A";
       }
-    } else {
-      return "N/A";
     }
-  }
+  };
+
+  const getCategoryName = (id) => {
+    if (categoryData.length !== 0) {
+      const category = categoryData.filter((cat) => cat.id === id);
+      return category[0].title;
+    }
   };
 
   return (
@@ -199,6 +220,11 @@ const MyCourses = () => {
                           {/* <p>{course.unit}</p> */}
                           {/* <h6>{"Course Author"}</h6> */}
                           <h6>{getUSerFullName(course.id)}</h6>
+                          <div>
+                            {course.category.map((category) => {
+                              return <p>{getCategoryName(category)}</p>;
+                            })}
+                          </div>
                         </div>
                         <div className="instr-img">
                           <img src={user} width={"50px"} alt="" />
@@ -236,7 +262,7 @@ const MyCourses = () => {
                       {/* <div className="bottom-container">
                         <i class="fas fa-solid fa-folder"></i>
                       </div> */}
-                       <div className="block-view button-div">
+                      <div className="block-view button-div">
                         <button
                           className="btn btn-primary launch-btn"
                           type="button"
@@ -325,58 +351,6 @@ const MyCourses = () => {
                 })}
           </div>
         )}
-
-        {/* side panel */}
-        {/* <div
-          class="offcanvas offcanvas-start"
-          tabindex="-1"
-          id="offcanvasExample"
-          aria-labelledby="offcanvasExampleLabel"
-        >
-          <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasExampleLabel">
-              Offcanvas
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="offcanvas-body">
-            <div>
-              Some text as placeholder. In real life you can have the elements
-              you have chosen. Like, text, images, lists, etc.
-            </div>
-            <div class="dropdown mt-3">
-              <button
-                class="btn btn-secondary dropdown-toggle"
-                type="button"
-                data-bs-toggle="dropdown"
-              >
-                Dropdown button
-              </button>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href="#">
-                    Action
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#">
-                    Another action
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#">
-                    Something else here
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div> */}
       </div>
     </>
   );
