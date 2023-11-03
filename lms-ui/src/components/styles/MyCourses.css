@@ -22,10 +22,11 @@
 .main-cards-container{
     display: flex;
     flex-wrap: wrap;
-    gap :10px;
-    overflow-y: scroll;
-    height: 70vh;
+    gap: 10px;
+    /* overflow-y: scroll; */
+    /* height: 70vh; */
     padding-top: 100px;
+    padding-bottom: 0px;
 }
 
 .card-container{
@@ -42,22 +43,21 @@
     background-image: url(../content/Images/card-background.jpg);
     color: white;
     display: flex;
-    padding: 20px;
+    padding: 5px;
 }
 
 .upper-half .instr-img{
-    border-radius: 100%;
+    border-radius: 50%;
     border: 1px solid white;
     position: relative;
-    top: 90px;
-    left: 50px;
+    top: 50px;
+    left: -20px;
     z-index: 1;
-    width: 62px;
-    height: 62px;
+    width: 50px;
+    height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 .card-container .second-half{
@@ -153,6 +153,27 @@
 }
 
 .progress-main-div{
-    margin-left: 100px;
-    margin-right: 100px;
+    /* margin-left: 100px;
+    margin-right: 100px; */
+}
+
+.block-view.button-div{
+    /* background-color: yellow; */
+    display: flex;
+    justify-content:flex-end;
+}
+
+.course-div{
+    /* background-color: red; */
+    width: 20%;
+}
+
+.pdf-doc-container{
+    display: flex;
+    gap :20px;
+}
+
+.resource-title-container{
+    display: flex;
+    gap: 20px;
 }

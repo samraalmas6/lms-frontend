@@ -11,6 +11,11 @@ const MyCourses = () => {
 
   const [showBlock, setShowBlock] = useState(false);
   const [courseContent, setCourseContent] = useState([]);
+  // const [unitContent, setUnitContent] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [authorData, setAuthorData] = useState([])
+
+
 
   console.log("I have come to my-courses screen");
   useEffect(() => {
@@ -61,13 +66,74 @@ const MyCourses = () => {
               }
               // console.log("coursesData: ",result)
             }
-            // console.log("after for loop:")
+            console.log("courses:",courses)
             setCourseContent(courses);
           });
         }
       });
     };
+
+    // const getUnitData = () => {
+    //   fetch("http://127.0.0.1:8000/api/units/", {
+    //     method: "GET",
+    //     headers: {
+    //       Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+    //     },
+    //   }).then((response) => {
+    //     if (response.status === 200) {
+    //       response.json().then(function (result) {
+    //         console.log("unit data: ",result);
+    //         setUnitContent(result);
+    //       });
+    //     } else {
+    //       console.log(response);
+    //     }
+    //   });
+    // };
+    // getUnitData()
+
+    const getAuthors = () => {
+      fetch("http://127.0.0.1:8000/api/authors/", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log("authors data: ",result);
+            setAuthorData(result);
+          });
+        } else {
+          console.log(response);
+        }
+      });
+    };
+    getAuthors();
+
+    const getUsers = () => {
+      fetch("http://127.0.0.1:8000/list_all_users/", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log("user data: ",result);
+            setUserData(result);
+          });
+        } else {
+          console.log(response);
+        }
+      });
+    };
+    getUsers();
+
+
   }, [0]);
+
+  
 
   const handleViewToggle = () => {
     setShowBlock((prev) => !prev);
@@ -75,6 +141,27 @@ const MyCourses = () => {
 
   const handlLunchCourse = (id) => {
     navigation("/my-courses/show", { state: { courseId: id } });
+  };
+
+  const getUSerFullName = (id) => {
+    if (authorData.length !== 0){
+    const author = authorData.filter((author) => {
+      return author.id === id;
+    });
+  
+    if (author.length !== 0 && userData.length !== 0) {
+      const user = userData.filter(
+        (users) => users.id === author[0].created_by
+      );
+      if (user.length !== 0) {
+        return `${user[0].first_name} ${user[0].last_name}`;
+      } else {
+        return "N/A";
+      }
+    } else {
+      return "N/A";
+    }
+  }
   };
 
   return (
@@ -109,15 +196,16 @@ const MyCourses = () => {
                       <div className="upper-half">
                         <div>
                           <h5>{course.title}</h5>
-                          <p>Current Unit</p>
-                          <h6>{"Course Author"}</h6>
+                          {/* <p>{course.unit}</p> */}
+                          {/* <h6>{"Course Author"}</h6> */}
+                          <h6>{getUSerFullName(course.id)}</h6>
                         </div>
                         <div className="instr-img">
                           <img src={user} width={"50px"} alt="" />
                         </div>
                       </div>
                       <div className="second-half">
-                        <p>tagline</p>
+                        {/* <p>tagline</p> */}
                         <div className="progress-main-div block-view">
                           {/* progress % */}
                           {`${course.id + 20}%`}
@@ -143,10 +231,19 @@ const MyCourses = () => {
                             </p>
                           </div>
                         </div>
-                        <p>Average Feedback</p>
+                        {/* <p>Average Feedback</p> */}
                       </div>
-                      <div className="bottom-container">
+                      {/* <div className="bottom-container">
                         <i class="fas fa-solid fa-folder"></i>
+                      </div> */}
+                       <div className="block-view button-div">
+                        <button
+                          className="btn btn-primary launch-btn"
+                          type="button"
+                          onClick={() => handlLunchCourse(course.id)}
+                        >
+                          <i class="fas fa-solid fa-play"></i>Launch Course
+                        </button>
                       </div>
                     </div>
                   );
@@ -230,7 +327,7 @@ const MyCourses = () => {
         )}
 
         {/* side panel */}
-        <div
+        {/* <div
           class="offcanvas offcanvas-start"
           tabindex="-1"
           id="offcanvasExample"
@@ -279,7 +376,7 @@ const MyCourses = () => {
               </ul>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );
