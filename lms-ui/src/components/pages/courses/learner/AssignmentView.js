@@ -50,7 +50,7 @@ function AssignmentView({ selectedAssignments }) {
   const [isConfirmButtonVisible, setIsConfirmButtonVisible] = useState(true);
   const [instructorFeedback, setInstructorFeedback] = useState(null);
   const [apiData, setApiData] = useState([]);
-  const [number, setNumber] = useState(0);
+  const [marks, setMarks] = useState(0);
   const [assignmentid, setAssignmentid] = useState("");
   const [feedbackData, setFeedbackData] = useState("feedback");
   const [gradeData, setGradeData] = useState(0);
@@ -84,7 +84,7 @@ function AssignmentView({ selectedAssignments }) {
           if (Array.isArray(result) && result.length > 0) {
             console.log(result);
             setApiData(result);
-            setNumber(result[0].marks);
+            setMarks(result[0].marks);
           } else {
             console.error("Invalid API response:", result);
           }
@@ -374,26 +374,15 @@ function AssignmentView({ selectedAssignments }) {
     setLinks(updatedLinks);
   }
 
-  // function handleSubmit(event, request) {
-  //   event.preventDefault();
-  //   let url = "";
-  //   const formData = new FormData();
-  //   formData.append("submitted_by", sessionStorage.getItem("user_id"));
-  //   formData.append("assignment", assignmentid);
-  //   // formData.append("submission_date", "2024-10-27T10:00:00Z");
-  //   const currentDateTime = new Date().toISOString();
-  //   formData.append("submission_date", currentDateTime);
-  //   formData.append("submitted_link", link);
-  //   // if (link) {
-  //   //   formData.append("submitted_link", link);
-  //   // }
-  //   if (typeof file === "object") {
-  //     formData.append("content", file);
-  //   }
-
+   
   function handleRequestPost(method) {
-    setRequestMethod(method);
-    setShowConfirmationDialog(true);
+    if (isSubmissionValid()) {
+      setRequestMethod(method);
+      setShowConfirmationDialog(true);
+    } else {
+      // Show a pop-up or set an error message to inform the user that they need to insert a file or link.
+      alert("Please insert a file or link before submitting.");
+    }
   }
 
   function handleSubmit(request) {
@@ -508,6 +497,7 @@ function AssignmentView({ selectedAssignments }) {
           }
 
           setLink("");
+         
           // setFile([])
         } else {
           console.log(response);
@@ -530,6 +520,10 @@ function AssignmentView({ selectedAssignments }) {
 
   function handleCloseConfirmationDialog() {
     setShowConfirmationDialog(false);
+  }
+
+  function isSubmissionValid() {
+    return (file && file.length !== "") || (link.trim() !== "");
   }
 
   return (
@@ -560,7 +554,7 @@ function AssignmentView({ selectedAssignments }) {
                 <div className="detail-points-and-date">
                   <div className="detail-points">
                     <strong>Marks:</strong>
-                    {number}
+                    {marks}
                   </div>
                   <div className="detail-create">
                     <strong>Created At:</strong>
@@ -933,7 +927,7 @@ function AssignmentView({ selectedAssignments }) {
                       <div className="grade-gd">
                         <strong>Grade:</strong>{" "}
                         {gradeData
-                          ? `${gradeData} / ${number}`
+                          ? `${gradeData} / ${marks}`
                           : "Not graded yet"}
                       </div>
                       {/* <div className="status">
