@@ -25,6 +25,7 @@ const ModuleCard = ({
   const [isCourseContentVisible, setIsCourseContentVisible] = useState(true);
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [lessonResources, setLessonResources] = useState({});
+  const [lectureCompleted,setLectureCompleted] = useState(false);
   // const []
 
   useEffect(() => {
@@ -59,6 +60,36 @@ const ModuleCard = ({
     };
 
     getCourseData();
+
+    const fileOpened = (index) => {
+      const updatedObj = {
+        title: "Sample File",
+    description: "This is a sample file.",
+    url: "https://example.com/sample-file",
+    file: null,
+    file_completed: lectureCompleted,
+    // "instructor": 1,
+    "unit": 1
+      };
+  
+      fetch(`http://127.0.0.1:8000/api/files/${index}/`, {
+        method: "PUT",
+        body: JSON.stringify(updatedObj),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          // getAssignmentGradingData();
+          response.json().then(function (result) {});
+        } else {
+          console.log(response);
+        }
+      });
+    };
+
+
   }, [0]);
 
   const handleUnitPDF = (unit) => {
@@ -154,6 +185,7 @@ const ModuleCard = ({
     // console.log('handleViewPdf ka obj',obj)
     setDoc(() => file);
     setShowPdf(!showPDF);
+    setLectureCompleted(true);
     window.open(file, "_blank");
   };
 
@@ -258,18 +290,30 @@ const ModuleCard = ({
                                     //   </div>
                                     // </div>
                                     unitPDF &&
-                                    unitPDF.map((pdf) => {
+                                    unitPDF.map((pdf,index) => {
                                       return (
-                                        <div
-                                          className="pdf-doc-container"
-                                          onClick={() => {
-                                            handleViewPdf(pdf.file);
-                                            console.log("pdf url ", pdf.file);
-                                          }}
-                                        >
-                                          <i class="fas fa-solid fa-file-pdf"></i>
-                                          <li>{pdf.title}</li>
-                                        </div>
+                                        <>
+                                          <div
+                                            className="pdf-doc-container"
+                                            onClick={() => {
+                                              handleViewPdf(pdf.file);
+                                              console.log("pdf url ", pdf.file);
+                                            }}
+                                          >
+                                            <div className="check-box-div">
+                                              <input
+                                                className="checkbox"
+                                                type="checkbox"
+                                                id={index}
+                                                name="lesson-checkbox"
+                                                value={index}
+                                                onClick={() => fileOpened(index)}
+                                              />
+                                            </div>
+                                            <i class="fas fa-solid fa-file-pdf"></i>
+                                            <li>{pdf.title}</li>
+                                          </div>
+                                        </>
                                       );
                                     })}
                               </div>
