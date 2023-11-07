@@ -29,7 +29,7 @@ const ModuleCard = ({
   const [isCourseContentVisible, setIsCourseContentVisible] = useState(true);
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [lessonResources, setLessonResources] = useState({});
-  const [lectureCompleted,setLectureCompleted] = useState(false);
+  const [lectureCompleted, setLectureCompleted] = useState(false);
   // const []
 
   useEffect(() => {
@@ -72,7 +72,7 @@ const ModuleCard = ({
       instructor: file.instructor,
       unit: file.unit,
       updated_by: sessionStorage.getItem("user_id"),
-      file_completed : lectureCompleted
+      file_completed: lectureCompleted,
     };
 
     fetch(`http://127.0.0.1:8000/api/files/${file.id}/`, {
@@ -85,7 +85,7 @@ const ModuleCard = ({
     }).then((response) => {
       if (response.status === 200) {
         response.json().then(function (result) {
-          console.log("updated data: ", result)
+          console.log("updated data: ", result);
         });
       } else {
         console.log(response);
@@ -299,28 +299,29 @@ const ModuleCard = ({
                                   : unitPDF &&
                                     unitPDF.map((pdf) => {
                                       return (
-                                        
+                                        <div
+                                          className="pdf-doc-container"
+                                          onClick={() => {
+                                            handleViewPdf(pdf.file);
+                                            console.log("pdf url ", pdf.file);
+                                          }}
+                                        >
                                           <div
-                                            className="pdf-doc-container"
-                                            onClick={() => {
-                                              handleViewPdf(pdf.file);
-                                              console.log("pdf url ", pdf.file);
-                                            }}
+                                            className="check-box-div"
+                                            onClick={handleFileComplete(pdf)}
                                           >
-                                            <div className="check-box-div" onClick={handleFileComplete(pdf)}>
-                                              <input
-                                                className="checkbox"
-                                                type="checkbox"
-                                                id={pdf.id}
-                                                name="lesson-checkbox"
-                                                value={pdf.id}
-                                                checked = {pdf.file_completed}
-                                              />
-                                            </div>
-                                            <i class="fas fa-solid fa-file-pdf"></i>
-                                            <li>{pdf.title}</li>
+                                            <input
+                                              className="checkbox"
+                                              type="checkbox"
+                                              id={pdf.id}
+                                              name="lesson-checkbox"
+                                              value={pdf.id}
+                                              checked={pdf.file_completed}
+                                            />
                                           </div>
-                                        
+                                          <i class="fas fa-solid fa-file-pdf"></i>
+                                          <li>{pdf.title}</li>
+                                        </div>
                                       );
                                     })}
                               </div>
@@ -341,8 +342,15 @@ const ModuleCard = ({
                                           }
                                         >
                                           <div>
+                                            
+                                              <input
+                                                className="checkbox"
+                                                type="checkbox"
+                                                name="lesson-checkbox"
+                                              />
+                                                                                        </div>
+                                                  
                                             <i class="far fa-file-alt"></i>
-                                          </div>
                                           <div className="assignment-pdf">
                                             {assignment.title}
                                           </div>
@@ -363,7 +371,7 @@ const ModuleCard = ({
                                             </div>
                                             <div>{resource.title}</div>
                                           </div>
-                                          </div>
+                                        </div>
                                       );
                                     })}
                               </div>
@@ -372,7 +380,7 @@ const ModuleCard = ({
                         </div>
                       </div>
                     </div>
-                        )
+                  );
                 })}
           </ul>
         </div>
