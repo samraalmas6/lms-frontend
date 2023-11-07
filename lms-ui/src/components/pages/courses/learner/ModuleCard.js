@@ -18,8 +18,9 @@ const ModuleCard = ({
   handleAssignmentClick,
   setShowAssignment,
   videoCompletion,
+  setVideoCompletion,
   unitCompletion,
-  setUnitCompletion
+  setUnitCompletion,
 }) => {
   const navigate = useNavigate();
   // const [selectedLesson, setSelectedLesson] = useState(null);
@@ -29,7 +30,6 @@ const ModuleCard = ({
   const [selectedAssignment, setSelectedAssignment] = useState(null);
 
   const [lessonResources, setLessonResources] = useState({});
- 
 
   // const[selectModule,setSelectedModule] = useState(null);
 
@@ -75,15 +75,14 @@ const ModuleCard = ({
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if(response.status === 200){
-      response.json().then(function (result) {
-        console.log("Units", result);
-        setUnitPDF(result);
-      });
-    }
-    else {
-      console.log(response);
-    }
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log("Units", result);
+          setUnitPDF(result);
+        });
+      } else {
+        console.log(response);
+      }
     });
     fetch(`http://127.0.0.1:8000/api/units/${unit.id}/assignments/`, {
       method: "GET",
@@ -91,15 +90,14 @@ const ModuleCard = ({
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
       },
     }).then((response) => {
-      if(response.status === 200){
-      response.json().then(function (result) {
-        console.log("Units", result);
-        setUnitAssignment(result);
-      });
-    }
-    else {
-      console.log(response);
-    }
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log("Units", result);
+          setUnitAssignment(result);
+        });
+      } else {
+        console.log(response);
+      }
     });
   };
 
@@ -129,8 +127,9 @@ const ModuleCard = ({
     }).then((response) => {
       if (response.status === 200) {
         response.json().then(function (result) {
-          console.log("Api result: ", result[0].url);
-          setUnitCompletion(result[0].video_completed)
+          console.log("Api result: ", result[0].video_completed);
+          // setUnitCompletion(result[0].video_completed)
+          setVideoCompletion(result[0].video_completed);
           handleLessonSelect(result[0]);
         });
       }
@@ -187,7 +186,6 @@ const ModuleCard = ({
     }));
   };
 
-
   const videoUrl = "https://youtu.be/apGV9Kg7ics?si=yP2oeVUi684WxZyg";
 
   // console.log(module)
@@ -212,7 +210,8 @@ const ModuleCard = ({
         <div className="module-list">
           <ul className="module-content">
             {/* {module.lessons.map((lesson) => { */}
-            {moduleUnit.length === 0 ? "No Unit Found for this Module"
+            {moduleUnit.length === 0
+              ? "No Unit Found for this Module"
               : moduleUnit &&
                 moduleUnit.map((unit, index) => {
                   const lessonAssignments = unit.assignments || [];
@@ -220,7 +219,6 @@ const ModuleCard = ({
                     <div className="module-content-container" key={unit.id}>
                       <div className="check-box-div">
                         <form onSubmit={(e) => e.preventDefault()}>
-                      
                           <input
                             className="checkbox"
                             type="checkbox"
@@ -243,7 +241,10 @@ const ModuleCard = ({
                           <li className="lecture-sno">{index + 1}</li>
                           <li
                             className="lecture-name"
-                            onClick={() => handleUnitPDF(unit)}
+                            onClick={() => {
+                              handleUnitPDF(unit)
+                              // toggleLesson(unit);
+                            }}
                           >
                             {" "}
                             {unit.title}
@@ -279,15 +280,25 @@ const ModuleCard = ({
                           >
                             <div className="lesson-content-container">
                               <div className="lesson-title">
+                                <input
+                                  className="checkbox"
+                                  type="checkbox"
+                                  id={`lesson-${unit.id}`}
+                                  name="lesson"
+                                  // value={`lesson-${unit.id}`}
+                                  value={videoCompletion}
+                                  checked={videoCompletion}
+                                />
                                 <FontAwesomeIcon
                                   icon={faCirclePlay}
                                   className="my-icon"
                                   style={{ marginTop: "3px" }}
                                 />
+
                                 <li>{unit.title}</li>
                               </div>
                               <div className="lecture-pdf">
-                                {unitPDF.length === 0 
+                                {unitPDF.length === 0
                                   ? "No Document"
                                   : unitPDF &&
                                     unitPDF.map((pdf) => {
@@ -350,24 +361,23 @@ const ModuleCard = ({
                           style={{ height: 1000 }}
                         /> */}
                           </li>
-
-
                         </div>
 
                         <div className="lesson-resources">
-                      <button
-                        onClick={() => toggleResources('lesson.id, lesson.resources')}
-                        className="resource-button"
-                      >
-                         Resources
-                      </button>
-                    </div>
+                          <button
+                            onClick={() =>
+                              toggleResources("lesson.id, lesson.resources")
+                            }
+                            className="resource-button"
+                          >
+                            Resources
+                          </button>
+                        </div>
 
-                    {lessonResources['lesson.id'] && (
-                      <div className="resources-popup">
-                        
-                        <div className="resources-list">
-                          {/* {lesson.resources.map((resource, index) => (
+                        {lessonResources["lesson.id"] && (
+                          <div className="resources-popup">
+                            <div className="resources-list">
+                              {/* {lesson.resources.map((resource, index) => (
                             <div
                               key={index}
                               className="resource-item"
@@ -381,10 +391,9 @@ const ModuleCard = ({
                               </a>
                             </div>
                           ))} */}
-                        </div>
-                      </div>
-                    )}
-
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   );

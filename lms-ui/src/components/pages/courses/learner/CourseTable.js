@@ -278,6 +278,7 @@ function CourseTable({ modules, assignments }) {
       }
       });
     };
+
     const getModuleData = () => {
       fetch(`http://127.0.0.1:8000/api/courses/${state.courseId}/modules`, {
         method: "GET",
@@ -479,6 +480,7 @@ function CourseTable({ modules, assignments }) {
                             handleAssignmentClick={handleAssignmentClick}
                             setShowAssignment={setShowAssignment}
                             videoCompletion={videoCompletion}
+                            setVideoCompletion={setVideoCompleted}
                             unitCompletion={unitCompletion}
                             setUnitCompletion={setUnitCompletion}
                           />
