@@ -22,10 +22,11 @@
 .main-cards-container{
     display: flex;
     flex-wrap: wrap;
-    gap :10px;
-    overflow-y: scroll;
-    height: 70vh;
+    gap: 10px;
+    /* overflow-y: scroll; */
+    /* height: 70vh; */
     padding-top: 100px;
+    padding-bottom: 0px;
 }
 
 .card-container{
@@ -42,20 +43,21 @@
     background-image: url(../content/Images/card-background.jpg);
     color: white;
     display: flex;
-    padding: 20px;
+    padding: 5px;
 }
 
-.instr-img{
+.upper-half .instr-img{
     border-radius: 50%;
     border: 1px solid white;
-    /* position: absolute; */
     position: relative;
-    top: 90px;
-    left: 120px;
-    /* margin-top: 100px; */
-    /* font-size: 40px; */
+    top: 50px;
+    left: -20px;
     z-index: 1;
-    width: 70px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .card-container .second-half{
@@ -88,20 +90,14 @@
 }
 
 .progress-tag{
-    /* border: 2px solid blue; */
-    border-radius: 20px;
-    padding: 10px;
+    /* border: 2px solid blue;  */
+    border-radius: 5px;
+    padding: 5px;
     /* width: 50%; */
     background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 50%);
     margin-top: 15px;
     color: white;
     font-weight: bold;
-    /* background: #1c92d2;  
-background: -webkit-linear-gradient(to right, #f2fcfe, #1c92d2);  
-background: linear-gradient(to right, #f2fcfe, #1c92d2);  */
-background-color: rgb(red, green, blue);
-
-
 }
 
 
@@ -110,7 +106,7 @@ background-color: rgb(red, green, blue);
     justify-content: flex-end;
     position: absolute;
     right: 50px;
-    top: 20px;
+    top: 50px;
     margin-bottom: 50px;
 }
 /* --------------List View Css---------- */
@@ -125,17 +121,24 @@ background-color: rgb(red, green, blue);
 
 .list-container{
     display: flex;
-    /* justify-content: space-evenly; */
-    gap: 100px;
+    justify-content: space-evenly;
+    /* gap: 100px; */
     align-items: center;
-    padding: 30px;
+    /* padding: 30px; */
     border-bottom: 1px dotted black;
     
 }
 
 .list-container .image-div{
-    width: 250px;
+    /* width: 250px; */
     /* height: 50px; */
+    width: 150px;
+    height: 100px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin-left: 15px */
 }
 .progress-statics-div{
     /* display: flex;
@@ -150,6 +153,27 @@ background-color: rgb(red, green, blue);
 }
 
 .progress-main-div{
-    margin-left: 100px;
-    margin-right: 100px;
+    /* margin-left: 100px;
+    margin-right: 100px; */
+}
+
+.block-view.button-div{
+    /* background-color: yellow; */
+    display: flex;
+    justify-content:flex-end;
+}
+
+.course-div{
+    /* background-color: red; */
+    width: 20%;
+}
+
+.pdf-doc-container{
+    display: flex;
+    gap :20px;
+}
+
+.resource-title-container{
+    display: flex;
+    gap: 20px;
 }

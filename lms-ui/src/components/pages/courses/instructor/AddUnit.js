@@ -226,7 +226,7 @@ const AddUnit = ({setUnitVideos, setUnitFiles}) => {
               </div>
             </div>
           </div>
-          <div className="slides-section">
+          {/* <div className="slides-section">
             <div className="unit-selection-section">
               <span className="unit-form-span-title">Slide</span>
               <i
@@ -257,7 +257,7 @@ const AddUnit = ({setUnitVideos, setUnitFiles}) => {
                 onClick={() => handleRemoveSlide()}
               ></i>
             </div>
-          </div>
+          </div> */}
           <div className="pdf-section">
             <div className="unit-selection-section">
               <span className="unit-form-span-title">PDF</span>
