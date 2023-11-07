@@ -63,37 +63,34 @@ const ModuleCard = ({
     };
 
     getCourseData();
+  }, [0]);
 
-    const fileOpened = (index) => {
-      const updatedObj = {
-        title: "Sample File",
-    description: "This is a sample file.",
-    url: "https://example.com/sample-file",
-    file: null,
-    file_completed: lectureCompleted,
-    // "instructor": 1,
-    "unit": 1
-      };
-  
-      fetch(`http://127.0.0.1:8000/api/files/${index}/`, {
-        method: "PUT",
-        body: JSON.stringify(updatedObj),
-        headers: {
-          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      }).then((response) => {
-        if (response.status === 200) {
-          // getAssignmentGradingData();
-          response.json().then(function (result) {});
-        } else {
-          console.log(response);
-        }
-      });
+  const handleFileComplete = (file) => {
+    const updatedObj = {
+      title: file.title,
+      instructor: file.instructor,
+      unit: file.unit,
+      updated_by: sessionStorage.getItem("user_id"),
+      file_completed : lectureCompleted
     };
 
-
-  }, [0]);
+    fetch(`http://127.0.0.1:8000/api/files/${file.id}/`, {
+      method: "PUT",
+      body: JSON.stringify(updatedObj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log("updated data: ", result)
+        });
+      } else {
+        console.log(response);
+      }
+    });
+  };
 
   const handleUnitPDF = (unit) => {
     fetch(`http://127.0.0.1:8000/api/units/${unit.id}/files/`, {
@@ -299,7 +296,7 @@ const ModuleCard = ({
                                     unitPDF &&
                                     unitPDF.map((pdf,index) => {
                                       return (
-                                        <>
+                                        
                                           <div
                                             className="pdf-doc-container"
                                             onClick={() => {
@@ -307,20 +304,20 @@ const ModuleCard = ({
                                               console.log("pdf url ", pdf.file);
                                             }}
                                           >
-                                            <div className="check-box-div">
+                                            <div className="check-box-div" onClick={handleFileComplete(pdf)}>
                                               <input
                                                 className="checkbox"
                                                 type="checkbox"
-                                                id={index}
+                                                id={pdf.id}
                                                 name="lesson-checkbox"
-                                                value={index}
-                                                onClick={() => fileOpened(index)}
+                                                value={pdf.id}
+                                                checked = {pdf.file_completed}
                                               />
                                             </div>
                                             <i class="fas fa-solid fa-file-pdf"></i>
                                             <li>{pdf.title}</li>
                                           </div>
-                                        </>
+                                        
                                       );
                                     })}
                               </div>
