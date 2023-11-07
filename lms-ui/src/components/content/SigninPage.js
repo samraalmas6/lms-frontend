@@ -78,22 +78,18 @@ const SigninPage = () => {
             sessionStorage.setItem('first_name', result.first_name);
             sessionStorage.setItem('last_name', result.last_name);
             sessionStorage.setItem('role', result.role);
-            // sessionStorage.setItem('role', result.role);
-
-
-            // sessionStorage.setItem('user_email', result.data.user.email);
-            // sessionStorage.setItem('user_firstname', result.data.user.full_name);
-            // sessionStorage.setItem('user_lastname', result.data.user.full_name);
-            // sessionStorage.setItem('user_roleid', result.role.id);
-            // sessionStorage.setItem('user_rolename', result.role.name);
             sessionStorage.setItem('user_token', result.token);
             console.log(sessionStorage);
+            if(result.role === 'learner'){
+              navigate('/course/my-courses')
+            }
+            else{
             navigate("/");
-
+            }
             setEmail("");
             setPassword("");
           });
-        } else if (response.status == 404) {
+        } else if (response.status === 404) {
           response.json().then(function (res) {
             setInvalidUser(res)
           });

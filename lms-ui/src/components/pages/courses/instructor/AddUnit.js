@@ -5,7 +5,7 @@ import { CourseProbs } from "../../../../App";
 
 const AddUnit = ({setUnitVideos, setUnitFiles}) => {
   const userId = sessionStorage.getItem("user_id");
-  const { courseCoauthors, courseId } = useContext(CourseProbs);
+  const { courseCoauthors, courseId, instructor} = useContext(CourseProbs);
   const navigate = useNavigate();
   const videoFieldRef = useRef(null);
   const videoAddRef = useRef(null);
@@ -85,7 +85,7 @@ const AddUnit = ({setUnitVideos, setUnitFiles}) => {
   const handleAssignment = () => {
     // navigate('/assignment', { state: { courseId, unitId } });
 
-    navigate("/course/create-assignment", { state: { unitId,courseId  } });
+    navigate("/course/create-assignment", { state: { unitId,courseId,instructor  } });
   };
 
   const handleUploadVideo = (e) => {
@@ -97,8 +97,7 @@ const AddUnit = ({setUnitVideos, setUnitFiles}) => {
         url: videoUrl,
         unit: unitId,
         updated_by: userId,
-        created_by: userId,
-        editor: courseCoauthors
+        instructor
       };
       fetch("http://127.0.0.1:8000/api/videos/", {
         method: "POST",
@@ -140,20 +139,17 @@ const AddUnit = ({setUnitVideos, setUnitFiles}) => {
       );
       formData.append("unit", unitId);
       formData.append("updated_by", userId);
-      formData.append("created_by", userId);
-      courseCoauthors.forEach(id => {
-        formData.append("editor", id);
-      });
-      // formData.append("editor", courseCoauthors);
+      formData.append("instructor", instructor);
     } else {
       formData.append("file", unitPDF);
       formData.append("title", unitPDF.name.split(".").slice(0, 1).toString());
       formData.append("unit", unitId);
       formData.append("updated_by", userId);
-      courseCoauthors.forEach(id => {
-        formData.append("editor", id);
-      });
-      formData.append("created_by", userId);
+      formData.append("instructor", instructor);
+      // courseCoauthors.forEach(id => {
+      //   formData.append("editor", id);
+      // });
+    
     }
     fetch("http://127.0.0.1:8000/api/files/", {
       method: "POST",

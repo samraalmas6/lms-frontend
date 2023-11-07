@@ -17,6 +17,9 @@ const ModuleCard = ({
   assignments,
   handleAssignmentClick,
   setShowAssignment,
+  videoCompletion,
+  unitCompletion,
+  setUnitCompletion
 }) => {
   const navigate = useNavigate();
   // const [selectedLesson, setSelectedLesson] = useState(null);
@@ -154,6 +157,7 @@ const ModuleCard = ({
       if (response.status === 200) {
         response.json().then(function (result) {
           console.log("Api result: ", result[0].url);
+          setUnitCompletion(result[0].video_completed)
           handleLessonSelect(result[0]);
         });
       }
@@ -222,12 +226,15 @@ const ModuleCard = ({
                     <div className="module-content-container" key={unit.id}>
                       <div className="check-box-div">
                         <form onSubmit={(e) => e.preventDefault()}>
+                      
                           <input
                             className="checkbox"
                             type="checkbox"
                             id={`lesson-${unit.id}`}
                             name="lesson"
-                            value={`lesson-${unit.id}`}
+                            // value={`lesson-${unit.id}`}
+                            value={unitCompletion}
+                            checked={unitCompletion}
                           />
                         </form>
                       </div>

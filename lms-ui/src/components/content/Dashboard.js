@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Dashboard.css";
-// import { Chart } from "react-google-charts";
+import { Chart } from "react-google-charts";
 import { useNavigate } from "react-router";
 
 const Dashboard = () => {
@@ -101,19 +101,19 @@ const Dashboard = () => {
   }, [0]);
 
   const data = [
-    ["Year", "Courses", "Users", "Modules", "Units"],
-    ["2018", noCourses, noUsers, 8, 10],
+    ["Year", "Courses", "Users", "Passed", "Not Passed"],
+    ["2018", noCourses, noUsers, 8, 5],
     ["2019", noCourses, noUsers, 5, 2],
-    ["2020", noCourses, noUsers, 3, 9],
-    ["2021", noCourses, noUsers, 4, 7],
-    ["2022", noCourses, noUsers, 1, 4],
-    ["2023", noCourses, noUsers, 5, 0],
+    ["2020", noCourses, noUsers, 3, 3],
+    ["2021", noCourses, noUsers, 10, 5],
+    ["2022", noCourses, noUsers, 9, 4],
+    ["2023", noCourses, noUsers, 5, 1],
   ];
 
   const options = {
     chart: {
       title: "Courses Reports",
-      subtitle: "Courses, Users, Modules, and Units : 2018-2023",
+      subtitle: "Courses, Users : 2018-2023",
     },
   };
 
@@ -128,7 +128,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="main">
+    <div className="dashboard-main-container">
       <p className="lead d-none d-sm-block">Overview</p>
       <div
         className="alert alert-warning fade collapse"
@@ -230,21 +230,25 @@ const Dashboard = () => {
           </div>
         </div> */}
       </div>
-      <div className="row ">
-        <div className="col-lg-7 col-md-6 col-sm-12">
-          <h5 className="mt-3 mb-3 text-secondary">Courses</h5>
-          <div className="">
-            {/* <Chart
+      <div className="dashboard-chart-row"
+
+      >
+        <div 
+        className="dashboard-chart-section"
+        >
+          {/* <h5 className="mt-3 mb-3 text-secondary">Courses</h5> */}
+       
+            <Chart
               chartType="Bar"
               width="100%"
               height="400px"
               data={data}
               options={options}
-            /> */}
-          </div>
+            />
+         
         </div>
-        <div className="table-responsive mt-5 col-lg-5">
-          <h5 className="mt-3 mb-3 text-secondary">
+        <div className="table-responsive dashboard-new-registered-user-section">
+          <h5 className="mt-0 mb-3 text-secondary">
             Recently Registered Users
           </h5>
           <table className="table">

@@ -2,6 +2,7 @@ import React from "react";
 import user from "./Images/user.png";
 import "../styles/HomePage.css";
 import { Link, useNavigate } from "react-router-dom";
+import Avatar from 'react-avatar';
 
 export const Navbar = () => {
   const navigate = useNavigate()
@@ -14,12 +15,12 @@ export const Navbar = () => {
   }
 
   return (
-    <nav className="navbar navbar-expand-md mb-0 nav-bar"
+    <nav className="navbar navbar-expand-md mb-0 nav-bar p-0"
       style={{ height: '8%', boxShadow: "4px 3px 21px -10px gray"}}
     >
       <div className="container-fluid">
         <Link to="/" className="navbar-brand" href="#">
-          LMS
+          Dashboard
         </Link>
         <button
           className="navbar-toggler"
@@ -34,15 +35,15 @@ export const Navbar = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav">
-            <li className="nav-item active">
+            {/* <li className="nav-item active">
               <Link to="/home" className="nav-link" href="#">
                 Home <span className="sr-only">Home</span>
               </Link>
-            </li>
+            </li> */}
           </ul>
-          <div className="searchbar-container">
+          {/* <div className="searchbar-container">
             <input type="search" placeholder="Search" />
-          </div>
+          </div> */}
           <ul className="navbar-nav ml-auto navbar-right ">
             <li className="nav-item">
               <a
@@ -71,7 +72,9 @@ export const Navbar = () => {
                 data-target="#myModal"
                 data-toggle="modal"
               >
-                <img src={user} alt="User" className="user-image" />
+                {/* <img src={user} alt="User" className="user-image" /> */}
+                <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'gray', 'green'])} name={name} round={true} size='40px' />
+
               </a>
             </li>
             <li className="nav-item">

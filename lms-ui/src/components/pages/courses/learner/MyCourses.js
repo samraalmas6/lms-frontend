@@ -56,19 +56,19 @@ const MyCourses = () => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
-        if (response.status === 200) {
-          response.json().then(function (result) {
-            const courses = [];
-            for (const course of result) {
-              if (totalCourses.includes(course.id)) {
-                courses.push(course);
-              }
-              // console.log("coursesData: ",result)
-            }
-            console.log("courses:", courses);
-            setCourseContent(courses);
-          });
+        if(response.status === 200) {
+        response.json().then(function (result) {
+          console.log('Course Api Result', result);
+          const courses = [];
+          for (const course of result) {
+            if (totalCourses.includes(course.id)) {
+              courses.push(course)
+          }
         }
+          setCourseContent(courses);
+          console.log('this is course object', courses);
+        });
+      }
       });
     };
 

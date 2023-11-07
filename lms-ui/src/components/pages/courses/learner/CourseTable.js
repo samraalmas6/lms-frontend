@@ -243,6 +243,9 @@ function CourseTable({ modules, assignments }) {
   const [videoProgress, setVideoProgress] = useState({});
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [showAssignmentDetail, setShowAssignmentDetail] = useState(false);
+  const [videoCompletion, setVideoCompletion] = useState(false);
+  const [unitCompletion, setUnitCompletion] = useState(false)
+
 
   const [showAssignment, setShowAssignment] = useState(false);
   const [courseContent, setCourseContent] = useState([]);
@@ -341,16 +344,41 @@ function CourseTable({ modules, assignments }) {
     setIsCourseContentVisible(!isCourseContentVisible);
   };
 
-  const handleVideoProgress = ({ played, playedSeconds }) => {
-    if (selectedLesson) {
-      setVideoProgress((prevProgress) => ({
-        ...prevProgress,
-        [selectedLesson.id]: {
-          played,
-          completed: played >= 0.95, // Mark as completed when played >= 0.95
-        },
-      }));
-    }
+  // const handleVideoProgress = ({ played, playedSeconds }) => {
+  //   // Set a threshold value (e.g., 0.95) to consider the video as completed
+  //   if (played >= 0.95 && !videoCompleted) {
+  //     // Mark the video as completed
+  //     setVideoCompleted(true);
+
+  //     // Use the lesson id to select the corresponding checkbox
+  //     const checkboxId = `lesson-${selectedLesson.id}`;
+  //     const checkbox = document.getElementById(checkboxId);
+
+  //     // Check the checkbox
+  //     if (checkbox) {
+  //       checkbox.checked = true;
+  //     }
+  //   }
+  // };
+  const handleVideoProgress = ({ progress, played, playedSeconds }) => {
+
+        // Calculate the percentage of video completion
+        // const percentage = progress.played * 100;
+        // setVideoProgress(percentage);
+    
+        // // Check if the video is played 90% or more
+        // if (percentage >= 90) {
+        //   setVideoCompleted(true);
+        // }
+    // if (selectedLesson) {
+    //   setVideoProgress((prevProgress) => ({
+    //     ...prevProgress,
+    //     [selectedLesson.id]: {
+    //       played,
+    //       completed: played >= 0.95, // Mark as completed when played >= 0.95
+    //     },
+    //   }));
+    // }
   };
 
   // Pass the video progress to the VideoPlayer component
@@ -371,6 +399,7 @@ function CourseTable({ modules, assignments }) {
                 <VideoPlayer
                   selectedLesson={selectedLesson}
                   handleVideoProgress={handleVideoProgress}
+                  setVideoCompletion={setVideoCompletion}
                 />
                 {/* tabs below video */}
               </div>
@@ -449,6 +478,9 @@ function CourseTable({ modules, assignments }) {
                             // selectedLesson={selectedLesson}
                             handleAssignmentClick={handleAssignmentClick}
                             setShowAssignment={setShowAssignment}
+                            videoCompletion={videoCompletion}
+                            unitCompletion={unitCompletion}
+                            setUnitCompletion={setUnitCompletion}
                           />
                         ))}
                   </div>

@@ -8,14 +8,13 @@ export const ModuleProbs = createContext(null);
 const CourseModule = ({ moduleData, moduleCounter, setModuleData, courseId }) => {
   // ****************   Module Refs   *********************
   // ******************************************************
-console.log('this is module counter', moduleCounter);
-
+  const userId = sessionStorage.getItem("user_id")
   const startDateRefModule = useRef(null);
   const endDateRefModule = useRef(null);
   const startDatePickerRefModule = useRef(null);
   const endDatePickerRefModule = useRef(null);
 
-  const {courseCoauthors} = useContext(CourseProbs)
+  const {instructor, setInstructor} = useContext(CourseProbs)
   const [initModuleName, setInitModuleName] = useState(0);
   const [moduleId, setModuleId] = useState(null);
 
@@ -36,6 +35,9 @@ console.log('this is module counter', moduleCounter);
   const [listModule, setListModule] = useState([]);
 
   useEffect(() => {
+    if(moduleData.length !== 0){
+      setInstructor(moduleData[0].instructor)
+    }
     setInitModuleName(
      moduleCounter+1
     );
@@ -104,9 +106,8 @@ console.log('this is module counter', moduleCounter);
       start_date: moduleStart,
       end_date: moduleEnd,
       course: courseId,
-      updated_by: sessionStorage.getItem("user_id"),
-      editor: courseCoauthors,
-      created_by: sessionStorage.getItem("user_id")
+      updated_by: userId,
+      instructor
     };
     fetch("http://127.0.0.1:8000/api/modules/", {
       method: "POST",

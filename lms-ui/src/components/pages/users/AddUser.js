@@ -8,6 +8,7 @@ import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
 import ExcelExportData from "../../hooks/ExcelExportData";
 import ExportExcel from "../../content/Excelexport";
+import Swal from "sweetalert2";
 
 function AddUser() {
   const excelFile = useRef();
@@ -154,8 +155,27 @@ function AddUser() {
           sendEmail()
         }
         
-        else {
+        else if(response.status === 403) {
           console.log(response);
+          response.json().then(function (result) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Not Registered',
+              text: `${result.detail}`
+        
+            });
+          })
+        
+        }
+        else {
+          response.json().then(function (result) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Not Registered',
+              text: `${result.email}`
+        
+            });
+          })
         }
       });
       const sendEmail = async () => {
@@ -168,7 +188,7 @@ function AddUser() {
             message: "Verify Account",
             sender: "LMS",
           });
-          alert("email successfully sent check inbox");
+          Swal.fire("Email successfully sent! check Your inbox")
         } catch (error) {
           console.log(error);
         }
@@ -299,7 +319,7 @@ function AddUser() {
               <option value="admin">ADMIN</option>
               <option value="instructor">INSTRUCTOR</option>
               <option value="learner">LEARNER</option>
-              <option value="custom">CUSTOM ROLE</option>
+              {/* <option value="custom">CUSTOM ROLE</option> */}
             </select>
           </div>
           <div className={styles.phonecity}>
