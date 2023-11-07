@@ -363,54 +363,16 @@ const ModuleCard = ({
                                             </div>
                                             <div>{resource.title}</div>
                                           </div>
-                                          {/* {showResource &&<div>{resource.url}</div>} */}
-                                          {/* <div><p><a href="https://www.youtube.com/"></a>https://www.youtube.com/</p></div>
-                                          <div><p><a href="https://app.slack.com/client/T04AJ4H2YCU  https://www.youtube.com/"></a>https://app.slack.com/client/T04AJ4H2YCU https://www.youtube.com/</p></div> */}
-                                        </div>
+                                          </div>
                                       );
                                     })}
                               </div>
-                              {/* -----------zxxxxxxxxxx------------ */}
-
-                              {/* -------------------------- */}
                             </div>
                           </li>
                         </div>
-                        {/* 
-                        <div className="lesson-resources">
-                          <button
-                            onClick={() =>
-                              toggleResources("lesson.id, lesson.resources")
-                            }
-                            className="resource-button"
-                          >
-                            Resources
-                          </button>
-                        </div>
-
-                        {lessonResources["lesson.id"] && (
-                          <div className="resources-popup">
-                            <div className="resources-list">
-                              {/* {lesson.resources.map((resource, index) => (
-                            <div
-                              key={index}
-                              className="resource-item"
-                            >
-                              <a
-                                href={resource.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                {resource.title}
-                              </a>
-                            </div>
-                          ))} */}
-                            </div>
-                          </div>
-                        )}
                       </div>
                     </div>
-                  );
+                        )
                 })}
           </ul>
         </div>
