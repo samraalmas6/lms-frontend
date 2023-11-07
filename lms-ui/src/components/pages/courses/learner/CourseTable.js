@@ -243,6 +243,9 @@ function CourseTable({ modules, assignments }) {
   const [videoProgress, setVideoProgress] = useState({});
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [showAssignmentDetail, setShowAssignmentDetail] = useState(false);
+  const [videoCompletion, setVideoCompletion] = useState(false);
+  const [unitCompletion, setUnitCompletion] = useState(false)
+
 
   const [showAssignment, setShowAssignment] = useState(false);
   const [courseContent, setCourseContent] = useState([]);
@@ -357,16 +360,25 @@ function CourseTable({ modules, assignments }) {
   //     }
   //   }
   // };
-  const handleVideoProgress = ({ played, playedSeconds }) => {
-    if (selectedLesson) {
-      setVideoProgress((prevProgress) => ({
-        ...prevProgress,
-        [selectedLesson.id]: {
-          played,
-          completed: played >= 0.95, // Mark as completed when played >= 0.95
-        },
-      }));
-    }
+  const handleVideoProgress = ({ progress, played, playedSeconds }) => {
+
+        // Calculate the percentage of video completion
+        // const percentage = progress.played * 100;
+        // setVideoProgress(percentage);
+    
+        // // Check if the video is played 90% or more
+        // if (percentage >= 90) {
+        //   setVideoCompleted(true);
+        // }
+    // if (selectedLesson) {
+    //   setVideoProgress((prevProgress) => ({
+    //     ...prevProgress,
+    //     [selectedLesson.id]: {
+    //       played,
+    //       completed: played >= 0.95, // Mark as completed when played >= 0.95
+    //     },
+    //   }));
+    // }
   };
 
   // Pass the video progress to the VideoPlayer component
@@ -387,6 +399,7 @@ function CourseTable({ modules, assignments }) {
                 <VideoPlayer
                   selectedLesson={selectedLesson}
                   handleVideoProgress={handleVideoProgress}
+                  setVideoCompletion={setVideoCompletion}
                 />
                 {/* tabs below video */}
               </div>
@@ -465,6 +478,9 @@ function CourseTable({ modules, assignments }) {
                             // selectedLesson={selectedLesson}
                             handleAssignmentClick={handleAssignmentClick}
                             setShowAssignment={setShowAssignment}
+                            videoCompletion={videoCompletion}
+                            unitCompletion={unitCompletion}
+                            setUnitCompletion={setUnitCompletion}
                           />
                         ))}
                   </div>

@@ -746,7 +746,11 @@ hr {
     border-radius: 7px;
   }
   .course-delete {
-    text-decoration: line-through;
+    /* text-decoration: line-through; */
     color: #c3c1c1 !important;
     /* background-color: #cfcfcf !important; */
+  }
+  .deleteCourse-line {
+    text-decoration: line-through;
+    color: #c3c1c1 !important;
   }

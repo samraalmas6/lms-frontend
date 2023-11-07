@@ -343,12 +343,11 @@ const AssignmentScreen = () => {
       due_date: courseStart,
       marks: marks,
       due_time: courseEnd,
-      is_updated: true,
       unit: state.unitId, // Assuming a default unit value
       is_team_submission_allowed: teamSubmission,
+      instructor: state.instructor,
+      updated_by: userId
       // Number_of_members: 1,
-      updated_by: sessionStorage.getItem("user_id"),
-      created_by: sessionStorage.getItem("user_id"),
     };
 
     fetch("http://127.0.0.1:8000/api/assignments/", {

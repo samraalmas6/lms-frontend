@@ -114,6 +114,38 @@ const AllCategory = ({ show }) => {
     }
   };
 
+  const getNumberOfCourses = (id) => {
+    let counter = 0;
+    coursesData.forEach(course => {
+      if(course.category.includes(id)){
+        counter++
+      }
+    });
+   return counter;
+  }
+
+  const getNameOfCourses = (id) => {
+    setcategoryCourses([])
+    coursesData.forEach(course => {
+      if(course.category.includes(id)){
+        setcategoryCourses(pre => [...pre, course])
+      }
+    });
+  }
+
+  const getCategoryName = (id) => {
+    const category = categoryData.filter(category => {
+      return category.id === id;
+    });
+    console.log('This is category:', category, id);
+    if(category.length !== 0){
+    return category[0].title
+    }
+    else {
+      return "None"
+    }
+  }
+
   const handleAddCourse = (e) => {
     e.preventDefault();
     const selectItems = document.getElementsByClassName("course-check");
@@ -123,7 +155,7 @@ const AllCategory = ({ show }) => {
           return course.course_title === item.value;
         });
         console.log(" obj  =", newObj);
-        if (typeof categoryCourses !== "undefined") {
+        if (typeof(categoryCourses) !== "undefined") {
           setcategoryCourses(() => [...categoryCourses, newObj[0]]);
         } else {
           setcategoryCourses([newObj[0]]);
@@ -135,6 +167,8 @@ const AllCategory = ({ show }) => {
 
     // console.log(categoryCourses);
   };
+
+
   return (
     <div style={{boxShadow: "4px 3px 21px -10px gray"}}>
       <div className="creat-course-btn p-2">
@@ -214,7 +248,7 @@ const AllCategory = ({ show }) => {
           <tr>
             <th scope="col">Names</th>
             <th scope="col">Description</th>
-            <th scope="col">Used In</th>
+            <th scope="col">Courses</th>
             <th scope="col">Parent Category</th>
           </tr>
         </thead>
@@ -228,7 +262,8 @@ const AllCategory = ({ show }) => {
                   onClick={() => {
                     setCatgoryName(category.title);
                     setParentCat(category.parent);
-                    setcategoryCourses(() => category.courses);
+                    // setcategoryCourses(() => category.courses);
+                    getNameOfCourses(category.id)
                     //   setTeamUser(team.Users);
                     //   setTeamCourses(team.Courses);
                     // setTeamDetail([team.Users, team.Courses]);
@@ -239,8 +274,8 @@ const AllCategory = ({ show }) => {
                 >
                   <td>{category.title}</td>
                   <td>{category.description}</td>
-                  <td>{category.usedIn}</td>
-                  <td>{category.parent}</td>
+                  <td>{getNumberOfCourses(category.id)}</td>
+                  <td>{getCategoryName(category.parent)}</td>
                 </tr>
               );
             })}
@@ -268,7 +303,8 @@ const AllCategory = ({ show }) => {
                             onClick={() => {
                               setCatgoryName(category.title);
                               setParentCat(category.parent);
-                              setcategoryCourses(() => category.courses);
+                              // setcategoryCourses(() => category.courses);
+                              getNameOfCourses(category.id)
                               // setTeamCourses(team.Courses);
                             }}
                           >
@@ -308,9 +344,9 @@ const AllCategory = ({ show }) => {
                   <table className="table">
                     <thead>
                       <tr>
-                        <th style={{ borderTop: "none" }}>Name</th>
-                        <th style={{ borderTop: "none" }}>Parent Category</th>
-                        <th style={{ borderTop: "none" }}>Courses</th>
+                        <th scope="col" style={{ borderTop: "none" }}>Name</th>
+                        <th scope="col" style={{ borderTop: "none" }}>Parent Category</th>
+                        <th scope="col" style={{ borderTop: "none" }}>Courses</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -320,7 +356,7 @@ const AllCategory = ({ show }) => {
                         </td>
                         <td className={"borderLess"}>
                           {/* <span className="label-tag">{parentCat.slice(0,1).toUpperCase()+ parentCat.slice(-1).toUpperCase()}</span> */}
-                          <span>{parentCat}</span>
+                          <span>{getCategoryName(parentCat)}</span>
                         </td>
                         <td className={"borderLess"}>
                           {categoryCourses &&
@@ -330,21 +366,8 @@ const AllCategory = ({ show }) => {
                                   key={course.id}
                                   className={"borderLess w-100"}
                                 >
-                                  <td className={"borderLess"}>{index + 1}</td>
                                   <td className={"borderLess"}>
-                                    {course.course_title}
-                                  </td>
-                                  <td className={"borderLess"}>
-                                    <button
-                                      type="button"
-                                      className={"deleteBtn"}
-                                      onClick={() =>
-                                        handleDeleteCourse(course.id)
-                                      }
-                                    >
-                                      {" "}
-                                      X{" "}
-                                    </button>
+                                    {course.title}
                                   </td>
                                 </tr>
                               );

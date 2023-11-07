@@ -58,6 +58,7 @@ const MyCourses = () => {
       }).then((response) => {
         if(response.status === 200) {
         response.json().then(function (result) {
+          console.log('Course Api Result', result);
           const courses = [];
           for (const course of result) {
             if (totalCourses.includes(course.id)) {
@@ -65,6 +66,7 @@ const MyCourses = () => {
           }
         }
           setCourseContent(courses);
+          console.log('this is course object', courses);
         });
       }
       });

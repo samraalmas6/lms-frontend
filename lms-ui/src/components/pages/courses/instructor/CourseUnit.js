@@ -20,8 +20,8 @@ const CourseUnit = ({ showUnit }) => {
   const userId = sessionStorage.getItem("user_id");
   const { unitData, setUnitData, moduleId, unitTitle, setUnitTitle } =
     useContext(ModuleProbs);
-    const {courseCoauthors} = useContext(CourseProbs)
-    console.log('co-author in unit', courseCoauthors);
+    const {instructor, setInstructor} = useContext(CourseProbs)
+  
   // console.log('unit data', unitData);
   const startDateRefUnit = useRef(null);
   const endDateRefUnit = useRef(null);
@@ -43,6 +43,9 @@ const CourseUnit = ({ showUnit }) => {
   const [showUnitList, setShoshowUnitList] = useState(showUnit);
 
   useEffect(() => {
+    if(unitData.length !== 0 ){
+      setInstructor(unitData[0].instructor)
+    }
     setInitUnitName(
       unitData.length === 0 ? Number(1) : Number(unitData.length + 1)
     );
@@ -82,8 +85,7 @@ const CourseUnit = ({ showUnit }) => {
         end_date: unitEnd,
         module: moduleId,
         updated_by: userId,
-        editor: courseCoauthors,
-        created_by: sessionStorage.getItem("user_id")
+        instructor
       };
       fetch("http://127.0.0.1:8000/api/units/", {
         method: "POST",
