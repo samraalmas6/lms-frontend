@@ -382,7 +382,8 @@ border: 10px solid red;
 .lesson-title,
 .lecture-pdf {
   display: flex;
-  gap: 20px;
+  gap: 10px;
+  flex-direction: column;
 }
 
 .lecture-pdf li a:hover {
