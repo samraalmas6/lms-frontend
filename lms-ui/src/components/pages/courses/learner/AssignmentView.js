@@ -348,6 +348,7 @@ function AssignmentView({ selectedAssignments }) {
   function handleLinkChange() {
     if (link.trim() !== "") {
       setLinks([...links, link]);
+      setSubmissionOption(null);
     }
   }
 
@@ -841,7 +842,15 @@ function AssignmentView({ selectedAssignments }) {
                       <div className="link-place">
                         <div
                           className="close-icon"
-                          onClick={() => setSubmissionOption(null)}
+                          
+                          onClick={() => {
+                            // Set the current link as the previous link
+                            setPreviousLink(link);
+                            // Clear the link input field
+                            setLink('');
+                            // Close the popup
+                            setSubmissionOption(null);
+                          }}
                         >
                           <FontAwesomeIcon icon={faTimes} />
                         </div>
