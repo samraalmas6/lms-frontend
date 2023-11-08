@@ -234,13 +234,13 @@ const MyCourses = () => {
                         {/* <p>tagline</p> */}
                         <div className="progress-main-div block-view">
                           {/* progress % */}
-                          {`${course.id + 20}%`}
+                          {`${course.progress}%`}
                           {/* progress bar */}
                           <div class="progress">
                             <div
                               class="progress-bar bg-success"
                               role="progressbar"
-                              style={{ width: `${course.id + 20}%` }}
+                              style={{ width: `${course.progress}%` }}
                               aria-valuenow="25"
                               aria-valuemin="0"
                               aria-valuemax="100"
@@ -249,9 +249,9 @@ const MyCourses = () => {
                           {/* status */}
                           <div>
                             <p className="progress-tag">
-                              {course.id + 20 < 1
+                              {course.progress < 1
                                 ? "not started"
-                                : course.id + 20 < 100
+                                : course.progress < 100
                                 ? "in progress"
                                 : "completed"}
                             </p>
@@ -314,22 +314,22 @@ const MyCourses = () => {
                         {/* status */}
                         <div>
                           <p className="progress-tag">
-                            {course.id < 1
+                            {course.progress === 0
                               ? "not started"
-                              : course.id < 100
+                              : course.progress < 100
                               ? "in progress"
                               : "completed"}
                           </p>
                         </div>
                         <div className="progress-statics-div">
                           {/* progress % */}
-                          <div>{`${course.id + 20}%`}</div>
+                          <div className="text-center">{`${course.progress.toString().slice(0,4)}%`}</div>
                           {/* progress bar */}
                           <div class="progress">
                             <div
                               class="progress-bar bg-success"
                               role="progressbar"
-                              style={{ width: `${course.id + 20}%` }}
+                              style={{ width: `${course.progress}%` }}
                               aria-valuenow="25"
                               aria-valuemin="0"
                               aria-valuemax="100"

@@ -208,13 +208,8 @@ const AssignmentGrading = () => {
             setCourseContent(result);
           } else {
             const obj = result.filter((course) => {
-              return (
-                (course.created_by === userId ||
-                  course.editor.includes(+userId)) &&
-                course.is_delete === false
-              );
+              return course.is_delete === false
             });
-            console.log("this is obj", obj, userId);
             setCourseContent(obj);
           }
         });
@@ -295,8 +290,8 @@ const AssignmentGrading = () => {
       }
     });
   };
-  const getAssignmentGradingData = async () => {
-    await fetch("http://127.0.0.1:8000/api/assignment_gradings/", {
+  const getAssignmentGradingData =  () => {
+     fetch("http://127.0.0.1:8000/api/assignment_gradings/", {
       method: "GET",
       headers: {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
@@ -304,7 +299,7 @@ const AssignmentGrading = () => {
     }).then((response) => {
       if (response.status === 200) {
         response.json().then(function (result) {
-          // console.log(result);
+          console.log('Api result Grading=',result);
           setAssignmentGrading(result);
         });
       } else {
@@ -399,7 +394,7 @@ const AssignmentGrading = () => {
     getUsers();
 
     // getfilteredData();
-  }, []);
+  }, [0]);
 
   // console.log("grader is jo user login h", sessionStorage.getItem("user_id"));
   // console.log(

@@ -374,7 +374,6 @@ function AssignmentView({ selectedAssignments }) {
     setLinks(updatedLinks);
   }
 
-   
   function handleRequestPost(method) {
     if (isSubmissionValid()) {
       setRequestMethod(method);
@@ -386,6 +385,37 @@ function AssignmentView({ selectedAssignments }) {
   }
 
   function handleSubmit(request) {
+    const handleAssignmentProgress = (id) => {
+      const obj = {
+        title: selectedAssignment.title,
+        description: selectedAssignment.description,
+        due_date: selectedAssignment.due_date,
+        due_time: selectedAssignment.due_time,
+        marks: selectedAssignment.marks,
+        instructor: selectedAssignment.instructor,
+        unit: selectedAssignment.unit,
+        updated_by: sessionStorage.getItem("user_id"),
+        assignment_completed: true
+      };
+
+      fetch(`http://127.0.0.1:8000/api/assignments/${id}/`, {
+        method: "PUT",
+        body: JSON.stringify(obj),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log("updated Assignment: ", result);
+          });
+        } else {
+          console.log(response);
+        }
+      });
+    };
+
     let url = "";
     const formData = new FormData();
     formData.append("submitted_by", sessionStorage.getItem("user_id"));
@@ -421,6 +451,7 @@ function AssignmentView({ selectedAssignments }) {
         });
 
         if (response.status === 201 || response.status === 200) {
+          handleAssignmentProgress(selectedAssignment.id)
           setFile("");
           setFiles("");
           setLink("");
@@ -497,7 +528,7 @@ function AssignmentView({ selectedAssignments }) {
           }
 
           setLink("");
-         
+
           // setFile([])
         } else {
           console.log(response);
@@ -505,8 +536,6 @@ function AssignmentView({ selectedAssignments }) {
       } catch (error) {
         console.error("Error:", error);
       }
-
-
     }
 
     // Call the postData function when needed:
@@ -527,7 +556,7 @@ function AssignmentView({ selectedAssignments }) {
   }
 
   function isSubmissionValid() {
-    return (file && file.length !== "") || (link.trim() !== "");
+    return (file && file.length !== "") || link.trim() !== "";
   }
 
   return (
@@ -771,7 +800,6 @@ function AssignmentView({ selectedAssignments }) {
                           onClick={() =>
                             setShowSubmissionOptions(!showSubmissionOptions)
                           }
-                          
                           className="add-create"
                         >
                           <FontAwesomeIcon icon={faPlus} /> Add or create

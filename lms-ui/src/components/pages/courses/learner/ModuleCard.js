@@ -67,12 +67,19 @@ const ModuleCard = ({
   }, [0]);
 
   const handleFileComplete = (file) => {
+    let completed = ""
+    if(lectureCompleted !== true) {
+      completed = file.file_completed
+    }
+    else {
+      completed = lectureCompleted
+    }
     const updatedObj = {
       title: file.title,
       instructor: file.instructor,
       unit: file.unit,
       updated_by: sessionStorage.getItem("user_id"),
-      file_completed: lectureCompleted,
+      file_completed: completed,
     };
 
     fetch(`http://127.0.0.1:8000/api/files/${file.id}/`, {
@@ -232,7 +239,7 @@ const ModuleCard = ({
                             name="lesson"
                             // value={`lesson-${unit.id}`}
                             value={unitCompletion}
-                            checked={unitCompletion}
+                            checked={unit.unit_completed}
                           />
                         </form>
                       </div>
@@ -247,7 +254,10 @@ const ModuleCard = ({
                           {/* <li className="lecture-sno">{index + 1}</li> */}
                           <li
                             className="lecture-name"
-                            onClick={() => handleUnitPDF(unit)}
+                            onClick={() => {
+                              handleUnitPDF(unit)
+                              toggleLesson(unit);
+                            }}
                           >
                             <div>{unit.title}</div>
                             <div>
@@ -291,7 +301,7 @@ const ModuleCard = ({
                                   style={{ marginTop: "3px" }}
                                 />
 
-                                <li>{unit.title}</li>
+                                <li>{unit.id}</li>
                               </div>
                               <div className="lecture-pdf">
                                 {unitPDF.length === 0
@@ -303,7 +313,6 @@ const ModuleCard = ({
                                           className="pdf-doc-container"
                                           onClick={() => {
                                             handleViewPdf(pdf.file);
-                                            console.log("pdf url ", pdf.file);
                                           }}
                                         >
                                           <div
@@ -347,6 +356,7 @@ const ModuleCard = ({
                                                 className="checkbox"
                                                 type="checkbox"
                                                 name="lesson-checkbox"
+                                                checked={assignment.assignment_completed}
                                               />
                                               </div>
                                             <i class="far fa-file-alt"></i>
