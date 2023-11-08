@@ -71,6 +71,15 @@ const AllUsers = () => {
       }
     });
   };
+
+  function randomColor() {
+    let hex = Math.floor(Math.random() * 0xffffff);
+  
+    let color = "#" + hex.toString(16);
+    console.log(hex, color);
+    return color;
+  }
+
   return (
     <div className="main pt-2" style={{ boxShadow: "4px 3px 21px -10px gray" }}>
       <form className="all-usersform">
@@ -155,11 +164,10 @@ const AllUsers = () => {
                             className="allusers-image"
                           /> */}
                           <Avatar
-                            color={Avatar.getRandomColor("sitebase", [
-                              "red",
-                              "gray",
-                              "green",
-                            ])}
+                          color={randomColor()}
+                            // style={{
+                            //   backgroundColor: randomColor()
+                            // }}
                             name={`${user.first_name} ${user.last_name}`}
                             round={true}
                             size="40px"
@@ -219,11 +227,9 @@ const AllUsers = () => {
                     alt="LMS User"
                   /> */}
                   <Avatar
-                    color={Avatar.getRandomColor("sitebase", [
-                      "red",
-                      "gray",
-                      "green",
-                    ])}
+                    style={{
+                      backgroundColor: randomColor(),
+                    }}
                     name={`${user.first_name} ${user.last_name}`}
                     className=""
                     round={true}

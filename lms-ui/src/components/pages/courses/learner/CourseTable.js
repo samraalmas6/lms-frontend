@@ -480,7 +480,7 @@ function CourseTable({ modules, assignments }) {
                             handleAssignmentClick={handleAssignmentClick}
                             setShowAssignment={setShowAssignment}
                             videoCompletion={videoCompletion}
-                            setVideoCompletion={setVideoCompleted}
+                            setVideoCompletion={setVideoCompletion}
                             unitCompletion={unitCompletion}
                             setUnitCompletion={setUnitCompletion}
                           />

@@ -168,6 +168,13 @@ const AllCourse = ({ show, minDate }) => {
   }
   };
 
+  function randomColor() {
+    let hex = Math.floor(Math.random() * 0xFFFFFF);
+    let color = "#" + hex.toString(16);
+  
+    return color;
+  }
+
   const handleCourseTitle = (e) => {
     setCourseTitle(e.target.value);
   };
@@ -480,12 +487,10 @@ const AllCourse = ({ show, minDate }) => {
                      className={deletedCourse}>{course.description}</td>
                     <td className={deletedCourse}>
                     <Avatar
-                    color={Avatar.getRandomColor("sitebase", [
-                      "red",
-                      "gray",
-                      "green",
-                    ])}
                     name={getUSerFullName(course.instructor)}
+                    style={{
+                      backgroundColor: randomColor()
+                    }}
                     className="me-1"
                     round={true}
                     size="30px"

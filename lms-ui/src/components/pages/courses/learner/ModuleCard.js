@@ -6,6 +6,7 @@ import "../../../styles/CourseTable.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
+import SingleVideo from "./SingleVideo";
 
 const ModuleCard = ({
   module,
@@ -30,6 +31,7 @@ const ModuleCard = ({
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [lessonResources, setLessonResources] = useState({});
   const [lectureCompleted, setLectureCompleted] = useState(false);
+  const [videoData, setVideoData] = useState([])
   // const []
 
   useEffect(() => {
@@ -161,10 +163,11 @@ const ModuleCard = ({
     }).then((response) => {
       if (response.status === 200) {
         response.json().then(function (result) {
-          console.log("Api result: ", result[0].video_completed);
+          console.log("API result Video =", result);
+          setVideoData(result)
           // setUnitCompletion(result[0].video_completed)
-          setVideoCompletion(result[0].video_completed);
-          handleLessonSelect(result[0]);
+          // setVideoCompletion(result[0].video_completed);
+          // handleLessonSelect(result[0]);
         });
       }
     });
@@ -285,24 +288,17 @@ const ModuleCard = ({
                             className={`lesson-item upper-row`}
                           >
                             <div className="lesson-content-container">
-                              <div className="lesson-title">
-                                <input
-                                  className="checkbox"
-                                  type="checkbox"
-                                  id={`lesson-${unit.id}`}
-                                  name="lesson"
-                                  // value={`lesson-${unit.id}`}
-                                  value={videoCompletion}
-                                  checked={videoCompletion}
-                                />
-                                <FontAwesomeIcon
-                                  icon={faCirclePlay}
-                                  className="my-icon"
-                                  style={{ marginTop: "3px" }}
-                                />
+                              {
+                                videoData.length !== 0 && videoData.map(video => {
+                                  return(
+                                    <SingleVideo video={video} videoCompletion={videoCompletion}
+                                    setVideoCompletion={setVideoCompletion}
+                                    handleLessonSelect={handleLessonSelect}
+                                    />
+                                  )
+                                })
+                              }
 
-                                <li>{unit.id}</li>
-                              </div>
                               <div className="lecture-pdf">
                                 {unitPDF.length === 0
                                   ? "No Document"

@@ -2,21 +2,31 @@ import React from "react";
 import user from "./Images/user.png";
 import "../styles/HomePage.css";
 import { Link, useNavigate } from "react-router-dom";
-import Avatar from 'react-avatar';
+import Avatar from "react-avatar";
 
 export const Navbar = () => {
-  const navigate = useNavigate()
-  const name = `${sessionStorage.getItem('first_name')} ${sessionStorage.getItem("last_name")}`
-  const role = sessionStorage.getItem('role');
+  const navigate = useNavigate();
+  const name = `${sessionStorage.getItem(
+    "first_name"
+  )} ${sessionStorage.getItem("last_name")}`;
+  const role = sessionStorage.getItem("role");
 
   const handleLogout = () => {
-    sessionStorage.clear()
-    navigate('/auth/login')
+    sessionStorage.clear();
+    navigate("/auth/login");
+  };
+
+  function randomColor() {
+    let hex = Math.floor(Math.random() * 0xffffff);
+    console.log(hex);
+    let color = "#" + hex.toString(16);
+    return color;
   }
 
   return (
-    <nav className="navbar navbar-expand-md mb-0 nav-bar p-0"
-      style={{ height: '8%', boxShadow: "4px 3px 21px -10px gray"}}
+    <nav
+      className="navbar navbar-expand-md mb-0 nav-bar p-0"
+      style={{ height: "8%", boxShadow: "4px 3px 21px -10px gray" }}
     >
       <div className="container-fluid">
         <Link to="/" className="navbar-brand" href="#">
@@ -73,8 +83,14 @@ export const Navbar = () => {
                 data-toggle="modal"
               >
                 {/* <img src={user} alt="User" className="user-image" /> */}
-                <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'gray', 'green'])} name={name} round={true} size='40px' />
-
+                <Avatar
+                  style={{
+                    backgroundColor: randomColor(),
+                  }}
+                  name={name}
+                  round={true}
+                  size="40px"
+                />
               </a>
             </li>
             <li className="nav-item">
@@ -88,13 +104,18 @@ export const Navbar = () => {
                   <span className="user-name">{name}</span>
                   <span className="user-role">{role}</span>
                 </div>
-                
               </a>
             </li>
             <li>
-            <div className="logout-container">
-                  <button className="log-out-btn" type="button" onClick={() => handleLogout()}>LogOut</button>
-                </div>
+              <div className="logout-container">
+                <button
+                  className="log-out-btn"
+                  type="button"
+                  onClick={() => handleLogout()}
+                >
+                  LogOut
+                </button>
+              </div>
             </li>
           </ul>
         </div>
