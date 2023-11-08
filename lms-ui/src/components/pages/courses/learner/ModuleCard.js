@@ -348,8 +348,7 @@ const ModuleCard = ({
                                                 type="checkbox"
                                                 name="lesson-checkbox"
                                               />
-                                                                                        </div>
-                                                  
+                                              </div>
                                             <i class="far fa-file-alt"></i>
                                           <div className="assignment-pdf">
                                             {assignment.title}
