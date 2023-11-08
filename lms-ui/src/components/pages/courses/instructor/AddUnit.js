@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { UnitProbs } from "./CourseUnit";
 import { CourseProbs } from "../../../../App";
 
-const AddUnit = ({}) => {
+const AddUnit = ({setUnitVideos, setUnitFiles}) => {
   const userId = sessionStorage.getItem("user_id");
-  const { courseCoauthors, courseId } = useContext(CourseProbs);
+  const { courseCoauthors, courseId, instructor} = useContext(CourseProbs);
   const navigate = useNavigate();
   const videoFieldRef = useRef(null);
   const videoAddRef = useRef(null);
@@ -85,7 +85,7 @@ const AddUnit = ({}) => {
   const handleAssignment = () => {
     // navigate('/assignment', { state: { courseId, unitId } });
 
-    navigate("/course/create-assignment", { state: { unitId,courseId  } });
+    navigate("/course/create-assignment", { state: { unitId,courseId,instructor  } });
   };
 
   const handleUploadVideo = (e) => {
@@ -97,8 +97,7 @@ const AddUnit = ({}) => {
         url: videoUrl,
         unit: unitId,
         updated_by: userId,
-        created_by: userId,
-        editor: courseCoauthors
+        instructor
       };
       fetch("http://127.0.0.1:8000/api/videos/", {
         method: "POST",
@@ -113,7 +112,7 @@ const AddUnit = ({}) => {
             console.log(result);
             setVideoTitle("");
             setVidoUrl("");
-
+            setUnitVideos(pre => [...pre, result])
             // setModuleDescription("");
             // window.location.reload();
           });
@@ -140,20 +139,17 @@ const AddUnit = ({}) => {
       );
       formData.append("unit", unitId);
       formData.append("updated_by", userId);
-      formData.append("created_by", userId);
-      courseCoauthors.forEach(id => {
-        formData.append("editor", id);
-      });
-      // formData.append("editor", courseCoauthors);
+      formData.append("instructor", instructor);
     } else {
       formData.append("file", unitPDF);
       formData.append("title", unitPDF.name.split(".").slice(0, 1).toString());
       formData.append("unit", unitId);
       formData.append("updated_by", userId);
-      courseCoauthors.forEach(id => {
-        formData.append("editor", id);
-      });
-      formData.append("created_by", userId);
+      formData.append("instructor", instructor);
+      // courseCoauthors.forEach(id => {
+      //   formData.append("editor", id);
+      // });
+    
     }
     fetch("http://127.0.0.1:8000/api/files/", {
       method: "POST",
@@ -163,10 +159,11 @@ const AddUnit = ({}) => {
         // "Content-type": "application/json; charset=UTF-8",
       },
     }).then((response) => {
-      if (response.status == 201) {
+      if (response.status === 201) {
         response.json().then(function (result) {
           setUnitPDF(null);
           setUnitSlide(null);
+          setUnitFiles(pre => [...pre, result])
           // setVidoUrl("");
           // setModuleDescription("");
           // window.location.reload();
@@ -229,7 +226,7 @@ const AddUnit = ({}) => {
               </div>
             </div>
           </div>
-          <div className="slides-section">
+          {/* <div className="slides-section">
             <div className="unit-selection-section">
               <span className="unit-form-span-title">Slide</span>
               <i
@@ -260,7 +257,7 @@ const AddUnit = ({}) => {
                 onClick={() => handleRemoveSlide()}
               ></i>
             </div>
-          </div>
+          </div> */}
           <div className="pdf-section">
             <div className="unit-selection-section">
               <span className="unit-form-span-title">PDF</span>

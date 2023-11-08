@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "../../styles/AllTeam.module.css";
 import userImg from "../../content/Images/user.png";
+import Avatar from "react-avatar";
 
 const AllTeams = ({ show }) => {
   const [showBlock, setShowBlock] = useState(false);
@@ -29,15 +30,14 @@ const AllTeams = ({ show }) => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
-        if(response.status === 200){
-        response.json().then(function (result) {
-          console.log(result);
-          setTeamData(result);
-        });
-      }
-      else {
-        console.log(response);
-      }
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log(result);
+            setTeamData(result);
+          });
+        } else {
+          console.log(response);
+        }
       });
     };
 
@@ -48,23 +48,25 @@ const AllTeams = ({ show }) => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
-        if(response.status === 200){
-        response.json().then(function (result) {
-          console.log(result);
-          setUserData(result);
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log(result);
+            const obj = result.filter((user) => {
+              return user.role === "learner";
+            });
+            setUserData(obj);
+            // setUserData(result);
 
-        // ************   List only Learner Users *********************
-        //
-        //   const users = result.filter(user => {
-        //     return user.role === 'learner'
-        // })
-        // setUserData(users);
-          
-        });
-      }
-      else {
-        console.log(response);
-      }
+            // ************   List only Learner Users *********************
+            //
+            //   const users = result.filter(user => {
+            //     return user.role === 'learner'
+            // })
+            // setUserData(users);
+          });
+        } else {
+          console.log(response);
+        }
       });
     };
     const getCourse = () => {
@@ -74,24 +76,21 @@ const AllTeams = ({ show }) => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
-        if(response.status === 200){
-        response.json().then(function (result) {
-          console.log("API result Courses:",result);
-          setCoursesData(result);
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log("API result Courses:", result);
+            setCoursesData(result);
 
-          // ****************** List only Acive Courses *********************
-          //
-          // const activeCourses = result.filter(course => {
-          //   return course.is_active === true
-          // });
-          // setCoursesData(activeCourses)
-
-
-        });
-      }
-      else {
-        console.log(response);
-      }
+            // ****************** List only Acive Courses *********************
+            //
+            // const activeCourses = result.filter(course => {
+            //   return course.is_active === true
+            // });
+            // setCoursesData(activeCourses)
+          });
+        } else {
+          console.log(response);
+        }
       });
       // setCoursesData(courseData);
     };
@@ -151,7 +150,6 @@ const AllTeams = ({ show }) => {
       setAddTeamCoursesId(coursesId);
     }
   };
-
 
   const handleUserCheckChange = (e) => {
     const email = e.target.value;
@@ -301,13 +299,15 @@ const AllTeams = ({ show }) => {
 
       item.checked = false;
     }
-
   };
 
   const getUSerFullName = (user) => {
     if (user) {
       const name = userData.filter((users) => users.id === user);
-      return `${name[0].first_name} ${name[0].last_name}`;
+      console.log("This is name", user);
+      if (name.length !== 0) {
+        return `${name[0].first_name} ${name[0].last_name}`;
+      }
     }
   };
 
@@ -345,7 +345,7 @@ const AllTeams = ({ show }) => {
             },
           }).then((response) => {
             response.json().then(function (result) {
-              console.log('API result ',result);
+              console.log("API result ", result);
               // setTeamUser(pre => [...pre, result])
 
               // conuserData.filter((user, index) => {
@@ -364,7 +364,6 @@ const AllTeams = ({ show }) => {
 
       item.checked = false;
     }
-
   };
 
   const handleDeleteTeam = (id) => {
@@ -385,12 +384,10 @@ const AllTeams = ({ show }) => {
     });
   };
 
-  const handleTeamUpdate = () => {
-    
-  };
+  const handleTeamUpdate = () => {};
 
   return (
-    <div className="" style={{boxShadow: "4px 3px 21px -10px gray"}}>
+    <div className="" style={{ boxShadow: "4px 3px 21px -10px gray" }}>
       <div className="all-course-content pt-2">
         <div className="creat-course-btn">
           <button
@@ -546,14 +543,7 @@ const AllTeams = ({ show }) => {
                                   className={styles.borderLess}
                                   //   className="allusers-name-container"
                                 >
-                                  <span>
-                                    {getUSerFullName(user)}
-                                    {/* { userData.filter((users) => {
-                                    if( users.id === user){
-                                      return users.first_name
-                                    }
-                                  } )} */}
-                                  </span>
+                                  <span>{getUSerFullName(user)}</span>
                                 </td>
                                 <td className={styles.borderLess}>
                                   {showUserDelete ? (
@@ -650,7 +640,9 @@ const AllTeams = ({ show }) => {
                   </div>
 
                   <div className="save-team-btn-section">
-                    <button type="button" onClick={() => handleTeamUpdate()}>Update Team</button>
+                    <button type="button" onClick={() => handleTeamUpdate()}>
+                      Update Team
+                    </button>
                   </div>
                 </form>
               </div>
@@ -802,10 +794,20 @@ const AllTeams = ({ show }) => {
                       </td>
                       <td scope="row" className="allusers-name-container">
                         <div>
-                          <img
+                          {/* <img
                             src={userImg}
                             alt=""
                             className="allusers-image"
+                          /> */}
+                          <Avatar
+                            color={Avatar.getRandomColor("sitebase", [
+                              "red",
+                              "gray",
+                              "green",
+                            ])}
+                            name={`${user.first_name} ${user.last_name}`}
+                            round={true}
+                            size="40px"
                           />
                         </div>
                         <div className="allusers-name-section">
@@ -905,14 +907,13 @@ const AllTeams = ({ show }) => {
                         // })
                       }
                     </td>
-                    <td onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteTeam(team.id);
-                        }}>
-                      <i
-                        className="bi bi-trash text-danger"
-                        
-                      ></i>
+                    <td
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteTeam(team.id);
+                      }}
+                    >
+                      <i className="bi bi-trash text-danger"></i>
                     </td>
                   </tr>
                 );

@@ -7,8 +7,9 @@ import React, {
 } from "react";
 import CourseContent from "./CourseContent";
 import { useNavigate, Link } from "react-router-dom";
-// import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import { CourseProbs } from "../../../../App";
+import Avatar from "react-avatar";
 
 const AllCourse = ({ show, minDate }) => {
   const userId = sessionStorage.getItem("user_id");
@@ -17,6 +18,8 @@ const AllCourse = ({ show, minDate }) => {
   const {
     courseId,
     setCourseId,
+    instructor,
+    setInstructor,
     courseCoauthors,
     setCourseCoauthors,
     courseCreator,
@@ -33,6 +36,7 @@ const AllCourse = ({ show, minDate }) => {
   const [singleCourse, setSingleCourse] = useState([]);
   const [courseCategory, setCourseCategory] = useState("");
   const [courseTitle, setCourseTitle] = useState("");
+  const [authorData, setAuthorData] = useState([]);
 
   useEffect(() => {
     const getCourseData = () => {
@@ -50,11 +54,8 @@ const AllCourse = ({ show, minDate }) => {
               setCourseContent(result);
             } else {
               const obj = result.filter((course) => {
-                return (
-                  ( course.created_by == userId || course.editor.includes(+userId)) && course.is_delete === false
-                );
+                return course.is_delete === false
               });
-              console.log("this is obj", obj, userId);
               setCourseContent(obj);
             }
           });
@@ -92,7 +93,7 @@ const AllCourse = ({ show, minDate }) => {
       }).then((response) => {
         if (response.status === 200) {
           response.json().then(function (result) {
-            console.log("team data", result);
+            console.log("API team data", result);
             setTeamData(result);
           });
         } else {
@@ -111,8 +112,26 @@ const AllCourse = ({ show, minDate }) => {
       }).then((response) => {
         if (response.status === 200) {
           response.json().then(function (result) {
-            console.log(result);
+            console.log('API user Data ',result);
             setUserData(result);
+          });
+        } else {
+          console.log(response);
+        }
+      });
+    };
+
+    const getAuthorsData = () => {
+      fetch(`http://localhost:8000/api/authors/`, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log('Api result Author Data', result);
+            setAuthorData(result);
           });
         } else {
           console.log(response);
@@ -124,19 +143,29 @@ const AllCourse = ({ show, minDate }) => {
     getTeamData();
     getUsers();
     getCourseData();
+    getAuthorsData();
   }, [0]);
 
   const getUSerFullName = (id) => {
-    if (id !== "undefined" && userData.length !== 0) {
-      const name = userData.filter((users) => users.id === id);
-      if (name.length !== 0) {
-        return `${name[0].first_name} ${name[0].last_name}`;
+    if (authorData.length !== 0){
+    const author = authorData.filter((author) => {
+      return author.id === id;
+    });
+  
+    if (author.length !== 0 && userData.length !== 0) {
+      const user = userData.filter(
+        (users) => users.id === author[0].created_by
+      );
+
+      if (user.length !== 0) {
+        return `${user[0].first_name} ${user[0].last_name}`;
       } else {
         return "N/A";
       }
     } else {
       return "N/A";
     }
+  }
   };
 
   const handleCourseTitle = (e) => {
@@ -149,14 +178,36 @@ const AllCourse = ({ show, minDate }) => {
 
   const handleSave = (e) => {
     e.preventDefault();
+
     if (courseTitle && courseCategory) {
+      fetch("http://127.0.0.1:8000/api/authors/", {
+        method: "POST",
+        body: JSON.stringify({created_by: userId, editor: [userId]}),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status === 201) {
+          response.json().then(function (result) {
+            console.log('Author Post Api result', result);
+            coursePostRequest(result.id)
+           
+          });
+        } else {
+          console.log(response);
+        }
+      });
+
+
+
+      const coursePostRequest = (authorId) => {
       const obj = {
         title: courseTitle,
         description: `This is description for the ${courseTitle} course.`,
-        updated_by: sessionStorage.getItem("user_id"),
         category: [courseCategory],
-        created_by: userId,
-        editor: [sessionStorage.getItem("user_id")],
+        updated_by: userId,
+        instructor: authorId
       };
 
       fetch("http://127.0.0.1:8000/api/courses/", {
@@ -180,6 +231,7 @@ const AllCourse = ({ show, minDate }) => {
         }
       });
     }
+    }
   };
 
   const getNumberOfUsers = (id) => {
@@ -193,33 +245,31 @@ const AllCourse = ({ show, minDate }) => {
   };
 
   const handleDeleteCourse = (course, deleted) => {
-    let action = ""
-    if(deleted) {
-      action = "Delete"
+    let action = "";
+    if (deleted) {
+      action = "Delete";
+    } else {
+      action = "Restore";
     }
-    else {
-      action = "Restore" 
-    }
-    // Swal.fire({
-    //   title: 'Are you sure?',
-    //   text: "You won't be able to revert this!",
-    //   icon: 'warning',
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#d33',
-    //   cancelButtonColor: '#3085d6',
-    //   confirmButtonText: `${action}`
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: `${action}`,
+    }).then((result) => {
+      if (result.isConfirmed) {
         const obj = {
           title: course.title,
           is_updated: true,
           is_delete: deleted,
-          created_by: course.created_by,
-          editor: [2, 24],
-          category: [1],
+          category: course.category,
           updated_by: userId,
+          instructor: course.instructor
         };
-    
+
         fetch(`http://127.0.0.1:8000/api/courses/${course.id}/`, {
           method: "PUT",
           body: JSON.stringify(obj),
@@ -230,37 +280,38 @@ const AllCourse = ({ show, minDate }) => {
         }).then((response) => {
           if (response.status === 200) {
             response.json().then(function (result) {
-              console.log('Api result: ',result);
-              // Swal.fire(
-              //   `${action}!`,
-              //   `${course.title} has been ${action}.`,
-              //   'success'
-              // ).then(res => {
-              //   window.location.reload();
-              // })
+              console.log("Api result Course: ", result);
+              Swal.fire(
+                `${action}!`,
+                `${course.title} has been ${action}.`,
+                "success"
+              ).then((res) => {
+                window.location.reload();
+              });
               // setCourseContent((pre) => [...pre, result]);
               // setCourseCreator(result.created_by);
               // setCourseCategory("");
               // setCourseTitle("");
-              // 
+              //
             });
           } else {
             console.log(response);
           }
         });
-      // }
-    // })
-
-
+      }
+    });
   };
 
   const handleCourseContentData = (course) => {
     setSingleCourse(course);
-    setCourseCoauthors(course.editor);
-    setCourseCreator(course.created_by);
+    const obj = authorData.filter(author => author.id === course.instructor);
+
+    setCourseCoauthors(obj[0].editor);
+    setCourseCreator(obj[0].created_by)
     setCourseId(course.id);
     setCourseTitle(course.title);
     setCourseCategory(course.category);
+    setInstructor(course.instructor)
 
     navigate(`/course/content/${course.id}`, {
       state: {
@@ -286,7 +337,7 @@ const AllCourse = ({ show, minDate }) => {
     //         return module.is_delete === false
     //       })
     //       setModuleData(obj);
-        
+
     //     });
     //   } else {
     //     console.log(response);
@@ -295,7 +346,6 @@ const AllCourse = ({ show, minDate }) => {
     // });
   };
 
-  console.log("Course co-authors:", courseCoauthors);
   return (
     <div className="">
       <div className="all-course-content pt-2">
@@ -410,11 +460,10 @@ const AllCourse = ({ show, minDate }) => {
             {courseContent.length !== 0 &&
               courseContent.map((course) => {
                 let deletedCourse = "";
-                if(course.is_delete === true ){
-                  deletedCourse = "course-delete"
+                if (course.is_delete === true) {
+                  deletedCourse = "course-delete";
                 }
                 return (
-
                   <tr
                     key={course.id}
                     role="button"
@@ -426,32 +475,46 @@ const AllCourse = ({ show, minDate }) => {
                       handleCourseContentData(course);
                     }}
                   >
-                    <td  className={deletedCourse}>{course.title}</td>
-                    <td  className={deletedCourse}>{course.description}</td>
-                    <td  className={deletedCourse}>{getUSerFullName(course.created_by)}</td>
+                    <td className={`deletedCourse} ${deletedCourse && "deleteCourse-line"}`}>{course.title}</td>
+                    <td
+                     className={deletedCourse}>{course.description}</td>
+                    <td className={deletedCourse}>
+                    <Avatar
+                    color={Avatar.getRandomColor("sitebase", [
+                      "red",
+                      "gray",
+                      "green",
+                    ])}
+                    name={getUSerFullName(course.instructor)}
+                    className="me-1"
+                    round={true}
+                    size="30px"
+                    ></Avatar>
+                      {getUSerFullName(course.instructor)}
+                    </td>
                     <td className={`text-center ${deletedCourse}`}>
                       {getNumberOfUsers(course.id)}
                     </td>
-                    <td  className={deletedCourse}>{course.created_at}</td>
+                    <td className={deletedCourse}>{course.created_at}</td>
                     <td style={{ display: "flex" }}>
-                      <i class="bi bi-pencil-square text-success me-3"></i>
-                      {
-                        course.is_delete ?
+                      <i className="bi bi-pencil-square text-success me-3"></i>
+                      {course.is_delete ? (
                         <i
-                        className="bi bi-recycle text-info"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleDeleteCourse(course, false)
-                        }}
-                      ></i> :
+                          className="bi bi-recycle text-info"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteCourse(course, false);
+                          }}
+                        ></i>
+                      ) : (
                         <i
-                        className="bi bi-trash text-danger"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleDeleteCourse(course, true)
-                        }}
-                      ></i>
-                      }
+                          className="bi bi-trash text-danger"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteCourse(course, true);
+                          }}
+                        ></i>
+                      )}
 
                       {/* <div className="form-check form-switch">
                           <input

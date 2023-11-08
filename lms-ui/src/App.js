@@ -33,6 +33,7 @@ export const CourseProbs = createContext(null);
 function App() {
 
   const [courseId, setCourseId] = useState(null);
+  const [instructor, setInstructor] = useState(null);
   const [courseCoauthors, setCourseCoauthors] = useState([]);
   const [courseCreator, setCourseCreator] = useState(null);
 
@@ -50,7 +51,7 @@ function App() {
        <Route element= {<VerificationPage />} path="/auth/verification"></Route>
        <Route element= {<ForgetPassword />} path="/auth/reset_password"></Route>
        </Routes>
-       <CourseProbs.Provider value={{ courseId, setCourseId, courseCoauthors, setCourseCoauthors, courseCreator, setCourseCreator }}>
+       <CourseProbs.Provider value={{ courseId, setCourseId,instructor, setInstructor, courseCoauthors, setCourseCoauthors, courseCreator, setCourseCreator }}>
 			<Routes>
 				<Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>}></Route>
         <Route path="/dashboard" element={<PrivateRoute><HomePage /></PrivateRoute>} ></Route>

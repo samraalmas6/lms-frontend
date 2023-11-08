@@ -6,230 +6,230 @@ import ModuleCard from "./ModuleCard";
 import AssignmentView from "./AssignmentView";
 import { useLocation } from "react-router-dom";
 
-const coursesData = [
-  {
-    id: 1,
-    title: "Cloud Native",
-    modules: [
-      {
-        id: 1,
-        title: "Module 1",
-        lessons: [
-          {
-            id: 1,
-            sno: "1.1",
-            title: "Extreme Programming",
-            lecture_name: "Introduction",
-            url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
-            duration: "7 min",
-            doc_name: "extreme prog doc",
-            doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
-            assignments: [
-              {
-                id: 1,
-                title: "Assignment 1",
-                description: "Complete the first assignment.",
-                dueDate: "2023-09-30 14:00",
-                resourceFiles: ["file1.pdf", "file2.doc"],
-                submissionLinks: [
-                  "https://example.com",
-                  "https://anotherlink.com",
-                ],
-              },
-            ],
-            // fileType: "pdf",
-            // fileName: "Min of meeting",
-          },
-          {
-            id: 2,
-            sno: "1.2",
-            title: "Lesson Title",
-            lecture_name: "Introduction",
-            doc_name: "dummy doc",
-            url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
-            duration: "1 hr",
-            doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
-          },
-        ],
-      },
-      {
-        id: 2,
-        title: "Module 2",
-        lessons: [
-          {
-            id: 3,
-            sno: "1.3",
-            title: "Lesson Title",
-            lecture_name: "Introduction",
-            doc_name: "lecture 3 doc",
-            url: "https://youtu.be/gwWKnnCMQ5c?si=_av7yUDr5ZKqGbgt",
-            duration: "7 min",
-            doc: [{ uri: require("../../../content/files/third_lec.pdf") }],
-            assignments: [
-              {
-                id: 1,
-                title: "Assignment 1",
-                description: "Complete the first assignment.",
-                dueDate: "2023-09-30",
-              },
-            ],
-          },
-          {
-            id: 4,
-            sno: "1.4",
-            title: "Lesson Title",
-            lecture_name: "Introduction",
-            doc_name: "lecture 4 doc",
-            url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
-            duration: "2 hr",
-            doc: [{ uri: require("../../../content/files/fourth_lec.pdf") }],
-          },
-        ],
-      },
-      {
-        id: 3,
-        title: "Module 3: ",
-        lessons: [
-          {
-            id: 1,
-            sno: "1.1",
-            title: "Extreme Programming",
-            lecture_name: "Introduction",
-            url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
-            duration: "7 min",
-            doc_name: "extreme prog doc",
-            doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
-            // fileType: "pdf",
-            // fileName: "Min of meeting",
-          },
-          {
-            id: 2,
-            sno: "1.2",
-            title: "Lesson Title",
-            lecture_name: "Introduction",
-            doc_name: "dummy doc",
-            url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
-            duration: "1 hr",
-            doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
-          },
-        ],
-      },
-      {
-        id: 4,
-        title: "Module 4: ",
-        lessons: [
-          {
-            id: 1,
-            sno: "1.1",
-            title: "Extreme Programming",
-            lecture_name: "Introduction",
-            url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
-            duration: "7 min",
-            doc_name: "extreme prog doc",
-            doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
-            // fileType: "pdf",
-            // fileName: "Min of meeting",
-          },
-          {
-            id: 2,
-            sno: "1.2",
-            title: "Lesson Title",
-            lecture_name: "Introduction",
-            doc_name: "dummy doc",
-            url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
-            duration: "1 hr",
-            doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
-          },
-        ],
-      },
-      {
-        id: 5,
-        title: "Module 5: ",
-        lessons: [
-          {
-            id: 1,
-            sno: "1.1",
-            title: "Extreme Programming",
-            lecture_name: "Introduction",
-            url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
-            duration: "7 min",
-            doc_name: "extreme prog doc",
-            doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
-            // fileType: "pdf",
-            // fileName: "Min of meeting",
-          },
-          {
-            id: 2,
-            sno: "1.2",
-            title: "Lesson Title",
-            lecture_name: "Introduction",
-            doc_name: "dummy doc",
-            url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
-            duration: "1 hr",
-            doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
-          },
-        ],
-      },
-      {
-        id: 6,
-        title: "Module 6: ",
-        lessons: [
-          {
-            id: 1,
-            sno: "1.1",
-            title: "Extreme Programming",
-            lecture_name: "Introduction",
-            url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
-            duration: "7 min",
-            doc_name: "extreme prog doc",
-            doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
-            // fileType: "pdf",
-            // fileName: "Min of meeting",
-          },
-          {
-            id: 2,
-            sno: "1.2",
-            title: "Lesson Title",
-            lecture_name: "Introduction",
-            doc_name: "dummy doc",
-            url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
-            duration: "1 hr",
-            doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
-          },
-        ],
-      },
-      {
-        id: 7,
-        title: "Module 7: ",
-        lessons: [
-          {
-            id: 1,
-            sno: "1.1",
-            title: "Extreme Programming",
-            lecture_name: "Introduction",
-            url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
-            duration: "7 min",
-            doc_name: "extreme prog doc",
-            doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
-            // fileType: "pdf",
-            // fileName: "Min of meeting",
-          },
-          {
-            id: 2,
-            sno: "1.2",
-            title: "Lesson Title",
-            lecture_name: "Introduction",
-            doc_name: "dummy doc",
-            url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
-            duration: "1 hr",
-            doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
-          },
-        ],
-      },
-    ],
-  },
-  // Add more courses and modules as needed
-];
+// const coursesData = [
+//   {
+//     id: 1,
+//     title: "Cloud Native",
+//     modules: [
+//       {
+//         id: 1,
+//         title: "Module 1",
+//         lessons: [
+//           {
+//             id: 1,
+//             sno: "1.1",
+//             title: "Extreme Programming",
+//             lecture_name: "Introduction",
+//             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
+//             duration: "7 min",
+//             doc_name: "extreme prog doc",
+//             doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
+//             assignments: [
+//               {
+//                 id: 1,
+//                 title: "Assignment 1",
+//                 description: "Complete the first assignment.",
+//                 dueDate: "2023-09-30 14:00",
+//                 resourceFiles: ["file1.pdf", "file2.doc"],
+//                 submissionLinks: [
+//                   "https://example.com",
+//                   "https://anotherlink.com",
+//                 ],
+//               },
+//             ],
+//             // fileType: "pdf",
+//             // fileName: "Min of meeting",
+//           },
+//           {
+//             id: 2,
+//             sno: "1.2",
+//             title: "Lesson Title",
+//             lecture_name: "Introduction",
+//             doc_name: "dummy doc",
+//             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
+//             duration: "1 hr",
+//             doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
+//           },
+//         ],
+//       },
+//       {
+//         id: 2,
+//         title: "Module 2",
+//         lessons: [
+//           {
+//             id: 3,
+//             sno: "1.3",
+//             title: "Lesson Title",
+//             lecture_name: "Introduction",
+//             doc_name: "lecture 3 doc",
+//             url: "https://youtu.be/gwWKnnCMQ5c?si=_av7yUDr5ZKqGbgt",
+//             duration: "7 min",
+//             doc: [{ uri: require("../../../content/files/third_lec.pdf") }],
+//             assignments: [
+//               {
+//                 id: 1,
+//                 title: "Assignment 1",
+//                 description: "Complete the first assignment.",
+//                 dueDate: "2023-09-30",
+//               },
+//             ],
+//           },
+//           {
+//             id: 4,
+//             sno: "1.4",
+//             title: "Lesson Title",
+//             lecture_name: "Introduction",
+//             doc_name: "lecture 4 doc",
+//             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
+//             duration: "2 hr",
+//             doc: [{ uri: require("../../../content/files/fourth_lec.pdf") }],
+//           },
+//         ],
+//       },
+//       {
+//         id: 3,
+//         title: "Module 3: ",
+//         lessons: [
+//           {
+//             id: 1,
+//             sno: "1.1",
+//             title: "Extreme Programming",
+//             lecture_name: "Introduction",
+//             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
+//             duration: "7 min",
+//             doc_name: "extreme prog doc",
+//             doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
+//             // fileType: "pdf",
+//             // fileName: "Min of meeting",
+//           },
+//           {
+//             id: 2,
+//             sno: "1.2",
+//             title: "Lesson Title",
+//             lecture_name: "Introduction",
+//             doc_name: "dummy doc",
+//             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
+//             duration: "1 hr",
+//             doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
+//           },
+//         ],
+//       },
+//       {
+//         id: 4,
+//         title: "Module 4: ",
+//         lessons: [
+//           {
+//             id: 1,
+//             sno: "1.1",
+//             title: "Extreme Programming",
+//             lecture_name: "Introduction",
+//             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
+//             duration: "7 min",
+//             doc_name: "extreme prog doc",
+//             doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
+//             // fileType: "pdf",
+//             // fileName: "Min of meeting",
+//           },
+//           {
+//             id: 2,
+//             sno: "1.2",
+//             title: "Lesson Title",
+//             lecture_name: "Introduction",
+//             doc_name: "dummy doc",
+//             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
+//             duration: "1 hr",
+//             doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
+//           },
+//         ],
+//       },
+//       {
+//         id: 5,
+//         title: "Module 5: ",
+//         lessons: [
+//           {
+//             id: 1,
+//             sno: "1.1",
+//             title: "Extreme Programming",
+//             lecture_name: "Introduction",
+//             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
+//             duration: "7 min",
+//             doc_name: "extreme prog doc",
+//             doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
+//             // fileType: "pdf",
+//             // fileName: "Min of meeting",
+//           },
+//           {
+//             id: 2,
+//             sno: "1.2",
+//             title: "Lesson Title",
+//             lecture_name: "Introduction",
+//             doc_name: "dummy doc",
+//             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
+//             duration: "1 hr",
+//             doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
+//           },
+//         ],
+//       },
+//       {
+//         id: 6,
+//         title: "Module 6: ",
+//         lessons: [
+//           {
+//             id: 1,
+//             sno: "1.1",
+//             title: "Extreme Programming",
+//             lecture_name: "Introduction",
+//             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
+//             duration: "7 min",
+//             doc_name: "extreme prog doc",
+//             doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
+//             // fileType: "pdf",
+//             // fileName: "Min of meeting",
+//           },
+//           {
+//             id: 2,
+//             sno: "1.2",
+//             title: "Lesson Title",
+//             lecture_name: "Introduction",
+//             doc_name: "dummy doc",
+//             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
+//             duration: "1 hr",
+//             doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
+//           },
+//         ],
+//       },
+//       {
+//         id: 7,
+//         title: "Module 7: ",
+//         lessons: [
+//           {
+//             id: 1,
+//             sno: "1.1",
+//             title: "Extreme Programming",
+//             lecture_name: "Introduction",
+//             url: "https://youtu.be/apGV9Kg7ics?si=0H7Du27QWZP7DQ6u",
+//             duration: "7 min",
+//             doc_name: "extreme prog doc",
+//             doc: [{ uri: require("../../../content/files/MOMS.pdf") }],
+//             // fileType: "pdf",
+//             // fileName: "Min of meeting",
+//           },
+//           {
+//             id: 2,
+//             sno: "1.2",
+//             title: "Lesson Title",
+//             lecture_name: "Introduction",
+//             doc_name: "dummy doc",
+//             url: "https://youtu.be/rZ41y93P2Qo?si=FEzJeeSY_baszCQ4",
+//             duration: "1 hr",
+//             doc: [{ uri: require("../../../content/files/MyProjects.pdf") }],
+//           },
+//         ],
+//       },
+//     ],
+//   },
+//   // Add more courses and modules as needed
+// ];
 
 function CourseTable({ modules, assignments }) {
   const {state} = useLocation();
@@ -243,6 +243,9 @@ function CourseTable({ modules, assignments }) {
   const [videoProgress, setVideoProgress] = useState({});
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [showAssignmentDetail, setShowAssignmentDetail] = useState(false);
+  const [videoCompletion, setVideoCompletion] = useState(false);
+  const [unitCompletion, setUnitCompletion] = useState(false)
+
 
   const [showAssignment, setShowAssignment] = useState(false);
   const [courseContent, setCourseContent] = useState([]);
@@ -275,6 +278,7 @@ function CourseTable({ modules, assignments }) {
       }
       });
     };
+
     const getModuleData = () => {
       fetch(`http://127.0.0.1:8000/api/courses/${state.courseId}/modules`, {
         method: "GET",
@@ -357,16 +361,25 @@ function CourseTable({ modules, assignments }) {
   //     }
   //   }
   // };
-  const handleVideoProgress = ({ played, playedSeconds }) => {
-    if (selectedLesson) {
-      setVideoProgress((prevProgress) => ({
-        ...prevProgress,
-        [selectedLesson.id]: {
-          played,
-          completed: played >= 0.95, // Mark as completed when played >= 0.95
-        },
-      }));
-    }
+  const handleVideoProgress = ({ progress, played, playedSeconds }) => {
+
+        // Calculate the percentage of video completion
+        // const percentage = progress.played * 100;
+        // setVideoProgress(percentage);
+    
+        // // Check if the video is played 90% or more
+        // if (percentage >= 90) {
+        //   setVideoCompleted(true);
+        // }
+    // if (selectedLesson) {
+    //   setVideoProgress((prevProgress) => ({
+    //     ...prevProgress,
+    //     [selectedLesson.id]: {
+    //       played,
+    //       completed: played >= 0.95, // Mark as completed when played >= 0.95
+    //     },
+    //   }));
+    // }
   };
 
   // Pass the video progress to the VideoPlayer component
@@ -387,6 +400,7 @@ function CourseTable({ modules, assignments }) {
                 <VideoPlayer
                   selectedLesson={selectedLesson}
                   handleVideoProgress={handleVideoProgress}
+                  setVideoCompletion={setVideoCompletion}
                 />
                 {/* tabs below video */}
               </div>
@@ -465,6 +479,10 @@ function CourseTable({ modules, assignments }) {
                             // selectedLesson={selectedLesson}
                             handleAssignmentClick={handleAssignmentClick}
                             setShowAssignment={setShowAssignment}
+                            videoCompletion={videoCompletion}
+                            setVideoCompletion={setVideoCompleted}
+                            unitCompletion={unitCompletion}
+                            setUnitCompletion={setUnitCompletion}
                           />
                         ))}
                   </div>

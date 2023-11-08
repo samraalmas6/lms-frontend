@@ -7,9 +7,10 @@ import { CourseProbs } from "../../../../App";
 // import Swal from 'sweetalert2';
 
 const CourseContent = ({}) => {
-  const { courseId,setCourseId, courseCoauthors, setCourseCoauthors, courseCreator } =
+  const { courseId,setCourseId, instructor,setInstructor, courseCoauthors, setCourseCoauthors, courseCreator } =
     useContext(CourseProbs);
   const userId = sessionStorage.getItem("user_id")
+  console.log('course coAuthors:', courseCoauthors);
   const navigate = useNavigate();
   const { state } = useLocation();
   console.log("state", state);
@@ -38,7 +39,6 @@ const CourseContent = ({}) => {
 
   useEffect(() => {
     const getModuleData = (id) => {
-
       fetch(`http://127.0.0.1:8000/api/courses/${id}/modules`, {
         method: "GET",
         headers: {
@@ -49,7 +49,7 @@ const CourseContent = ({}) => {
           response.json().then(function (result) {
             console.log("Api result: ", result);
             setModuleCounter(result.length)
-            setCourseCoauthors(result[0].editor)
+            // setCourseCoauthors(result[0].editor)
             setCourseId(id)
             const obj = result.filter(module => {
               // setCourse(result.course)
@@ -167,7 +167,7 @@ const CourseContent = ({}) => {
   const handleCourseContent = (course) => {
     setCourse(course);
     setCourseId(course.id);
-    setCourseCoauthors(course.editor);
+    setInstructor(course.instructor)
 
     fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
       method: "GET",
@@ -277,6 +277,26 @@ const CourseContent = ({}) => {
 
   const handleSaveCourse = () => {
     if (courseTitle && courseCategory) {
+
+      console.log('instructor id',instructor);
+
+      fetch(`http://127.0.0.1:8000/api/authors/${instructor}/`, {
+        method: "PUT",
+        body: JSON.stringify({created_by: courseCreator, editor: courseCoauthors}),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log(result);
+          });
+        } else {
+          console.log(response);
+        }
+      });
+
       const formData = new FormData();
       if (typeof courseImg === "object" && courseImg) {
         formData.append("course_image", courseImg);
@@ -286,12 +306,13 @@ const CourseContent = ({}) => {
       formData.append("start_date", courseStart);
       formData.append("end_date", courseEnd);
       formData.append("category", [courseCategory]);
+      formData.append("instructor", instructor);
       formData.append("updated_by", sessionStorage.getItem("user_id"));
-      formData.append("created_by", courseCreator);
-      console.log("Post Coauthors:", courseCoauthors);
-      courseCoauthors.forEach((id) => {
-        formData.append("editor", id);
-      });
+      // formData.append("created_by", courseCreator);
+
+      // courseCoauthors.forEach((id) => {
+      //   formData.append("editor", id);
+      // });
       fetch(`http://127.0.0.1:8000/api/courses/${courseId}/`, {
         method: "PUT",
         body: formData,
@@ -502,10 +523,7 @@ const CourseContent = ({}) => {
                         value={courseCategory}
                       >
                         <option value="">--Select Category--</option>
-                        {categoryData.length === 0 ||
-                        categoryData.detail == "No objects found"
-                          ? categoryData.detail
-                          : categoryData &&
+                        {categoryData.length === 0  ? "No Record ": categoryData &&
                             categoryData.map((category) => {
                               return (
                                 <option value={category.id} key={category.id}>
@@ -528,6 +546,7 @@ const CourseContent = ({}) => {
                           {userData.length !== 0 &&
                             userData.map((user) => {
                               if (
+                               
                                 user.role === "instructor" &&
                                 user.id !== courseCreator &&
                                 !coAutherData.includes(user.id)

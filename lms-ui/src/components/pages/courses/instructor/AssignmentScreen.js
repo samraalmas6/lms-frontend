@@ -337,26 +337,39 @@ const AssignmentScreen = () => {
   function handleSubmit(event) {
     event.preventDefault();
 
-    const obj = {
-      title: title,
-      description: content, // You can add the description here if you have it
-      due_date: courseStart,
-      marks: marks,
-      due_time: courseEnd,
-      is_updated: true,
-      unit: state.unitId, // Assuming a default unit value
-      is_team_submission_allowed: teamSubmission,
-      // Number_of_members: 1,
-      updated_by: sessionStorage.getItem("user_id"),
-      created_by: sessionStorage.getItem("user_id"),
-    };
+    const formData = new FormData();
+    if(selectedFile){formData.append("assignment_file", selectedFile)}
+    formData.append("title", title);
+    formData.append("description", content);
+    formData.append("due_date", courseStart);
+    formData.append("marks", marks);
+    formData.append("due_time", courseEnd);
+    formData.append("unit", state.unitId);
+    formData.append("is_team_submission_allowed", teamSubmission);
+    formData.append("instructor", state.instructor);
+    formData.append("updated_by", userId);
+
+
+
+    // const obj = {
+    //   title: title,
+    //   description: content, // You can add the description here if you have it
+    //   due_date: courseStart,
+    //   marks: marks,
+    //   due_time: courseEnd,
+    //   unit: state.unitId, // Assuming a default unit value
+    //   is_team_submission_allowed: teamSubmission,
+    //   instructor: state.instructor,
+    //   updated_by: userId
+    //   // Number_of_members: 1,
+    // };
 
     fetch("http://127.0.0.1:8000/api/assignments/", {
       method: "POST",
-      body: JSON.stringify(obj),
+      body: formData,
       headers: {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-        "Content-type": "application/json; charset=UTF-8",
+        // "Content-type": "application/json; charset=UTF-8",
       },
     })
       .then((response) => {
@@ -374,12 +387,12 @@ const AssignmentScreen = () => {
             setCourseEnd("");
             setSelectedFile(null);
             setAssignmentId(result.id);
-            handleCreateGroup(result.id);
+            // handleCreateGroup(result.id);
             console.log("assignment id: ", assignmentId);
             if (result.is_team_submission_allowed === true) {
               setGroupSub(true);
             } else {
-              // navigate(-1);
+              navigate(-1);
             }
             //
           });
@@ -464,7 +477,7 @@ const AssignmentScreen = () => {
               </div>
             </div>
             <div className="file-upload-container">
-              <FileUploadComponent onFileSelected={handleFileUpload} />
+              <FileUploadComponent selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
             </div>
             {/* <button onClick={handleSubmit}>Create Assignment</button> */}
             <button
@@ -523,16 +536,16 @@ const AssignmentScreen = () => {
                   onChange={handleMarks}
                 />
               </div>
-              <div className="permission">
+              {/* <div className="permission">
                 Group Submission Allowed
                 <label class="switch">
                   <input type="checkbox" onClick={handleGroupSub} />
                   <span class="slider round"></span>
                 </label>
-              </div>
+              </div> */}
             </>
           )}
-          {groupSub && (
+          {/* {groupSub && (
             <div className="assignment-partners">
               <div className="heading-container">
                 <span>Assignment Partners</span>
@@ -552,7 +565,7 @@ const AssignmentScreen = () => {
                 </AssignmentProbs.Provider>
               )}
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>

@@ -4,6 +4,9 @@ import Collapse from "react-collapse";
 import "../../../styles/AssignmentTable.css";
 import "../../../styles/AssignmentGrading.css";
 const AssignmentGrading = () => {
+  const userId = sessionStorage.getItem("user_id");
+  const userRole = sessionStorage.getItem("role");
+
   const [courseContent, setCourseContent] = useState([]);
   const [courseCoauthors, setCourseCoauthors] = useState([]);
   const [openIndex, setOpenIndex] = useState(null); //one collapsible at a time
@@ -82,6 +85,7 @@ const AssignmentGrading = () => {
   const [gradingId, setGradingId] = useState();
   const [updatedStatus, setUpdatedStatus] = useState();
   const [userData, setUserData] = useState([]);
+  const [authorData, setAuthorData] = useState([])
   const [overDue, setOverDue] = useState();
   // const [gradingStatus, setGradingStatus] = useState("");
 
@@ -143,7 +147,8 @@ const AssignmentGrading = () => {
   };
 
   const handleGraderName = (id) => {
-    const graderName = userData.filter((obj) => obj.id === id);
+    const author = authorData.filter(author => author.id === id);
+    const graderName = userData.filter((obj) => obj.id === author[0].created_by);
     console.log("This is grader name", graderName);
     if (graderName.length !== 0) {
       return `${graderName[0].first_name} ${graderName[0].last_name}`;
@@ -190,6 +195,7 @@ const AssignmentGrading = () => {
   //   return true;
   // });
 
+  console.log('User Role', userRole);
   const getCourseData = () => {
     fetch("http://127.0.0.1:8000/api/courses", {
       method: "GET",
@@ -200,7 +206,14 @@ const AssignmentGrading = () => {
       if (response.status === 200) {
         response.json().then(function (result) {
           // console.log(result);
-          setCourseContent(result);
+          if (userRole === "admin") {
+            setCourseContent(result);
+          } else {
+            const obj = result.filter((course) => {
+              return course.is_delete === false
+            });
+            setCourseContent(obj);
+          }
         });
       } else {
         // console.log(response);
@@ -279,8 +292,8 @@ const AssignmentGrading = () => {
       }
     });
   };
-  const getAssignmentGradingData = async () => {
-    await fetch("http://127.0.0.1:8000/api/assignment_gradings/", {
+  const getAssignmentGradingData =  () => {
+     fetch("http://127.0.0.1:8000/api/assignment_gradings/", {
       method: "GET",
       headers: {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
@@ -288,7 +301,7 @@ const AssignmentGrading = () => {
     }).then((response) => {
       if (response.status === 200) {
         response.json().then(function (result) {
-          // console.log(result);
+          console.log('Api result Grading=',result);
           setAssignmentGrading(result);
         });
       } else {
@@ -296,17 +309,37 @@ const AssignmentGrading = () => {
       }
     });
   };
+
+  const getAuthorsData =  () => {
+    fetch("http://127.0.0.1:8000/api/authors/", {
+     method: "GET",
+     headers: {
+       Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+     },
+   }).then((response) => {
+     if (response.status === 200) {
+       response.json().then(function (result) {
+         console.log('Api result Authors=',result);
+        setAuthorData(result)
+       });
+     } else {
+       console.log(response);
+     }
+   });
+ };
+
+
   const putAssignmentGradingData = (userId, gradingId, submissionId) => {
     const updatedObj = {
       marks: grade,
       comments: feedback,
       assignment_submission: submissionId,
       grader: sessionStorage.getItem("user_id"),
-      user: userId,
+      user: sessionStorage.getItem("user_id"),
       status: updatedStatus,
       editor: courseCoauthors,
       updated_by: sessionStorage.getItem("user_id"),
-      assignment: 12
+      assignment: 67,
     };
 
     fetch(`http://127.0.0.1:8000/api/assignment_gradings/${gradingId}/`, {
@@ -380,10 +413,11 @@ const AssignmentGrading = () => {
     getAssignmentData();
     getAssignmentSubmissionData();
     getAssignmentGradingData();
+    getAuthorsData();
     getUsers();
 
     // getfilteredData();
-  }, []);
+  }, [0]);
 
   // console.log("grader is jo user login h", sessionStorage.getItem("user_id"));
   // console.log(
@@ -674,7 +708,7 @@ const AssignmentGrading = () => {
                                                                 </td>
                                                                 <td>
                                                                   {handleGraderName(
-                                                                    grading.grader
+                                                                    grading.instructor
                                                                   )}
                                                                   {/* {console.log(
                                                                     "grader ka object with respect to user api",
@@ -827,10 +861,10 @@ const AssignmentGrading = () => {
                                                           >
                                                             select status
                                                           </option>
-                                                          <option value="pass">
+                                                          <option value="Pass">
                                                             pass
                                                           </option>
-                                                          <option value="fail">
+                                                          <option value="Not Passed">
                                                             fail
                                                           </option>
                                                         </select>

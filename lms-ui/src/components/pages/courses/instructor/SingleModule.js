@@ -168,7 +168,8 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
           <div className="module-heading-container">
             <div className="">
               <span className="me-3">MODULE</span>
-              <input
+              <span>{moduleTitle}</span>
+              {/* <input
                 type="text"
                 placeholder="Module Title"
                 value={moduleTitle}
@@ -180,7 +181,7 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
                 onMouseEnter={preventAccordionClose}
                 onMouseLeave={preventAccordionOpen}
                 // onClick={(e) => e.stopPropagation()}
-              />
+              /> */}
             </div>
             <div className="">
               <label>Start Date:</label>
