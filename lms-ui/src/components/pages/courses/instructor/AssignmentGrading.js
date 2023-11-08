@@ -85,6 +85,7 @@ const AssignmentGrading = () => {
   const [gradingId, setGradingId] = useState();
   const [updatedStatus, setUpdatedStatus] = useState();
   const [userData, setUserData] = useState([]);
+  const [authorData, setAuthorData] = useState([])
   const [overDue, setOverDue] = useState();
   // const [gradingStatus, setGradingStatus] = useState("");
 
@@ -146,7 +147,8 @@ const AssignmentGrading = () => {
   };
 
   const handleGraderName = (id) => {
-    const graderName = userData.filter((obj) => obj.id === id);
+    const author = authorData.filter(author => author.id === id);
+    const graderName = userData.filter((obj) => obj.id === author[0].created_by);
     console.log("This is grader name", graderName);
     if (graderName.length !== 0) {
       return `${graderName[0].first_name} ${graderName[0].last_name}`;
@@ -307,6 +309,26 @@ const AssignmentGrading = () => {
       }
     });
   };
+
+  const getAuthorsData =  () => {
+    fetch("http://127.0.0.1:8000/api/authors/", {
+     method: "GET",
+     headers: {
+       Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+     },
+   }).then((response) => {
+     if (response.status === 200) {
+       response.json().then(function (result) {
+         console.log('Api result Authors=',result);
+        setAuthorData(result)
+       });
+     } else {
+       console.log(response);
+     }
+   });
+ };
+
+
   const putAssignmentGradingData = (userId, gradingId, submissionId) => {
     const updatedObj = {
       marks: grade,
@@ -391,6 +413,7 @@ const AssignmentGrading = () => {
     getAssignmentData();
     getAssignmentSubmissionData();
     getAssignmentGradingData();
+    getAuthorsData();
     getUsers();
 
     // getfilteredData();
@@ -685,7 +708,7 @@ const AssignmentGrading = () => {
                                                                 </td>
                                                                 <td>
                                                                   {handleGraderName(
-                                                                    grading.grader
+                                                                    grading.instructor
                                                                   )}
                                                                   {/* {console.log(
                                                                     "grader ka object with respect to user api",
