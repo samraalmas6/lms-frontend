@@ -4,7 +4,7 @@ import CourseModule from "./CourseModule";
 import img from "../../../content/Images/uploadImg.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CourseProbs } from "../../../../App";
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 
 const CourseContent = ({}) => {
   const { courseId,setCourseId, instructor,setInstructor, courseCoauthors, setCourseCoauthors, courseCreator } =
@@ -221,16 +221,16 @@ const CourseContent = ({}) => {
     else {
       action = "Restore" 
     }
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: `${action}`
-    }).then((result) => {
-      if (result.isConfirmed) {
+    // Swal.fire({
+    //   title: 'Are you sure?',
+    //   text: "You won't be able to revert this!",
+    //   icon: 'warning',
+    //   showCancelButton: true,
+    //   confirmButtonColor: '#d33',
+    //   cancelButtonColor: '#3085d6',
+    //   confirmButtonText: `${action}`
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
         const obj = {
           title: course.title,
           is_updated: true,
@@ -252,13 +252,13 @@ const CourseContent = ({}) => {
           if (response.status === 200) {
             response.json().then(function (result) {
               console.log('Api result: ',result);
-              Swal.fire(
-                `${action}!`,
-                `${course.title} has been ${action}.`,
-                'success'
-              ).then(res => {
-               navigate(-1)
-              })
+              // Swal.fire(
+              //   `${action}!`,
+              //   `${course.title} has been ${action}.`,
+              //   'success'
+              // ).then(res => {
+              //  navigate(-1)
+              // })
               // setCourseContent((pre) => [...pre, result]);
               // setCourseCreator(result.created_by);
               // setCourseCategory("");
@@ -269,8 +269,8 @@ const CourseContent = ({}) => {
             console.log(response);
           }
         });
-      }
-    })
+      // }
+    // })
 
 
   };

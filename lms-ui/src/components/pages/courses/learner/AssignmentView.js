@@ -50,7 +50,7 @@ function AssignmentView({ selectedAssignments }) {
   const [isConfirmButtonVisible, setIsConfirmButtonVisible] = useState(true);
   const [instructorFeedback, setInstructorFeedback] = useState(null);
   const [apiData, setApiData] = useState([]);
-  const [number, setNumber] = useState(0);
+  const [marks, setMarks] = useState(0);
   const [assignmentid, setAssignmentid] = useState("");
   const [feedbackData, setFeedbackData] = useState("feedback");
   const [gradeData, setGradeData] = useState(0);
@@ -69,6 +69,7 @@ function AssignmentView({ selectedAssignments }) {
   const [isEditClicked, setIsEditClicked] = useState(false);
   const [isEditButtonDisabled, setIsEditButtonDisabled] = useState(false);
   const [showEditButton, setShowEditButton] = useState(true);
+  const [requestMethod, setRequestMethod] = useState("POST");
 
   useEffect(() => {
     const getAssignmentData = () => {
@@ -83,7 +84,7 @@ function AssignmentView({ selectedAssignments }) {
           if (Array.isArray(result) && result.length > 0) {
             console.log(result);
             setApiData(result);
-            setNumber(result[0].marks);
+            setMarks(result[0].marks);
           } else {
             console.error("Invalid API response:", result);
           }
@@ -373,53 +374,35 @@ function AssignmentView({ selectedAssignments }) {
     setLinks(updatedLinks);
   }
 
-  function handleSubmit(event, request) {
+   
+  function handleRequestPost(method) {
+    if (isSubmissionValid()) {
+      setRequestMethod(method);
+      setShowConfirmationDialog(true);
+    } else {
+      // Show a pop-up or set an error message to inform the user that they need to insert a file or link.
+      alert("Please insert a file or link before submitting.");
+    }
+  }
 
-    const handleAssignmentProgress = (id) => {
-      const obj = {
-        title: selectedAssignment.title,
-        description: selectedAssignment.description,
-        due_date: selectedAssignment.due_date,
-        due_time: selectedAssignment.due_time,
-        marks: selectedAssignment.marks,
-        instructor: selectedAssignment.instructor,
-        unit: selectedAssignment.unit,
-        updated_by: sessionStorage.getItem("user_id"),
-        assignment_completed: true
-      };
-
-      fetch(`http://127.0.0.1:8000/api/assignments/${id}/`, {
-        method: "PUT",
-        body: JSON.stringify(obj),
-        headers: {
-          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      }).then((response) => {
-        if (response.status === 200) {
-          response.json().then(function (result) {
-            console.log(result);
-          });
-        } else {
-          console.log(response);
-        }
-      });
-    };
-
-
-
-    event.preventDefault();
+  function handleSubmit(request) {
     let url = "";
     const formData = new FormData();
     formData.append("submitted_by", sessionStorage.getItem("user_id"));
     formData.append("assignment", assignmentid);
-    // formData.append("submission_date", "2024-10-27T10:00:00Z");
     const currentDateTime = new Date().toISOString();
     formData.append("submission_date", currentDateTime);
     formData.append("submitted_link", link);
-    if (typeof file === "object") {
+    if (typeof file === "object" && file != null) {
       formData.append("content", file);
     }
+    // const obj = {
+    //   submitted_by: sessionStorage.getItem("user_id"),
+    //   assignment: assignmentid,
+    //   submission_date: "2022-10-03T10:00:00Z",
+    //   submitted_link: link,
+    //   // content: file,
+    // };
     if (request === "POST") {
       url = `http://127.0.0.1:8000/api/assignment_submissions/`;
     } else {
@@ -438,8 +421,6 @@ function AssignmentView({ selectedAssignments }) {
         });
 
         if (response.status === 201 || response.status === 200) {
-          handleAssignmentProgress(assignmentid);
-
           setFile("");
           setFiles("");
           setLink("");
@@ -516,6 +497,7 @@ function AssignmentView({ selectedAssignments }) {
           }
 
           setLink("");
+         
           // setFile([])
         } else {
           console.log(response);
@@ -529,8 +511,6 @@ function AssignmentView({ selectedAssignments }) {
 
     // Call the postData function when needed:
     postData(formData);
-
-    setShowConfirmationDialog(true);
   }
 
   console.log("selected Assignement", selectedAssignment);
@@ -538,11 +518,16 @@ function AssignmentView({ selectedAssignments }) {
   function handleConfirmSubmit() {
     setIsSubmitClicked(true);
     setShowConfirmationDialog(false);
+    handleSubmit(requestMethod);
     // simulateSubmission(); // Simulate submission and get feedback
   }
 
   function handleCloseConfirmationDialog() {
     setShowConfirmationDialog(false);
+  }
+
+  function isSubmissionValid() {
+    return (file && file.length !== "") || (link.trim() !== "");
   }
 
   return (
@@ -573,7 +558,7 @@ function AssignmentView({ selectedAssignments }) {
                 <div className="detail-points-and-date">
                   <div className="detail-points">
                     <strong>Marks:</strong>
-                    {number}
+                    {marks}
                   </div>
                   <div className="detail-create">
                     <strong>Created At:</strong>
@@ -610,19 +595,19 @@ function AssignmentView({ selectedAssignments }) {
                   )}
               </div> */}
               <div className="resource-files">
-                {selectedAssignment.assignment_file ? (
+                {selectedAssignment.content ? (
                   <>
                     <p>Attached Resource File:</p>
                     <a
                       className="res"
-                      href={selectedAssignment.assignment_file}
+                      href={selectedAssignment.content}
                       download
                     >
                       <i
                         className="fas fa-file"
                         style={{ marginRight: "5px" }}
                       ></i>
-                      {selectedAssignment.assignment_file}
+                      {selectedAssignment.content}
                     </a>
                   </>
                 ) : (
@@ -667,16 +652,19 @@ function AssignmentView({ selectedAssignments }) {
                     <ul className="uploa">
                       {file && (
                         <li className="upload">
-                          <img src={fil} alt="" className="pht" />
-                          <div className="fil-text">
-                            {typeof file === "string"
-                              ? file.slice(36)
-                              : file.name}
-                          </div>
+                          <a href={file} download>
+                            <img src={fil} alt="" className="pht" />
+                            <div className="fil-text">
+                              {typeof file === "string"
+                                ? file.slice(36)
+                                : file.name}
+                            </div>
+                          </a>
                         </li>
                       )}
                     </ul>
                   </>
+
                   {/* )} */}
                 </div>
 
@@ -765,9 +753,11 @@ function AssignmentView({ selectedAssignments }) {
                           type="button"
                           onClick={(e) => {
                             setIsEditButtonDisabled(false);
-                            handleSubmit(e, "PUT");
+                            // handleSubmit(e, "PUT");
+                            e.preventDefault();
+                            handleRequestPost("PUT");
                           }}
-                          className="save-btn"
+                          className="resubmit-btn"
                           disabled={!selectedAssignment}
                         >
                           Resubmit
@@ -781,6 +771,7 @@ function AssignmentView({ selectedAssignments }) {
                           onClick={() =>
                             setShowSubmissionOptions(!showSubmissionOptions)
                           }
+                          
                           className="add-create"
                         >
                           <FontAwesomeIcon icon={faPlus} /> Add or create
@@ -836,7 +827,11 @@ function AssignmentView({ selectedAssignments }) {
                         {isConfirmButtonVisible && (
                           <button
                             type="button"
-                            onClick={(e) => handleSubmit(e, "POST")}
+                            // onClick={(e) => handleSubmit(e, "POST")}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleRequestPost("POST");
+                            }}
                             className="save-btn"
                             disabled={!selectedAssignment}
                           >
@@ -936,12 +931,36 @@ function AssignmentView({ selectedAssignments }) {
                       <div className="grade-gd">
                         <strong>Grade:</strong>{" "}
                         {gradeData
-                          ? `${gradeData} / ${number}`
+                          ? `${gradeData} / ${marks}`
                           : "Not graded yet"}
                       </div>
-                      <div className="status">
+                      {/* <div className="status">
                         <strong>Status:</strong>{" "}
                         {gradeData ? statusData : "pending"}
+                      </div> */}
+
+                      <div className="status">
+                        {/* <strong>Status:</strong>{" "} */}
+                        {gradeData ? (
+                          statusData === "Pass" ? (
+                            <div className="status-pass">
+                              <div className="status-bulb green"></div>
+                              <strong className="status-list">Pass</strong>
+                            </div>
+                          ) : (
+                            <div className="status-fail">
+                              <div className="status-bulb red"></div>
+                              <strong className="status-list">
+                                Not Passed
+                              </strong>
+                            </div>
+                          )
+                        ) : (
+                          <div className="status-pending">
+                            <div className="status-bulb yellow"></div>
+                            <strong className="status-list">Pending</strong>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
