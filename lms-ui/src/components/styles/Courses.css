@@ -759,3 +759,7 @@ hr {
     width: 15px;
     height: 35px;
   }
+
+  .module-edit-btn:hover {
+    display: inline;
+  }

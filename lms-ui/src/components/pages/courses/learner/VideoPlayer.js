@@ -14,11 +14,9 @@ const VideoPlayer = ({
   }, [selectedLesson]);
   console.log('Selected Video', selectedLesson);
   const handleProgress = (progress) => {
-    // Calculate the percentage of video completion
     const percentage = progress.played * 100;
     console.log("Video completion ", percentage);
 
-    // Check if the video is played 90% or more
     if (percentage >= 90 && timer === true) {
       console.log("Video played 90");
       setVideoCompletion(true);

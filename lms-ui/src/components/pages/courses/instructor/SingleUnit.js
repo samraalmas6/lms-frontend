@@ -7,6 +7,9 @@ import AddVideo from "./AddUnitVideo";
 import AddUnitFile from "./AddUnitFile";
 import AddUnitVideo from "./AddUnitVideo";
 import AddUnitAssignment from "./AddUnitAssignment";
+import UnitSingleFile from "./UnitSingleFile";
+import UnitSingleVideo from "./UnitSingleVideo";
+import UnitSingleAssignment from "./UnitSingleAssignment";
 
 const SingleUnit = ({ unit, setUnitId }) => {
   const userId = sessionStorage.getItem("user_id");
@@ -16,7 +19,6 @@ const SingleUnit = ({ unit, setUnitId }) => {
 
   const startDateRefUnit = useRef(null);
   const endDateRefUnit = useRef(null);
-  const [showUnitContent, setShowUnitContent] = useState(false);
   const [fileShow, setFileShow] = useState(false);
   const [vidoShow, setVideoShow] = useState(false);
   const [assignmentShow, setAssignmentShow] = useState(false);
@@ -26,10 +28,13 @@ const SingleUnit = ({ unit, setUnitId }) => {
   const [unitAssignment, setUnitAssignment] = useState([]);
 
   const [unitTitle, setUnitTitle] = useState(unit.title);
+
   const [unitStart, setUnitStart] = useState("2023-12-25");
   const [unitEnd, setUnitEnd] = useState("2023-12-25");
   const [visibility, setVisibility] = useState("");
-  const [userName, setUserName] = useState("");
+  const [editUnit, setEditUnit] = useState(false);
+  const [showEditBtn, setShowEditBtn] = useState(false);
+
 
   const [userData, setUserData] = useState({});
 
@@ -43,7 +48,6 @@ const SingleUnit = ({ unit, setUnitId }) => {
       }).then((response) => {
         if (response.status === 200) {
           response.json().then(function (result) {
-            console.log(result);
             setUserData(result);
           });
         } else {
@@ -99,6 +103,42 @@ const SingleUnit = ({ unit, setUnitId }) => {
   const handleUnitTitle = (e) => {
     setUnitTitle(e.target.value);
   };
+
+  
+  const handleUpdateTitle = (e, id) => {
+    if (e.key === "Enter" || e.type === "contextmenu") {
+      e.preventDefault();
+
+      const obj = {
+        title: unitTitle,
+        instructor: unit.instructor,
+        module: unit.module,
+        updated_by: userId,
+      };
+
+      fetch(`http://127.0.0.1:8000/api/units/${id}/`, {
+        method: "PUT",
+        body: JSON.stringify(obj),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log(result);
+            setEditUnit(false);
+            // window.location.reload();
+          });
+        } else {
+          console.log(response);
+        }
+      });
+    }
+  };
+
+
+
 
   const preventAccordionClose = () => {
     accordion.current.setAttribute("data-bs-toggle", "");
@@ -204,11 +244,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
     }
   };
 
-  const handleAssignmentClick = (id) => {
-    navigate("/course/create-assignment", {
-      state: { assignmentId: id, showContent: true },
-    });
-  };
+
 
   const handleDeleteUnit = (unit, deleted) => {
     let action = "";
@@ -291,20 +327,34 @@ const SingleUnit = ({ unit, setUnitId }) => {
           aria-controls={`flush-unit${unit.id}`}
           ref={accordion}
         >
-          <div className="module-heading-container">
+          <div
+            className="module-heading-container"
+            onMouseEnter={() => setShowEditBtn(true)}
+            onMouseLeave={() => setShowEditBtn(false)}
+          >
             <div className="">
               <span className="me-3">Unit</span>
-              <span>{unitTitle}</span>
-              {/* <input
-                type="text"
-                placeholder="Unit Title"
-                value={unitTitle}
-                className="unitTitle"
-                onChange={(e) => handleUnitTitle(e)}
-                required
-                onMouseEnter={preventAccordionClose}
-                onMouseLeave={preventAccordionOpen}
-              /> */}
+              {editUnit ? (
+                <input
+                  type="text"
+                  placeholder="Unit Title"
+                  value={unitTitle}
+                  className="unitTitle"
+                  onChange={(e) => handleUnitTitle(e)}
+                  required
+                  onKeyDown={(e) => handleUpdateTitle(e, unit.id)}
+                  onMouseEnter={preventAccordionClose}
+                  onMouseLeave={preventAccordionOpen}
+                />
+              ) : (
+                <span>{unitTitle}</span>
+              )}
+              {showEditBtn && (
+                <i
+                  className="bi bi-pencil ms-2 module-edit-btn"
+                  onClick={() => setEditUnit(true)}
+                ></i>
+              )}
             </div>
             <div className="">
               <label>Start Date:</label>
@@ -450,43 +500,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
                           {unitFiles &&
                             unitFiles.map((file, index) => {
                               return (
-                                <tr key={file.id}>
-                                  <td>{index + 1}</td>
-                                  <td>{file.title.slice(0, 20)}...</td>
-                                  <td>{file.file.split(".").slice(-1)}</td>
-                                  <td>
-                                    <a href={file.file} target="_blank">
-                                      {file.file.substr(34)}
-                                    </a>
-                                  </td>
-                                  <td>{file.created_at}</td>
-                                  <td colspan="2">
-                                    {/* {String(file.is_active).toUpperCase()} */}
-                                    <ul className="unit-content-file-vidoe-options">
-                                      <li>
-                                        <div className="form-check form-switch visibility">
-                                          <input
-                                            className="form-check-input "
-                                            type="checkbox"
-                                            role="switch"
-                                            value={visibility}
-                                            onChange={handleVisibility}
-                                            id="flexSwitchCheckDefault"
-                                          />
-                                        </div>
-                                      </li>
-                                      <li>
-                                        <i
-                                          className="bi bi-trash text-danger"
-                                          onClick={() => null}
-                                        ></i>
-                                      </li>
-                                      <li>
-                                        <i className="bi bi-copy text-info"></i>
-                                      </li>
-                                    </ul>
-                                  </td>
-                                </tr>
+                                <UnitSingleFile file={file} index={index} handleUnitContent={handleUnitContent} />
                               );
                             })}
                         </tbody>
@@ -537,43 +551,10 @@ const SingleUnit = ({ unit, setUnitId }) => {
                           {unitVideos &&
                             unitVideos.map((video, index) => {
                               return (
-                                <tr key={video.id}>
-                                  <td>{index + 1}</td>
-                                  <td>{video.title.slice(0, 20)}...</td>
-                                  <td>
-                                    <a href={video.url} target="_blank">
-                                      {video.url}
-                                    </a>
-                                  </td>
-                                  <td>{video.created_at}</td>
-                                  <td>{getUSerFullName(video.updated_by)}</td>
-                                  <td colspan="2">
-                                    {/* {String(file.is_active).toUpperCase()} */}
-                                    <ul className="unit-content-file-vidoe-options">
-                                      <li>
-                                        <div className="form-check form-switch visibility">
-                                          <input
-                                            className="form-check-input "
-                                            type="checkbox"
-                                            role="switch"
-                                            value={visibility}
-                                            onChange={handleVisibility}
-                                            id="flexSwitchCheckDefault"
-                                          />
-                                        </div>
-                                      </li>
-                                      <li>
-                                        <i
-                                          className="bi bi-trash text-danger"
-                                          onClick={() => null}
-                                        ></i>
-                                      </li>
-                                      <li>
-                                        <i className="bi bi-copy text-info"></i>
-                                      </li>
-                                    </ul>
-                                  </td>
-                                </tr>
+                                <UnitSingleVideo video={video} index={index} visibility={visibility} handleVisibility={handleVisibility} getUSerFullName={getUSerFullName} 
+                                handleUnitContent={handleUnitContent}
+                                />
+                         
                               );
                             })}
                         </tbody>
@@ -628,47 +609,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
                                 ? `${userData[userId].first_name} ${userData[userId].last_name}`
                                 : "none";
                               return (
-                                <tr
-                                  key={assignment.id}
-                                  onClick={() =>
-                                    handleAssignmentClick(assignment.id)
-                                  }
-                                >
-                                  <td>{index + 1}</td>
-                                  <td>{assignment.title.slice(0, 20)}...</td>
-                                  <td>{assignment.description}</td>
-                                  <td>{assignment.due_date}</td>
-                                  {/* <td>{assignment.updated_by}</td> */}
-                                  <td>
-                                    {getUSerFullName(assignment.updated_by)}
-                                  </td>
-                                  <td colspan="2">
-                                    {/* {String(file.is_active).toUpperCase()} */}
-                                    <ul className="unit-content-file-vidoe-options">
-                                      <li>
-                                        <div className="form-check form-switch visibility">
-                                          <input
-                                            className="form-check-input "
-                                            type="checkbox"
-                                            role="switch"
-                                            value={visibility}
-                                            onChange={handleVisibility}
-                                            id="flexSwitchCheckDefault"
-                                          />
-                                        </div>
-                                      </li>
-                                      <li>
-                                        <i
-                                          className="bi bi-trash text-danger"
-                                          onClick={() => null}
-                                        ></i>
-                                      </li>
-                                      <li>
-                                        <i className="bi bi-copy text-info"></i>
-                                      </li>
-                                    </ul>
-                                  </td>
-                                </tr>
+                               <UnitSingleAssignment assignment={assignment} index={index} getUSerFullName={getUSerFullName} handleUnitContent={handleUnitContent} />
                               );
                             })}
                         </tbody>

@@ -4,6 +4,16 @@ import Collapse from "react-collapse";
 import "../../../styles/AssignmentTable.css";
 import "../../../styles/AssignmentGrading.css";
 const AssignmentGrading = () => {
+
+  function getCurrentTime() {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+  
+    return `${hours}:${minutes}:${seconds}`;
+  }
+
   const userId = sessionStorage.getItem("user_id");
   const userRole = sessionStorage.getItem("role");
 
@@ -137,8 +147,10 @@ const AssignmentGrading = () => {
     setUpdatedStatus(e.target.value);
   };
 
-  const handleOverDueDate = (subDate, dueDate) => {
-    if (subDate > dueDate) {
+  const handleOverDueDate = (subDate, dueDate, due_time) => {
+    const currentTime = getCurrentTime();
+    console.log('current time', currentTime, due_time);
+    if (subDate > dueDate && currentTime > due_time) {
       // setOverDue(true)
       return true;
     } else {
@@ -691,7 +703,8 @@ const AssignmentGrading = () => {
                                                                   className={`${
                                                                     handleOverDueDate(
                                                                       submission.submission_date,
-                                                                      assignment.due_date
+                                                                      assignment.due_date,
+                                                                      assignment.due_time
                                                                     )
                                                                       ? "overDue"
                                                                       : "on-time"

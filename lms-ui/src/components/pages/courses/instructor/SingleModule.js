@@ -21,6 +21,8 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
   const [moduleStart, setModuleStart] = useState(module.start_date);
   const [moduleEnd, setModuleEnd] = useState(module.end_date);
   const [visibility, setVisibility] = useState(module.is_active);
+  const [editModule, setEditModule] = useState(false)
+  const [showEditBtn, setShowEditBtn] = useState(false)
 
   const preventAccordionClose = () => {
     accordion.current.setAttribute("data-bs-toggle", "");
@@ -32,6 +34,40 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
   const handleModuleTitle = (e) => {
     setModuleTitle(e.target.value);
   };
+
+  const handleUpdateTitle = (e, id) => {
+    console.log("inside update function");
+    if(e.key === 'Enter' || e.type === "contextmenu"){
+      e.preventDefault()
+      console.log('title', moduleTitle, id);
+
+      const obj = {
+        title: moduleTitle,
+        instructor: module.instructor,
+        course: module.course,
+        updated_by: userId
+      }
+
+      fetch(`http://127.0.0.1:8000/api/modules/${id}/`, {
+      method: "PUT",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log(result);
+          setEditModule(false)
+          // window.location.reload();
+        });
+      } else {
+        console.log(response);
+      }
+    });
+    }
+  }
   const handlModuleStart = (e) => {
     // startDateRefModule.current.removeAttribute("className", "module-start-field");
     // startDatePickerRefModule.current.setAttribute(
@@ -165,11 +201,14 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
           ref={accordion}
           // onClick={(e) => e.stopPropagation()}
         >
-          <div className="module-heading-container">
+          <div className="module-heading-container"
+           onMouseEnter={() => setShowEditBtn(true)}
+           onMouseLeave={() => setShowEditBtn(false)}
+          >
             <div className="">
               <span className="me-3">MODULE</span>
-              <span>{moduleTitle}</span>
-              {/* <input
+              {
+                editModule ? <input
                 type="text"
                 placeholder="Module Title"
                 value={moduleTitle}
@@ -178,10 +217,16 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
                   handleModuleTitle(e);
                 }}
                 required
+              onKeyDown={(e) => handleUpdateTitle(e, module.id)}
+              onContextMenu={(e) => handleUpdateTitle(e, module.id)}
                 onMouseEnter={preventAccordionClose}
                 onMouseLeave={preventAccordionOpen}
-                // onClick={(e) => e.stopPropagation()}
-              /> */}
+              /> : <span>{moduleTitle}</span> 
+              }
+              {
+                showEditBtn && 
+                <i className="bi bi-pencil ms-2 module-edit-btn" onClick={() => setEditModule(true)}></i>
+              }
             </div>
             <div className="">
               <label>Start Date:</label>

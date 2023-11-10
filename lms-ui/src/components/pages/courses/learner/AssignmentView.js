@@ -96,7 +96,7 @@ function AssignmentView({ selectedAssignments }) {
 
     getAssignmentData();
     handleAssignment(selectedAssignment);
-  }, [selectedAssignment]);
+  }, [selectedAssignment,0]);
 
   // useEffect(() => {
   //   const getGradingData = () => {
@@ -235,11 +235,9 @@ function AssignmentView({ selectedAssignments }) {
             setStatusData(result[result.length - 1].status);
 
             if (result[result.length - 1].marks === null) {
-              setIsSubmitClicked(true);
               setShowAddNewSubmission(false);
             } else {
               setShowEditButton(false);
-              // setIsSubmitClicked(false);
               setShowAddNewSubmission(false);
             }
 
@@ -253,7 +251,6 @@ function AssignmentView({ selectedAssignments }) {
         } else {
           console.log(response);
           setGradeData(0);
-          setIsSubmitClicked(true);
           setShowAddNewSubmission(false);
         }
       });
@@ -289,35 +286,29 @@ function AssignmentView({ selectedAssignments }) {
     )
       .then((response) => {
         if (response.status === 200) {
-          setIsSubmitClicked(true);
-          return response.json();
+          response.json().then(function (result) {
+            if (result.length > 0) {
+              // const submission= submissionData;
+              const submission = result[result.length - 1];
+              console.log("Submission Data:", submission);
+              setIsSubmitClicked(true);
+              setSubmissionId(submission.id);
+              setLink(submission.submitted_link);
+              setFile(submission.content);
+              setFiles(submission.content);
+              setShowAddNewSubmission(false);
+            } else {
+              console.log("No submissions found for this assignment");
+              setShowAddNewSubmission(true);
+              setIsSubmitClicked(false);
+            }
+          });
         } else {
           console.error("Error fetching submission data:", response);
           setShowAddNewSubmission(true);
           setIsSubmitClicked(false);
         }
       })
-      .then((submissionData) => {
-        if (submissionData.length > 0) {
-          // const submission= submissionData;
-          const submission = submissionData[submissionData.length - 1];
-          console.log("Submission Data:", submission);
-          setIsSubmitClicked(true);
-
-          setSubmissionId(submission.id);
-          setLink(submission.submitted_link);
-          setFile(submission.content);
-          setFiles(submission.content);
-          setShowAddNewSubmission(false);
-        } else {
-          console.log("No submissions found for this assignment");
-          setShowAddNewSubmission(true);
-          setIsSubmitClicked(false);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching submission data:", error);
-      });
   }
 
   function handleToggleResubmit(submission) {

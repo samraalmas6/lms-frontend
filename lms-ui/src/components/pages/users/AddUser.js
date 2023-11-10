@@ -255,9 +255,9 @@ function AddUser() {
   return (
     <div className="col">
       <div className={styles.container}>
-        <UploadPicture />
-        <form className={styles.form}>
-          <div className={styles.excelFile}>
+        {/* <UploadPicture /> */}
+        <div className="">
+    <div className={styles.excelFile}>
             <label className={styles.downloadExcel}>
               Download Excel File Template
               <ExportExcel
@@ -276,6 +276,11 @@ function AddUser() {
               />
             </label>
           </div>
+
+        </div>
+    
+        <form className={styles.form}>
+         
           <div className={styles.firstlast}>
             <input
               type="text"
