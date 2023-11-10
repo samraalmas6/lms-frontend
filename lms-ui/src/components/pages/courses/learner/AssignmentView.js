@@ -451,14 +451,23 @@ function AssignmentView({ selectedAssignments }) {
           },
         });
 
+        const dueDate = selectedAssignment.dueDate; 
+        const currentDate = new Date();
+
+        // Compare the due date with the current date
+        const isDueDatePassed = currentDate > new Date(dueDate);
+        
+        // Update the logic after handling the assignment submission response
         if (response.status === 201 || response.status === 200) {
-          handleAssignmentProgress(selectedAssignment.id)
+          handleAssignmentProgress(selectedAssignment.id);
           setFile("");
           setFiles("");
           setLink("");
           setLinks("");
           setStatusData("Pending");
-          setShowEditButton(true);
+        
+          // Set showEditButton based on whether the due date has passed
+          setShowEditButton(!isDueDatePassed);
           setShowLink(false);
           const result = await response.json();
           console.log(result.id);
@@ -588,7 +597,7 @@ function AssignmentView({ selectedAssignments }) {
                 <div className="detail-points-and-date">
                   <div className="detail-points">
                     <strong>Marks:</strong>
-                    {marks}
+                    {selectedAssignment.marks}
                   </div>
                   <div className="detail-create">
                     <strong>Created At:</strong>
@@ -598,8 +607,14 @@ function AssignmentView({ selectedAssignments }) {
                     <strong>Due date:</strong>
                     {selectedAssignment.due_date}
                   </div>
-                </div>
+                  <div className="detail-time">
+                    <strong>:</strong>
+                    {selectedAssignment.due_time}
+                  </div>
               </div>
+
+                </div>
+                
               <div className="detail-description">
                 {selectedAssignment.description}
               </div>
@@ -713,7 +728,16 @@ function AssignmentView({ selectedAssignments }) {
                             </a>
                             <span
                               className="rem-link"
-                              onClick={() => handleRemoveLink(index)}
+                              // onClick={() => handleRemoveLink(index)
+                              // }
+                              onClick={() => {
+                                // Set the current link as the previous link
+                                handleRemoveLink(index)
+                                // Clear the link input field
+                                setLink('');
+                                // Close the popup
+                                setSubmissionOption(null);
+                              }}
                             >
                               &#x2716;
                             </span>
@@ -876,11 +900,11 @@ function AssignmentView({ selectedAssignments }) {
                           className="close-icon"
                           
                           onClick={() => {
-                            // Set the current link as the previous link
-                            setPreviousLink(link);
-                            // Clear the link input field
-                            setLink('');
-                            // Close the popup
+                           
+                            // setPreviousLink(link);
+                           
+                            // setLink('');
+                         
                             setSubmissionOption(null);
                           }}
                         >

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "../../styles/AllTeam.module.css";
 import userImg from "../../content/Images/user.png";
-import Avatar from "react-avatar";
+// import Avatar from "react-avatar";
 
 const AllTeams = ({ show }) => {
   const [showBlock, setShowBlock] = useState(false);
@@ -799,7 +799,7 @@ const AllTeams = ({ show }) => {
                             alt=""
                             className="allusers-image"
                           /> */}
-                          <Avatar
+                          {/* <Avatar
                             color={Avatar.getRandomColor("sitebase", [
                               "red",
                               "gray",
@@ -808,7 +808,7 @@ const AllTeams = ({ show }) => {
                             name={`${user.first_name} ${user.last_name}`}
                             round={true}
                             size="40px"
-                          />
+                          /> */}
                         </div>
                         <div className="allusers-name-section">
                           <span>

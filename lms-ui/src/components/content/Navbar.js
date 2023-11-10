@@ -2,7 +2,7 @@ import React from "react";
 import user from "./Images/user.png";
 import "../styles/HomePage.css";
 import { Link, useNavigate } from "react-router-dom";
-import Avatar from 'react-avatar';
+// import Avatar from 'react-avatar';
 
 export const Navbar = () => {
   const navigate = useNavigate()
@@ -73,7 +73,7 @@ export const Navbar = () => {
                 data-toggle="modal"
               >
                 {/* <img src={user} alt="User" className="user-image" /> */}
-                <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'gray', 'green'])} name={name} round={true} size='40px' />
+                {/* <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'gray', 'green'])} name={name} round={true} size='40px' /> */}
 
               </a>
             </li>

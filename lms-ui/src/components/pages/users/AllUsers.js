@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import userImg from "../../content/Images/user.png";
 import "../../styles/Users.css";
 import { Link } from "react-router-dom";
-import Avatar from "react-avatar";
+// import Avatar from "react-avatar";
 
 const AllUsers = () => {
   const [showBlock, setShowBlock] = useState(false);
@@ -154,7 +154,7 @@ const AllUsers = () => {
                             alt=""
                             className="allusers-image"
                           /> */}
-                          <Avatar
+                          {/* <Avatar
                             color={Avatar.getRandomColor("sitebase", [
                               "red",
                               "gray",
@@ -163,7 +163,7 @@ const AllUsers = () => {
                             name={`${user.first_name} ${user.last_name}`}
                             round={true}
                             size="40px"
-                          />
+                          /> */}
                         </div>
                         <div className="allusers-name-section">
                           <span>
@@ -218,7 +218,7 @@ const AllUsers = () => {
                     className="card-img-top userCardImg"
                     alt="LMS User"
                   /> */}
-                  <Avatar
+                  {/* <Avatar
                     color={Avatar.getRandomColor("sitebase", [
                       "red",
                       "gray",
@@ -228,7 +228,7 @@ const AllUsers = () => {
                     className=""
                     round={true}
                     size="40px"
-                  />
+                  /> */}
                   <div className="card-body blockCardBody">
                     <p className="card-text p-0 m-0">
                       {user.first_name} {user.last_name}
