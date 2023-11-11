@@ -88,6 +88,11 @@ const AssignmentGrading = () => {
   const [authorData, setAuthorData] = useState([])
   const [overDue, setOverDue] = useState();
   // const [gradingStatus, setGradingStatus] = useState("");
+  const [subDate,setSubDate] = useState('');
+  const [subTime,setSubTime] = useState('');
+  const [dueDate,setDueDate] = useState('');
+  const [dueTime,setDueTime] = useState('');
+
 
   useEffect(() => {
     // Initialize userStatusMap with "Pending" for each assignment
@@ -137,13 +142,51 @@ const AssignmentGrading = () => {
     setUpdatedStatus(e.target.value);
   };
 
-  const handleOverDueDate = (subDate, dueDate) => {
-    if (subDate > dueDate) {
-      // setOverDue(true)
+  const handleOverDueDate = (subDate,subTime, dueDate,dueTime) => {
+    // setSubDate(subDate);
+    // setSubTime(subTime);
+    // setDueDate(dueDate);
+    // setDueTime(dueTime);
+
+    console.log("dueDate",dueDate)
+    console.log("dueTime",dueTime)
+    console.log("subDate",subDate)
+    console.log("subTime",subTime)
+
+    const subDateTimeString = subDate + "T" + subTime + "Z";
+    const dueDateTimeString = dueDate + "T" + dueTime + "Z";
+
+    console.log("subDateTimeString",subDateTimeString)
+    console.log("dueDateTimeString",dueDateTimeString)
+
+    const dueDateTime = new Date(dueDateTimeString);
+    const subDateTime = new Date(subDateTimeString);
+
+    const dueMilliseconds = dueDateTime.getTime();
+    const subMilliseconds = subDateTime.getTime();
+
+    console.log("dueMilliseconds",dueMilliseconds)
+    console.log("subMilliseconds",subMilliseconds)
+
+  //   ----------------xxxxxxxxxx---------------------
+  //   if (subDate > dueDate && subTime > dueTime) {
+  //     console.log("lateeeeeeeeeeeeeeeeee")
+  //     // setOverDue(true)
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  //   -----------------xxxxxxxxxxxxxx------------------
+
+    if (subMilliseconds > dueMilliseconds){
+      console.log("late submission")
       return true;
-    } else {
+    }
+    else{
+      console.log("on time submission")
       return false;
     }
+
   };
 
   const handleGraderName = (id) => {
@@ -419,11 +462,6 @@ const AssignmentGrading = () => {
     // getfilteredData();
   }, [0]);
 
-  // console.log("grader is jo user login h", sessionStorage.getItem("user_id"));
-  // console.log(
-  //   "grader is jo user login h uska first name",
-  //   sessionStorage.getItem("first_name")
-  // );
 
   const instructor =
     sessionStorage.getItem("first_name") + sessionStorage.getItem("last_name");
@@ -604,7 +642,7 @@ const AssignmentGrading = () => {
                                                       Assignment
                                                     </th>
                                                     <th scope="col">
-                                                      Submission Date
+                                                      Submission Date & Time
                                                     </th>
                                                     <th scope="col">
                                                       Due Date
@@ -691,20 +729,26 @@ const AssignmentGrading = () => {
                                                                   className={`${
                                                                     handleOverDueDate(
                                                                       submission.submission_date,
-                                                                      assignment.due_date
+                                                                      submission.submission_time,
+                                                                      assignment.due_date,
+                                                                      assignment.due_time
                                                                     )
                                                                       ? "overDue"
                                                                       : "on-time"
                                                                   }`}
                                                                 >
                                                                   {
-                                                                    submission.submission_date
-                                                                  }
+                                                                    submission.submission_date  
+                                                                  },
+                                                                  {/* {submission.submission_time} */}
                                                                 </td>
                                                                 <td>
                                                                   {
                                                                     assignment.due_date
                                                                   }
+                                                                  {/* {
+                                                                    assignment.due_time
+                                                                  } */}
                                                                 </td>
                                                                 <td>
                                                                   {handleGraderName(

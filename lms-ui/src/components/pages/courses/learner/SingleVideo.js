@@ -2,7 +2,7 @@ import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 
-const SingleVideo = ({video, videoCompletion, setVideoCompletion, handleLessonSelect}) => {
+const SingleVideo = ({video, videoCompletion, handleLessonSelect}) => {
     const [videoProgress, setVideoProgress] = useState(videoCompletion)
     useEffect(() => {
         setVideoProgress(videoCompletion)
