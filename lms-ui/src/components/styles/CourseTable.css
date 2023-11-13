@@ -320,7 +320,7 @@ border: 10px solid red;
   color: #1463b8;
 }
 
-.lesson-content-container .lecture-pdf:hover {
+.lesson-content-container .lecture-pdf .pdf-doc-container:hover ,.assignment-container .assignment-pdf:hover {
   color: #1463b8;
   text-decoration: none;
   list-style: none;
@@ -379,16 +379,20 @@ border: 10px solid red;
   gap: 10px;
 }
 
-.lesson-title,
+.lesson-title{
+  display: flex;
+  gap: 10px;
+}
+
 .lecture-pdf {
   display: flex;
   gap: 10px;
   flex-direction: column;
 }
 
-.lecture-pdf li a:hover {
+/* .lecture-pdf li a:hover {
   text-decoration: none;
-}
+} */
 
 .document-container {
   position: absolute;
@@ -439,6 +443,7 @@ border: 10px solid red;
 .additional-resources-container{
  /* background-color:yellow; */
  margin-top: -10px;
+ justify-content: flex-end;
 }
 
 .assignment-pdf{
@@ -446,4 +451,53 @@ border: 10px solid red;
   flex-direction:column;
   gap: 10px; */
   margin-bottom: 10px;
+}
+
+/* -----------xxxxxx---------------- */
+.dropbtn {
+  background-color: white;
+  color: black;
+  padding: 5px;
+  font-size: 16px;
+  /* border: none; */
+  cursor: pointer;
+}
+
+.resources-dropdown {
+  position: relative;
+  display: inline-block;
+  margin-right: 15px;
+  display: flex;
+    justify-content: flex-end;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content div {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content div:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: rgb(30, 151, 199);
+}
+/* -----------xxxxxx---------------- */
+
+.resources-arrow{
+  font-size: 15px;
 }
