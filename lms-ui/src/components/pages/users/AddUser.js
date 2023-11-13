@@ -8,7 +8,7 @@ import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
 import ExcelExportData from "../../hooks/ExcelExportData";
 import ExportExcel from "../../content/Excelexport";
-import Swal from "sweetalert2";
+// import Swal from "sweetalert2";
 
 function AddUser() {
   const excelFile = useRef();
@@ -158,23 +158,23 @@ function AddUser() {
         else if(response.status === 403) {
           console.log(response);
           response.json().then(function (result) {
-            Swal.fire({
-              icon: 'error',
-              title: 'Not Registered',
-              text: `${result.detail}`
+            // Swal.fire({
+            //   icon: 'error',
+            //   title: 'Not Registered',
+            //   text: `${result.detail}`
         
-            });
+            // });
           })
         
         }
         else {
           response.json().then(function (result) {
-            Swal.fire({
-              icon: 'error',
-              title: 'Not Registered',
-              text: `${result.email}`
+            // Swal.fire({
+            //   icon: 'error',
+            //   title: 'Not Registered',
+            //   text: `${result.email}`
         
-            });
+            // });
           })
         }
       });
@@ -188,7 +188,7 @@ function AddUser() {
             message: "Verify Account",
             sender: "LMS",
           });
-          Swal.fire("Email successfully sent! check Your inbox")
+          // Swal.fire("Email successfully sent! check Your inbox")
         } catch (error) {
           console.log(error);
         }
