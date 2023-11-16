@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import userImg from "../../content/Images/user.png";
 import "../../styles/Users.css";
 import { Link } from "react-router-dom";
+import Avatar from "react-avatar";
+import Swal from "sweetalert2";
 // import Avatar from "react-avatar";
 
 const AllUsers = () => {
@@ -49,6 +51,23 @@ const AllUsers = () => {
   };
 
   const handleVisibility = (email, active) => {
+    let action = ""
+    if(active === true ){
+      action = "Deactivate"
+    }
+    else {
+      action = "Activate"
+    }
+    Swal.fire({
+      title: "Attention!",
+      text: `Do you want to ${action} this User?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: `${action}`,
+    }).then((result) => {
+      if (result.isConfirmed) {
     const obj = {
       email: email,
       is_active: !active,
@@ -63,13 +82,22 @@ const AllUsers = () => {
     }).then((response) => {
       if (response.status === 200) {
         response.json().then(function (result) {
+          Swal.fire(
+            result.is_active ? "User Activation Successful!" : `User Deactivation Successful!`,
+            `${result.first_name} has been ${action}d`,
+            "success"
+          ).then((res) => {
+            window.location.reload();
+          });
           console.log(result);
-          window.location.reload();
+          // window.location.reload();
         });
       } else {
         console.log(response);
       }
     });
+  }
+});
   };
 
   function randomColor() {
@@ -168,10 +196,10 @@ const AllUsers = () => {
                             // style={{
                             //   backgroundColor: randomColor()
                             // }}
-                            name={`${user.first_name} ${user.last_name}`}
+                            name={`${user.first_name && user.first_name} ${user.last_name && user.last_name}`}
                             round={true}
                             size="40px"
-                          /> */}
+                          /> 
                         </div>
                         <div className="allusers-name-section">
                           <span>
@@ -234,7 +262,7 @@ const AllUsers = () => {
                     className=""
                     round={true}
                     size="40px"
-                  /> */}
+                  />
                   <div className="card-body blockCardBody">
                     <p className="card-text p-0 m-0">
                       {user.first_name} {user.last_name}

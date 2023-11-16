@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Dashboard.css";
-// import { Chart } from "react-google-charts";
+import { Chart } from "react-google-charts";
 import { useNavigate } from "react-router";
 
 const Dashboard = () => {
@@ -236,15 +236,14 @@ const Dashboard = () => {
         <div 
         className="dashboard-chart-section"
         >
-          {/* <h5 className="mt-3 mb-3 text-secondary">Courses</h5> */}
-       
-            {/* <Chart
+          <h5 className="mt-3 mb-3 text-secondary">Courses</h5>
+           <Chart
               chartType="Bar"
               width="100%"
               height="400px"
               data={data}
               options={options}
-            /> */}
+            />
          
         </div>
         <div className="table-responsive dashboard-new-registered-user-section">

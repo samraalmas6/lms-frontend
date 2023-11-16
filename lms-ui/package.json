@@ -26,6 +26,7 @@
     "react-scripts": "5.0.1",
     "react-select": "^5.7.4",
     "react-select-country-list": "^2.2.3",
+    "react-spinners": "^0.13.8",
     "react-youtube": "^10.1.0",
     "screenfull": "^6.0.2",
     "sheetjs-style": "^0.15.8",

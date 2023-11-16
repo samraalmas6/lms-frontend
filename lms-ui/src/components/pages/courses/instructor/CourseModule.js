@@ -20,7 +20,6 @@ const CourseModule = ({ moduleData, moduleCounter, setModuleData, courseId }) =>
 
   const [showAddModule, setShowAddModule] = useState(false);
   const [saveUnit, setSaveUnit] = useState(false);
-  const [unitData, setUnitData] = useState([]);
   const [unitTitle, setUnitTitle] = useState("");
 
   const [moduleTitle, setModuleTitle] = useState("");
@@ -78,24 +77,7 @@ const CourseModule = ({ moduleData, moduleCounter, setModuleData, courseId }) =>
     setShowAddModule(true);
   };
 
-  const handleModuleContent = (module) => {
-    setModuleId(module.id);
-    fetch(`http://127.0.0.1:8000/api/modules/${module.id}/units`, {
-      method: "GET",
-      headers: {
-        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-      },
-    }).then((response) => {
-      if (response.status === 200) {
-        response.json().then(function (result) {
-          setUnitData(result);
-        });
-      } else {
-        console.log(response);
-        setUnitData([]);
-      }
-    });
-  };
+  
 
   const handleSaveModule = (moduleTitle) => {
     // e.preventDefault();
@@ -144,8 +126,8 @@ const CourseModule = ({ moduleData, moduleCounter, setModuleData, courseId }) =>
                   <ModuleProbs.Provider
                     value={{
                       moduleId,
-                      unitData,
-                      setUnitData,
+                      // unitData,
+                      // setUnitData,
                       unitTitle,
                       setUnitTitle,
                     }}
@@ -153,7 +135,8 @@ const CourseModule = ({ moduleData, moduleCounter, setModuleData, courseId }) =>
                     <SingleModule
                       key={module.id}
                       module={module}
-                      handleModuleContent={handleModuleContent}
+                      setModuleId={setModuleId}
+                      // handleModuleContent={handleModuleContent}
                       setModuelContent={setModuelContent}
                     />
                   </ModuleProbs.Provider>
@@ -270,8 +253,8 @@ const CourseModule = ({ moduleData, moduleCounter, setModuleData, courseId }) =>
                       <ModuleProbs.Provider
                         value={{
                           moduleId,
-                          unitData,
-                          setUnitData,
+                          // unitData,
+                          // setUnitData,
                           unitTitle,
                           setUnitTitle,
                         }}

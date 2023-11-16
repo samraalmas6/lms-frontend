@@ -4,13 +4,21 @@ import CourseModule from "./CourseModule";
 import img from "../../../content/Images/uploadImg.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CourseProbs } from "../../../../App";
+import Swal from "sweetalert2";
 // import Swal from 'sweetalert2';
 
 const CourseContent = ({}) => {
-  const { courseId,setCourseId, instructor,setInstructor, courseCoauthors, setCourseCoauthors, courseCreator } =
-    useContext(CourseProbs);
-  const userId = sessionStorage.getItem("user_id")
-  console.log('course coAuthors:', courseCoauthors);
+  const {
+    courseId,
+    setCourseId,
+    instructor,
+    setInstructor,
+    courseCoauthors,
+    setCourseCoauthors,
+    courseCreator,
+  } = useContext(CourseProbs);
+  const userId = sessionStorage.getItem("user_id");
+  console.log("course coAuthors:", courseCoauthors);
   const navigate = useNavigate();
   const { state } = useLocation();
   console.log("state", state);
@@ -18,7 +26,7 @@ const CourseContent = ({}) => {
   const [categoryData, setCategoryData] = useState([]);
   const [userData, setUserData] = useState([]);
   const [moduleData, setModuleData] = useState([]);
-  const [moduleCounter, setModuleCounter] = useState(0)
+  const [moduleCounter, setModuleCounter] = useState(0);
   const [course, setCourse] = useState([]);
 
   const inpRef = useRef("");
@@ -48,22 +56,25 @@ const CourseContent = ({}) => {
         if (response.status === 200) {
           response.json().then(function (result) {
             console.log("Api result: ", result);
-            setModuleCounter(result.length)
+            setModuleCounter(result.length);
             // setCourseCoauthors(result[0].editor)
-            setCourseId(id)
-            const obj = result.filter(module => {
+            setCourseId(id);
+            const obj = result.filter((module) => {
               // setCourse(result.course)
-              return module.is_delete === false
-            })
-            setModuleData(obj);
-           
+              return module.is_delete === false;
+            });
+            if (sessionStorage.getItem("role") === "admin") {
+              setModuleData(result);
+            } else {
+              setModuleData(obj);
+            }
           });
         } else {
           console.log(response);
           setModuleData([]);
         }
       });
-    }
+    };
 
     getModuleData(state.course.id);
     setCourse(state.course);
@@ -73,10 +84,35 @@ const CourseContent = ({}) => {
   }, [state.course]);
 
   useEffect(() => {
+    const getApiAuthors = () => {
+      fetch(`http://localhost:8000/api/authors/`, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log("Api result Author Data", result);
+            const obj = result.filter(
+              (author) => author.id === course.instructor
+            );
+            if (obj.length !== 0) {
+              setCourseCoauthors(obj[0].editor);
+            }
+          });
+        } else {
+          console.log(response);
+        }
+      });
+    };
+    getApiAuthors();
     setCourseTitle(course.title);
+    setCourseId(course.id);
+    setInstructor(course.instructor);
     setCourseStart(course.start_date);
     setCourseEnd(course.end_date);
-    setCourseDes(course.description);
+    setCourseDes(`<i>${course.description}</i>`);
     setCourseCategory(course.category);
     setCourseImg(course.course_image);
     setVisibility(course.is_active);
@@ -139,11 +175,10 @@ const CourseContent = ({}) => {
     const active = e.target.value;
     const obj = {
       title: courseTitle,
-      author: sessionStorage.getItem("user_id"),
+      instructor: instructor,
       updated_by: sessionStorage.getItem("user_id"),
       category: courseCategory,
       is_active: !visibility,
-      created_by: sessionStorage.getItem("user_id"),
     };
     fetch(`http://127.0.0.1:8000/api/courses/${courseId}/`, {
       method: "PUT",
@@ -156,6 +191,12 @@ const CourseContent = ({}) => {
       if (response.status === 200) {
         response.json().then(function (result) {
           console.log(result);
+          Swal.fire({
+            title: `${result.title} has been ${
+              result.is_active ? "activated" : "deactivated"
+            }`,
+            icon: "success",
+          });
           // window.location.reload();
         });
       } else {
@@ -167,7 +208,7 @@ const CourseContent = ({}) => {
   const handleCourseContent = (course) => {
     setCourse(course);
     setCourseId(course.id);
-    setInstructor(course.instructor)
+    setInstructor(course.instructor);
 
     fetch(`http://127.0.0.1:8000/api/courses/${course.id}/modules`, {
       method: "GET",
@@ -178,11 +219,15 @@ const CourseContent = ({}) => {
       if (response.status === 200) {
         response.json().then(function (result) {
           console.log("Api result: ", result);
-          const obj = result.filter(module => {
-            return module.is_delete === false
-          })
-          setModuleCounter(result.length)
-          setModuleData(obj);
+          const obj = result.filter((module) => {
+            return module.is_delete === false;
+          });
+          setModuleCounter(result.length);
+          if (sessionStorage.getItem("role") === "admin") {
+            setModuleData(result);
+          } else {
+            setModuleData(obj);
+          }
         });
       } else {
         console.log(response);
@@ -214,33 +259,31 @@ const CourseContent = ({}) => {
   };
 
   const handleDeleteCourse = (course, deleted) => {
-    let action = ""
-    if(deleted) {
-      action = "Delete"
+    let action = "";
+    if (deleted) {
+      action = "Delete";
+    } else {
+      action = "Restore";
     }
-    else {
-      action = "Restore" 
-    }
-    // Swal.fire({
-    //   title: 'Are you sure?',
-    //   text: "You won't be able to revert this!",
-    //   icon: 'warning',
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#d33',
-    //   cancelButtonColor: '#3085d6',
-    //   confirmButtonText: `${action}`
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
+    Swal.fire({
+      title: "Attention!",
+      text: `Do you want to ${action} this Course?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: `${action}`,
+    }).then((result) => {
+      if (result.isConfirmed) {
         const obj = {
           title: course.title,
           is_updated: true,
           is_delete: deleted,
-          created_by: course.created_by,
-          editor: [2, 24],
-          category: [1],
+          category: course.category,
+          instructor: course.instructor,
           updated_by: userId,
         };
-    
+
         fetch(`http://127.0.0.1:8000/api/courses/${course.id}/`, {
           method: "PUT",
           body: JSON.stringify(obj),
@@ -251,38 +294,36 @@ const CourseContent = ({}) => {
         }).then((response) => {
           if (response.status === 200) {
             response.json().then(function (result) {
-              console.log('Api result: ',result);
-              // Swal.fire(
-              //   `${action}!`,
-              //   `${course.title} has been ${action}.`,
-              //   'success'
-              // ).then(res => {
-              //  navigate(-1)
-              // })
-              // setCourseContent((pre) => [...pre, result]);
-              // setCourseCreator(result.created_by);
-              // setCourseCategory("");
-              // setCourseTitle("");
-              // 
+              console.log("Api result: ", result);
+              Swal.fire(
+                `${action}d!`,
+                `${course.title} has been ${action}d.`,
+                "success"
+              ).then((res) => {
+                navigate(-1);
+              });
+              setCourseContent((pre) => [...pre, result]);
+              setCourseCategory("");
+              setCourseTitle("");
             });
           } else {
             console.log(response);
           }
         });
-      // }
-    // })
-
-
+      }
+    });
   };
 
   const handleSaveCourse = () => {
     if (courseTitle && courseCategory) {
-
-      console.log('instructor id',instructor);
+      console.log("instructor id", instructor);
 
       fetch(`http://127.0.0.1:8000/api/authors/${instructor}/`, {
         method: "PUT",
-        body: JSON.stringify({created_by: courseCreator, editor: courseCoauthors}),
+        body: JSON.stringify({
+          created_by: courseCreator,
+          editor: courseCoauthors,
+        }),
         headers: {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
           "Content-type": "application/json; charset=UTF-8",
@@ -303,8 +344,10 @@ const CourseContent = ({}) => {
       }
       formData.append("title", courseTitle);
       formData.append("description", courseDescription);
-      formData.append("start_date", courseStart);
-      formData.append("end_date", courseEnd);
+      if (courseStart && courseEnd) {
+        formData.append("start_date", courseStart);
+        formData.append("end_date", courseEnd);
+      }
       formData.append("category", [courseCategory]);
       formData.append("instructor", instructor);
       formData.append("updated_by", sessionStorage.getItem("user_id"));
@@ -326,7 +369,7 @@ const CourseContent = ({}) => {
             console.log(result);
             setCourseCategory("");
             setCourseTitle("");
-            navigate(-1)
+            navigate(-1);
           });
         } else {
           console.log(response);
@@ -447,17 +490,17 @@ const CourseContent = ({}) => {
                         </div>
                       </li>
                       <li>
-                        {
-                          course.length !== 0 && course.is_delete ?  <i
-                          className="bi bi-recycle text-success"
-                          onClick={() => handleDeleteCourse(course, false)}
-                        ></i>:
-                        <i
-                          className="bi bi-trash text-danger"
-                          onClick={() => handleDeleteCourse(course, true)}
-                        ></i>
-                        }
-                        
+                        {course.length !== 0 && course.is_delete ? (
+                          <i
+                            className="bi bi-recycle text-success"
+                            onClick={() => handleDeleteCourse(course, false)}
+                          ></i>
+                        ) : (
+                          <i
+                            className="bi bi-trash text-danger"
+                            onClick={() => handleDeleteCourse(course, true)}
+                          ></i>
+                        )}
                       </li>
                       <li>
                         <i className="bi bi-copy text-info"></i>
@@ -523,7 +566,9 @@ const CourseContent = ({}) => {
                         value={courseCategory}
                       >
                         <option value="">--Select Category--</option>
-                        {categoryData.length === 0  ? "No Record ": categoryData &&
+                        {categoryData.length === 0
+                          ? "No Record "
+                          : categoryData &&
                             categoryData.map((category) => {
                               return (
                                 <option value={category.id} key={category.id}>
@@ -546,7 +591,6 @@ const CourseContent = ({}) => {
                           {userData.length !== 0 &&
                             userData.map((user) => {
                               if (
-                               
                                 user.role === "instructor" &&
                                 user.id !== courseCreator &&
                                 !coAutherData.includes(user.id)

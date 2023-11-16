@@ -14,11 +14,11 @@ import '../../../styles/CourseUnit.css'
 import { CourseProbs } from "../../../../App";
 export const UnitProbs = createContext(null);
 
-const CourseUnit = ({ showUnit }) => {
+const CourseUnit = ({ showUnit, unitData, setUnitData }) => {
   //  ************************* Unit Ref Hooks  ********************
   // ***************************************************************
   const userId = sessionStorage.getItem("user_id");
-  const { unitData, setUnitData, moduleId, unitTitle, setUnitTitle } =
+  const {  moduleId, unitTitle, setUnitTitle } =
     useContext(ModuleProbs);
     const {instructor, setInstructor} = useContext(CourseProbs)
   

@@ -5,11 +5,10 @@ import React, {
   useRef,
   useState,
 } from "react";
-import CourseContent from "./CourseContent";
 import { useNavigate, Link } from "react-router-dom";
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { CourseProbs } from "../../../../App";
-// import Avatar from "react-avatar";
+import Avatar from "react-avatar";
 
 const AllCourse = ({ show, minDate }) => {
   const userId = sessionStorage.getItem("user_id");
@@ -228,7 +227,6 @@ const AllCourse = ({ show, minDate }) => {
         if (response.status === 201) {
           response.json().then(function (result) {
             setCourseContent((pre) => [...pre, result]);
-            setCourseCreator(result.created_by);
             setCourseCategory("");
             setCourseTitle("");
             // window.location.reload();
@@ -252,22 +250,24 @@ const AllCourse = ({ show, minDate }) => {
   };
 
   const handleDeleteCourse = (course, deleted) => {
+     const courseAuthor = authorData.filter(author => author.id === course.instructor); 
+    if(+sessionStorage.getItem("user_id") === courseAuthor[0].created_by || sessionStorage.getItem("role") === 'admin'){
     let action = "";
     if (deleted) {
       action = "Delete";
     } else {
       action = "Restore";
     }
-    // Swal.fire({
-    //   title: "Are you sure?",
-    //   text: "You won't be able to revert this!",
-    //   icon: "warning",
-    //   showCancelButton: true,
-    //   confirmButtonColor: "#d33",
-    //   cancelButtonColor: "#3085d6",
-    //   confirmButtonText: `${action}`,
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
+    Swal.fire({
+      title: "Attention",
+      text: `Do you want to ${action} this course?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: `${action}`,
+    }).then((result) => {
+      if (result.isConfirmed) {
         const obj = {
           title: course.title,
           is_updated: true,
@@ -288,33 +288,40 @@ const AllCourse = ({ show, minDate }) => {
           if (response.status === 200) {
             response.json().then(function (result) {
               console.log("Api result Course: ", result);
-              // Swal.fire(
-              //   `${action}!`,
-              //   `${course.title} has been ${action}.`,
-              //   "success"
-              // ).then((res) => {
-              //   window.location.reload();
-              // });
-              // setCourseContent((pre) => [...pre, result]);
-              // setCourseCreator(result.created_by);
-              // setCourseCategory("");
-              // setCourseTitle("");
-              //
+              Swal.fire(
+                `${action}d!`,
+                `${course.title} has been ${action}d.`,
+                "success"
+              ).then((res) => {
+                window.location.reload();
+              });
+              setCourseContent((pre) => [...pre, result]);
+              setCourseCategory("");
+              setCourseTitle("");
+              
             });
           } else {
             console.log(response);
           }
-        // });
-      // }
+        });
+      }
     });
+  }else {
+   Swal.fire({
+    icon: "warning",
+    text: "You can't delete this course!"
+   })
+  }
   };
 
   const handleCourseContentData = (course) => {
     setSingleCourse(course);
     const obj = authorData.filter(author => author.id === course.instructor);
+    if(obj.length !==0 ){
+      setCourseCoauthors(obj[0].editor);
+      setCourseCreator(obj[0].created_by)
+    }
 
-    setCourseCoauthors(obj[0].editor);
-    setCourseCreator(obj[0].created_by)
     setCourseId(course.id);
     setCourseTitle(course.title);
     setCourseCategory(course.category);
@@ -326,6 +333,7 @@ const AllCourse = ({ show, minDate }) => {
         categoryData,
         userData,
         course,
+        courseCoauthors
       },
     });
 
@@ -494,7 +502,7 @@ const AllCourse = ({ show, minDate }) => {
                     className="me-1"
                     round={true}
                     size="30px"
-                    ></Avatar> */}
+                    ></Avatar> 
                       {getUSerFullName(course.instructor)}
                     </td>
                     <td className={`text-center ${deletedCourse}`}>

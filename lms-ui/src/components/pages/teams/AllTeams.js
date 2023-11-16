@@ -1,10 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "../../styles/AllTeam.module.css";
 import userImg from "../../content/Images/user.png";
+import Swal from "sweetalert2";
 // import Avatar from "react-avatar";
 
 const AllTeams = ({ show }) => {
   const [showBlock, setShowBlock] = useState(false);
+  const [showAddUser, setShowAddUser] = useState(false);
+  const [showAddCourse, setShowAddCourse] = useState(false)
+
   const [showUserDelete, setShowUserDelete] = useState(false);
   const [showCourseDelete, setShowCourseDelete] = useState(false);
   const [checkedAllCourse, setCheckAllCourse] = useState(false);
@@ -52,7 +56,7 @@ const AllTeams = ({ show }) => {
           response.json().then(function (result) {
             console.log(result);
             const obj = result.filter((user) => {
-              return user.role === "learner";
+              return user.role === "learner" && user.is_active === true;
             });
             setUserData(obj);
             // setUserData(result);
@@ -79,8 +83,11 @@ const AllTeams = ({ show }) => {
         if (response.status === 200) {
           response.json().then(function (result) {
             console.log("API result Courses:", result);
+            const activeCourses = result.filter(course => {
+              return course.is_active === true;
+            })
+            // setCoursesData(activeCourses);
             setCoursesData(result);
-
             // ****************** List only Acive Courses *********************
             //
             // const activeCourses = result.filter(course => {
@@ -214,11 +221,15 @@ const AllTeams = ({ show }) => {
         "Content-type": "application/json; charset=UTF-8",
       },
     }).then((response) => {
-      response.json().then(function (result) {
-        console.log(result);
-        window.location.reload();
-        // setTeamData(result);
-      });
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log(result);
+          const updatedList = teamCourses.filter(
+            (course) => course !== result.removed_courses[0]
+          );
+          setTeamCourses(updatedList);
+        });
+      }
     });
 
     // const obj = teamCourses.filter((course) => {
@@ -244,11 +255,17 @@ const AllTeams = ({ show }) => {
         "Content-type": "application/json; charset=UTF-8",
       },
     }).then((response) => {
-      response.json().then(function (result) {
-        console.log(result);
-        window.location.reload();
-        // setTeamData(result);
-      });
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log(result);
+          const updatedList = teamUsers.filter(
+            (user) => user !== result.removed_users[0]
+          );
+          setTeamUser(updatedList);
+          // window.location.reload();
+          // setTeamData(result);
+        });
+      }
     });
 
     // const obj = teamUsers.filter((users) => {
@@ -270,35 +287,39 @@ const AllTeams = ({ show }) => {
               i--;
             }
           }
-
-          const obj = {
-            team_id: teamId,
-            course_ids: addTeamCoursesId,
-          };
-
-          fetch("http://127.0.0.1:8000/add_courses_to_team/", {
-            method: "POST",
-            body: JSON.stringify(obj),
-            headers: {
-              Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-              "Content-type": "application/json; charset=UTF-8",
-            },
-          }).then((response) => {
-            response.json().then(function (result) {
-              console.log(result);
-              window.location.reload();
-              // setTeamData(result);
-            });
-          });
-
-          // setTeamCourses(() => [...teamCourses, newObj[0]]);
         } else {
-          // setTeamCourses([newObj[0]]);
         }
       }
 
       item.checked = false;
     }
+    const obj = {
+      team_id: teamId,
+      course_ids: addTeamCoursesId,
+    };
+
+    fetch("http://127.0.0.1:8000/add_courses_to_team/", {
+      method: "POST",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          setShowAddCourse(false)
+          console.log(result);
+          addTeamCoursesId.forEach((course) => {
+            if (!teamCourses.includes(course)) {
+              console.log("inside include condition");
+              setTeamCourses((pre) => [...pre, course]);
+            }
+          });
+          setAddTeamCoursesId([]);
+        });
+      }
+    });
   };
 
   const getUSerFullName = (user) => {
@@ -330,32 +351,6 @@ const AllTeams = ({ show }) => {
             }
           }
 
-          const obj = {
-            team_name: teamName,
-            // user_emails: ["hammad@example.com"],
-            user_ids: addTeamUsersId,
-          };
-
-          fetch("http://127.0.0.1:8000/add_users_to_team/", {
-            method: "POST",
-            body: JSON.stringify(obj),
-            headers: {
-              Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-              "Content-type": "application/json; charset=UTF-8",
-            },
-          }).then((response) => {
-            response.json().then(function (result) {
-              console.log("API result ", result);
-              // setTeamUser(pre => [...pre, result])
-
-              // conuserData.filter((user, index) => {
-              //   return result.added_users[index] === user.id
-              // })
-              // window.location.reload();
-              // setTeamData(result);
-            });
-          });
-
           // setTeamUser(() => [...teamUsers, newObj[0]]);
         } else {
           // setTeamUser([newObj[0]]);
@@ -364,25 +359,80 @@ const AllTeams = ({ show }) => {
 
       item.checked = false;
     }
-  };
+    const obj = {
+      team_name: teamName,
+      user_ids: addTeamUsersId,
+    };
 
-  const handleDeleteTeam = (id) => {
-    fetch("http://127.0.0.1:8000/delete_team/", {
-      method: "DELETE",
-      body: JSON.stringify({ team_id: id }),
+    fetch("http://127.0.0.1:8000/add_users_to_team/", {
+      method: "POST",
+      body: JSON.stringify(obj),
       headers: {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         "Content-type": "application/json; charset=UTF-8",
       },
     }).then((response) => {
-      response.json().then(function (result) {
-        console.log(result);
-
-        window.location.reload();
-        // setTeamData(result);
-      });
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          setShowAddUser(false)
+          console.log("API result ", result);
+          addTeamUsersId.forEach((user) => {
+            setTeamUser((pre) => [...pre, user]);
+          });
+          setAddTeamUsersId([]);
+        });
+      }
     });
   };
+
+  const handleDeleteTeam = (id) => {
+    Swal.fire({
+      title: "Attention!",
+      text: `Do you want to Delete this Team?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: `Delete`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const obj = {
+          team_id: id,
+        };
+        fetch("http://127.0.0.1:8000/delete_team/", {
+          method: "DELETE",
+          body: JSON.stringify(obj),
+          headers: {
+            Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }).then((response) => {
+          if (response.status === 204) {
+            Swal.fire(
+              `Team Deletion Successful!`,
+              `This Team has been deleted`,
+              "success"
+            ).then((res) => {
+              window.location.reload();
+            });
+          } else {
+            response.json().then(function (result) {
+              console.log(result);
+              Swal.fire(
+                `Team Deleted Successful!`,
+                `${result.message}`,
+                "success"
+              ).then((res) => {
+                window.location.reload();
+              });
+            });
+          }
+        });
+      }
+    });
+  };
+  
+
 
   const handleTeamUpdate = () => {};
 
@@ -402,7 +452,7 @@ const AllTeams = ({ show }) => {
           {/* This is for Team Add panel */}
         </div>
         <div
-          className={`offcanvas offcanvas-end ${show}`}
+          className={`offcanvas offcanvas-end ${show} `}
           tabIndex="-1"
           style={{ width: "30%" }}
           id="offcanvasTeam"
@@ -463,6 +513,7 @@ const AllTeams = ({ show }) => {
         {/* This is for Course Content */}
         <div
           className="offcanvas offcanvas-end"
+          data-bs-backdrop="static"
           tabIndex="-1"
           style={{ width: "87%" }}
           id="offcanvasCourse"
@@ -504,6 +555,7 @@ const AllTeams = ({ show }) => {
                     className="btn-close"
                     data-bs-dismiss="offcanvas"
                     aria-label="Close"
+                    onClick={() => window.location.reload()}
                   ></button>
                 </div>
                 <form>
@@ -620,225 +672,229 @@ const AllTeams = ({ show }) => {
                     <button
                       className="btn btn-primary me-3"
                       type="button"
-                      data-bs-toggle="offcanvas"
-                      data-bs-target="#show-course-list"
-                      aria-expanded="false"
-                      aria-controls="show-course-list"
+                      onClick={() => {
+                        setShowAddCourse(!showAddCourse)
+                        setShowAddUser(false)
+                      }}
                     >
                       Add Course
                     </button>
                     <button
                       className="btn btn-secondary"
                       type="button"
-                      data-bs-toggle="offcanvas"
-                      data-bs-target="#show-user-list"
-                      aria-expanded="false"
-                      aria-controls="show-user-list"
+                      onClick={() => {
+                        setShowAddUser(!showAddUser)
+                        setShowAddCourse(false)
+                      }}
                     >
                       Add User
                     </button>
                   </div>
+                  {showAddCourse && (
+                    <div className="team-add-course-section mt-3 mb-3">
+                      <div
+                        className=""
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <h3>Courses List</h3>
+                        <button
+                          type="button"
+                          className="text-bg-primary add-new-user"
+                          onClick={(e) => handleAddCourse(e)}
+                        >
+                          Done
+                        </button>
+                      </div>
 
-                  <div className="save-team-btn-section">
-                    <button type="button" onClick={() => handleTeamUpdate()}>
-                      Update Team
-                    </button>
-                  </div>
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th
+                              onClick={() => {
+                                setCheckAllCourse((pre) => !pre);
+                                handlCourseAllSelect();
+                              }}
+                              style={{ cursor: "pointer" }}
+                            >
+                              Select All
+                            </th>
+                            <th scope="col">Course Title</th>
+                            <th scope="col">Author</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Users Enrolled</th>
+                            <th scope="col">Last Update</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {coursesData.length === 0 ||
+                          coursesData.detail == "No objects found"
+                            ? coursesData.detail
+                            : coursesData &&
+                              coursesData.map((course, index) => {
+                                if(!teamCourses.includes(course.id)){
+                                  return (
+                                    <tr
+                                      key={course.id}
+                                      // role="button"
+                                      // data-bs-toggle="offcanvas"
+                                      // data-bs-target="#offcanvasCourse"
+                                      // aria-controls="offcanvasRight"
+                                    >
+                                      <td>
+                                        <div className="form-check">
+                                          <input
+                                            className="form-check-input course-check"
+                                            type="checkbox"
+                                            ref={checkbox}
+                                            name="check"
+                                            value={course.title}
+                                      
+                                            onChange={(e) => {
+                                              handleCourseCheckChange(e);
+                                            }}
+                                            // checked={check}
+                                            id="flexCheckDefult"
+                                          />
+                                        </div>
+                                      </td>
+                                      <td>{course.title}</td>
+                                      <td>{course.author}</td>
+                                      <td>{course.description}</td>
+                                      <td>{course.users_enrolled}</td>
+                                      <td>{course.created_at}</td>
+                                    </tr>
+                                  );
+                                }
+                              })}
+                        </tbody>
+                      </table>
+                      <div className={styles.addBtnSection}>
+                        {/* <button
+                          type="button"
+                          className="text-bg-primary add-new-user"
+                          onClick={(e) => handleAddCourse(e)}
+                        >
+                          Done
+                        </button> */}
+                      </div>
+                    </div>
+                  )}
+
+                  {showAddUser && (
+                    <div className="team-add-users-section mt-3">
+                      <div>
+                        <div className=""
+                          style={{display: "flex", justifyContent: "space-between"}}
+                        >
+                        <h3>Users List</h3>
+                        <button
+                            type="button"
+                            className="text-bg-primary add-new-user"
+                            onClick={handleAddUser}
+                          >
+                            Done
+                          </button>
+                        </div>
+
+                        <table className="table">
+                          <thead>
+                            <tr>
+                              <th
+                                onClick={() => {
+                                  setCheckAllUser((pre) => !pre);
+                                  handlUserAllSelect();
+                                }}
+                                style={{ cursor: "pointer" }}
+                              >
+                                Select All
+                              </th>
+                              <th scope="col">Name</th>
+                              <th scope="col">Role</th>
+                              <th scope="col">Email</th>
+                              <th scope="col">Phone Number</th>
+                              {/* <th scope="col">Active</th> */}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {userData &&
+                              userData.map((user) => {
+                                if(!teamUsers.includes(user.id)){
+                                  return (
+                                    <tr key={user.id}>
+                                      <td>
+                                        <div className="form-check">
+                                          <input
+                                            className="form-check-input user-check"
+                                            type="checkbox"
+                                            ref={checkbox}
+                                            name="check"
+                                            value={user.email}
+                                            onChange={(e) => {
+                                              handleUserCheckChange(e);
+                                            }}
+                                            id="flexCheckDefult"
+                                          />
+                                        </div>
+                                      </td>
+                                      <td
+                                        scope="row"
+                                        className="allusers-name-container"
+                                      >
+                                        <div></div>
+                                        <div className="allusers-name-section">
+                                          <span>
+                                            {user.first_name} {user.last_name}
+                                            {/* {user.name} */}
+                                          </span>
+                                          <span className="designation">
+                                            {user.country}
+                                          </span>
+                                        </div>
+                                      </td>
+                                      <td>{user.role}</td>
+                                      <td>{user.email}</td>
+                                      <td>{user.phone_number}</td>
+                                      {/* <td>
+                                        <div className="form-check form-switch">
+                                          <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            role="switch"
+                                            disabled
+                                            readOnly
+                                            checked={user.is_active}
+                                            id="flexSwitchCheckDefault"
+                                          />
+                                        </div>
+                                      </td> */}
+                                    </tr>
+                                  );
+                                }
+
+                              })}
+                          </tbody>
+                        </table>
+                        <div className={styles.addBtnSection}>
+                          {/* <button
+                            type="button"
+                            className="text-bg-primary add-new-user"
+                            onClick={handleAddUser}
+                          >
+                            Done
+                          </button> */}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </form>
               </div>
             </div>
           </div>
         </div>
-        <div
-          className={`${styles.teamCourseSection} offcanvas offcanvas-bottom`}
-          id="show-course-list"
-          tabindex="-1"
-        >
-          <h3>Team Courses</h3>
-          <div className={styles.addBtnSection}>
-            <input
-              type="search"
-              className="all-users-input"
-              placeholder="Search Course.."
-            />
-            <button
-              type="button"
-              className="text-bg-primary add-new-user"
-              onClick={(e) => handleAddCourse(e)}
-              data-bs-toggle="offcanvas"
-              data-bs-target="#offcanvasCourse"
-            >
-              Add
-            </button>
-          </div>
-          <table className="table">
-            <thead>
-              <tr>
-                <th
-                  onClick={() => {
-                    setCheckAllCourse((pre) => !pre);
-                    handlCourseAllSelect();
-                  }}
-                  style={{ cursor: "pointer" }}
-                >
-                  Select All
-                </th>
-                <th scope="col">Course Title</th>
-                <th scope="col">Author</th>
-                <th scope="col">Description</th>
-                <th scope="col">Users Enrolled</th>
-                <th scope="col">Last Update</th>
-              </tr>
-            </thead>
-            <tbody>
-              {coursesData.length === 0 ||
-              coursesData.detail == "No objects found"
-                ? coursesData.detail
-                : coursesData &&
-                  coursesData.map((course) => {
-                    return (
-                      <tr
-                        key={course.id}
-                        // role="button"
-                        // data-bs-toggle="offcanvas"
-                        // data-bs-target="#offcanvasCourse"
-                        // aria-controls="offcanvasRight"
-                      >
-                        <td>
-                          <div className="form-check">
-                            <input
-                              className="form-check-input course-check"
-                              type="checkbox"
-                              ref={checkbox}
-                              name="check"
-                              value={course.title}
-                              onChange={(e) => {
-                                handleCourseCheckChange(e);
-                              }}
-                              // checked={check}
-                              id="flexCheckDefult"
-                            />
-                          </div>
-                        </td>
-                        <td>{course.title}</td>
-                        <td>{course.author}</td>
-                        <td>{course.description}</td>
-                        <td>{course.users_enrolled}</td>
-                        <td>{course.created_at}</td>
-                      </tr>
-                    );
-                  })}
-            </tbody>
-          </table>
-        </div>
-        <div
-          className={`${styles.teamUserSection} offcanvas offcanvas-bottom`}
-          id="show-user-list"
-          tabindex="-1"
-        >
-          <h3>Team Users</h3>
-          <div className={styles.addBtnSection}>
-            <input
-              type="search"
-              className="all-users-input"
-              placeholder="Search User.."
-            />
-            <button
-              type="button"
-              className="text-bg-primary add-new-user"
-              onClick={handleAddUser}
-              data-bs-toggle="offcanvas"
-              data-bs-target="#offcanvasCourse"
-            >
-              Add
-            </button>
-          </div>
-          <table className="table">
-            <thead>
-              <tr>
-                <th
-                  onClick={() => {
-                    setCheckAllUser((pre) => !pre);
-                    handlUserAllSelect();
-                  }}
-                  style={{ cursor: "pointer" }}
-                >
-                  Select All
-                </th>
-                <th scope="col">Name</th>
-                <th scope="col">Role</th>
-                <th scope="col">Email</th>
-                <th scope="col">Phone Number</th>
-                <th scope="col">Active</th>
-              </tr>
-            </thead>
-            <tbody>
-              {userData &&
-                userData.map((user) => {
-                  return (
-                    <tr key={user.id}>
-                      <td>
-                        <div className="form-check">
-                          <input
-                            className="form-check-input user-check"
-                            type="checkbox"
-                            ref={checkbox}
-                            name="check"
-                            value={user.email}
-                            onChange={(e) => {
-                              handleUserCheckChange(e);
-                            }}
-                            id="flexCheckDefult"
-                          />
-                        </div>
-                      </td>
-                      <td scope="row" className="allusers-name-container">
-                        <div>
-                          {/* <img
-                            src={userImg}
-                            alt=""
-                            className="allusers-image"
-                          /> */}
-                          {/* <Avatar
-                            color={Avatar.getRandomColor("sitebase", [
-                              "red",
-                              "gray",
-                              "green",
-                            ])}
-                            name={`${user.first_name} ${user.last_name}`}
-                            round={true}
-                            size="40px"
-                          /> */}
-                        </div>
-                        <div className="allusers-name-section">
-                          <span>
-                            {user.first_name} {user.last_name}
-                            {/* {user.name} */}
-                          </span>
-                          <span className="designation">{user.country}</span>
-                        </div>
-                      </td>
-                      <td>{user.role}</td>
-                      <td>{user.email}</td>
-                      <td>{user.phone_number}</td>
-                      <td>
-                        <div className="form-check form-switch">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            role="switch"
-                            readOnly
-                            checked={user.is_active}
-                            id="flexSwitchCheckDefault"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
-        </div>
+
         {!showBlock ? (
           <table className="table">
             <thead>
@@ -860,52 +916,35 @@ const AllTeams = ({ show }) => {
                       setTeamUser(team.users);
                       setTeamId(team.id);
                       setTeamCourses(team.courses);
+                      var myOffcanvas = document.getElementById('offcanvasCourse');
+                      if (myOffcanvas) {
+                        myOffcanvas.classList.add('show');
+                      }
                       // setTeamDetail([team.Users, team.Courses]);
                     }}
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasCourse"
-                    aria-controls="offcanvasRight"
                   >
                     <td>{team.name}</td>
                     <td>
-                      {
-                        team.users && team.users.length !== 0 ? (
-                          <span className={styles.text_with_background}>
-                            {team.users.length}
-                          </span>
-                        ) : (
-                          <span className={styles.text_with_background}>
-                            {"0"}
-                          </span>
-                        )
-                        // team.Users.map((user) => {
-                        //   return (
-                        //     <span   className={styles.text_with_background}>
-                        //      >{team.Users.length}
-                        //     </span>
-                        //   );
-                        // })
-                      }
+                      {team.users && team.users.length !== 0 ? (
+                        <span className={styles.text_with_background}>
+                          {team.users.length}
+                        </span>
+                      ) : (
+                        <span className={styles.text_with_background}>
+                          {"0"}
+                        </span>
+                      )}
                     </td>
                     <td>
-                      {
-                        team.courses && team.courses.length !== 0 ? (
-                          <span className={styles.txt_with_background}>
-                            {team.courses.length}
-                          </span>
-                        ) : (
-                          <span className={styles.text_with_background}>
-                            {"0"}
-                          </span>
-                        )
-                        // team.Courses.map((course) => {
-                        //   return (
-                        //     <span   className={styles.txt_with_background}>
-                        //       {course.course_title}
-                        //     </span>
-                        //   );
-                        // })
-                      }
+                      {team.courses && team.courses.length !== 0 ? (
+                        <span className={styles.txt_with_background}>
+                          {team.courses.length}
+                        </span>
+                      ) : (
+                        <span className={styles.text_with_background}>
+                          {"0"}
+                        </span>
+                      )}
                     </td>
                     <td
                       onClick={(e) => {

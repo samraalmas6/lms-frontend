@@ -41,7 +41,7 @@ element.style{
 }
 .addBtnSection {
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
 }
 .addBtnSection input[type="search"] {
     padding: 6px 13px;

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import catData from "../../hooks/catData";
 import "../../styles/Category.css";
+import Swal from "sweetalert2";
 // import courseData from "../../hooks/courseData";
 
 const AllCategory = ({ show }) => {
@@ -88,12 +89,16 @@ const AllCategory = ({ show }) => {
         "Content-type": "application/json; charset=UTF-8",
       },
     }).then((response) => {
-      if (response.status == 201) {
+      if (response.status === 201) {
         response.json().then(function (result) {
           console.log(result);
           setCatgoryName("");
           setParentCat("");
           setCategoryData(pre => [...pre, result])
+          Swal.fire({
+            icon:"success",
+            title:`${result.title} has been created`
+        })
           // window.location.reload();
         });
       } else {

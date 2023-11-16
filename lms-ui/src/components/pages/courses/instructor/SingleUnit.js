@@ -10,6 +10,7 @@ import AddUnitAssignment from "./AddUnitAssignment";
 import UnitSingleFile from "./UnitSingleFile";
 import UnitSingleVideo from "./UnitSingleVideo";
 import UnitSingleAssignment from "./UnitSingleAssignment";
+import Swal from "sweetalert2";
 
 const SingleUnit = ({ unit, setUnitId }) => {
   const userId = sessionStorage.getItem("user_id");
@@ -39,6 +40,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
   const [userData, setUserData] = useState({});
 
   useEffect(() => {
+    setVisibility(unit.is_active)
     const getUsers = () => {
       fetch("http://127.0.0.1:8000/list_all_users/", {
         method: "GET",
@@ -56,7 +58,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
       });
     };
     getUsers();
-  }, []);
+  }, [0]);
 
   const handlUnitStart = (e) => {
     // startDateRefUnit.current.removeAttribute("className", "unit-start-field");
@@ -77,6 +79,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
       is_active: !visibility,
       start_date: unitStart,
       end_date: unitEnd,
+      instructor: unit.instructor,
       module: moduleId,
       updated_by: sessionStorage.getItem("user_id"),
     };
@@ -92,6 +95,10 @@ const SingleUnit = ({ unit, setUnitId }) => {
       if (response.status === 200) {
         response.json().then(function (result) {
           console.log(result);
+          Swal.fire({
+            icon: "success",
+            text: `${result.title} has been ${result.is_active ? "activated" : "deactivated"}`
+          })
           // window.location.reload();
         });
       } else {
@@ -253,21 +260,21 @@ const SingleUnit = ({ unit, setUnitId }) => {
     } else {
       action = "Restore";
     }
-    // Swal.fire({
-    //   title: "Are you sure?",
-    //   text: "You won't be able to revert this!",
-    //   icon: "warning",
-    //   showCancelButton: true,
-    //   confirmButtonColor: "#d33",
-    //   cancelButtonColor: "#3085d6",
-    //   confirmButtonText: `${action}`,
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
+    Swal.fire({
+      title: "Attention",
+      text: `Do you want to ${action} this unit?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: `${action}`,
+    }).then((result) => {
+      if (result.isConfirmed) {
         const obj = {
           title: unit.title,
           is_updated: true,
           is_delete: deleted,
-          created_by: unit.created_by,
+          instructor: unit.instructor,
           module: unit.module,
           updated_by: userId,
         };
@@ -283,24 +290,19 @@ const SingleUnit = ({ unit, setUnitId }) => {
           if (response.status === 200) {
             response.json().then(function (result) {
               console.log("Api result: ", result);
-              // Swal.fire(
-              //   `${action}!`,
-              //   `${unit.title} has been ${action}.`,
-              //   "success"
-              // ).then((res) => {
-              //   navigate(-1);
-              // });
-              // setCourseContent((pre) => [...pre, result]);
-              // setCourseCreator(result.created_by);
-              // setCourseCategory("");
-              // setCourseTitle("");
-              //
+              Swal.fire(
+                `${action}d!`,
+                `${unit.title} has been ${action}d.`,
+                "success"
+              ).then((res) => {
+                window.location.reload();
+              });
             });
           } else {
             console.log(response);
           }
-        // });
-      // }
+        });
+      }
     });
   };
   return (

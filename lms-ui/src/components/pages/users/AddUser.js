@@ -5,13 +5,17 @@ import Select from "react-select";
 import countryList from "react-select-country-list";
 import emailjs from "@emailjs/browser";
 import * as XLSX from "xlsx";
-import * as FileSaver from "file-saver";
 import ExcelExportData from "../../hooks/ExcelExportData";
 import ExportExcel from "../../content/Excelexport";
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
+import { element } from "prop-types";
 
 function AddUser() {
   const excelFile = useRef();
+  const [showNameEditBtn, setShowNameEditBtn] = useState(false);
+  const [nameEdit, setNameEdit] = useState("");
+  const [showErrorCol, setShowErrorCol] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -27,9 +31,12 @@ function AddUser() {
   const [country, setCountry] = useState("Pakistan");
   const options = useMemo(() => countryList().getData(), []);
   const [errors, setErros] = useState({});
+  const [registeredErrors, setRegisteredErrors] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const [exelObj, setExcelObj] = useState(null)
-  useEffect(() => emailjs.init("739xGz6oDs9E1tq_w"), []);
+  const [excelUsers, setExcelUsers] = useState([]);
+  const [excelObj, setExcelObj] = useState([]);
+  useEffect(() => emailjs.init("739xGz6oDs9E1tq_w"), [0]);
 
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value);
@@ -110,7 +117,6 @@ function AddUser() {
   };
 
   const handleFormSubmit = (e) => {
-    console.log('register user');
     e.preventDefault();
     const errors = validate({ firstName, lastName, email, city, country });
     setErros(errors);
@@ -134,48 +140,52 @@ function AddUser() {
         body: JSON.stringify(userData),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Token ${sessionStorage.getItem('user_token')}`,
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
         if (response.status === 201) {
-
           response.json().then(function (result) {
             console.log(result);
 
             setFirstName("");
             setLastName("");
-            setGender('')
+            setGender("");
             setPassword("");
             setEmail("");
             setCity("");
             setPhoneNumber("");
             setIsActive(false);
             setUserType("");
+            Swal.fire({
+              icon: "success",
+              title: "Registered ",
+              html: `User Registered successfully!<br /> check Your inbox`,
+            });
+            // Swal.fire("User Registered successfully! check Your inbox");
           });
-          sendEmail()
-        }
-        
-        else if(response.status === 403) {
+          sendEmail();
+        } else if (response.status === 403) {
           console.log(response);
           response.json().then(function (result) {
-            // Swal.fire({
-            //   icon: 'error',
-            //   title: 'Not Registered',
-            //   text: `${result.detail}`
-        
-            // });
-          })
-        
-        }
-        else {
+            Swal.fire({
+              icon: "error",
+              title: "Not Registered",
+              text: `${result.detail}`,
+            });
+          });
+        } else {
           response.json().then(function (result) {
-            // Swal.fire({
-            //   icon: 'error',
-            //   title: 'Not Registered',
-            //   text: `${result.email}`
-        
-            // });
-          })
+            const keys = Object.keys(result);
+            keys.forEach((key) => {
+              if (result.hasOwnProperty(key)) {
+                Swal.fire({
+                  icon: "error",
+                  title: "Not Registered",
+                  text: `${key} ${String(result[key]).slice(5)}`,
+                });
+              }
+            });
+          });
         }
       });
       const sendEmail = async () => {
@@ -188,44 +198,32 @@ function AddUser() {
             message: "Verify Account",
             sender: "LMS",
           });
-          // Swal.fire("Email successfully sent! check Your inbox")
         } catch (error) {
           console.log(error);
         }
-      }
-     
+      };
+    } else {
+      const keys = Object.keys(errors);
+      keys.forEach((key) => {
+        if (errors.hasOwnProperty(key)) {
+          Swal.fire({
+            icon: "error",
+            title: "Not Registered",
+            text: `${errors[key]}`,
+          });
+        }
+      });
+      // Swal.fire({
+      //   icon: "error",
+      //   title: "Not Registered",
+      //   text: `${errors.email}`,
+      // });
     }
   };
 
   // Excel Import Functionality
 
   const handleExcelFile = (e) => {
-
-
-    const requestAPI = (user) => {
-      fetch(`${"http://127.0.0.1:8000/register/"}`, {
-        method: "POST",
-        body: JSON.stringify(user),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Token ${sessionStorage.getItem('user_token')}`,
-        },
-      }).then((response) => {
-        if (response.status == 201) {
-          response.json().then(function (result) {
-            setFirstName(result.first_name)
-            setLastName(result.last_name)
-            setEmail(result.email)
-            // sendEmail()
-            console.log(result);
-          });
-        }
-        else {
-          console.log(response);
-        }
-      });
-    }
-
     const reader = new FileReader();
     reader.readAsBinaryString(e.target.files[0]);
     console.log(reader);
@@ -235,52 +233,186 @@ function AddUser() {
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       const parseData = XLSX.utils.sheet_to_json(sheet);
-      const obj = { ...parseData };
-      const keys = Object.keys(obj[0]);
-      console.log(keys);
       const newObj = parseData.map(function (obj) {
         return obj;
       });
-      console.log('new obj',newObj);
-      setExcelObj(obj)
-
-      newObj.forEach((user) => {
-        requestAPI(user)
-      })
-
-     
-   
+      console.log("new obj", newObj);
+      setExcelObj(newObj);
+      setExcelUsers(newObj);
+    };
   };
-}
+
+  const handleEAddFromExcelFile = (e) => {
+    setLoading(true);
+    let counter = 0;
+    const requestAPI = (user, last, error) => {
+      console.log("this is counter", counter);
+      fetch(`${"http://127.0.0.1:8000/register/"}`, {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if (response.status === 201) {
+          response.json().then(function (result) {
+            setShowSuccess(true);
+            if (last === "last" && counter === 0) {
+              setLoading(false);
+              console.log("Errors list length", error);
+              Swal.fire({
+                icon: "success",
+                title: "Registeration Successful!",
+                text: `All Users registered Successfully`,
+              });
+            } else if (last === "last" && counter > 0) {
+              setLoading(false);
+              Swal.fire({
+                icon: "info",
+                title: "Attention!",
+                html: `${
+                  excelObj.length - counter
+                } users Registered.<br /> ${counter} Users Not Registered`,
+              });
+            }
+          });
+        } else {
+          response.json().then(function (result) {
+            const keys = Object.keys(result);
+            keys.forEach((key) => {
+              if (result.hasOwnProperty(key)) {
+                setRegisteredErrors((pre) => [
+                  ...pre,
+                  [{ email: user.email, error: result[key], key }],
+                ]);
+              }
+            });
+            setShowErrorCol(true);
+            setShowSuccess(true);
+            counter++;
+            // alert("User not registered")
+            console.log(response, counter);
+            if (counter === excelObj.length) {
+              setLoading(false)
+              Swal.fire({
+                icon: "error",
+                title: "Registeration Unsuccessful!",
+                text: `All Users Not Registered Successfully`,
+              });
+            } else if (
+              last === "last" &&
+              counter > 0 &&
+              counter !== excelObj.length
+            ) {
+              setLoading(false)
+              Swal.fire({
+                icon: "info",
+                title: "Attention!",
+                html: `${
+                  excelObj.length - counter
+                } users Registered.<br /> ${counter} Users Not Registered`,
+              });
+            }
+          });
+        }
+      });
+    };
+
+    // const reader = new FileReader();
+    // reader.readAsBinaryString(e.target.files[0]);
+    // console.log(reader);
+    // reader.onload = (e) => {
+    //   const data = e.target.result;
+    //   const workbook = XLSX.read(data, { type: "binary" });
+    //   const sheetName = workbook.SheetNames[0];
+    //   const sheet = workbook.Sheets[sheetName];
+    //   const parseData = XLSX.utils.sheet_to_json(sheet);
+    //   const obj = { ...parseData };
+    //   const keys = Object.keys(obj[0]);
+    //   console.log(keys);
+    //   const newObj = parseData.map(function (obj) {
+    //     return obj;
+    //   });
+    //   console.log("new obj", newObj);
+    //   setExcelUsers(obj);
+
+    excelUsers.forEach((user, i) => {
+      if (i + 1 === excelUsers.length) {
+        requestAPI(user, "last", registeredErrors);
+      } else {
+        requestAPI(user, "", registeredErrors);
+      }
+    });
+    // };
+  };
+
+  const getUserRegisteredStatus = (email) => {
+    const obj = registeredErrors.filter((element) => {
+      return element[0].email === email;
+    });
+    if (obj.length !== 0) {
+      return <span className="text-danger">Unsuccessful</span>;
+    } else {
+      return <span className="text-success">Successful</span>;
+    }
+  };
+
+  const getErrorMessage = (email) => {
+    const obj = registeredErrors.filter((element) => {
+      return element[0].email === email;
+    });
+    const updatedList = obj[0];
+    if (obj.length !== 0) {
+      if (
+        updatedList[0].key === "email" &&
+        updatedList[0].error[0].includes("user")
+      ) {
+        return "User is already registered!";
+      } else if (updatedList[0].key === "detail") {
+        return "You don't have permission!";
+      } else {
+        return `${updatedList[0].key} is required!`;
+      }
+    } else {
+      return "None";
+    }
+  };
+
+  const handleFilterRegisteredUser = (value) => {
+    if (value === "unsuccessful") {
+      const filteredUSer = excelObj.filter((user) => {
+        return registeredErrors.filter((element) => {
+          console.log("this is element", element[0].email);
+          return element[0].email === user.email;
+        });
+      });
+      console.log("Filtered User unsuccess:", filteredUSer);
+      setExcelUsers(filteredUSer);
+    } else if (value === "successful") {
+      const filteredUSer = excelObj.filter((user) => {
+        return !registeredErrors.forEach((element) => {
+          console.log("this is element", element[0], user.email);
+          return element[0].email === user.email;
+        });
+      });
+      console.log("Filtered User success:", filteredUSer);
+      setExcelUsers(filteredUSer);
+    } else {
+      setExcelUsers(excelObj);
+    }
+  };
+
+  console.log("Registered Erros", registeredErrors);
   return (
-    <div className="col">
+    <div className="">
       <div className={styles.container}>
         {/* <UploadPicture /> */}
-        <div className="">
-    <div className={styles.excelFile}>
-            <label className={styles.downloadExcel}>
-              Download Excel File Template
-              <ExportExcel
-                excelData={ExcelExportData}
-                fileName={"Excel Export"}
-                className={styles.excelexport}
-              />
-            </label>
-            <label>
-              Import From Excel file
-              <input
-                type="file"
-                accept=".xlsx, xls"
-                onChange={(e) => handleExcelFile(e)}
-                ref={excelFile}
-              />
-            </label>
-          </div>
 
-        </div>
-    
         <form className={styles.form}>
-         
+          <div className="">
+            <h3 className="text-center">Register Single User</h3>
+          </div>
           <div className={styles.firstlast}>
             <input
               type="text"
@@ -368,20 +500,19 @@ function AddUser() {
               value={phoneNumber}
               onChange={handlePhoneNumberChange}
             />
-        <div className="form-check form-switch">
-        <label htmlFor="IsActive" className="form-check-label">
-              Is Active
-            </label>
-            <input
-              className="form-check-input"
-              type="checkbox"
-              role="switch"
-              value={isActive}
-              onChange={handleIsActiveChange}
-              id="flexSwitchCheckDefault"
-            />
-        </div>
-
+            <div className="form-check form-switch">
+              <label htmlFor="IsActive" className="form-check-label">
+                Is Active
+              </label>
+              <input
+                className="form-check-input"
+                type="checkbox"
+                role="switch"
+                value={isActive}
+                onChange={handleIsActiveChange}
+                id="flexSwitchCheckDefault"
+              />
+            </div>
           </div>
           <div className={`${styles.btn_container}`}>
             <button
@@ -393,6 +524,148 @@ function AddUser() {
             </button>
           </div>
         </form>
+        <div className={styles.excelFileSection}>
+          <div className={styles.excelHeadingSection}>
+            <h3 className="text-center">Register Multiple Users</h3>
+          </div>
+          <div
+            className={`${styles.excelFile} ${
+              excelObj.length !== 0
+                ? styles.excelFileSelected
+                : styles.excelFileNotSelected
+            }`}
+          >
+            <label className={styles.downloadExcel}>
+              Download Excel File Template
+              <ExportExcel
+                excelData={ExcelExportData}
+                fileName={"Excel Export"}
+                className={styles.excelexport}
+              />
+            </label>
+            <label>
+              Import From Excel file
+              <input
+                type="file"
+                accept=".xlsx, xls"
+                onChange={(e) => handleExcelFile(e)}
+                ref={excelFile}
+              />
+            </label>
+          </div>
+          {loading ? (
+            <div className="loading-container">
+              <div class="spinner-border m-5" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <span class="">Loading...</span>
+            </div>
+          ) : (
+            <>
+            <div className={styles.excelUserList}>
+              {/* <div className="filter-container mb-2">
+              <button
+                className="btn btn-primary"
+                type="button"
+                onClick={() => handleFilterRegisteredUser("all")}
+              >
+                All
+              </button>
+              <button
+                className="btn btn-success"
+                type="button"
+                onClick={() => handleFilterRegisteredUser("successful")}
+              >
+                Successful
+              </button>
+              <button
+                className="btn btn-danger"
+                type="button"
+                onClick={() => handleFilterRegisteredUser("unsuccessful")}
+              >
+                Unsuccessful
+              </button>
+            </div> */}
+              <table className={`table ${styles.excelUserTable}`}>
+                <thead>
+                  {excelUsers.length !== 0 ? (
+                    <>
+                      <tr className="sticky-top">
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">role</th>
+                        {showSuccess && <th scope="col">Registration</th>}
+                        {showErrorCol && <th scope="col">Error</th>}
+                      </tr>
+                    </>
+                  ) : (
+                    <tr>{/* <th scope="col">No Excel file Selected</th> */}</tr>
+                  )}
+                </thead>
+                <tbody>
+                  {excelUsers.length !== 0 &&
+                    excelUsers.map((user, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{`${user.first_name ? user.first_name : ""} ${
+                            user.last_name ? user.last_name : ""
+                          }`}</td>
+                          {/* <td>
+                          {" "}
+                          {nameEdit ? (
+                            <input type="text" />
+                          ) : (
+                            `${user.first_name ? user.first_name : ""} ${
+                              user.last_name ? user.last_name : ""
+                            }`
+                          )}
+                          {showNameEditBtn && (
+                            <i
+                              className="bi bi-pencil ms-2 module-edit-btn"
+                              onClick={() => setNameEdit(true)}
+                            ></i>
+                          )}
+                        </td> */}
+
+                          <td>{user.email}</td>
+                          <td>{user.role}</td>
+                          {showSuccess && (
+                            <td className="text-danger">
+                              {getUserRegisteredStatus(user.email)}
+                            </td>
+                          )}
+                          {showErrorCol && (
+                            <td className="text-danger">
+                              {getErrorMessage(user.email)}
+                            </td>
+                          )}
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+        
+
+          {excelUsers.length !== 0 && (
+            <div
+              className=""
+              style={{ display: "flex", justifyContent: "end" }}
+            >
+              <button
+                className={styles.btn_add}
+                onClick={(e) => handleEAddFromExcelFile(e)}
+                type="button"
+              >
+                Add
+              </button>
+            </div>
+          )}
+</>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -193,5 +193,17 @@ const ExcelExportData = [
     is_active: false,
     role: "learner",
   },
+  {
+    email: "sam@work.com",
+    first_name: "Sam",
+    last_name: "Javed",
+    gender: "F",
+    city: "Karachi",
+    country: "Pak",
+    password: "sam",
+    phone_number: "03162485944",
+    is_active: false,
+    role: "learner",
+  },
 ];
 export default ExcelExportData;

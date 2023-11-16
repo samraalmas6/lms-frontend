@@ -2,10 +2,13 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+ 
 }
 body {
   background-color: #ffff;
   border-radius: 0%;
+  font-size: 15px;
+  font-family: 'Lato', sans-serif;
 }
 .main-body {
   height: auto;
@@ -101,4 +104,14 @@ body {
   margin: 0 auto;
   height: 100vh;
   margin-top: 15%;
+}
+
+
+/* Styling for the spinner */
+#loadingSpinner {
+  display: none; 
+}
+
+.hidden {
+  display: none !important; 
 }

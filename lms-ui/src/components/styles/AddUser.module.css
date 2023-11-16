@@ -2,6 +2,7 @@
 .container{
     display: flex;
     background-color: #ffff;
+    box-shadow: 1px 2px 10px -2px gray;
 }
 
 .pictures{
@@ -32,9 +33,10 @@
 
 
 .form{
-    padding: 40px 5px 20px 30px;
-    width: 85%;
-    box-shadow: 5px 8px 19px -3px gray;
+    padding: 10px 5px 20px 30px;
+    width: 70%;
+    margin-right: 10px;
+    box-shadow: 11px 1px 15px -12px gray;
 }
 .form input, .roles {
     padding: 8px 12px;
@@ -43,7 +45,7 @@
     border-style: solid;
     font-size: 17px;
     width: 68%;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 .form input:focus, .roles:focus, .form input:hover, .roles:hover{
     outline: none;
@@ -53,14 +55,14 @@
   
 
 .firstlast, .passemail, .phonecity{
-    gap: 20px;
+    gap: 15px;
     display: flex;
-    width: 85%;
+    width: 96%;
 }
 .active{
    display: flex;
    align-items: center;
-   width: 61%;
+   width: 68%;
 }
 .active input[type='checkbox'] {
     width: 30px;
@@ -74,10 +76,24 @@
     font-size: 17px;
     font-weight: 500;
 }
-.btn_container, .excelFile {
+.btn_container{
     width: 88%;
     display: flex;
     justify-content: end;
+    /* flex-direction: column; */
+}
+.excelFileNotSelected {
+    width: 100%;
+    display: flex;
+    margin-top: 25%;
+    align-items: center;
+    flex-direction: column;
+    /* height: 100%; */
+}
+.excelFileSelected {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
 }
 .btn_add{
    background-color: #1d90e4;
@@ -96,7 +112,7 @@
 }
 
 .cont_1{
-    background-color: rgb(237, 223, 223);
+    background-color: #eddfdf;
     height: 0px;
     border-radius: 100%;
     cursor: pointer;
@@ -106,18 +122,18 @@
 /*  Country  */
 .country{
     width: 70%;
-    margin-top: 21px;
+    margin-top: 15px;
 }
 .country > div > div {
     border-radius: 6px;
     border-style: solid;
-    border-color: rgb(133, 133, 133);
+    border-color: #858585;
     border-width: 2px;
     font-size: 17px;
 }
 .roles {
     border-style: solid;
-    border-color: rgb(133, 133, 133);
+    border-color: #858585;
     border-width: 2px;
     font-size: 17px;
 }
@@ -131,6 +147,10 @@
     color: #fff;
     font-weight: 500;
     margin-left: 5px;
+    margin-bottom: 12px;
+    width: 55%;
+    height: 50px;
+    text-align: center;
 }
 
 .excelFile label:hover {
@@ -150,3 +170,22 @@
     background-color: #4b4b4f !important;
     color: #f6eded !important;
 }
+.excelHeadingSection {
+    padding-top: 10px;
+    margin-bottom: 25px;
+}
+
+.excelFileSection {
+    width: 55%;
+}
+.excelUserList {
+    max-height: 41vh;
+    overflow-y: auto;
+    max-width: 100%;
+}
+body::-webkit-scrollbar {
+    display: none; 
+  }
+.excelUserList::-webkit-scrollbar {
+    display: none; 
+  }

@@ -7,11 +7,12 @@ import React, {
 } from "react";
 import CourseUnit from "./CourseUnit";
 import { CourseProbs } from "../../../../App";
+import Swal from "sweetalert2";
 // import Swal from 'sweetalert2';
 export const ModuleProbs = createContext(null);
 
-const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
-  const userId = sessionStorage.getItem("user_id")
+const SingleModule = ({ module, setModuelContent,setModuleId }) => {
+  const userId = sessionStorage.getItem("user_id");
   const startDateRefModule = useRef(null);
   const endDateRefModule = useRef(null);
   const { courseId } = useContext(CourseProbs);
@@ -21,8 +22,9 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
   const [moduleStart, setModuleStart] = useState(module.start_date);
   const [moduleEnd, setModuleEnd] = useState(module.end_date);
   const [visibility, setVisibility] = useState(module.is_active);
-  const [editModule, setEditModule] = useState(false)
-  const [showEditBtn, setShowEditBtn] = useState(false)
+  const [editModule, setEditModule] = useState(false);
+  const [showEditBtn, setShowEditBtn] = useState(false);
+  const [unitData, setUnitData] = useState([]);
 
   const preventAccordionClose = () => {
     accordion.current.setAttribute("data-bs-toggle", "");
@@ -37,37 +39,37 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
 
   const handleUpdateTitle = (e, id) => {
     console.log("inside update function");
-    if(e.key === 'Enter' || e.type === "contextmenu"){
-      e.preventDefault()
-      console.log('title', moduleTitle, id);
+    if (e.key === "Enter" || e.type === "contextmenu") {
+      e.preventDefault();
+      console.log("title", moduleTitle, id);
 
       const obj = {
         title: moduleTitle,
         instructor: module.instructor,
         course: module.course,
-        updated_by: userId
-      }
+        updated_by: userId,
+      };
 
       fetch(`http://127.0.0.1:8000/api/modules/${id}/`, {
-      method: "PUT",
-      body: JSON.stringify(obj),
-      headers: {
-        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    }).then((response) => {
-      if (response.status === 200) {
-        response.json().then(function (result) {
-          console.log(result);
-          setEditModule(false)
-          // window.location.reload();
-        });
-      } else {
-        console.log(response);
-      }
-    });
+        method: "PUT",
+        body: JSON.stringify(obj),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log(result);
+            setEditModule(false);
+            // window.location.reload();
+          });
+        } else {
+          console.log(response);
+        }
+      });
     }
-  }
+  };
   const handlModuleStart = (e) => {
     // startDateRefModule.current.removeAttribute("className", "module-start-field");
     // startDatePickerRefModule.current.setAttribute(
@@ -91,6 +93,7 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
       start_date: moduleStart,
       end_date: moduleEnd,
       course: courseId,
+      instructor: module.instructor,
       updated_by: sessionStorage.getItem("user_id"),
     };
 
@@ -105,6 +108,10 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
       if (response.status === 200) {
         response.json().then(function (result) {
           console.log(result);
+          Swal.fire({
+            icon: "success",
+            text: `${result.title} has been ${result.is_active ? "activated" : "deactivated"}`
+          })
           // window.location.reload();
         });
       } else {
@@ -114,64 +121,85 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
   };
 
   const handleDeleteModule = (module, deleted) => {
-    let action = ""
-    if(deleted) {
-      action = "Delete"
+    let action = "";
+    if (deleted) {
+      action = "Delete";
+    } else {
+      action = "Restore";
     }
-    else {
-      action = "Restore" 
-    }
-    // Swal.fire({
-    //   title: 'Are you sure?',
-    //   text: "You won't be able to revert this!",
-    //   icon: 'warning',
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#d33',
-    //   cancelButtonColor: '#3085d6',
-    //   confirmButtonText: `${action}`
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
-        const obj = {
-          title: module.title,
-          is_updated: true,
-          is_delete: deleted,
-          created_by: module.created_by,
-          course: module.course,
-          updated_by: userId,
-        };
-    
-        fetch(`http://127.0.0.1:8000/api/modules/${module.id}/`, {
-          method: "PUT",
-          body: JSON.stringify(obj),
-          headers: {
-            Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        }).then((response) => {
-          if (response.status === 200) {
-            response.json().then(function (result) {
-              console.log('Api result: ',result);
-              // Swal.fire(
-              //   `${action}!`,
-              //   `${module.title} has been ${action}.`,
-              //   'success'
-              // ).then(res => {
-              //   window.location.reload();
-              // })
-              // setCourseContent((pre) => [...pre, result]);
-              // setCourseCreator(result.created_by);
-              // setCourseCategory("");
-              // setCourseTitle("");
-              // 
-            });
-          } else {
-            console.log(response);
+    Swal.fire({
+      title: "Attention",
+      text: `Do you want to ${action} this module?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: `${action}`
+    }).then((result) => {
+      if (result.isConfirmed) {
+    const obj = {
+      title: module.title,
+      is_updated: true,
+      is_delete: deleted,
+      instructor: module.instructor,
+      course: module.course,
+      updated_by: userId,
+    };
+
+    fetch(`http://127.0.0.1:8000/api/modules/${module.id}/`, {
+      method: "PUT",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log("Api result: ", result);
+          Swal.fire(
+            `${action}d!`,
+            `${module.title} has been ${action}d.`,
+            'success'
+          ).then(res => {
+            window.location.reload();
+          })
+
+          
+        });
+      } else {
+        console.log(response);
+      }
+    });
+      }
+    })
+  };
+
+
+
+  const handleModuleContent = (module) => {
+    setModuleId(module.id);
+    fetch(`http://127.0.0.1:8000/api/modules/${module.id}/units`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          const activeUnit = result.filter(unit => unit.is_delete === false);
+          if(sessionStorage.getItem("role") === 'admin'){
+            setUnitData(result)
+          }
+          else{
+          setUnitData(activeUnit);
           }
         });
-    //   }
-    // })
-
-
+      } else {
+        console.log(response);
+        setUnitData([]);
+      }
+    });
   };
 
   return (
@@ -201,32 +229,37 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
           ref={accordion}
           // onClick={(e) => e.stopPropagation()}
         >
-          <div className="module-heading-container"
-           onMouseEnter={() => setShowEditBtn(true)}
-           onMouseLeave={() => setShowEditBtn(false)}
+          <div
+            className="module-heading-container"
+            onMouseEnter={() => setShowEditBtn(true)}
+            onMouseLeave={() => setShowEditBtn(false)}
           >
             <div className="">
               <span className="me-3">MODULE</span>
-              {
-                editModule ? <input
-                type="text"
-                placeholder="Module Title"
-                value={moduleTitle}
-                className="moduleTitle"
-                onChange={(e) => {
-                  handleModuleTitle(e);
-                }}
-                required
-              onKeyDown={(e) => handleUpdateTitle(e, module.id)}
-              onContextMenu={(e) => handleUpdateTitle(e, module.id)}
-                onMouseEnter={preventAccordionClose}
-                onMouseLeave={preventAccordionOpen}
-              /> : <span>{moduleTitle}</span> 
-              }
-              {
-                showEditBtn && 
-                <i className="bi bi-pencil ms-2 module-edit-btn" onClick={() => setEditModule(true)}></i>
-              }
+              {editModule ? (
+                <input
+                  type="text"
+                  placeholder="Module Title"
+                  value={moduleTitle}
+                  className="moduleTitle"
+                  onChange={(e) => {
+                    handleModuleTitle(e);
+                  }}
+                  required
+                  onKeyDown={(e) => handleUpdateTitle(e, module.id)}
+                  onContextMenu={(e) => handleUpdateTitle(e, module.id)}
+                  onMouseEnter={preventAccordionClose}
+                  onMouseLeave={preventAccordionOpen}
+                />
+              ) : (
+                <span>{moduleTitle}</span>
+              )}
+              {showEditBtn && (
+                <i
+                  className="bi bi-pencil ms-2 module-edit-btn"
+                  onClick={() => setEditModule(true)}
+                ></i>
+              )}
             </div>
             <div className="">
               <label>Start Date:</label>
@@ -297,21 +330,21 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
                     </div>
                   </li>
                   <li>
-
-                  {
-                          module.length !== 0 && module.is_delete ?  <i
-                          className="bi bi-recycle text-success"
-                          onMouseEnter={preventAccordionClose}
-                          onMouseLeave={preventAccordionOpen}
-                          onClick={() => handleDeleteModule(module, false)}
-                        ></i>:
-                        <i
-                          className="bi bi-trash text-danger"
-                          onClick={() => handleDeleteModule(module, true)}
-                          onMouseEnter={preventAccordionClose}
-                          onMouseLeave={preventAccordionOpen}
-                        ></i>
-                        }
+                    {module.length !== 0 && module.is_delete ? (
+                      <i
+                        className="bi bi-recycle text-success"
+                        onMouseEnter={preventAccordionClose}
+                        onMouseLeave={preventAccordionOpen}
+                        onClick={() => handleDeleteModule(module, false)}
+                      ></i>
+                    ) : (
+                      <i
+                        className="bi bi-trash text-danger"
+                        onClick={() => handleDeleteModule(module, true)}
+                        onMouseEnter={preventAccordionClose}
+                        onMouseLeave={preventAccordionOpen}
+                      ></i>
+                    )}
                   </li>
                   <li>
                     <i
@@ -334,7 +367,7 @@ const SingleModule = ({ module, setModuelContent, handleModuleContent }) => {
       >
         <div className="accordion-body">
           <ModuleProbs.Provider>
-            <CourseUnit showUnit={true} />
+            <CourseUnit showUnit={true} unitData={unitData} setUnitData={setUnitData}/>
           </ModuleProbs.Provider>
         </div>
       </div>
