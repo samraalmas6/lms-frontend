@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 const AllTeams = ({ show }) => {
   const [showBlock, setShowBlock] = useState(false);
   const [showAddUser, setShowAddUser] = useState(false);
-  const [showAddCourse, setShowAddCourse] = useState(false)
+  const [showAddCourse, setShowAddCourse] = useState(false);
 
   const [showUserDelete, setShowUserDelete] = useState(false);
   const [showCourseDelete, setShowCourseDelete] = useState(false);
@@ -17,14 +17,21 @@ const AllTeams = ({ show }) => {
   const checkbox = useRef("");
   const [teamId, setTeamId] = useState(null);
   const [teamName, setTeamName] = useState("");
+  const [teamTitle, setTeamTitle] = useState("");
   const [teamDes, setTeamDes] = useState("");
   const [teamData, setTeamData] = useState([]);
   const [teamUsers, setTeamUser] = useState([]);
   const [teamCourses, setTeamCourses] = useState([]);
   const [addTeamUsersId, setAddTeamUsersId] = useState([]);
   const [addTeamCoursesId, setAddTeamCoursesId] = useState([]);
+  const [learnerUserData, setLearnerUserData] = useState([]);
   const [userData, setUserData] = useState([]);
+  const [visibility, setVisibility] = useState();
+  const [editTeam, setEditTeam] = useState(false);
+  const [showEditBtn, setShowEditBtn] = useState(false);
+
   const [coursesData, setCoursesData] = useState([]);
+  const [authorData, setAuthorData] = useState([]);
 
   useEffect(() => {
     const getAllTeams = () => {
@@ -55,18 +62,19 @@ const AllTeams = ({ show }) => {
         if (response.status === 200) {
           response.json().then(function (result) {
             console.log(result);
+            setUserData(result);
             const obj = result.filter((user) => {
-              return user.role === "learner" && user.is_active === true;
+              return user.role === "learner";
             });
-            setUserData(obj);
-            // setUserData(result);
+            setLearnerUserData(obj);
+            // setLearnerUserData(result);
 
             // ************   List only Learner Users *********************
             //
             //   const users = result.filter(user => {
             //     return user.role === 'learner'
             // })
-            // setUserData(users);
+            // setLearnerUserData(users);
           });
         } else {
           console.log(response);
@@ -83,11 +91,11 @@ const AllTeams = ({ show }) => {
         if (response.status === 200) {
           response.json().then(function (result) {
             console.log("API result Courses:", result);
-            const activeCourses = result.filter(course => {
-              return course.is_active === true;
-            })
-            // setCoursesData(activeCourses);
-            setCoursesData(result);
+            const activeCourses = result.filter((course) => {
+              return course.is_delete === false;
+            });
+            setCoursesData(activeCourses);
+            // setCoursesData(result);
             // ****************** List only Acive Courses *********************
             //
             // const activeCourses = result.filter(course => {
@@ -102,18 +110,74 @@ const AllTeams = ({ show }) => {
       // setCoursesData(courseData);
     };
 
+    const getAuthorsData = () => {
+      fetch(`http://localhost:8000/api/authors/`, {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log("Api result Author Data", result);
+            setAuthorData(result);
+          });
+        } else {
+          console.log(response);
+        }
+      });
+    };
+
     getAllTeams();
     getUsers();
     getCourse();
-  }, []);
+    getAuthorsData();
+  }, [0, visibility]);
 
   const handleTeamName = (e) => {
     setTeamName(e.target.value);
+  };
+  const handleTeamTitle = (e) => {
+    setTeamTitle(e.target.value);
   };
 
   const handleTeamDes = (e) => {
     setTeamDes(e.target.value);
   };
+
+  const handleUpdateTitle = (e) => {
+    if (e.key === "Enter" || e.type === "contextmenu") {
+      e.preventDefault();
+
+      const obj = {
+        name: teamTitle,
+        is_updated: true,
+        updated_by: 2,
+      };
+
+      fetch(`http://127.0.0.1:8000/teams/${teamId}/update/`, {
+        method: "PUT",
+        body: JSON.stringify(obj),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log(result);
+            setTeamName(result.name);
+            setTeamTitle("")
+            setEditTeam(false);
+            // window.location.reload();
+          });
+        } else {
+          console.log(response);
+        }
+      });
+    }
+  };
+
   const handleSaveTeam = (e) => {
     e.preventDefault();
     const obj = {
@@ -160,7 +224,7 @@ const AllTeams = ({ show }) => {
 
   const handleUserCheckChange = (e) => {
     const email = e.target.value;
-    const newObj = userData.filter((user) => {
+    const newObj = learnerUserData.filter((user) => {
       return user.email === email;
     });
 
@@ -198,7 +262,7 @@ const AllTeams = ({ show }) => {
         item.checked = false;
       }
     } else {
-      userData.forEach((user) => {
+      learnerUserData.forEach((user) => {
         setAddTeamUsersId((pre) => [...pre, user.id]);
       });
       for (let item of selectItems) {
@@ -239,7 +303,7 @@ const AllTeams = ({ show }) => {
   };
 
   const handleDeleteUser = (user) => {
-    const user_id = userData.filter((users) => {
+    const user_id = learnerUserData.filter((users) => {
       return users.id === user;
     });
     const obj = {
@@ -272,6 +336,95 @@ const AllTeams = ({ show }) => {
     //   return users.id !== user;
     // });
     // setTeamUser(obj);
+  };
+
+  const handleCourseVisibility = (course) => {
+    const active = course.is_active;
+    const obj = {
+      title: course.title,
+      instructor: course.instructor,
+      updated_by: sessionStorage.getItem("user_id"),
+      category: course.category,
+      is_active: !active,
+    };
+    fetch(`http://127.0.0.1:8000/api/courses/${course.id}/`, {
+      method: "PUT",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log(result);
+          Swal.fire({
+            title: `${result.title} has been ${
+              result.is_active ? "activated" : "deactivated"
+            }`,
+            icon: "success",
+          }).then((res) => {
+            setVisibility(!visibility);
+          });
+
+          // window.location.reload();
+        });
+      } else {
+        console.log(response);
+      }
+    });
+  };
+
+  const handleUserVisibility = (email, active) => {
+    let action = "";
+    if (active === true) {
+      action = "Deactivate";
+    } else {
+      action = "Activate";
+    }
+    Swal.fire({
+      title: "Attention!",
+      text: `Do you want to ${action} this User?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: `${action}`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const obj = {
+          email: email,
+          is_active: !active,
+        };
+        fetch("http://127.0.0.1:8000/update_user/", {
+          method: "PUT",
+          body: JSON.stringify(obj),
+          headers: {
+            Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }).then((response) => {
+          if (response.status === 200) {
+            response.json().then(function (result) {
+              Swal.fire(
+                result.is_active
+                  ? "User Activation Successful!"
+                  : `User Deactivation Successful!`,
+                `${result.first_name} has been ${action}d`,
+                "success"
+              ).then((res) => {
+                setVisibility(!visibility);
+                // window.location.reload();
+              });
+              console.log(result);
+              // window.location.reload();
+            });
+          } else {
+            console.log(response);
+          }
+        });
+      }
+    });
   };
 
   const handleAddCourse = (e) => {
@@ -308,7 +461,7 @@ const AllTeams = ({ show }) => {
     }).then((response) => {
       if (response.status === 200) {
         response.json().then(function (result) {
-          setShowAddCourse(false)
+          setShowAddCourse(false);
           console.log(result);
           addTeamCoursesId.forEach((course) => {
             if (!teamCourses.includes(course)) {
@@ -324,7 +477,7 @@ const AllTeams = ({ show }) => {
 
   const getUSerFullName = (user) => {
     if (user) {
-      const name = userData.filter((users) => users.id === user);
+      const name = learnerUserData.filter((users) => users.id === user);
       console.log("This is name", user);
       if (name.length !== 0) {
         return `${name[0].first_name} ${name[0].last_name}`;
@@ -332,9 +485,51 @@ const AllTeams = ({ show }) => {
     }
   };
 
+  const getUSerAcivationStatus = (user) => {
+    if (user) {
+      const name = learnerUserData.filter((users) => users.id === user);
+
+      if (name.length !== 0) {
+        return name;
+      }
+    }
+  };
+
+  const getCourseActivationStatus = (courseId) => {
+    if (courseId) {
+      const course = coursesData.filter((course) => course.id === courseId);
+
+      if (course.length !== 0) {
+        return course[0];
+      }
+    }
+  };
+  const getAuthorFullName = (id) => {
+    if (authorData.length !== 0) {
+      const author = authorData.filter((author) => {
+        return author.id === id;
+      });
+      if (author.length !== 0 && learnerUserData.length !== 0) {
+        const user = userData.filter(
+          (users) => users.id === author[0].created_by
+        );
+
+        if (user.length !== 0) {
+          return `${user[0].first_name} ${user[0].last_name}`;
+        } else {
+          return "N/A";
+        }
+      } else {
+        return "N/A";
+      }
+    }
+  };
+
   const getTeamCourseName = (course) => {
     const title = coursesData.filter((courses) => courses.id === course);
-    return `${title[0].title}`;
+    if (title.length !== 0) {
+      return `${title[0].title}`;
+    }
   };
 
   const handleAddUser = (e) => {
@@ -374,7 +569,7 @@ const AllTeams = ({ show }) => {
     }).then((response) => {
       if (response.status === 200) {
         response.json().then(function (result) {
-          setShowAddUser(false)
+          setShowAddUser(false);
           console.log("API result ", result);
           addTeamUsersId.forEach((user) => {
             setTeamUser((pre) => [...pre, user]);
@@ -431,14 +626,12 @@ const AllTeams = ({ show }) => {
       }
     });
   };
-  
-
 
   const handleTeamUpdate = () => {};
 
   return (
     <div className="" style={{ boxShadow: "4px 3px 21px -10px gray" }}>
-      <div className="all-course-content pt-2">
+      <div className="all-team-content pt-2">
         <div className="creat-course-btn">
           <button
             type="button"
@@ -454,13 +647,13 @@ const AllTeams = ({ show }) => {
         <div
           className={`offcanvas offcanvas-end ${show} `}
           tabIndex="-1"
-          style={{ width: "30%" }}
+          style={{ width: "28%" }}
           id="offcanvasTeam"
           aria-labelledby="offcanvasRightLabel"
         >
-          <div className="offcanvas-body ">
-            <div className="add-course-content w-100">
-              <div className="course-form-section w-100">
+          <div className="offcanvas-body">
+            <div className="add-new-team-outer-container">
+              <div className="add-new-team-inner-container">
                 <div className="offcanvas-head">
                   <h5 className="offcanvas-title" id="offcanvasRightLabel">
                     Add Team
@@ -472,29 +665,29 @@ const AllTeams = ({ show }) => {
                     aria-label="Close"
                   ></button>
                 </div>
-                <form>
-                  <label className="mb-0">
-                    Team Name<span style={{ color: "red" }}>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={teamName}
-                    onChange={(e) => handleTeamName(e)}
-                    required
-                    placeholder="Team Name"
-                    className="team-name"
-                  />
-                  <label className="mb-0">
-                    Team Description<span style={{ color: "red" }}>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={teamDes}
-                    onChange={(e) => handleTeamDes(e)}
-                    required
-                    placeholder="Team Description"
-                    className="team-name"
-                  />
+                <form className="add-new-team-form">
+                  <div className="add-new-team-form-content">
+                    <label className="mb-0 w-100">
+                      Team Name<span style={{ color: "red" }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={teamName}
+                      onChange={(e) => handleTeamName(e)}
+                      required
+                      placeholder="Team Name"
+                      className="team-name w-100"
+                    />
+                    <label className="mb-0 w-100">Team Description</label>
+                    <input
+                      type="text"
+                      value={teamDes}
+                      onChange={(e) => handleTeamDes(e)}
+                      required
+                      placeholder="Team Description"
+                      className="team-name w-100"
+                    />
+                  </div>
                   <div className="team-save-btn">
                     <button
                       type="submit"
@@ -519,8 +712,8 @@ const AllTeams = ({ show }) => {
           id="offcanvasCourse"
           aria-labelledby="offcanvasRightLabel"
         >
-          <div className="offcanvas-body">
-            <div className="add-course-content">
+          <div className="offcanvas-body team-content-outer-div">
+            <div className="add-team-content">
               <div className="course-name-section">
                 <ul style={{ paddingLeft: "10px" }}>
                   {teamData &&
@@ -532,6 +725,7 @@ const AllTeams = ({ show }) => {
                               role="button"
                               onClick={() => {
                                 setTeamName(team.name);
+                                setTeamTitle(team.name);
                                 setTeamUser(team.users);
                                 setTeamId(team.id);
                                 setTeamCourses(team.courses);
@@ -545,8 +739,8 @@ const AllTeams = ({ show }) => {
                     })}
                 </ul>
               </div>
-              <div className="course-form-section">
-                <div className="offcanvas-head">
+              <div className="team-form-section">
+                <div className="offcanvas-head team-content-heading">
                   <h5 className="offcanvas-title" id="offcanvasRightLabel">
                     Add Team Details
                   </h5>
@@ -559,122 +753,211 @@ const AllTeams = ({ show }) => {
                   ></button>
                 </div>
                 <form>
-                  <label className="mb-0">
-                    Team Name<span style={{ color: "red" }}>*</span>
-                  </label>
-                  <input
+                <div
+                  className=""
+                  style={{ display: "flex", flexDirection: "column" }}
+                  onMouseEnter={() => setShowEditBtn(true)}
+                  onMouseLeave={() => setShowEditBtn(false)}
+                >
+                    <label className="mb-0">Team Name:</label>
+                    {/* <span>{teamName}</span> */}
+              
+
+                  {editTeam ? (
+                    <input
+                      type="text"
+                      placeholder="Team Title"
+                      value={teamTitle}
+                      style={{ width: "99%" }}
+                      className="course-title mb-2"
+                      onChange={(e) => {
+                        handleTeamTitle(e);
+                      }}
+                      required
+                      onKeyDown={(e) => handleUpdateTitle(e)}
+                      onContextMenu={(e) => handleUpdateTitle(e)}
+                    />
+                  ) : (
+                    <span style={{ width: "" }} className="course-title mb-2">
+                      {teamName}
+                      {showEditBtn && (
+                        <i
+                          className="bi bi-pencil ms-2 module-edit-btn"
+                          onClick={() => setEditTeam(true)}
+                        ></i>
+                      )}
+                    </span>
+                  )}
+                      </div>
+                  {/* <input
                     type="text"
                     value={teamName}
                     onChange={(e) => handleTeamName(e)}
                     required
                     className="course-title"
-                  />
+                  /> */}
 
                   <div className={styles.teamListSection}>
-                    <table className="table">
-                      <thead>
-                        <tr>
-                          <th style={{ borderTop: "none" }}>#</th>
-                          <th style={{ borderTop: "none" }}>Users</th>
-                          <th style={{ borderTop: "none" }}></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {teamUsers &&
-                          teamUsers.map((user, index) => {
-                            return (
-                              <tr
-                                key={user}
-                                onMouseEnter={() => setShowUserDelete(true)}
-                                onMouseLeave={() => setShowUserDelete(false)}
-                              >
-                                <td className={styles.borderLess}>
-                                  {index + 1}
-                                </td>
-                                <td
-                                  className={styles.borderLess}
-                                  //   className="allusers-name-container"
-                                >
-                                  <span>{getUSerFullName(user)}</span>
-                                </td>
-                                <td className={styles.borderLess}>
-                                  {showUserDelete ? (
+                    <div className="team-content-user-table-container">
+                      <table className="table team-content-user-table">
+                        <thead>
+                          <tr>
+                            <th
+                              style={{ borderTop: "none" }}
+                              className="team-table-heading"
+                            >
+                              #
+                            </th>
+                            <th
+                              style={{ borderTop: "none" }}
+                              className="team-table-heading"
+                            >
+                              Users
+                            </th>
+                            <th
+                              colSpan="2"
+                              style={{ borderTop: "none" }}
+                              className="team-table-heading"
+                            >
+                              Action
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {teamUsers &&
+                            teamUsers.map((user, index) => {
+                              return (
+                                <tr key={user}>
+                                  <td className={styles.borderLess}>
+                                    {index + 1}
+                                  </td>
+                                  <td
+                                    className={styles.borderLess}
+                                    //   className="allusers-name-container"
+                                  >
+                                    <span>{getUSerFullName(user)}</span>
+                                  </td>
+                                  <td
+                                    className={`${styles.borderLess} ps-0`}
+                                    style={{ width: "3%" }}
+                                  >
+                                    <div className="form-check form-switch">
+                                      <input
+                                        className="form-check-input "
+                                        type="checkbox"
+                                        role="switch"
+                                        checked={
+                                          getUSerAcivationStatus(user)[0]
+                                            .is_active
+                                        }
+                                        value={
+                                          getUSerAcivationStatus(user)[0]
+                                            .is_active
+                                        }
+                                        onChange={() => {
+                                          handleUserVisibility(
+                                            getUSerAcivationStatus(user)[0]
+                                              .email,
+                                            getUSerAcivationStatus(user)[0]
+                                              .is_active
+                                          );
+                                        }}
+                                        id="flexSwitchCheckDefault"
+                                      />
+                                    </div>
+                                  </td>
+                                  <td className={`${styles.borderLess} ps-0`}>
                                     <button
                                       type="button"
-                                      className={styles.deleteBtn}
+                                      className={`${styles.deleteBtn} p-0`}
                                       onClick={() => handleDeleteUser(user)}
                                     >
                                       <i className="bi bi-trash"></i>
                                     </button>
-                                  ) : (
-                                    <button
-                                      type="button"
-                                      style={{ color: "white" }}
-                                      onClick={() => handleDeleteUser(user)}
-                                      className={styles.deleteBtn}
-                                    >
-                                      <i className="bi bi-trash"></i>
-                                    </button>
-                                  )}
-                                </td>
-                              </tr>
-                            );
-                          })}
-                      </tbody>
-                    </table>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                        </tbody>
+                      </table>
+                    </div>
 
-                    <table className="table">
-                      <thead>
-                        <tr>
-                          <th style={{ borderTop: "none" }}>Courses</th>
-                          <th style={{ borderTop: "none" }}></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {teamCourses &&
-                          teamCourses.map((course) => {
-                            return (
-                              <tr
-                                key={course}
-                                onMouseEnter={() => setShowCourseDelete(true)}
-                                onMouseLeave={() => setShowCourseDelete(false)}
-                              >
-                                <td className={styles.borderLess}>
-                                  {getTeamCourseName(course)}
-                                </td>
-                                <td className={styles.borderLess}>
-                                  {showCourseDelete ? (
+                    <div className="team-content-course-table-container">
+                      <table className="table team-content-course-table">
+                        <thead>
+                          <tr>
+                            <th
+                              style={{ borderTop: "none" }}
+                              className="team-table-heading"
+                            >
+                              Courses
+                            </th>
+                            <th
+                              colSpan="2"
+                              style={{ borderTop: "none" }}
+                              className="team-table-heading"
+                            >
+                              Action
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {teamCourses.length !== 0 &&
+                            teamCourses.map((course) => {
+                              return (
+                                <tr key={course}>
+                                  <td className={styles.borderLess}>
+                                    {getTeamCourseName(course)}
+                                  </td>
+                                  <td
+                                    className={`${styles.borderLess} ps-0`}
+                                    style={{ width: "3%" }}
+                                  >
+                                    <div className="form-check form-switch">
+                                      <input
+                                        className="form-check-input "
+                                        type="checkbox"
+                                        role="switch"
+                                        checked={
+                                          getCourseActivationStatus(course)
+                                            .is_active
+                                        }
+                                        value={
+                                          getCourseActivationStatus(course)
+                                            .is_active
+                                        }
+                                        onChange={() => {
+                                          handleCourseVisibility(
+                                            getCourseActivationStatus(course)
+                                          );
+                                        }}
+                                        id="flexSwitchCheckDefault"
+                                      />
+                                    </div>
+                                  </td>
+                                  <td className={styles.borderLess}>
                                     <button
                                       type="button"
-                                      className={styles.deleteBtn}
+                                      className={`${styles.deleteBtn} p-0`}
                                       onClick={() => handleDeleteCourse(course)}
                                     >
                                       <i className="bi bi-trash"></i>
                                     </button>
-                                  ) : (
-                                    <button
-                                      type="button"
-                                      style={{ color: "white" }}
-                                      onClick={() => handleDeleteCourse(course)}
-                                      className={styles.deleteBtn}
-                                    >
-                                      <i className="bi bi-trash"></i>
-                                    </button>
-                                  )}
-                                </td>
-                              </tr>
-                            );
-                          })}
-                      </tbody>
-                    </table>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                  <div className="courseAddBtn">
+                  <div className="teamAddBtn">
                     <button
                       className="btn btn-primary me-3"
                       type="button"
                       onClick={() => {
-                        setShowAddCourse(!showAddCourse)
-                        setShowAddUser(false)
+                        setShowAddCourse(!showAddCourse);
+                        setShowAddUser(false);
                       }}
                     >
                       Add Course
@@ -683,8 +966,8 @@ const AllTeams = ({ show }) => {
                       className="btn btn-secondary"
                       type="button"
                       onClick={() => {
-                        setShowAddUser(!showAddUser)
-                        setShowAddCourse(false)
+                        setShowAddUser(!showAddUser);
+                        setShowAddCourse(false);
                       }}
                     >
                       Add User
@@ -724,8 +1007,8 @@ const AllTeams = ({ show }) => {
                             <th scope="col">Course Title</th>
                             <th scope="col">Author</th>
                             <th scope="col">Description</th>
-                            <th scope="col">Users Enrolled</th>
                             <th scope="col">Last Update</th>
+                            <th scope="col">Action</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -734,7 +1017,7 @@ const AllTeams = ({ show }) => {
                             ? coursesData.detail
                             : coursesData &&
                               coursesData.map((course, index) => {
-                                if(!teamCourses.includes(course.id)){
+                                if (!teamCourses.includes(course.id)) {
                                   return (
                                     <tr
                                       key={course.id}
@@ -751,7 +1034,6 @@ const AllTeams = ({ show }) => {
                                             ref={checkbox}
                                             name="check"
                                             value={course.title}
-                                      
                                             onChange={(e) => {
                                               handleCourseCheckChange(e);
                                             }}
@@ -761,10 +1043,27 @@ const AllTeams = ({ show }) => {
                                         </div>
                                       </td>
                                       <td>{course.title}</td>
-                                      <td>{course.author}</td>
+                                      <td>
+                                        {getAuthorFullName(course.instructor)}
+                                      </td>
                                       <td>{course.description}</td>
-                                      <td>{course.users_enrolled}</td>
+                                      {/* <td>{course.users_enrolled}</td> */}
                                       <td>{course.created_at}</td>
+                                      <td>
+                                        <div className="form-check form-switch">
+                                          <input
+                                            className="form-check-input "
+                                            type="checkbox"
+                                            role="switch"
+                                            checked={course.is_active}
+                                            value={course.is_active}
+                                            onChange={() => {
+                                              handleCourseVisibility(course);
+                                            }}
+                                            id="flexSwitchCheckDefault"
+                                          />
+                                        </div>
+                                      </td>
                                     </tr>
                                   );
                                 }
@@ -786,11 +1085,15 @@ const AllTeams = ({ show }) => {
                   {showAddUser && (
                     <div className="team-add-users-section mt-3">
                       <div>
-                        <div className=""
-                          style={{display: "flex", justifyContent: "space-between"}}
+                        <div
+                          className=""
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
                         >
-                        <h3>Users List</h3>
-                        <button
+                          <h3>Users List</h3>
+                          <button
                             type="button"
                             className="text-bg-primary add-new-user"
                             onClick={handleAddUser}
@@ -812,16 +1115,17 @@ const AllTeams = ({ show }) => {
                                 Select All
                               </th>
                               <th scope="col">Name</th>
+                              <th scope="col">Gender</th>
                               <th scope="col">Role</th>
                               <th scope="col">Email</th>
                               <th scope="col">Phone Number</th>
-                              {/* <th scope="col">Active</th> */}
+                              <th scope="col">Active</th>
                             </tr>
                           </thead>
                           <tbody>
-                            {userData &&
-                              userData.map((user) => {
-                                if(!teamUsers.includes(user.id)){
+                            {learnerUserData &&
+                              learnerUserData.map((user) => {
+                                if (!teamUsers.includes(user.id)) {
                                   return (
                                     <tr key={user.id}>
                                       <td>
@@ -854,26 +1158,31 @@ const AllTeams = ({ show }) => {
                                           </span>
                                         </div>
                                       </td>
+                                      <td>{user.gender}</td>
                                       <td>{user.role}</td>
                                       <td>{user.email}</td>
                                       <td>{user.phone_number}</td>
-                                      {/* <td>
+                                      <td>
                                         <div className="form-check form-switch">
                                           <input
-                                            className="form-check-input"
+                                            className="form-check-input "
                                             type="checkbox"
                                             role="switch"
-                                            disabled
-                                            readOnly
                                             checked={user.is_active}
+                                            value={user.is_active}
+                                            onChange={() => {
+                                              handleUserVisibility(
+                                                user.email,
+                                                user.is_active
+                                              );
+                                            }}
                                             id="flexSwitchCheckDefault"
                                           />
                                         </div>
-                                      </td> */}
+                                      </td>
                                     </tr>
                                   );
                                 }
-
                               })}
                           </tbody>
                         </table>
@@ -894,74 +1203,83 @@ const AllTeams = ({ show }) => {
             </div>
           </div>
         </div>
-
-        {!showBlock ? (
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">Names</th>
-                <th scope="col">Users</th>
-                <th scope="col">Courses</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {teamData.map((team) => {
-                return (
-                  <tr
-                    key={team.id}
-                    role="button"
-                    onClick={() => {
-                      setTeamName(team.name);
-                      setTeamUser(team.users);
-                      setTeamId(team.id);
-                      setTeamCourses(team.courses);
-                      var myOffcanvas = document.getElementById('offcanvasCourse');
-                      if (myOffcanvas) {
-                        myOffcanvas.classList.add('show');
-                      }
-                      // setTeamDetail([team.Users, team.Courses]);
-                    }}
-                  >
-                    <td>{team.name}</td>
-                    <td>
-                      {team.users && team.users.length !== 0 ? (
-                        <span className={styles.text_with_background}>
-                          {team.users.length}
-                        </span>
-                      ) : (
-                        <span className={styles.text_with_background}>
-                          {"0"}
-                        </span>
-                      )}
-                    </td>
-                    <td>
-                      {team.courses && team.courses.length !== 0 ? (
-                        <span className={styles.txt_with_background}>
-                          {team.courses.length}
-                        </span>
-                      ) : (
-                        <span className={styles.text_with_background}>
-                          {"0"}
-                        </span>
-                      )}
-                    </td>
-                    <td
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteTeam(team.id);
+        <div className="team-table-main-container">
+          {!showBlock ? (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th className="team-table-heading" style={{ width: "3%" }}>
+                    #
+                  </th>
+                  <th className="team-table-heading">Team</th>
+                  <th className="team-table-heading">Users</th>
+                  <th className="team-table-heading">Courses</th>
+                  <th className="team-table-heading">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {teamData.map((team, index) => {
+                  return (
+                    <tr
+                      key={team.id}
+                      role="button"
+                      onClick={() => {
+                        setTeamName(team.name);
+                        setTeamTitle(team.name);
+                        setTeamUser(team.users);
+                        setTeamId(team.id);
+                        setTeamCourses(team.courses);
+                        var myOffcanvas =
+                          document.getElementById("offcanvasCourse");
+                        if (myOffcanvas) {
+                          myOffcanvas.classList.add("show");
+                        }
+                        // setTeamDetail([team.Users, team.Courses]);
                       }}
                     >
-                      <i className="bi bi-trash text-danger"></i>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        ) : (
-          ""
-        )}
+                      <td style={{ width: "3%", fontWeight: "bold" }}>
+                        {index + 1}
+                      </td>
+                      <td>{team.name}</td>
+                      <td>
+                        {team.users && team.users.length !== 0 ? (
+                          <span className={styles.text_with_background}>
+                            {team.users.length}
+                          </span>
+                        ) : (
+                          <span className={styles.text_with_background}>
+                            {"0"}
+                          </span>
+                        )}
+                      </td>
+                      <td>
+                        {team.courses && team.courses.length !== 0 ? (
+                          <span className={styles.txt_with_background}>
+                            {team.courses.length}
+                          </span>
+                        ) : (
+                          <span className={styles.text_with_background}>
+                            {"0"}
+                          </span>
+                        )}
+                      </td>
+                      <td
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteTeam(team.id);
+                        }}
+                      >
+                        <i className="bi bi-trash text-danger"></i>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </div>
   );

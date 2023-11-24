@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles/Dashboard.css";
 import { Chart } from "react-google-charts";
 import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -10,9 +11,12 @@ const Dashboard = () => {
   const [noTeams, setNoTeams] = useState(0);
   const [noInstructor, setNoInstructor] = useState(0);
   const [nonLearners, setNoLearners] = useState(0);
-  const [newUserData, setNewUserData] = useState(null);
+  const [newUserData, setNewUserData] = useState([]);
+  const [allUser, setAllUser] = useState([])
+  const [filterUSer, setFilterUser] = useState([])
+  const [showUser, setShowUSer] = useState("more")
+  const [visibility, setVisibility] = useState(false)
 
-  console.log("new user", newUserData);
   useEffect(() => {
     const getCourseData = () => {
       fetch("http://127.0.0.1:8000/api/courses", {
@@ -63,15 +67,29 @@ const Dashboard = () => {
             console.log(result);
             result.sort((a, b) => a - b);
             result.reverse();
+            setAllUser(result.filter((user, index) => {
+              if (index < 13) {
+                return user;
+              } else {
+                return null;
+              }
+            }));
             setNewUserData(
               result.filter((user, index) => {
-                if (index < 8) {
+                if (index < 6) {
                   return user;
                 } else {
                   return null;
                 }
               })
             );
+            setFilterUser(result.filter((user, index) => {
+              if (index < 6) {
+                return user;
+              } else {
+                return null;
+              }
+            }))
             setNoUsers(result.length);
 
             setNoInstructor(
@@ -98,7 +116,7 @@ const Dashboard = () => {
     getUsers();
     getCourseData();
     getTeamData();
-  }, [0]);
+  }, [0,visibility]);
 
   const data = [
     ["Year", "Courses", "Users", "Passed", "Not Passed"],
@@ -117,38 +135,86 @@ const Dashboard = () => {
     },
   };
 
+  const handleVisibility = (email, active) => {
+    let action = "";
+    if (active === true) {
+      action = "Deactivate";
+    } else {
+      action = "Activate";
+    }
+    Swal.fire({
+      title: "Attention!",
+      text: `Do you want to ${action} this User?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: `${action}`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const obj = {
+          email: email,
+          is_active: !active,
+        };
+        fetch("http://127.0.0.1:8000/update_user/", {
+          method: "PUT",
+          body: JSON.stringify(obj),
+          headers: {
+            Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }).then((response) => {
+          if (response.status === 200) {
+            response.json().then(function (result) {
+              Swal.fire(
+                result.is_active
+                  ? "User Activation Successful!"
+                  : `User Deactivation Successful!`,
+                `${result.first_name} has been ${action}d`,
+                "success"
+              ).then((res) => {
+                setVisibility(!visibility)
+              });
+              console.log(result);
+              // window.location.reload();
+            });
+          } else {
+            console.log(response);
+          }
+        });
+      }
+    });
+  };
+
+
   const handleUserClick = () => {
-    navigate("/allusers");
+    navigate("/user/all");
   };
   const handleCourseClick = () => {
     navigate("/course/all");
   };
   const handleTeamClick = () => {
-    navigate("/allteams");
+    navigate("/team/all");
   };
+
+  const handleShowMoreUser = (value) => {
+    if(value === "more"){
+      setNewUserData(allUser);
+      setShowUSer("less")
+    }
+    else{
+      setNewUserData(filterUSer);
+      setShowUSer("more")
+    }
+    // navigate("/allusers");
+    // setNewUserData(allUser);
+  }
 
   return (
     <div className="dashboard-main-container">
-      <p className="lead d-none d-sm-block">Overview</p>
-      <div
-        className="alert alert-warning fade collapse"
-        role="alert"
-        id="myAlert"
-      >
-        <button
-          type="button"
-          className="close"
-          data-dismiss="alert"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">×</span>
-          <span className="sr-only">Close</span>
-        </button>
-        <strong>Data and Records</strong> Learn more about LMS
-      </div>
-      <div className="row mb-3">
-        <div className="col-xl-2 col-sm-6 py-2  text-center">
-          <div className="card bg-success text-white h-100 dashboard-card">
+      <div className="mb-1 dashboard-card-container">
+        <div className="dashboard-card-inner-container text-center">
+          <div className="card bg-success text-white dashboard-card">
             <div
               className="card-body bg-success "
               style={{ backgroundColor: "#57b960" }}
@@ -157,12 +223,12 @@ const Dashboard = () => {
               <div className="rotate">
                 <i className="fa fa-user fa-4x"></i>
               </div>
-              <h6 className="text-uppercase">Users</h6>
-              <h1 className="display-4">{noUsers}</h1>
+              <h6 className="text-uppercase mt-2">Users</h6>
+              <h1 className="">{noUsers}</h1>
             </div>
           </div>
         </div>
-        <div className="col-xl-2 col-sm-6 py-2  text-center">
+        <div className="dashboard-card-inner-container text-center">
           <div
             className="card text-white bg-warning h-100 dashboard-card"
             onClick={() => handleUserClick()}
@@ -171,12 +237,12 @@ const Dashboard = () => {
               <div className="rotate">
                 <i className="fas fa-solid fa-users fa-4x"></i>
               </div>
-              <h6 className="text-uppercase">Instructors</h6>
-              <h1 className="display-4">{noInstructor}</h1>
+              <h6 className="text-uppercase mt-1">Instructors</h6>
+              <h1 className="">{noInstructor}</h1>
             </div>
           </div>
         </div>
-        <div className="col-xl-2 col-sm-6 py-2  text-center">
+        <div className="dashboard-card-inner-container text-center">
           <div
             className="card text-white bg-primary h-100 dashboard-card"
             onClick={() => handleUserClick()}
@@ -185,12 +251,12 @@ const Dashboard = () => {
               <div className="rotate">
                 <i className="fas fa-solid fa-users fa-4x"></i>
               </div>
-              <h6 className="text-uppercase">Learners</h6>
-              <h1 className="display-4">{nonLearners}</h1>
+              <h6 className="text-uppercase mt-1">Learners</h6>
+              <h1 className="">{nonLearners}</h1>
             </div>
           </div>
         </div>
-        <div className="col-xl-2 col-sm-6 py-2  text-center">
+        <div className="dashboard-card-inner-container text-center">
           <div
             className="card text-white bg-danger h-100 dashboard-card"
             onClick={() => handleTeamClick()}
@@ -199,12 +265,12 @@ const Dashboard = () => {
               <div className="rotate">
                 <i className="fa fa-list fa-4x"></i>
               </div>
-              <h6 className="text-uppercase">Teams</h6>
-              <h1 className="display-4">{noTeams}</h1>
+              <h6 className="text-uppercase mt-1">Teams</h6>
+              <h1 className="">{noTeams}</h1>
             </div>
           </div>
         </div>
-        <div className="col-xl-2 col-sm-6 py-2  text-center">
+        <div className="dashboard-card-inner-container text-center">
           <div
             className="card text-white bg-info h-100 dashboard-card"
             onClick={() => handleCourseClick()}
@@ -213,8 +279,8 @@ const Dashboard = () => {
               <div className="rotate">
                 <i className="fas fa-solid fa-book fa-4x"></i>
               </div>
-              <h6 className="text-uppercase">Courses</h6>
-              <h1 className="display-4">{noCourses}</h1>
+              <h6 className="text-uppercase mt-2">Courses</h6>
+              <h1 className="">{noCourses}</h1>
             </div>
           </div>
         </div>
@@ -230,27 +296,21 @@ const Dashboard = () => {
           </div>
         </div> */}
       </div>
-      <div className="dashboard-chart-row"
-
-      >
-        <div 
-        className="dashboard-chart-section"
-        >
-          <h5 className="mt-3 mb-3 text-secondary">Courses</h5>
-           <Chart
-              chartType="Bar"
-              width="100%"
-              height="400px"
-              data={data}
-              options={options}
-            />
-         
+      <div className="dashboard-chart-row">
+        <div className="dashboard-chart-section">
+          <Chart
+            chartType="Bar"
+            width="100%"
+            height="400px"
+            data={data}
+            options={options}
+          />
         </div>
-        <div className="table-responsive dashboard-new-registered-user-section">
-          <h5 className="mt-0 mb-3 text-secondary">
+        <div className="dashboard-new-registered-user-section">
+          <h5 className="mt-1 mb-2 text-secondary">
             Recently Registered Users
           </h5>
-          <table className="table">
+          <table className="table mb-1">
             <thead>
               <tr>
                 <th scope="col">First Name</th>
@@ -260,7 +320,7 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {newUserData &&
+              {newUserData.length !== 0 &&
                 newUserData.map((user) => {
                   return (
                     <tr key={user.id}>
@@ -269,12 +329,15 @@ const Dashboard = () => {
                       <td>{user.role}</td>
                       <td>
                         <div className="form-check form-switch">
-                          <input
-                            className="form-check-input"
+                        <input
+                            className="form-check-input "
                             type="checkbox"
                             role="switch"
-                            readOnly
                             checked={user.is_active}
+                            value={user.is_active}
+                            onChange={() => {
+                              handleVisibility(user.email, user.is_active);
+                            }}
                             id="flexSwitchCheckDefault"
                           />
                         </div>
@@ -284,9 +347,13 @@ const Dashboard = () => {
                 })}
             </tbody>
           </table>
+          {/* <div className="show-more-user-btn-section">
+            <button className="show-more-btn" type="button" onClick={() => handleShowMoreUser(showUser)}>
+              {showUser}
+            </button>
+          </div> */}
         </div>
       </div>
-      <hr />
     </div>
   );
 };

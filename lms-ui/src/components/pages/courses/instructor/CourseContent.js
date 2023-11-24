@@ -142,7 +142,7 @@ const CourseContent = ({}) => {
 
   const handleCoAuthor = (e) => {
     setCoAuthor(e.target.value);
-    setCourseCoauthors((pre) => [...pre, +e.target.value]);
+    setCourseCoauthors((pre) => [ +e.target.value, ...pre]);
   };
   console.log("this is co-authors:", courseCoauthors);
   const handleDescription = (value, e) => {
@@ -591,7 +591,7 @@ const CourseContent = ({}) => {
                           {userData.length !== 0 &&
                             userData.map((user) => {
                               if (
-                                user.role === "instructor" &&
+                                user.role === "learner" &&
                                 user.id !== courseCreator &&
                                 !coAutherData.includes(user.id)
                               ) {
@@ -600,8 +600,12 @@ const CourseContent = ({}) => {
                                     {`${user.first_name} ${user.last_name}`}
                                   </option>
                                 );
-                              } else {
-                                return null;
+                              } else if (  user.role === "instructor" &&
+                              user.id !== courseCreator ) {
+                                return (<option value="" disabled key={user.id}>
+                                {`${user.first_name} ${user.last_name}`}
+                              </option>
+                                )
                               }
                             })}
                         </select>
@@ -609,9 +613,9 @@ const CourseContent = ({}) => {
 
                       <div className="coauther-selection">
                         <ul className="coauthor-list-section">
-                          {coAutherData &&
+                          {coAutherData.length !== 0 ? 
                             coAutherData.map((coAuthor, index) => {
-                              if (index === 0) {
+                              if ((coAuthor=== +userId || courseCreator === coAuthor) && sessionStorage.getItem('role') !== "admin") {
                                 return null;
                               }
                               return (
@@ -628,6 +632,7 @@ const CourseContent = ({}) => {
                                     style={{
                                       display: "flex",
                                       alignItems: "center",
+                                      width: "50%"
                                     }}
                                   >
                                     <div
@@ -650,7 +655,7 @@ const CourseContent = ({}) => {
                                   </div>
                                 </li>
                               );
-                            })}
+                            }) : <div className="ms-3 mt-2">No CoAuthor selected</div>}
                         </ul>
                       </div>
                     </div>
@@ -687,7 +692,7 @@ const CourseContent = ({}) => {
                   </div>
 
                   <div className="category-section me-2 ms-0 w-50">
-                    <div className="">
+                    {/* <div className="">
                       <label className="course-content-label w-100 m-0 mt-3">
                         Course Start Date
                       </label>
@@ -726,7 +731,7 @@ const CourseContent = ({}) => {
                       >
                         {courseEnd ? courseEnd : "YYYY-MM-DD"}
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 

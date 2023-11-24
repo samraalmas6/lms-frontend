@@ -1,0 +1,5 @@
+.deleted-content {
+  color: #cbc4c4 !important;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}

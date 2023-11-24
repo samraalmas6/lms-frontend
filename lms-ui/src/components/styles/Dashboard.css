@@ -1,9 +1,15 @@
 .dashboard-card {
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-right: 17px;
 }
 .dashboard-main-container {
   padding-left: 12px;
   padding-right: 12px;
+  height: 90vh;
 }
 .dashboard-chart-section {
   width: 45%;
@@ -14,22 +20,44 @@
 .dashboard-chart-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: start;
 }
 
 .dashboard-new-registered-user-section {
   width: 45%;
-  /* margin-top: 20px; */
-  margin-top: -55px;
-  height: 40vh !important;
+  height: 100% !important;
   overflow: auto;
 }
 .dashboard-new-registered-user-section::-webkit-scrollbar {
   display: none;
 }
-.dashboard-new-registered-user-section h5, .dashboard-new-registered-user-section th {
+.dashboard-new-registered-user-section h5,
+.dashboard-new-registered-user-section th {
   position: sticky;
   top: 0;
   background-color: white;
   z-index: 1;
+}
+
+.dashboard-card-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+.dashboard-card-inner-container {
+  width: 16%;
+}
+.show-more-user-btn-section {
+  display: flex;
+  justify-content: end;
+  
+}
+.show-more-btn {
+  font-weight: bold;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 10px;
+    width: 13%;
+    text-transform: capitalize;
+    background: #bfbfbf;
 }

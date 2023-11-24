@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useRef, useState } from "r
 import CourseUnit from "./CourseUnit";
 import SingleModule from "./SingleModule";
 import { CourseProbs } from "../../../../App";
+import '../../../styles/CourseModule.css'
 
 export const ModuleProbs = createContext(null);
 
@@ -131,6 +132,7 @@ const CourseModule = ({ moduleData, moduleCounter, setModuleData, courseId }) =>
                       unitTitle,
                       setUnitTitle,
                     }}
+                    
                   >
                     <SingleModule
                       key={module.id}

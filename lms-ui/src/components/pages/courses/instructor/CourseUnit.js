@@ -75,7 +75,6 @@ const CourseUnit = ({ showUnit, unitData, setUnitData }) => {
   };
 
   const handleSaveUnit = (unitTitle) => {
-    setUnitTitle(unitTitle);
     // e.preventDefault();
     if (unitTitle) {
       const obj = {
@@ -97,9 +96,10 @@ const CourseUnit = ({ showUnit, unitData, setUnitData }) => {
       }).then((response) => {
         if (response.status === 201) {
           response.json().then(function (result) {
+            setUnitTitle(unitTitle);
             setInitUnitName((pre) => Number(pre + 1));
             // setUnitTitle("");
-            setUnitData(pre => [...pre, {result}])
+            setUnitData(pre => [...pre, result])
             setUnitId(() => result.id);
             // setModuleDescription("");
             // window.location.reload();

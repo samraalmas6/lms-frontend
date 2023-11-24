@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import Swal from 'sweetalert2';
 
 const UnitSingleVideo = ({video, index, getUSerFullName, handleUnitContent }) => {
     const [videoTitle, setVideoTitle] = useState(video.title);
@@ -6,9 +7,100 @@ const UnitSingleVideo = ({video, index, getUSerFullName, handleUnitContent }) =>
     const [editVideo, setEditVideo] = useState(false);
     const [visibility, setVisibility] = useState(false);
 
+    useEffect(() => {
+      setVisibility(video.is_active)
+    },[0])
+
     const handleVisibility = (e) => {
-        setVisibility(!visibility);
-    }
+      setVisibility(!visibility);
+  
+      const obj = {
+        title: video.title,
+        url: video.url,
+        is_active: !visibility,
+        instructor: video.instructor,
+        unit: video.unit,
+        updated_by: sessionStorage.getItem("user_id"),
+      };
+  
+      fetch(`http://127.0.0.1:8000/api/videos/${video.id}/`, {
+        method: "PUT",
+        body: JSON.stringify(obj),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log(result);
+            Swal.fire({
+              icon: "success",
+              text: `${result.title} has been ${result.is_active ? "activated" : "deactivated"}`
+            })
+            // window.location.reload();
+          });
+        } else {
+          console.log(response);
+        }
+      });
+    };
+  
+    const handleDeleteVideo = (video, deleted) => {
+      let action = "";
+      if (deleted) {
+        action = "Delete";
+      } else {
+        action = "Restore";
+      }
+      Swal.fire({
+        title: "Attention",
+        text: `Do you want to ${action} this video?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: `${action}`
+      }).then((result) => {
+        if (result.isConfirmed) {
+      const obj = {
+        title: video.title,
+        url: video.url,
+        is_updated: true,
+        is_delete: deleted,
+        instructor: video.instructor,
+        unit: video.unit,
+        updated_by: sessionStorage.getItem("user_id"),
+      };
+  
+      fetch(`http://127.0.0.1:8000/api/videos/${video.id}/`, {
+        method: "PUT",
+        body: JSON.stringify(obj),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log("Api result: ", result);
+            Swal.fire(
+              `${action}d!`,
+              `${result.title} has been ${action}d.`,
+              'success'
+            ).then(res => {
+              window.location.reload();
+            })
+  
+            
+          });
+        } else {
+          console.log(response);
+        }
+      });
+        }
+      })
+    };
 
     const handleVideoTitle = (e) => {
         setVideoTitle(e.target.value);
@@ -97,16 +189,26 @@ const UnitSingleVideo = ({video, index, getUSerFullName, handleUnitContent }) =>
               type="checkbox"
               role="switch"
               value={visibility}
+              checked={visibility}
               onChange={handleVisibility}
               id="flexSwitchCheckDefault"
             />
           </div>
         </li>
         <li>
-          <i
-            className="bi bi-trash text-danger"
-            onClick={() => null}
-          ></i>
+        {video.length !== 0 && video.is_delete ? (
+                      <i
+                        className="bi bi-recycle text-success"
+                      
+                        onClick={() => handleDeleteVideo(video, false)}
+                      ></i>
+                    ) : (
+                      <i
+                        className="bi bi-trash text-danger"
+                        onClick={() => handleDeleteVideo(video, true)}
+                    
+                      ></i>
+                    )}
         </li>
         <li>
           <i className="bi bi-copy text-info"></i>

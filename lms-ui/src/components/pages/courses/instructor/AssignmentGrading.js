@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Collapse from "react-collapse";
 import "../../../styles/AssignmentTable.css";
 import "../../../styles/AssignmentGrading.css";
+import Swal from "sweetalert2";
 const AssignmentGrading = () => {
 
   function getCurrentTime() {
@@ -405,7 +406,12 @@ const AssignmentGrading = () => {
     }).then((response) => {
       if (response.status === 200) {
         getAssignmentGradingData();
-        response.json().then(function (result) {});
+        response.json().then(function (result) {
+          Swal.fire({
+            icon: "success",
+            text: `This assignment has been graded`
+          })
+        });
       } else {
         console.log(response);
       }

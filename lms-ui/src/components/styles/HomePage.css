@@ -56,16 +56,16 @@
   font-weight: 500;
   margin-right: 5px;
 }
+.logout-container{
+  margin-right: 10px;
+  cursor: pointer;
+  color: red;
+}
 .logout-container .log-out-btn{
-  border: 1px solid #fdfdfd;
-  padding: 7px 5px;
-  margin: 0px;
-  background-color: #fdfdfd;
-  font-weight: 500;
+  font-size: 30px;
+  color: #e09494;
 }
 .logout-container .log-out-btn:hover, .logout-container .log-out-btn:focus, .logout-container .log-out-btn:active {
-  border: 1px solid #0990d8;
-  box-shadow: 0px 1px 7px -2px gray;
-  color: #2d2b2b;
-  border-radius: 7px;
+  color: #d30404;
+  font-weight: bolder;
 }

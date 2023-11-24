@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 // import Swal from 'sweetalert2';
 export const ModuleProbs = createContext(null);
 
-const SingleModule = ({ module, setModuelContent,setModuleId }) => {
+const SingleModule = ({ module, setModuelContent, setModuleId }) => {
   const userId = sessionStorage.getItem("user_id");
   const startDateRefModule = useRef(null);
   const endDateRefModule = useRef(null);
@@ -110,8 +110,10 @@ const SingleModule = ({ module, setModuelContent,setModuleId }) => {
           console.log(result);
           Swal.fire({
             icon: "success",
-            text: `${result.title} has been ${result.is_active ? "activated" : "deactivated"}`
-          })
+            text: `${result.title} has been ${
+              result.is_active ? "activated" : "deactivated"
+            }`,
+          });
           // window.location.reload();
         });
       } else {
@@ -130,52 +132,48 @@ const SingleModule = ({ module, setModuelContent,setModuleId }) => {
     Swal.fire({
       title: "Attention",
       text: `Do you want to ${action} this module?`,
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: `${action}`
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: `${action}`,
     }).then((result) => {
       if (result.isConfirmed) {
-    const obj = {
-      title: module.title,
-      is_updated: true,
-      is_delete: deleted,
-      instructor: module.instructor,
-      course: module.course,
-      updated_by: userId,
-    };
+        const obj = {
+          title: module.title,
+          is_updated: true,
+          is_delete: deleted,
+          instructor: module.instructor,
+          course: module.course,
+          updated_by: userId,
+        };
 
-    fetch(`http://127.0.0.1:8000/api/modules/${module.id}/`, {
-      method: "PUT",
-      body: JSON.stringify(obj),
-      headers: {
-        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    }).then((response) => {
-      if (response.status === 200) {
-        response.json().then(function (result) {
-          console.log("Api result: ", result);
-          Swal.fire(
-            `${action}d!`,
-            `${module.title} has been ${action}d.`,
-            'success'
-          ).then(res => {
-            window.location.reload();
-          })
-
-          
+        fetch(`http://127.0.0.1:8000/api/modules/${module.id}/`, {
+          method: "PUT",
+          body: JSON.stringify(obj),
+          headers: {
+            Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }).then((response) => {
+          if (response.status === 200) {
+            response.json().then(function (result) {
+              console.log("Api result: ", result);
+              Swal.fire(
+                `${action}d!`,
+                `${module.title} has been ${action}d.`,
+                "success"
+              ).then((res) => {
+                window.location.reload();
+              });
+            });
+          } else {
+            console.log(response);
+          }
         });
-      } else {
-        console.log(response);
       }
     });
-      }
-    })
   };
-
-
 
   const handleModuleContent = (module) => {
     setModuleId(module.id);
@@ -187,12 +185,11 @@ const SingleModule = ({ module, setModuelContent,setModuleId }) => {
     }).then((response) => {
       if (response.status === 200) {
         response.json().then(function (result) {
-          const activeUnit = result.filter(unit => unit.is_delete === false);
-          if(sessionStorage.getItem("role") === 'admin'){
-            setUnitData(result)
-          }
-          else{
-          setUnitData(activeUnit);
+          const activeUnit = result.filter((unit) => unit.is_delete === false);
+          if (sessionStorage.getItem("role") === "admin") {
+            setUnitData(result);
+          } else {
+            setUnitData(activeUnit);
           }
         });
       } else {
@@ -204,7 +201,7 @@ const SingleModule = ({ module, setModuelContent,setModuleId }) => {
 
   return (
     <div
-      // type="button"
+      type="button"
       className="accordion-item mb-1 "
       role="button"
       onClick={(e) => {
@@ -220,7 +217,7 @@ const SingleModule = ({ module, setModuelContent,setModuleId }) => {
         id={`flush-module${module.id}`}
       >
         <div
-          className="accordion-button collapsed module-button w-100 "
+          className="accordion-button collapsed module-button w-100  "
           type="button"
           data-bs-toggle="collapse"
           data-bs-target={`#module${module.id}`}
@@ -234,13 +231,20 @@ const SingleModule = ({ module, setModuelContent,setModuleId }) => {
             onMouseEnter={() => setShowEditBtn(true)}
             onMouseLeave={() => setShowEditBtn(false)}
           >
-            <div className="">
-              <span className="me-3">MODULE</span>
+            <div className={`${module.is_delete ? "deleted-content" : ""}`}>
+              <span
+                className={`${
+                  module.is_delete ? "deleted-content me-3" : "me-3"
+                }`}
+              >
+                MODULE
+              </span>
               {editModule ? (
                 <input
                   type="text"
                   placeholder="Module Title"
                   value={moduleTitle}
+                  disabled={module.is_delete}
                   className="moduleTitle"
                   onChange={(e) => {
                     handleModuleTitle(e);
@@ -261,7 +265,7 @@ const SingleModule = ({ module, setModuelContent,setModuleId }) => {
                 ></i>
               )}
             </div>
-            <div className="">
+            <div className={`${module.is_delete ? "deleted-content" : ""}`}>
               <label>Start Date:</label>
               {/* <i
               className="bi bi-calendar-date date-picker"
@@ -274,7 +278,11 @@ const SingleModule = ({ module, setModuelContent,setModuleId }) => {
               <input
                 type="date"
                 value={moduleStart}
-                className="module-start-fiel"
+                className={`${
+                  module.is_delete
+                    ? "deleted-content module-start-fiel"
+                    : "module-start-fiel"
+                }`}
                 ref={startDateRefModule}
                 id="module-date-field"
                 onMouseEnter={preventAccordionClose}
@@ -296,7 +304,11 @@ const SingleModule = ({ module, setModuelContent,setModuleId }) => {
                 onChange={(e) => handlModuleEnd(e)}
                 onMouseEnter={preventAccordionClose}
                 onMouseLeave={preventAccordionOpen}
-                className="module-end-fiel"
+                className={`${
+                  module.is_delete
+                    ? "deleted-content module-end-fiel"
+                    : "module-end-fiel"
+                }`}
                 id="module-date-field"
                 ref={endDateRefModule}
               />
@@ -367,7 +379,11 @@ const SingleModule = ({ module, setModuelContent,setModuleId }) => {
       >
         <div className="accordion-body">
           <ModuleProbs.Provider>
-            <CourseUnit showUnit={true} unitData={unitData} setUnitData={setUnitData}/>
+            <CourseUnit
+              showUnit={true}
+              unitData={unitData}
+              setUnitData={setUnitData}
+            />
           </ModuleProbs.Provider>
         </div>
       </div>

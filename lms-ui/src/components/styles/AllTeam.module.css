@@ -23,9 +23,19 @@ element.style{
 }
 .teamListSection {
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-items: start;
+    max-height: 40vh;
+    min-height: 40vh;
+    max-width: 100%;
 }
+
+.teamListSection::-webkit-scrollbar {
+    display: none; 
+  }
+.body::-webkit-scrollbar {
+    display: none; 
+  }
 .deleteBtn {
     padding: 0px 12px;
     background-color: #fff;

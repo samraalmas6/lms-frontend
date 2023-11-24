@@ -2,7 +2,9 @@
 .container{
     display: flex;
     background-color: #ffff;
+    justify-content: space-around;
     box-shadow: 1px 2px 10px -2px gray;
+    min-height: 90vh;
 }
 
 .pictures{
@@ -33,10 +35,14 @@
 
 
 .form{
-    padding: 10px 5px 20px 30px;
-    width: 70%;
-    margin-right: 10px;
+    padding: 10px 5px 20px 15px;
+    width: 60%;
+    margin-right: 0px;
     box-shadow: 11px 1px 15px -12px gray;
+    padding-top: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .form input, .roles {
     padding: 8px 12px;
@@ -46,8 +52,10 @@
     font-size: 17px;
     width: 68%;
     margin-top: 15px;
+    background-color: #f7f7f7;
+
 }
-.form input:focus, .roles:focus, .form input:hover, .roles:hover{
+.form input:focus, .roles:focus, .form input:hover, .roles:hover, .team:focus, .team:hover{
     outline: none;
     box-shadow: 2px 2px 22px -9px #000;
     border-color: #6f7b7e;
@@ -59,20 +67,73 @@
     display: flex;
     width: 96%;
 }
+.phoneNumberContainer, .team{
+    padding: 0px 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    width: 50%;
+    margin-top: 15px;
+    border: 2px solid gray !important;
+    background-color: #f7f7f7;
+
+}
+.team {
+    width: 50%;
+    padding: 0px;
+
+}
+.team > div {
+    height: 100%;
+    background-color: #f7f7f7;
+
+}
+.team > div:hover, .team > div:focus{
+    outline: none !important;
+    box-shadow: 2px 2px 22px -9px #000000 !important;
+    border-color: #6f7b7e !important;
+}
+.team > div:nth-child(3) > div:first-child {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-content: center !important;
+    justify-content: flex-start !important;
+}
+.phoneNumberContainer:hover,  .phoneNumberContainer:focus{
+    outline: none;
+    box-shadow: 2px 2px 22px -9px #000;
+    border-color: #6f7b7e;
+}
+.phoneNumberContainer .PhoneInput {
+    width: 100%;
+    height: max-content;
+}
+input[type="tel"]{
+    border: none;
+    margin: 0;
+    padding: 10px 0px;
+}
+input[type="tel"]:hover, input[type="tel"]:focus {
+    border: none;
+    box-shadow: none;
+}
 .active{
+   /* display: flex;
+   align-items: center; */
+   width: 96%;
    display: flex;
+   justify-content: space-between;
    align-items: center;
-   width: 68%;
 }
 .active input[type='checkbox'] {
     width: 30px;
     height: 19px;
-    margin-top: 5px;
+    margin-top: 14px;
     margin-bottom: 0;
     margin-left: 12px;
 }
 .active label {
-    margin: 0px 0px;
+    margin: 10px 0px;
     font-size: 17px;
     font-weight: 500;
 }
@@ -85,7 +146,7 @@
 .excelFileNotSelected {
     width: 100%;
     display: flex;
-    margin-top: 25%;
+    margin-top: 20%;
     align-items: center;
     flex-direction: column;
     /* height: 100%; */
@@ -95,6 +156,11 @@
     display: flex;
     justify-content: space-between;
 }
+.addBtnContainer{
+    display: flex;
+    justify-content: end;
+    width: 96%;
+}
 .btn_add{
    background-color: #1d90e4;
    color:#fff;
@@ -102,7 +168,7 @@
    border: none;
    padding: 8px 12px;
    border-radius: 8px;
-   margin-top: 20px;
+   margin-top: 10px;
    font-weight: 500;
 }
 .btn_add:hover {
@@ -123,21 +189,29 @@
 .country{
     width: 70%;
     margin-top: 15px;
+    
 }
+
 .country > div > div {
     border-radius: 6px;
     border-style: solid;
     border-color: #858585;
     border-width: 2px;
     font-size: 17px;
+    background-color: #f7f7f7;
+
 }
-.roles {
+.roles{
     border-style: solid;
     border-color: #858585;
     border-width: 2px;
     font-size: 17px;
 }
-
+.addTeamSelector {
+    gap: 15px;
+    display: flex;
+    width: 96%;
+}
 .excelFile label {
     cursor: pointer;
     background-color: #1d90e4;
@@ -149,10 +223,18 @@
     margin-left: 5px;
     margin-bottom: 12px;
     width: 55%;
-    height: 50px;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10%;
 }
-
+.fileNotSelected{
+    height: 20vh !important;
+}
+.fileSelected{
+    height: 10% !important;
+}
 .excelFile label:hover {
     background-color: #0863a3;
 }
@@ -171,17 +253,20 @@
     color: #f6eded !important;
 }
 .excelHeadingSection {
-    padding-top: 10px;
-    margin-bottom: 25px;
+    /* padding-top: 10px; */
+    margin-bottom: 23px;
 }
 
 .excelFileSection {
-    width: 55%;
+    width: 45%;
+    padding-top: 40px;
+    margin-right: 18px;
 }
 .excelUserList {
-    max-height: 41vh;
+    max-height: 60vh;
     overflow-y: auto;
     max-width: 100%;
+    margin-left: 10px;
 }
 body::-webkit-scrollbar {
     display: none; 

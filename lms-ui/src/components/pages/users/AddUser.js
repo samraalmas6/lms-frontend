@@ -9,6 +9,8 @@ import ExcelExportData from "../../hooks/ExcelExportData";
 import ExportExcel from "../../content/Excelexport";
 import Swal from "sweetalert2";
 import { element } from "prop-types";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 
 function AddUser() {
   const excelFile = useRef();
@@ -27,8 +29,11 @@ function AddUser() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isActive, setIsActive] = useState(false);
   const [userType, setUserType] = useState("");
+  const [team, setTeam] = useState("");
+  const [teamData, setTeamData] = useState([]);
+  const [teamOptions, setTeamOptions] = useState([]);
 
-  const [country, setCountry] = useState("Pakistan");
+  const [country, setCountry] = useState([{ value: "PK", label: "Pakistan" }]);
   const options = useMemo(() => countryList().getData(), []);
   const [errors, setErros] = useState({});
   const [registeredErrors, setRegisteredErrors] = useState([]);
@@ -37,6 +42,36 @@ function AddUser() {
   const [excelUsers, setExcelUsers] = useState([]);
   const [excelObj, setExcelObj] = useState([]);
   useEffect(() => emailjs.init("739xGz6oDs9E1tq_w"), [0]);
+
+  useEffect(() => {
+    if(team.length === 0) {
+      document.getElementById("react-select-3-placeholder").innerHTML  = "Select Team (optional)"
+    }
+  },[team])
+
+  useEffect(() => {
+    const getAllTeams = () => {
+      fetch("http://127.0.0.1:8000/teams_list_data/", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log(result);
+            setTeamData(result);
+            setTeamOptions(result.map(team => {
+              return {value: team.name, label: team.name}
+            }))
+          });
+        } else {
+          console.log(response);
+        }
+      });
+    };
+    getAllTeams();
+  }, [0]);
 
   const handleFirstNameChange = (e) => {
     setFirstName(e.target.value);
@@ -56,7 +91,10 @@ function AddUser() {
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
-
+  const handleTeam = (selectedOption) => {
+    setTeam(selectedOption);
+  };
+  console.log('select team', team);
   const handleCityChange = (e) => {
     setCity(e.target.value);
   };
@@ -146,7 +184,9 @@ function AddUser() {
         if (response.status === 201) {
           response.json().then(function (result) {
             console.log(result);
-
+            if(result.role !== "instructor"){
+            addToTeamApiRequest(result.id);
+            }
             setFirstName("");
             setLastName("");
             setGender("");
@@ -294,7 +334,7 @@ function AddUser() {
             // alert("User not registered")
             console.log(response, counter);
             if (counter === excelObj.length) {
-              setLoading(false)
+              setLoading(false);
               Swal.fire({
                 icon: "error",
                 title: "Registeration Unsuccessful!",
@@ -305,7 +345,7 @@ function AddUser() {
               counter > 0 &&
               counter !== excelObj.length
             ) {
-              setLoading(false)
+              setLoading(false);
               Swal.fire({
                 icon: "info",
                 title: "Attention!",
@@ -347,6 +387,35 @@ function AddUser() {
     // };
   };
 
+  const addToTeamApiRequest = (userId) => {
+    const addTeamApi = (obj) => {
+      fetch("http://127.0.0.1:8000/add_users_to_team/", {
+        method: "POST",
+        body: JSON.stringify(obj),
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log("API result ", result);
+          });
+        }
+      });
+    }
+
+    if(team.length !== 0){
+    team.forEach(team => {
+      addTeamApi({team_name: team.value, user_ids: [userId]})
+    });
+  }
+    // const obj = {
+    //   team_name: team,
+    //   user_ids: [userId],
+    // };
+
+  };
   const getUserRegisteredStatus = (email) => {
     const obj = registeredErrors.filter((element) => {
       return element[0].email === email;
@@ -403,13 +472,12 @@ function AddUser() {
     }
   };
 
-  console.log("Registered Erros", registeredErrors);
   return (
     <div className="">
       <div className={styles.container}>
         {/* <UploadPicture /> */}
-
         <form className={styles.form}>
+          <div className="">
           <div className="">
             <h3 className="text-center">Register Single User</h3>
           </div>
@@ -451,9 +519,9 @@ function AddUser() {
               className={styles.roles}
             >
               <option value="" disabled>
-                ---User Type---
+                ---Select Role---
               </option>
-              <option value="admin">ADMIN</option>
+              {/* <option value="admin">ADMIN</option> */}
               <option value="instructor">INSTRUCTOR</option>
               <option value="learner">LEARNER</option>
               {/* <option value="custom">CUSTOM ROLE</option> */}
@@ -489,33 +557,62 @@ function AddUser() {
                 options={options}
                 value={country}
                 onChange={changeHandler}
+                // defaultValue={
+                //   }
               />
             </div>
           </div>
-          <div className={`${styles.active} `}>
+          <div className={`${styles.addTeamSelector}`}>
+            <span className={`w-50 ${styles.phoneNumberContainer}`}>
+              <PhoneInput
+                defaultCountry="PK"
+                country="PK"
+                international={true}
+                placeholder="Phone Number (optional)"
+                value={phoneNumber}
+                onChange={setPhoneNumber}
+              />
+            </span>
+            {/* <div className={`${styles.addTeamSelector}`}> */}
+              <Select
+                value={team}
+                options={teamOptions}
+                onChange={handleTeam}
+                className={styles.team}
+                isMulti={true}
+              >
+                {/* <option value="" disabled>
+                  ---Add Team---
+                </option>
+                {teamData.length !== 0 &&
+                  teamData.map((team) => {
+                    return <option value={team.name}>{team.name}</option>;
+                  })} */}
+              </Select>
+            {/* </div> */}
+          </div>
+          <div className={`form-check form-switch ps-3 ${styles.active}`}>
+            <div className="">
+            <label htmlFor="IsActive" className={`form-check-label`}>
+              Is Active
+            </label>
             <input
-              type="number"
-              name="phoneNumber"
-              placeholder="Phone Number (optional) "
-              value={phoneNumber}
-              onChange={handlePhoneNumberChange}
+              className="form-check-input"
+              type="checkbox"
+              role="switch"
+              value={isActive}
+              onChange={handleIsActiveChange}
+              id="flexSwitchCheckDefault"
             />
-            <div className="form-check form-switch">
-              <label htmlFor="IsActive" className="form-check-label">
-                Is Active
-              </label>
-              <input
-                className="form-check-input"
-                type="checkbox"
-                role="switch"
-                value={isActive}
-                onChange={handleIsActiveChange}
-                id="flexSwitchCheckDefault"
-              />
             </div>
+           
+            <div className="">
           </div>
-          <div className={`${styles.btn_container}`}>
-            <button
+          </div>
+          </div>
+          <div className={styles.addBtnContainer}>
+            
+          <button
               className={styles.btn_add}
               onClick={(e) => handleFormSubmit(e)}
               type="button"
@@ -535,7 +632,7 @@ function AddUser() {
                 : styles.excelFileNotSelected
             }`}
           >
-            <label className={styles.downloadExcel}>
+            <label className={`${styles.downloadExcel} ${excelObj.length ===0 ? styles.fileNotSelected : styles.fileSelected}`}>
               Download Excel File Template
               <ExportExcel
                 excelData={ExcelExportData}
@@ -543,7 +640,7 @@ function AddUser() {
                 className={styles.excelexport}
               />
             </label>
-            <label>
+            <label className={`${excelObj.length === 0 ? styles.fileNotSelected :styles.fileSelected}`} >
               Import From Excel file
               <input
                 type="file"
@@ -562,8 +659,8 @@ function AddUser() {
             </div>
           ) : (
             <>
-            <div className={styles.excelUserList}>
-              {/* <div className="filter-container mb-2">
+              <div className={styles.excelUserList}>
+                {/* <div className="filter-container mb-2">
               <button
                 className="btn btn-primary"
                 type="button"
@@ -586,33 +683,35 @@ function AddUser() {
                 Unsuccessful
               </button>
             </div> */}
-              <table className={`table ${styles.excelUserTable}`}>
-                <thead>
-                  {excelUsers.length !== 0 ? (
-                    <>
-                      <tr className="sticky-top">
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">role</th>
-                        {showSuccess && <th scope="col">Registration</th>}
-                        {showErrorCol && <th scope="col">Error</th>}
+                <table className={`table ${styles.excelUserTable}`}>
+                  <thead>
+                    {excelUsers.length !== 0 ? (
+                      <>
+                        <tr className="sticky-top">
+                          <th scope="col">#</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">role</th>
+                          {showSuccess && <th scope="col">Registration</th>}
+                          {showErrorCol && <th scope="col">Error</th>}
+                        </tr>
+                      </>
+                    ) : (
+                      <tr>
+                        {/* <th scope="col">No Excel file Selected</th> */}
                       </tr>
-                    </>
-                  ) : (
-                    <tr>{/* <th scope="col">No Excel file Selected</th> */}</tr>
-                  )}
-                </thead>
-                <tbody>
-                  {excelUsers.length !== 0 &&
-                    excelUsers.map((user, index) => {
-                      return (
-                        <tr key={index}>
-                          <td>{index + 1}</td>
-                          <td>{`${user.first_name ? user.first_name : ""} ${
-                            user.last_name ? user.last_name : ""
-                          }`}</td>
-                          {/* <td>
+                    )}
+                  </thead>
+                  <tbody>
+                    {excelUsers.length !== 0 &&
+                      excelUsers.map((user, index) => {
+                        return (
+                          <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>{`${user.first_name ? user.first_name : ""} ${
+                              user.last_name ? user.last_name : ""
+                            }`}</td>
+                            {/* <td>
                           {" "}
                           {nameEdit ? (
                             <input type="text" />
@@ -629,41 +728,40 @@ function AddUser() {
                           )}
                         </td> */}
 
-                          <td>{user.email}</td>
-                          <td>{user.role}</td>
-                          {showSuccess && (
-                            <td className="text-danger">
-                              {getUserRegisteredStatus(user.email)}
-                            </td>
-                          )}
-                          {showErrorCol && (
-                            <td className="text-danger">
-                              {getErrorMessage(user.email)}
-                            </td>
-                          )}
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            </div>
-        
+                            <td>{user.email}</td>
+                            <td>{user.role}</td>
+                            {showSuccess && (
+                              <td className="text-danger">
+                                {getUserRegisteredStatus(user.email)}
+                              </td>
+                            )}
+                            {showErrorCol && (
+                              <td className="text-danger">
+                                {getErrorMessage(user.email)}
+                              </td>
+                            )}
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              </div>
 
-          {excelUsers.length !== 0 && (
-            <div
-              className=""
-              style={{ display: "flex", justifyContent: "end" }}
-            >
-              <button
-                className={styles.btn_add}
-                onClick={(e) => handleEAddFromExcelFile(e)}
-                type="button"
-              >
-                Add
-              </button>
-            </div>
-          )}
-</>
+              {excelUsers.length !== 0 && (
+                <div
+                  className="me-2"
+                  style={{ display: "flex", justifyContent: "end" }}
+                >
+                  <button
+                    className={styles.btn_add}
+                    onClick={(e) => handleEAddFromExcelFile(e)}
+                    type="button"
+                  >
+                    Add
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

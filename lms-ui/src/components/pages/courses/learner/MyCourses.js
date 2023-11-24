@@ -15,6 +15,7 @@ const MyCourses = () => {
   const [userData, setUserData] = useState([]);
   const [authorData, setAuthorData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
+  const [courseProgress, setCourseProgress] = useState([])
 
   console.log("I have come to my-courses screen");
   useEffect(() => {
@@ -59,8 +60,10 @@ const MyCourses = () => {
         if(response.status === 200) {
         response.json().then(function (result) {
           console.log('Course Api Result', result);
+
           const courses = [];
           for (const course of result) {
+            getCourseStatus(course.id);
             if (totalCourses.includes(course.id)) {
               courses.push(course)
           }
@@ -71,6 +74,23 @@ const MyCourses = () => {
       }
       });
     };
+
+    const getCourseStatus = (courseId) => {
+      fetch(`http://127.0.0.1:8000/api/course-progress/${userId}/${courseId}/`, {        method: "GET",
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log("progress data: ", result);
+            setCourseProgress(pre => [...pre, {course: courseId, progress:result.overall_progress}])
+          });
+        } else {
+          console.log(response);
+        }
+      });
+    }
 
     // const getUnitData = () => {
     //   fetch("http://127.0.0.1:8000/api/units/", {
@@ -146,9 +166,22 @@ const MyCourses = () => {
         }
       });
     };
+
+
     getCategoriesData();
   }, [0]);
 
+const getCourseProgress = (courseId) => {
+  const progress = courseProgress.filter(course => {
+    return course.course === courseId
+  });
+  if(progress.length !== 0){
+    return progress[0].progress
+  }
+  else{
+    return ""
+  }
+}
   const handleViewToggle = () => {
     setShowBlock((prev) => !prev);
   };
@@ -234,13 +267,13 @@ const MyCourses = () => {
                         {/* <p>tagline</p> */}
                         <div className="progress-main-div block-view">
                           {/* progress % */}
-                          {`${course.progress}%`}
+                          {`${getCourseProgress(course.id).toString().slice(0,4)}%`}
                           {/* progress bar */}
                           <div class="progress">
                             <div
                               class="progress-bar bg-success"
                               role="progressbar"
-                              style={{ width: `${course.progress}%` }}
+                              style={{ width: `${getCourseProgress(course.id)}%` }}
                               aria-valuenow="25"
                               aria-valuemin="0"
                               aria-valuemax="100"
@@ -249,9 +282,9 @@ const MyCourses = () => {
                           {/* status */}
                           <div>
                             <p className="progress-tag">
-                              {course.progress < 1
+                              {getCourseProgress(course.id) < 1
                                 ? "not started"
-                                : course.progress < 100
+                                : getCourseProgress(course.id) < 100
                                 ? "in progress"
                                 : "completed"}
                             </p>
@@ -314,22 +347,24 @@ const MyCourses = () => {
                         {/* status */}
                         <div>
                           <p className="progress-tag">
-                            {course.progress === 0
-                              ? "not started"
-                              : course.progress < 100
-                              ? "in progress"
+                            {getCourseProgress(course.id) === 0
+                              ? "Not started"
+                              : getCourseProgress(course.id) < 100
+                              ? "In progress"
                               : "completed"}
                           </p>
                         </div>
                         <div className="progress-statics-div">
                           {/* progress % */}
-                          <div className="text-center">{`${course.progress.toString().slice(0,4)}%`}</div>
+                          <div className="text-center">{getCourseProgress(course.id).toString().slice(0,4)}%</div>
+
+                          {/* <div className="text-center">{`${course.progress.toString().slice(0,4)}%`}</div> */}
                           {/* progress bar */}
                           <div class="progress">
                             <div
                               class="progress-bar bg-success"
                               role="progressbar"
-                              style={{ width: `${course.progress}%` }}
+                              style={{ width: `${getCourseProgress(course.id)}%` }}
                               aria-valuenow="25"
                               aria-valuemin="0"
                               aria-valuemax="100"

@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/Sidebar.css";
 import { Link, NavLink } from "react-router-dom";
 import lmsLogo from '../content/Images/lms-logo.png'
 
 const Sidebar = () => {
   const USER_Role = sessionStorage.getItem("role");
+  const [activeLink, setActiveLink] = useState(null);
+
+  const handleActiveLink = (value) => {
+    setActiveLink(value)
+    console.log('value', value);
+  }
   return (
-    <div className="sidebar-offcanvas pl-0 sidebar position-fixed m-0">
+    <div className="sidebar-offcanvas pl-0 sidebar m-0">
       {/* <button
         class="btn btn-primary"
         type="button"
@@ -25,9 +31,9 @@ const Sidebar = () => {
       > */}
       {/* <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button> */}
 
-      <ul className="nav flex-column sticky-top pl-0 pt-0 p-2 sidebar-nav ">
-        <li className="nav-item mb-2 mt-2">
-          <Link to="/dashboard" className="nav-link text-secondary">
+      <ul className="nav flex-column sticky-top pl-0 pt-0 sidebar-nav ">
+        <li className={`nav-item mb-2 mt-2`} >
+          <Link to={USER_Role === "admin" ? "/dashboard" : "/course/my-courses"} className="nav-link text-secondary" >
             <h5 style={{ textAlign: "center" }}>
               <img src={lmsLogo} alt=" XLoop LMS" width={120}/>
              </h5>
@@ -38,19 +44,19 @@ const Sidebar = () => {
           // ************** Admin Section   *************************************
           USER_Role === "admin" || USER_Role === "instructor" ? (
             <>
-              <li className="nav-item mb-2  ">
+              <li className="nav-item mb-2 w-100 " onClick={() => handleActiveLink(1)}>
                 <a
-                  className="nav-link text-secondary "
+                  className="nav-link text-secondary sidebar-heading"
                   href="#submenu1"
                   data-bs-toggle="collapse"
-                  data-target="#submenu1"
+                  data-bs-target="#submenu1"
                   aria-expanded="true"
                 >
                   <i className="fas fa-user font-weight-bold"></i>
-                  <span className="ml-2 text-white">People Management</span>
+                  <span className={`ml-2 ${activeLink === 1 ? "active-link" : "text-white"}`}>People Management</span>
                 </a>
                 <ul
-                  className="list-unstyled flex-column pl-3 collapse sidebar-nav-sub show"
+                  className="list-unstyled flex-column collapse sidebar-nav-sub show"
                   id="submenu1"
                 >
                   {/* <li className="nav-item mb-2 ">
@@ -71,13 +77,12 @@ const Sidebar = () => {
                       Add User
                     </Link>
                   </li> */}
-                  <li className="nav-item mb-2 ">
+                  <li className="nav-item sidebar-nav-sub-nav-item">
                     <Link
-                      to="/allusers"
+                      to="/user/all"
                       style={{
                         textDecoration: "none",
                         color: "black",
-                        borderBottom: "1px solid #b7b7b7",
                       }}
                       className="nav-link text-secondary navLink text-white"
                     >
@@ -89,8 +94,8 @@ const Sidebar = () => {
                       Add Team
                     </a>
                   </li> */}
-                  <li className="nav-item mb-2 ">
-                    <a className="nav-link text-secondary text-white" href="/allteams">
+                  <li className="nav-item sidebar-nav-sub-nav-item">
+                    <a className="nav-link text-secondary text-white" href="/team/all">
                       Teams
                     </a>
                   </li>
@@ -104,17 +109,17 @@ const Sidebar = () => {
 
               <li className="nav-item mb-2">
                 <a
-                  className="nav-link text-secondary"
+                  className="nav-link text-secondary sidebar-heading"
                   href="#submenu2"
                   data-bs-toggle="collapse"
                   data-target="#submenu2"
                   aria-expanded="true"
                 >
                   <i className="fas fa-book font-weight-bold"></i>
-                  <span className="ml-1 text-white">Course Management</span>
+                  <span className="ml-2 text-white">Course Management</span>
                 </a>
                 <ul
-                  className="list-unstyled flex-column pl-3 collapse sidebar-nav-sub show"
+                  className="list-unstyled flex-column collapse sidebar-nav-sub show"
                   id="submenu2"
                 >
                   {/* <li className="nav-item mb-2 ">
@@ -128,7 +133,7 @@ const Sidebar = () => {
                       Add Category
                     </a>
                   </li> */}
-                  <li className="nav-item mb-2 ">
+                  <li className="nav-item sidebar-nav-sub-nav-item">
                     <Link
                       className="nav-link text-secondary text-white"
                       to="/category/all"
@@ -144,7 +149,7 @@ const Sidebar = () => {
                       Create Course
                     </a>
                   </li> */}
-                  <li className="nav-item mb-2 ">
+                  <li className="nav-item sidebar-nav-sub-nav-item ">
                     <Link to="/course/all" className="nav-link text-secondary text-white">
                       Courses
                     </Link>
@@ -273,17 +278,17 @@ const Sidebar = () => {
             <>
               <li className="nav-item mb-2">
                 <a
-                  className="nav-link text-secondary"
+                  className="nav-link text-secondary sidebar-heading"
                   href="#submenu2"
                   data-bs-toggle="collapse"
                   data-target="#submenu2"
                   aria-expanded="true"
                 >
                   <i className="fas fa-book font-weight-bold"></i>
-                  <span className="ml-1 text-white">Course Management</span>
+                  <span className="ml-2 text-white">Course Management</span>
                 </a>
                 <ul
-                  className="list-unstyled flex-column pl-3 collapse sidebar-nav-sub show"
+                  className="list-unstyled flex-column collapse sidebar-nav-sub show"
                   id="submenu2"
                 >
                   {/* <li className="nav-item mb-2 ">
@@ -292,7 +297,7 @@ const Sidebar = () => {
                         </a>
                       </li> */}
 
-                  <li className="nav-item mb-2 ">
+                  <li className="nav-item sidebar-nav-sub-nav-item ">
                     <Link
                       to="/course/my-courses"
                       className="nav-link text-secondary text-white"

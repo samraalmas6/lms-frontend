@@ -137,7 +137,7 @@ const UnitSingleFile = ({ file, index, handleUnitContent }) => {
     }
   };
   return (
-    <tr key={file.id}>
+    <tr key={file.id} className={`${file.is_delete ? "deleted-content" : ""}`}>
       <td>{index + 1}</td>
       <td
         onMouseEnter={() => {

@@ -38,7 +38,7 @@ const AllCourse = ({ show, minDate }) => {
   const [authorData, setAuthorData] = useState([]);
 
   useEffect(() => {
-    const getCourseData = () => {
+    const getCourseData = (authorsData) => {
       fetch("http://127.0.0.1:8000/api/courses/", {
         method: "GET",
         headers: {
@@ -53,7 +53,14 @@ const AllCourse = ({ show, minDate }) => {
               setCourseContent(result);
             } else {
               const obj = result.filter((course) => {
-                return course.is_delete === false
+                const author = authorsData.find(
+                  (author) => author.id === course.instructor
+                );
+                return (
+                  author &&
+                  (author.created_by === +userId ||
+                    author.editor.includes(+userId))
+                );
               });
               setCourseContent(obj);
             }
@@ -111,7 +118,7 @@ const AllCourse = ({ show, minDate }) => {
       }).then((response) => {
         if (response.status === 200) {
           response.json().then(function (result) {
-            console.log('API user Data ',result);
+            console.log("API user Data ", result);
             setUserData(result);
           });
         } else {
@@ -129,11 +136,13 @@ const AllCourse = ({ show, minDate }) => {
       }).then((response) => {
         if (response.status === 200) {
           response.json().then(function (result) {
-            console.log('Api result Author Data', result);
+            console.log("Api result Author Data", result);
             setAuthorData(result);
+            getCourseData(result);
           });
         } else {
           console.log(response);
+          getCourseData();
         }
       });
     };
@@ -141,36 +150,73 @@ const AllCourse = ({ show, minDate }) => {
     getCategoryData();
     getTeamData();
     getUsers();
-    getCourseData();
+
     getAuthorsData();
   }, [0]);
 
-  const getUSerFullName = (id) => {
-    if (authorData.length !== 0){
-    const author = authorData.filter((author) => {
-      return author.id === id;
+  const handleVisibility = (course) => {
+    // setVisibility(e.target.value);
+    const active = course.is_active;
+    const obj = {
+      title: course.title,
+      instructor: course.instructor,
+      updated_by: sessionStorage.getItem("user_id"),
+      category: course.category,
+      is_active: !active,
+    };
+    fetch(`http://127.0.0.1:8000/api/courses/${course.id}/`, {
+      method: "PUT",
+      body: JSON.stringify(obj),
+      headers: {
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        response.json().then(function (result) {
+          console.log(result);
+          Swal.fire({
+            title: `${result.title} has been ${
+              result.is_active ? "activated" : "deactivated"
+            }`,
+            icon: "success",
+          }).then(res => {
+            window.location.reload();
+          });
+          // window.location.reload();
+        });
+      } else {
+        console.log(response);
+      }
     });
-  
-    if (author.length !== 0 && userData.length !== 0) {
-      const user = userData.filter(
-        (users) => users.id === author[0].created_by
-      );
+  };
 
-      if (user.length !== 0) {
-        return `${user[0].first_name} ${user[0].last_name}`;
+  const getUSerFullName = (id) => {
+    if (authorData.length !== 0) {
+      const author = authorData.filter((author) => {
+        return author.id === id;
+      });
+
+      if (author.length !== 0 && userData.length !== 0) {
+        const user = userData.filter(
+          (users) => users.id === author[0].created_by
+        );
+
+        if (user.length !== 0) {
+          return `${user[0].first_name} ${user[0].last_name}`;
+        } else {
+          return "N/A";
+        }
       } else {
         return "N/A";
       }
-    } else {
-      return "N/A";
     }
-  }
   };
 
   function randomColor() {
-    let hex = Math.floor(Math.random() * 0xFFFFFF);
+    let hex = Math.floor(Math.random() * 0xffffff);
     let color = "#" + hex.toString(16);
-  
+
     return color;
   }
 
@@ -188,7 +234,7 @@ const AllCourse = ({ show, minDate }) => {
     if (courseTitle && courseCategory) {
       fetch("http://127.0.0.1:8000/api/authors/", {
         method: "POST",
-        body: JSON.stringify({created_by: userId, editor: [userId]}),
+        body: JSON.stringify({ created_by: userId, editor: [userId] }),
         headers: {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
           "Content-type": "application/json; charset=UTF-8",
@@ -196,46 +242,43 @@ const AllCourse = ({ show, minDate }) => {
       }).then((response) => {
         if (response.status === 201) {
           response.json().then(function (result) {
-            console.log('Author Post Api result', result);
-            coursePostRequest(result.id)
-           
+            console.log("Author Post Api result", result);
+            coursePostRequest(result.id);
           });
         } else {
           console.log(response);
         }
       });
-
-
 
       const coursePostRequest = (authorId) => {
-      const obj = {
-        title: courseTitle,
-        description: `This is description for the ${courseTitle} course.`,
-        category: [courseCategory],
-        updated_by: userId,
-        instructor: authorId
-      };
+        const obj = {
+          title: courseTitle,
+          description: `This is description for the ${courseTitle} course.`,
+          category: [courseCategory],
+          updated_by: userId,
+          instructor: authorId,
+        };
 
-      fetch("http://127.0.0.1:8000/api/courses/", {
-        method: "POST",
-        body: JSON.stringify(obj),
-        headers: {
-          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      }).then((response) => {
-        if (response.status === 201) {
-          response.json().then(function (result) {
-            setCourseContent((pre) => [...pre, result]);
-            setCourseCategory("");
-            setCourseTitle("");
-            // window.location.reload();
-          });
-        } else {
-          console.log(response);
-        }
-      });
-    }
+        fetch("http://127.0.0.1:8000/api/courses/", {
+          method: "POST",
+          body: JSON.stringify(obj),
+          headers: {
+            Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }).then((response) => {
+          if (response.status === 201) {
+            response.json().then(function (result) {
+              setCourseContent((pre) => [...pre, result]);
+              setCourseCategory("");
+              setCourseTitle("");
+              // window.location.reload();
+            });
+          } else {
+            console.log(response);
+          }
+        });
+      };
     }
   };
 
@@ -250,82 +293,86 @@ const AllCourse = ({ show, minDate }) => {
   };
 
   const handleDeleteCourse = (course, deleted) => {
-     const courseAuthor = authorData.filter(author => author.id === course.instructor); 
-    if(+sessionStorage.getItem("user_id") === courseAuthor[0].created_by || sessionStorage.getItem("role") === 'admin'){
-    let action = "";
-    if (deleted) {
-      action = "Delete";
-    } else {
-      action = "Restore";
-    }
-    Swal.fire({
-      title: "Attention",
-      text: `Do you want to ${action} this course?`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: `${action}`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const obj = {
-          title: course.title,
-          is_updated: true,
-          is_delete: deleted,
-          category: course.category,
-          updated_by: userId,
-          instructor: course.instructor
-        };
-
-        fetch(`http://127.0.0.1:8000/api/courses/${course.id}/`, {
-          method: "PUT",
-          body: JSON.stringify(obj),
-          headers: {
-            Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        }).then((response) => {
-          if (response.status === 200) {
-            response.json().then(function (result) {
-              console.log("Api result Course: ", result);
-              Swal.fire(
-                `${action}d!`,
-                `${course.title} has been ${action}d.`,
-                "success"
-              ).then((res) => {
-                window.location.reload();
-              });
-              setCourseContent((pre) => [...pre, result]);
-              setCourseCategory("");
-              setCourseTitle("");
-              
-            });
-          } else {
-            console.log(response);
-          }
-        });
+    const courseAuthor = authorData.filter(
+      (author) => author.id === course.instructor
+    );
+    if (
+      +sessionStorage.getItem("user_id") === courseAuthor[0].created_by ||
+      sessionStorage.getItem("role") === "admin"
+    ) {
+      let action = "";
+      if (deleted) {
+        action = "Delete";
+      } else {
+        action = "Restore";
       }
-    });
-  }else {
-   Swal.fire({
-    icon: "warning",
-    text: "You can't delete this course!"
-   })
-  }
+      Swal.fire({
+        title: "Attention",
+        text: `Do you want to ${action} this course?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: `${action}`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const obj = {
+            title: course.title,
+            is_updated: true,
+            is_delete: deleted,
+            category: course.category,
+            updated_by: userId,
+            instructor: course.instructor,
+          };
+
+          fetch(`http://127.0.0.1:8000/api/courses/${course.id}/`, {
+            method: "PUT",
+            body: JSON.stringify(obj),
+            headers: {
+              Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          }).then((response) => {
+            if (response.status === 200) {
+              response.json().then(function (result) {
+                console.log("Api result Course: ", result);
+                Swal.fire(
+                  `${action}d!`,
+                  `${course.title} has been ${action}d.`,
+                  "success"
+                ).then((res) => {
+                  window.location.reload();
+                });
+                setCourseContent((pre) => [...pre, result]);
+                setCourseCategory("");
+                setCourseTitle("");
+              });
+            } else {
+              console.log(response);
+            }
+          });
+        }
+      });
+    } else {
+      Swal.fire({
+        icon: "warning",
+        text: "You can't delete this course!",
+      });
+    }
   };
 
   const handleCourseContentData = (course) => {
     setSingleCourse(course);
-    const obj = authorData.filter(author => author.id === course.instructor);
-    if(obj.length !==0 ){
+    const obj = authorData.filter((author) => author.id === course.instructor);
+    if (obj.length !== 0) {
       setCourseCoauthors(obj[0].editor);
-      setCourseCreator(obj[0].created_by)
+      setCourseCreator(obj[0].created_by);
     }
 
     setCourseId(course.id);
     setCourseTitle(course.title);
     setCourseCategory(course.category);
-    setInstructor(course.instructor)
+    setInstructor(course.instructor);
 
     navigate(`/course/content/${course.id}`, {
       state: {
@@ -333,7 +380,7 @@ const AllCourse = ({ show, minDate }) => {
         categoryData,
         userData,
         course,
-        courseCoauthors
+        courseCoauthors,
       },
     });
 
@@ -468,7 +515,9 @@ const AllCourse = ({ show, minDate }) => {
               <th scope="col">Author</th>
               <th scope="col">Users Enrolled</th>
               <th scope="col">Created</th>
-              <th scope="col">Action</th>
+              <th colSpan="2" scope="col">
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -490,27 +539,49 @@ const AllCourse = ({ show, minDate }) => {
                       handleCourseContentData(course);
                     }}
                   >
-                    <td className={`deletedCourse} ${deletedCourse && "deleteCourse-line"}`}>{course.title}</td>
                     <td
-                     className={deletedCourse}>{course.description}</td>
+                      className={`deletedCourse} ${
+                        deletedCourse && "deleteCourse-line"
+                      }`}
+                    >
+                      {course.title}
+                    </td>
+                    <td className={deletedCourse}>{course.description}</td>
                     <td className={deletedCourse}>
-                    <Avatar
-                    name={getUSerFullName(course.instructor)}
-                    style={{
-                      backgroundColor: randomColor()
-                    }}
-                    className="me-1"
-                    round={true}
-                    size="30px"
-                    ></Avatar> 
+                      <Avatar
+                        name={getUSerFullName(course.instructor)}
+                        style={{
+                          backgroundColor: randomColor(),
+                        }}
+                        className="me-1"
+                        round={true}
+                        size="30px"
+                      ></Avatar>
                       {getUSerFullName(course.instructor)}
                     </td>
                     <td className={`text-center ${deletedCourse}`}>
                       {getNumberOfUsers(course.id)}
                     </td>
                     <td className={deletedCourse}>{course.created_at}</td>
-                    <td style={{ display: "flex" }}>
-                      <i className="bi bi-pencil-square text-success me-3"></i>
+                    <td className="" style={{ width: "2%" }}>
+                      <div className="form-check form-switch visibility">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          role="switch"
+                          checked={course.is_active}
+                          value={course.is_active}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                          onChange={(e) => {
+                            e.stopPropagation();
+                            handleVisibility(course)}}
+                          id="flexSwitchCheckDefault"
+                        />
+                      </div>
+                    </td>
+                    <td style={{ display: "flex" }} className="ps-0">
                       {course.is_delete ? (
                         <i
                           className="bi bi-recycle text-info"

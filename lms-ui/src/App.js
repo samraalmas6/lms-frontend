@@ -5,7 +5,7 @@ import "./components/styles/Responsive.css";
 import SigninPage from "./components/content/SigninPage";
 import HomePage from './components/content/HomePage'
 import { createContext, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route  } from "react-router-dom";
 
 import AddUser from "./components/pages/users/AddUser";
 import PrivateRoute from "./components/content/PrivateRoute";
@@ -44,8 +44,6 @@ function App() {
        <Routes>
         <Route path="/test" element={<Practice />} ></Route>
        </Routes>
-
-
        <Routes>
        <Route element={<SigninPage />} path="/auth/login" />
        <Route element= {<VerificationPage />} path="/auth/verification"></Route>
@@ -53,24 +51,23 @@ function App() {
        </Routes>
        <CourseProbs.Provider value={{ courseId, setCourseId,instructor, setInstructor, courseCoauthors, setCourseCoauthors, courseCreator, setCourseCreator }}>
 			<Routes>
-				<Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>}></Route>
-        <Route path="/dashboard" element={<PrivateRoute><HomePage /></PrivateRoute>} ></Route>
-				<Route path="/home" element={<PrivateRoute><HomePage /></PrivateRoute>} ></Route>
-        <Route path="/adduser" element={<PrivateRoute><AddUser /></PrivateRoute>}></Route>
-        <Route path="/allusers" element={<PrivateRoute><AllUsers /></PrivateRoute>}></Route>
-        <Route path="/addteam" element={<PrivateRoute><AddTeam /></PrivateRoute>}></Route>
-        <Route path="/allteams" element={<PrivateRoute><AllTeams /></PrivateRoute>}></Route>
-        <Route path="/course/create" element={<PrivateRoute><CreateCourse /></PrivateRoute>}></Route>
-        <Route path="/course/all" element={<PrivateRoute><AllCourse /></PrivateRoute>}></Route>
+				<Route exact path="/" element={<PrivateRoute page="Dashboard"><HomePage /></PrivateRoute>}></Route>
+        <Route path="/dashboard" element={<PrivateRoute page="Dashboard"><HomePage /></PrivateRoute>} ></Route>
+				<Route path="/home" element={<PrivateRoute page="Dashboard"><HomePage /></PrivateRoute>} ></Route>
+        <Route path="/user/add" element={<PrivateRoute page="user/add"><AddUser /></PrivateRoute>}></Route>
+        <Route path="/user/all" element={<PrivateRoute page="user"><AllUsers /></PrivateRoute>}></Route>
+        <Route path="/team/add" element={<PrivateRoute page="team/add"><AddTeam /></PrivateRoute>}></Route>
+        <Route path="/team/all" element={<PrivateRoute page="team"><AllTeams /></PrivateRoute>}></Route>
+        <Route path="/course/create" element={<PrivateRoute page="course/create"><CreateCourse /></PrivateRoute>}></Route>
+        <Route path="/course/all" element={<PrivateRoute  page="course"><AllCourse /></PrivateRoute>}></Route>
         <Route path="/course/content/:courseId" element={<PrivateRoute><CourseContent /></PrivateRoute>}></Route>
-        <Route path="/course/my-courses" element={<PrivateRoute><MyCourses /></PrivateRoute>}></Route>
+        <Route path="/course/my-courses" element={<PrivateRoute page="My Courses"><MyCourses /></PrivateRoute>}></Route>
         <Route path="/course/create-assignment" element={<PrivateRoute><AssignmentScreen /></PrivateRoute>}></Route>
-        <Route path="/course/my-assignments" element={<PrivateRoute><AssignmentView /></PrivateRoute>}></Route>
-        <Route path="/course/assignment-hub" element={<PrivateRoute><AssignmentGrading /></PrivateRoute>}></Route>
-        <Route path="/my-courses/show" element={<PrivateRoute><CourseTable /></PrivateRoute>}></Route>
-        <Route path="/category/add" element={<PrivateRoute><AddCategory /></PrivateRoute>}></Route>
-        <Route path="/category/all" element={<PrivateRoute><AllCategory /></PrivateRoute>}></Route>
-
+        <Route path="/course/my-assignments" element={<PrivateRoute page="My Assignments"><AssignmentView /></PrivateRoute>}></Route>
+        <Route path="/course/assignment-hub" element={<PrivateRoute page="Assignments"><AssignmentGrading /></PrivateRoute>}></Route>
+        <Route path="/my-courses/show" element={<PrivateRoute page="Course"><CourseTable /></PrivateRoute>}></Route>
+        <Route path="/category/add" element={<PrivateRoute page="Category"><AddCategory /></PrivateRoute>}></Route>
+        <Route path="/category/all" element={<PrivateRoute page="Category"><AllCategory /></PrivateRoute>}></Route>
       </Routes>
       </CourseProbs.Provider>
 

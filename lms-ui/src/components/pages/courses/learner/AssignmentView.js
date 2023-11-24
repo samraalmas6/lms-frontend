@@ -197,11 +197,19 @@ function AssignmentView({ selectedAssignments }) {
         if (response.status === 200) {
           response.json().then(function (result) {
             console.log("Api result submissions: ", result);
-            console.log("result id", result[result.length - 1].id);
-            getGradingAPI(result[result.length - 1].id);
+            result.forEach(assignmentSub => {
+              if(assignmentSub.submitted_by === +sessionStorage.getItem("user_id")){
+                getGradingAPI(assignmentSub.id);
+              }
+            })
+            
             if (result.length > 0) {
-              setShowAddNewSubmission(false);
-              setIsSubmitClicked(true);
+              const check = result.some(assignmentSub => {
+                return assignmentSub.submitted_by === +sessionStorage.getItem("user_id") && assignmentSub.assignment === assignment.id;
+              })
+              setShowAddNewSubmission(!check);
+              setIsSubmitClicked(check);
+
             } else {
               setShowAddNewSubmission(true);
               setIsSubmitClicked(false);
@@ -288,15 +296,20 @@ function AssignmentView({ selectedAssignments }) {
         if (response.status === 200) {
           response.json().then(function (result) {
             if (result.length > 0) {
+              const check = result.some(assignmentSub => {
+                return assignmentSub.submitted_by === +sessionStorage.getItem("user_id") && assignmentSub.assignment === assignmentId;
+              })
+              setShowAddNewSubmission(!check);
+              setIsSubmitClicked(check);
               // const submission= submissionData;
               const submission = result[result.length - 1];
               console.log("Submission Data:", submission);
-              setIsSubmitClicked(true);
+              // setIsSubmitClicked(true);
               setSubmissionId(submission.id);
               setLink(submission.submitted_link);
               setFile(submission.content);
               setFiles(submission.content);
-              setShowAddNewSubmission(false);
+              // setShowAddNewSubmission(false);
             } else {
               console.log("No submissions found for this assignment");
               setShowAddNewSubmission(true);

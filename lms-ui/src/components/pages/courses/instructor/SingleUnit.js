@@ -166,7 +166,14 @@ const SingleUnit = ({ unit, setUnitId }) => {
     }).then((response) => {
       if (response.status === 200) {
         response.json().then(function (result) {
-          setUnitFiles(result);
+          const activeFiles = result.filter(file => file.is_delete === false);
+          if(sessionStorage.getItem("role") === "admin"){
+            setUnitFiles(result)
+          }
+          else {
+            setUnitFiles(activeFiles);
+
+          }
         });
       } else {
         console.log(response);
@@ -183,7 +190,14 @@ const SingleUnit = ({ unit, setUnitId }) => {
     }).then((response) => {
       if (response.status === 200) {
         response.json().then(function (result) {
-          setUnitVideos(result);
+          const activeAssignment = result.filter(video => video.is_delete === false);
+          if(sessionStorage.getItem("role") === "admin"){
+            setUnitVideos(result)
+          }
+          else {
+            setUnitVideos(activeAssignment);
+
+          }
         });
       } else {
         console.log(response);
@@ -201,6 +215,15 @@ const SingleUnit = ({ unit, setUnitId }) => {
       if (response.status === 200) {
         response.json().then(function (result) {
           setUnitAssignment(result);
+
+          const activeAssignment = result.filter(assignment => assignment.is_delete === false);
+          if(sessionStorage.getItem("role") === "admin"){
+            setUnitAssignment(result)
+          }
+          else {
+            setUnitAssignment(activeAssignment);
+
+          }
 
           // Fetch user data for each assignment
           result.forEach((assignment) => {
@@ -334,14 +357,15 @@ const SingleUnit = ({ unit, setUnitId }) => {
             onMouseEnter={() => setShowEditBtn(true)}
             onMouseLeave={() => setShowEditBtn(false)}
           >
-            <div className="">
-              <span className="me-3">Unit</span>
+            <div className={`${unit.is_delete ? "deleted-content " : ""}`}>
+              <span className="me-3" >Unit</span>
               {editUnit ? (
                 <input
                   type="text"
                   placeholder="Unit Title"
                   value={unitTitle}
-                  className="unitTitle"
+                  className={`${unit.is_delete ? "deleted-content" : "unitTitle"}`}
+                  disabled={unit.is_delete}
                   onChange={(e) => handleUnitTitle(e)}
                   required
                   onKeyDown={(e) => handleUpdateTitle(e, unit.id)}
@@ -358,13 +382,13 @@ const SingleUnit = ({ unit, setUnitId }) => {
                 ></i>
               )}
             </div>
-            <div className="">
+            <div className={`${unit.is_delete ? "deleted-content" : ""}`}>
               <label>Start Date:</label>
 
               <input
                 type="date"
                 value={unitStart}
-                className="unit-start-fiel"
+                className={`${unit.is_delete ? "deleted-content unit-start-fiel" : "unit-start-fiel"}`}
                 ref={startDateRefUnit}
                 id="unit-date-field"
                 onChange={(e) => handlUnitStart(e)}
@@ -378,7 +402,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
                 onChange={(e) => handlUnitEnd(e)}
                 onMouseEnter={preventAccordionClose}
                 onMouseLeave={preventAccordionOpen}
-                className="unit-end-fiel"
+                className={`${unit.is_delete ? "deleted-content unit-end-fiel" : "unit-end-fiel"}`}
                 id="unit-date-field"
                 ref={endDateRefUnit}
               />

@@ -1,3 +1,108 @@
+.all-team-content {
+    box-shadow: 4px 5px 15px -3px gray;
+    max-height: 90vh !important;
+    min-height: 90vh !important;
+}
+.add-team-content {
+    display: flex;
+    min-height: 97vh;
+    max-height: 97vh;
+}
+.team-form-section{
+    width: 86%;
+    box-shadow: 4px 3px 21px -10px gray;
+    padding: 0px;
+    overflow: auto;
+    min-height: 97vh;
+    max-height: 97vh;
+}
+
+.team-content-user-table-container {
+    width: 55%;
+    max-height: 40vh;
+    min-height: 40vh;
+    max-width: 99%;
+    overflow-y: auto;
+  }
+  .team-content-user-table-container::-webkit-scrollbar {
+    display: none; 
+  }
+
+  .team-content-course-table-container {
+    width: 50%;
+    max-height: 40vh;
+    min-height: 40vh;
+    max-width: 99%;
+    overflow-y: auto;
+  }
+  .team-content-course-table-container::-webkit-scrollbar {
+    display: none; 
+  }
+
+  .all-user-content-table {
+    max-height: 82vh !important;
+    min-height: 82vh !important;
+    max-width: 99%;
+    overflow-y: auto;
+  }
+.team-form-section form {
+    display: flex;
+    flex-direction: column;
+    /* height: 92%; */
+}
+.add-new-team-form {
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+}
+.add-new-team-form-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: flex-start;
+}
+.team-table-main-container{
+    max-height: 82vh !important;
+    min-height: 82vh !important;
+    max-width: 99%;
+    overflow-y: auto;
+}
+.team-table-heading {
+    padding: 9px 0px;
+    position: sticky;
+    top: 0;
+    background-color: #e9e9e9 !important;
+    z-index: 1;
+    text-align: start;
+    border: none;
+}
+.team-content-teamName-container{
+    padding: 12px 5px;
+    width: fit-content;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.team-content-teamName-container label{
+    font-weight: bold;
+    font-size: 16px;
+    margin-right: 15px;
+}
+
+.team-content-teamName-container span {
+    font-size: 18px;
+    font-style: italic;
+    text-transform: uppercase;
+}
+.team-content-heading {
+    background-color: #eceff1;
+    padding: 10px 8px;
+    border-radius: 5px 10px 0px 0px;
+}
+.team-content-outer-div {
+    padding-top: 0px;
+    padding-right: 3px;
+}
 .team-name {
     padding: 5px 12px;
     margin: 6px 2px 3px;
@@ -10,6 +115,10 @@
     outline: none;
     box-shadow: 2px 2px 11px -8px #000;
     border-color: #9c9c9c;
+}
+.teamAddBtn {
+    margin-top: 10px;
+    /* background-color: #eceff1; */
 }
 .team-save-btn {
     height: 82%;

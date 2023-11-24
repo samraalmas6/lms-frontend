@@ -2,34 +2,33 @@ import React, { useEffect, useState } from "react";
 // import catData from "../../hooks/catData";
 import "../../styles/Category.css";
 import Swal from "sweetalert2";
+import SingleCategory from "./SingleCategory";
 // import courseData from "../../hooks/courseData";
 
 const AllCategory = ({ show }) => {
   const [categoryName, setCatgoryName] = useState("");
   const [parentCat, setParentCat] = useState("");
   const [categoryData, setCategoryData] = useState([]);
-  const [categoryCourses, setcategoryCourses] = useState([]);
   const [coursesData, setCoursesData] = useState([]);
+  const [categoryContent, setCategoryContent] = useState([]);
 
-  const [checkedAll, setCheckAll] = useState(false);
 
   useEffect(() => {
     const getCategory = () => {
       fetch("http://127.0.0.1:8000/api/categories", {
         method: "GET",
         headers: {
-          Authorization: `Token ${sessionStorage.getItem('user_token')}`,
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
-        if(response.status === 200){
-        response.json().then(function (result) {
-          console.log(result);
-          setCategoryData(result);
-        });
-      }
-      else {
-        console.log(response);
-      }
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log(result);
+            setCategoryData(result);
+          });
+        } else {
+          console.log(response);
+        }
       });
       // setCoursesData(courseData);
     };
@@ -37,18 +36,17 @@ const AllCategory = ({ show }) => {
       fetch("http://127.0.0.1:8000/api/courses", {
         method: "GET",
         headers: {
-          Authorization: `Token ${sessionStorage.getItem('user_token')}`,
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
-        if(response.status === 200){
-        response.json().then(function (result) {
-          console.log(result);
-          setCoursesData(result);
-        });
-      }
-      else {
-        console.log(response);
-      }
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log(result);
+            setCoursesData(result);
+          });
+        } else {
+          console.log(response);
+        }
       });
     };
 
@@ -63,12 +61,6 @@ const AllCategory = ({ show }) => {
     setParentCat(e.target.value);
   };
 
-  const handleDeleteCourse = (id) => {
-    const obj = categoryCourses.filter((course) => {
-      return course.id !== id;
-    });
-    setcategoryCourses(obj);
-  };
 
   const handleAddCat = (e) => {
     const obj = {
@@ -77,7 +69,7 @@ const AllCategory = ({ show }) => {
       parent: parentCat,
       created_by: sessionStorage.getItem("user_id"),
       updated_by: sessionStorage.getItem("user_id"),
-      user:sessionStorage.getItem("user_id"),
+      user: sessionStorage.getItem("user_id"),
       // updated_by: sessionStorage.getItem('name')
     };
 
@@ -85,7 +77,7 @@ const AllCategory = ({ show }) => {
       method: "POST",
       body: JSON.stringify(obj),
       headers: {
-        Authorization: `Token ${sessionStorage.getItem('user_token')}`,
+        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         "Content-type": "application/json; charset=UTF-8",
       },
     }).then((response) => {
@@ -94,11 +86,11 @@ const AllCategory = ({ show }) => {
           console.log(result);
           setCatgoryName("");
           setParentCat("");
-          setCategoryData(pre => [...pre, result])
+          setCategoryData((pre) => [...pre, result]);
           Swal.fire({
-            icon:"success",
-            title:`${result.title} has been created`
-        })
+            icon: "success",
+            title: `${result.title} has been created`,
+          });
           // window.location.reload();
         });
       } else {
@@ -107,76 +99,96 @@ const AllCategory = ({ show }) => {
     });
   };
 
-  const handlAllSelect = () => {
-    const selectItems = document.getElementsByClassName("course-check");
-    if (checkedAll) {
-      for (let item of selectItems) {
-        item.checked = false;
+
+  const handleDeleteCategory = (category, deleted) => {
+
+    if (
+      sessionStorage.getItem("role") === "admin"
+    ) {
+      let action = "";
+      if (deleted) {
+        action = "Delete";
+      } else {
+        action = "Restore";
       }
+      Swal.fire({
+        title: "Attention",
+        text: `Do you want to ${action} this category?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: `${action}`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const obj = {
+            title: category.title,
+            is_updated: true,
+            created_by: category.created_by,
+            is_delete: deleted,            
+            updated_by: sessionStorage.getItem("user_id"),
+          };
+
+          fetch(`http://127.0.0.1:8000/api/categories/${category.id}/`, {
+            method: "PUT",
+            body: JSON.stringify(obj),
+            headers: {
+              Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          }).then((response) => {
+            if (response.status === 200) {
+              response.json().then(function (result) {
+                console.log("Api result Course: ", result);
+                Swal.fire(
+                  `${action}d!`,
+                  `${category.title} has been ${action}d.`,
+                  "success"
+                ).then((res) => {
+                  window.location.reload();
+                });
+                // setCategoryData((pre) => [...pre, result]);
+              });
+            } else {
+              console.log(response);
+            }
+          });
+        }
+      });
     } else {
-      for (let item of selectItems) {
-        item.checked = true;
-      }
+      Swal.fire({
+        icon: "warning",
+        text: "You can't delete this course!",
+      });
     }
   };
 
   const getNumberOfCourses = (id) => {
     let counter = 0;
-    coursesData.forEach(course => {
-      if(course.category.includes(id)){
-        counter++
+    coursesData.forEach((course) => {
+      if (course.category.includes(id)) {
+        counter++;
       }
     });
-   return counter;
-  }
-
-  const getNameOfCourses = (id) => {
-    setcategoryCourses([])
-    coursesData.forEach(course => {
-      if(course.category.includes(id)){
-        setcategoryCourses(pre => [...pre, course])
-      }
-    });
-  }
-
-  const getCategoryName = (id) => {
-    const category = categoryData.filter(category => {
-      return category.id === id;
-    });
-    console.log('This is category:', category, id);
-    if(category.length !== 0){
-    return category[0].title
-    }
-    else {
-      return "None"
-    }
-  }
-
-  const handleAddCourse = (e) => {
-    e.preventDefault();
-    const selectItems = document.getElementsByClassName("course-check");
-    for (let item of selectItems) {
-      if (item.checked) {
-        const newObj = coursesData.filter((course) => {
-          return course.course_title === item.value;
-        });
-        console.log(" obj  =", newObj);
-        if (typeof(categoryCourses) !== "undefined") {
-          setcategoryCourses(() => [...categoryCourses, newObj[0]]);
-        } else {
-          setcategoryCourses([newObj[0]]);
-        }
-      }
-
-      item.checked = false;
-    }
-
-    // console.log(categoryCourses);
+    return counter;
   };
 
 
+
+  const getCategoryName = (id) => {
+    const category = categoryData.filter((category) => {
+      return category.id === id;
+    });
+    console.log("This is category:", category, id);
+    if (category.length !== 0) {
+      return category[0].title;
+    } else {
+      return "None";
+    }
+  };
+
   return (
-    <div style={{boxShadow: "4px 3px 21px -10px gray"}}>
+    <div className="all-category-outer-main-container">
       <div className="creat-course-btn p-2">
         <button
           type="button"
@@ -252,36 +264,68 @@ const AllCategory = ({ show }) => {
       <table className="table">
         <thead>
           <tr>
-            <th scope="col">Names</th>
-            <th scope="col">Description</th>
-            <th scope="col">Courses</th>
-            <th scope="col">Parent Category</th>
+            <th className="category-table-heading">#</th>
+            <th className="category-table-heading">Names</th>
+            <th className="category-table-heading">Description</th>
+            <th className="category-table-heading">Courses</th>
+            <th className="category-table-heading">Parent Category</th>
+            <th className="category-table-heading">Action</th>
           </tr>
         </thead>
         <tbody>
           {categoryData &&
-            categoryData.map((category) => {
+            categoryData.map((category, index) => {
               return (
                 <tr
                   key={category.id}
                   role="button"
                   onClick={() => {
-                    setCatgoryName(category.title);
-                    setParentCat(category.parent);
+                    setCategoryContent(category);
+                    var myOffcanvas =
+                    document.getElementById("offcanvasCourse");
+                  if (myOffcanvas) {
+                    myOffcanvas.classList.add("show");
+                  }
+                    // setCatgoryName(category.title);
+                    // setParentCat(category.parent);
                     // setcategoryCourses(() => category.courses);
-                    getNameOfCourses(category.id)
+               
                     //   setTeamUser(team.Users);
                     //   setTeamCourses(team.Courses);
                     // setTeamDetail([team.Users, team.Courses]);
                   }}
-                  data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasCourse"
-                  aria-controls="offcanvasRight"
+                  // data-bs-toggle="offcanvas"
+                  // data-bs-target="#offcanvasCourse"
+                  // aria-controls="offcanvasRight"
                 >
+                  <td style={{ width: "3%", fontWeight: "bold" }}>
+                    {index + 1}
+                  </td>
                   <td>{category.title}</td>
                   <td>{category.description}</td>
-                  <td>{getNumberOfCourses(category.id)}</td>
+                  <td style={{ fontWeight: "bold" }}>
+                    {getNumberOfCourses(category.id)}
+                  </td>
                   <td>{getCategoryName(category.parent)}</td>
+                  <td style={{ display: "flex" }} className="ps-0">
+                      {category.is_delete ? (
+                        <i
+                          className="bi bi-recycle text-info"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteCategory(category, false);
+                          }}
+                        ></i>
+                      ) : (
+                        <i
+                          className="bi bi-trash text-danger"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteCategory(category, true);
+                          }}
+                        ></i>
+                      )}
+                    </td>
                 </tr>
               );
             })}
@@ -295,192 +339,15 @@ const AllCategory = ({ show }) => {
         id="offcanvasCourse"
         aria-labelledby="offcanvasRightLabel"
       >
-        <div className="offcanvas-body">
-          <div className="add-course-content">
-            <div className="course-name-section">
-              <ul style={{ paddingLeft: "10px" }}>
-                {categoryData &&
-                  categoryData.map((category) => {
-                    return (
-                      <div key={category.id}>
-                        <li>
-                          <a
-                            role="button"
-                            onClick={() => {
-                              setCatgoryName(category.title);
-                              setParentCat(category.parent);
-                              // setcategoryCourses(() => category.courses);
-                              getNameOfCourses(category.id)
-                              // setTeamCourses(team.Courses);
-                            }}
-                          >
-                            {category.title}
-                          </a>
-                        </li>
-                      </div>
-                    );
-                  })}
-              </ul>
-            </div>
-            <div className="course-form-section">
-              <div className="offcanvas-head">
-                <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                  Add Category Details
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="offcanvas"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <form>
-                <label className="mb-0">
-                  Category Name<span style={{ color: "red" }}>*</span>
-                </label>
-                <input
-                  type="text"
-                  value={categoryName}
-                  onChange={handleCatName}
-                  required
-                  className="course-title"
-                />
-
-                <div className={"teamListSection"}>
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col" style={{ borderTop: "none" }}>Name</th>
-                        <th scope="col" style={{ borderTop: "none" }}>Parent Category</th>
-                        <th scope="col" style={{ borderTop: "none" }}>Courses</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className={"borderLess"}>
-                        <td className={"borderLess"}>
-                          <span>{categoryName}</span>
-                        </td>
-                        <td className={"borderLess"}>
-                          {/* <span className="label-tag">{parentCat.slice(0,1).toUpperCase()+ parentCat.slice(-1).toUpperCase()}</span> */}
-                          <span>{getCategoryName(parentCat)}</span>
-                        </td>
-                        <td className={"borderLess"}>
-                          {categoryCourses &&
-                            categoryCourses.map((course, index) => {
-                              return (
-                                <tr
-                                  key={course.id}
-                                  className={"borderLess w-100"}
-                                >
-                                  <td className={"borderLess"}>
-                                    {course.title}
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                {/* <div className="courseAddBtn catCourseBtn">
-                  <button
-                    className="btn btn-primary me-3"
-                    type="button"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#show-course-list"
-                    aria-expanded="false"
-                    aria-controls="show-course-list"
-                  >
-                    Add Course
-                  </button>
-                </div> */}
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div
-        className={`${"teamCourseSection"} offcanvas offcanvas-bottom`}
-        id="show-course-list"
-        tabindex="-1"
-      >
-        <div className="header-section">
-          <h3>Courses</h3>
-          <button
-            type="button"
-            className="btn-close"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close"
-          ></button>
-        </div>
-
-        <div className={"addBtnSection"}>
-          <input
-            type="search"
-            className="all-users-input"
-            placeholder="Search Course.."
+        <div className="offcanvas-body pe-1">
+          <SingleCategory
+            categoryContent={categoryContent}
+            categoryData={categoryData}
+            getCategoryName={getCategoryName}
+            getNameOfCourses={getCategoryName}
+            coursesData={coursesData}
           />
-          <button
-            type="button"
-            className="text-bg-primary add-new-user"
-            onClick={handleAddCourse}
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasCourse"
-          >
-            Add
-          </button>
         </div>
-        <table className="table">
-          <thead>
-            <tr>
-              <th
-                onClick={() => {
-                  setCheckAll((pre) => !pre);
-                  handlAllSelect();
-                }}
-                style={{ cursor: "pointer" }}
-              >
-                Select All
-              </th>
-              <th scope="col">Course Title</th>
-              <th scope="col">Author</th>
-              <th scope="col">Description</th>
-              <th scope="col">Users Enrolled</th>
-              <th scope="col">Last Update</th>
-            </tr>
-          </thead>
-          <tbody>
-            {coursesData.length === 0 ||
-          coursesData.detail == "No objects found"
-            ? coursesData.detail
-            : coursesData &&
-            coursesData.map((course) => {
-                return (
-                  <tr key={course.id}>
-                    <td>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input course-check"
-                          type="checkbox"
-                          name="check"
-                          value={course.title}
-                          onChange={(e) => {}}
-                          id="flexCheckDefult"
-                        />
-                      </div>
-                    </td>
-                    <td>{course.title}</td>
-                    <td>{course.author}</td>
-                    <td>{course.description}</td>
-                    <td>{course.users_enrolled}</td>
-                    <td>{course.created_at}</td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
       </div>
     </div>
   );
