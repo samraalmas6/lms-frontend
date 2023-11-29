@@ -507,22 +507,24 @@ const AllCourse = ({ show, minDate }) => {
                 showContent={showContent}
                 setShowContent={setShowContent}
               /> */}
+        <div className="course-table-container">
         <table className="table table-striped ">
           <thead className="table-info">
             <tr>
-              <th scope="col">Course Title</th>
-              <th scope="col">Description</th>
-              <th scope="col">Author</th>
-              <th scope="col">Users Enrolled</th>
-              <th scope="col">Created</th>
-              <th colSpan="2" scope="col">
+            <th className="course-table-heading"  style={{ width: "2%" }}>#</th>
+              <th className="course-table-heading">Course Title</th>
+              <th className="course-table-heading">Description</th>
+              <th className="course-table-heading">Author</th>
+              <th className="course-table-heading">Users Enrolled</th>
+              <th className="course-table-heading">Created</th>
+              <th colSpan="2" className="course-table-heading">
                 Action
               </th>
             </tr>
           </thead>
           <tbody>
             {courseContent.length !== 0 &&
-              courseContent.map((course) => {
+              courseContent.map((course, index) => {
                 let deletedCourse = "";
                 if (course.is_delete === true) {
                   deletedCourse = "course-delete";
@@ -539,14 +541,17 @@ const AllCourse = ({ show, minDate }) => {
                       handleCourseContentData(course);
                     }}
                   >
+                    <td style={{ width: "3%", fontWeight: "bold" }}>{index+1}</td>
+
                     <td
                       className={`deletedCourse} ${
                         deletedCourse && "deleteCourse-line"
                       }`}
                     >
-                      {course.title}
+                      {console.log('type of course title', course.title.length)}
+                      {course.title && course.title.length < 30 ? course.title : course.title.slice(0, 30)+"..."}
                     </td>
-                    <td className={deletedCourse}>{course.description}</td>
+                    <td className={deletedCourse}>{course.description &&course.description.length < 30 ? course.description : course.description.slice(0,35)+"..."}</td>
                     <td className={deletedCourse}>
                       <Avatar
                         name={getUSerFullName(course.instructor)}
@@ -617,6 +622,7 @@ const AllCourse = ({ show, minDate }) => {
               })}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

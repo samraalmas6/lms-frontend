@@ -18,170 +18,196 @@
     text-align: center;
     font-size: 24px;
 } */
-
-.main-cards-container{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    /* overflow-y: scroll; */
-    /* height: 70vh; */
-    padding-top: 100px;
-    padding-bottom: 0px;
+.my-courses-main-container {
+  box-shadow: 5px 4px 19px -3px gray;
+  min-height: 90vh;
+  max-height: 90vh;
+  padding-top: 1%;
+  padding-right: 5px;
 }
 
-.card-container{
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    /* border: 5px solid white; */
-    width: 400px;
-    /* height: 400px; */
-    box-shadow: 5px 4px 19px -3px gray;
+.main-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  /* overflow-y: scroll; */
+  /* height: 70vh; */
+  padding-top: 10%px;
+  padding-bottom: 0px;
 }
 
-.card-container .upper-half{
-    background-image: url(../content/Images/card-background.jpg);
-    color: white;
-    display: flex;
-    padding: 5px;
-    width: 360px;
-    height: 150px;
+.card-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  /* border: 5px solid white; */
+  width: 400px;
+  /* height: 400px; */
+  box-shadow: 5px 4px 19px -3px gray;
 }
 
-.upper-half h5{
-    width: 222px;
-    /* background-color: red; */
+.card-container .upper-half {
+  background-image: url(../content/Images/card-background.jpg);
+  color: white;
+  display: flex;
+  padding: 5px;
+  width: 360px;
+  height: 150px;
 }
 
-.upper-half .instr-img{
-    border-radius: 50%;
-    border: 1px solid white;
-    position: relative; 
-    top: 112px; 
-    /* left: -20px; */
-    /* z-index: 1; */
-    width: 50px;
-    height: 50px;
-    /* display: flex; */
-    /* justify-content: flex-end; */
-    align-items: center;
-    margin-left: 60px;
+.upper-half h5 {
+  width: 222px;
+  /* background-color: red; */
 }
 
-.card-container .second-half{
-    padding: 20px;
+.upper-half .instr-img {
+  border-radius: 50%;
+  border: 1px solid white;
+  position: relative;
+  top: 112px;
+  /* left: -20px; */
+  /* z-index: 1; */
+  width: 50px;
+  height: 50px;
+  /* display: flex; */
+  /* justify-content: flex-end; */
+  align-items: center;
+  margin-left: 60px;
 }
 
-.bottom-container{
-    display: flex;
-    justify-content: flex-end;
-    font-size: 30px;
-    border-radius: 100%;
-    background-color: white;
+.card-container .second-half {
+  padding: 20px;
 }
 
-.main-prog-div{
-    display: flex;
-    gap: 10px;
-    padding: 10px;
-    align-items: center;
-    justify-content: center;
+.bottom-container {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 30px;
+  border-radius: 100%;
+  background-color: white;
 }
 
-.progress-main-div.block-view{
-    margin-left: 0;
-    margin-right: 0;
+.main-prog-div {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  align-items: center;
+  justify-content: center;
 }
 
-.progress, .progress-stacked{
-    --bs-progress-height: 0.5rem !important;
+.progress-main-div.block-view {
+  margin-left: 0;
+  margin-right: 0;
 }
 
-.progress-tag{
-    /* border: 2px solid blue;  */
-    border-radius: 5px;
-    padding: 5px;
-    /* width: 50%; */
-    background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 50%);
-    margin-top: 15px;
-    color: white;
-    font-weight: bold;
+.progress,
+.progress-stacked {
+  --bs-progress-height: 0.5rem !important;
 }
 
+.progress-tag {
+  /* border: 2px solid blue;  */
+  border-radius: 5px;
+  padding: 5px;
+  /* width: 50%; */
+  background-image: linear-gradient(160deg, #0093e9 0%, #80d0c7 50%);
+  margin-top: 15px;
+  color: white;
+  font-weight: bold;
+}
 
-.course-toggle-btn{
-    display: flex;
-    justify-content: flex-end;
-    position: absolute;
+.course-toggle-btn {
+  display: flex;
+  justify-content: flex-end;
+  /* position: absolute;
     right: 50px;
     top: 50px;
-    margin-bottom: 50px;
+    margin-bottom: 50px; */
 }
 /* --------------List View Css---------- */
 
-.main-listView-Container{
-    overflow-y: scroll;
-    height: 100vh;
-    padding-top: 100px;
-    box-shadow: 5px 4px 19px -3px gray;
-
+.main-listView-Container {
+  overflow-y: scroll;
+  height: 100%;
+  padding-top: 5%;
+}
+body::-webkit-scrollbar {
+  display: none;
+}
+.main-listView-Container::-webkit-scrollbar {
+  display: none;
 }
 
-.list-container{
-    display: flex;
-    justify-content: space-evenly;
-    /* gap: 100px; */
-    align-items: center;
-    /* padding: 30px; */
-    border-bottom: 1px dotted black;
-    
+.list-container {
+  margin-left: 10px;
+  width: 98%;
+  display: flex;
+  justify-content: space-between;
+  /* gap: 100px; */
+  align-items: center;
+  /* padding: 30px; */
+  border-bottom: 1px dotted black;
+}
+.course-card-image {
+  min-height: 100%;
+  max-height: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  border-radius: 0px 15px 0px 15px;
 }
 
-.list-container .image-div{
-    /* width: 250px; */
-    /* height: 50px; */
-    width: 150px;
-    height: 100px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* margin-left: 15px */
+.list-container .image-div {
+  /* width: 250px; */
+  /* height: 50px; */
+  width: 150px;
+  height: 100px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin-left: 15px */
 }
-.progress-statics-div{
-    /* display: flex;
+.image-div {
+  max-width: 13%;
+  min-width: 13%;
+}
+.progress-statics-div {
+  /* display: flex;
     gap: 5px; */
 }
 
-.launch-btn{
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
+.launch-btn {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
 }
 
-.progress-main-div{
-    /* margin-left: 100px;
+.progress-main-div {
+  max-width: 20%;
+  min-width: 20%;
+  /* margin-left: 100px;
     margin-right: 100px; */
 }
 
-.block-view.button-div{
-    /* background-color: yellow; */
-    display: flex;
-    justify-content:flex-end;
+.block-view.button-div {
+  /* background-color: yellow; */
+  display: flex;
+  justify-content: flex-end;
 }
 
-.course-div{
-    /* background-color: red; */
-    width: 20%;
+.course-div {
+  /* background-color: red; */
+  max-width: 20%;
+  min-width: 20%;
 }
 
-.pdf-doc-container{
-    display: flex;
-    gap :20px;
+.pdf-doc-container {
+  display: flex;
+  gap: 20px;
 }
 
-.resource-title-container{
-    display: flex;
-    gap: 20px;
+.resource-title-container {
+  display: flex;
+  gap: 20px;
 }

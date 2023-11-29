@@ -15,6 +15,7 @@ const SingleCategory = ({categoryContent,categoryData, getCategoryName, coursesD
         setCategoryTitle(categoryContent.title);
         setParentCat(categoryContent.parent)
         setCategoryName(categoryContent.title)
+        setCategoryId(categoryContent.id);
     },[categoryContent])
     const handleCategoryName = (e) => {
         setCategoryTitle(e.target.value);
@@ -97,8 +98,14 @@ const SingleCategory = ({categoryContent,categoryData, getCategoryName, coursesD
                 <button
                   type="button"
                   className="btn-close"
-                  data-bs-dismiss="offcanvas"
-                  aria-label="Close"
+                  onClick={() => {
+                    var myOffcanvas =
+                    document.getElementById("offcanvasCourse");
+                  if (myOffcanvas) {
+                    myOffcanvas.classList.remove("show");
+                    window.location.reload();
+                  }
+                  }}
                 ></button>
               </div>
               <form>

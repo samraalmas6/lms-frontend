@@ -64,7 +64,7 @@ const MyCourses = () => {
           const courses = [];
           for (const course of result) {
             getCourseStatus(course.id);
-            if (totalCourses.includes(course.id)) {
+            if (totalCourses.includes(course.id) && course.is_delete === false) {
               courses.push(course)
           }
         }
@@ -195,7 +195,6 @@ const getCourseProgress = (courseId) => {
       const author = authorData.filter((author) => {
         return author.id === id;
       });
-
       if (author.length !== 0 && userData.length !== 0) {
         const user = userData.filter(
           (users) => users.id === author[0].created_by
@@ -220,11 +219,13 @@ const getCourseProgress = (courseId) => {
 
   return (
     <>
-      <div>
+      <div className="my-courses-main-container">
+        <div className="me-3 mt-3" style={{ display: "flex", justifyContent: "flex-end"}}>
+          <div className=""></div>
         <button
           className="btn btn-secondary course-toggle-btn"
           type="button"
-          style={{ width: "50px" }}
+          // style={{ width: "50px" }}
           onClick={handleViewToggle}
         >
           {showBlock ? (
@@ -233,6 +234,9 @@ const getCourseProgress = (courseId) => {
             <i className="fas fa-solid fa-grip-vertical"></i>
           )}
         </button>
+        </div>
+
+ 
         {/* Courses Block view */}
         {showBlock ? (
           <div className="main-cards-container">
@@ -243,16 +247,16 @@ const getCourseProgress = (courseId) => {
                   return (
                     <div
                       className="card-container"
-                      data-bs-toggle="offcanvas"
-                      data-bs-target="#offcanvasExample"
+                      // data-bs-toggle="offcanvas"
+                      // data-bs-target="#offcanvasExample"
                       key={course.id}
                     >
                       <div className="upper-half">
                         <div>
-                          <h5>{course.title}</h5>
+                          <h5 className="w-100">{course.title && course.title.length < 22 ? course.title : course.title.slice(0,22)+"..."}</h5>
                           {/* <p>{course.unit}</p> */}
                           {/* <h6>{"Course Author"}</h6> */}
-                          <h6>{getUSerFullName(course.id)}</h6>
+                          <h6>{getUSerFullName(course.instructor)}</h6>
                           <div>
                             {course.category.map((category) => {
                               return <p>{getCategoryName(category)}</p>;
@@ -265,7 +269,7 @@ const getCourseProgress = (courseId) => {
                       </div>
                       <div className="second-half">
                         {/* <p>tagline</p> */}
-                        <div className="progress-main-div block-view">
+                        <div className="w-100 block-view">
                           {/* progress % */}
                           {`${getCourseProgress(course.id).toString().slice(0,4)}%`}
                           {/* progress bar */}
@@ -283,10 +287,10 @@ const getCourseProgress = (courseId) => {
                           <div>
                             <p className="progress-tag">
                               {getCourseProgress(course.id) < 1
-                                ? "not started"
+                                ? "Not Started"
                                 : getCourseProgress(course.id) < 100
-                                ? "in progress"
-                                : "completed"}
+                                ? "In Progress"
+                                : "Completed"}
                             </p>
                           </div>
                         </div>
@@ -319,25 +323,25 @@ const getCourseProgress = (courseId) => {
                       <div className="image-div">
                         {course.course_image ? (
                           <img
-                            className=""
+                            className="course-card-image"
                             src={course.course_image}
                             width={"100%"}
                             alt=""
                           />
                         ) : (
                           <img
-                            className=""
+                            className="course-card-image"
                             src={cloudCourse}
                             width={"100%"}
                             alt=""
                           />
                         )}
-                        <img
+                        {/* <img
                           className=""
                           src={course.course_image}
                           width={"100%"}
                           alt=""
-                        />
+                        /> */}
                       </div>
                       <div className="course-div">
                         <h5>{course.title}</h5>
@@ -351,7 +355,7 @@ const getCourseProgress = (courseId) => {
                               ? "Not started"
                               : getCourseProgress(course.id) < 100
                               ? "In progress"
-                              : "completed"}
+                              : "Completed"}
                           </p>
                         </div>
                         <div className="progress-statics-div">

@@ -591,7 +591,7 @@ const CourseContent = ({}) => {
                           {userData.length !== 0 &&
                             userData.map((user) => {
                               if (
-                                user.role === "learner" &&
+                                user.role === "instructor" &&
                                 user.id !== courseCreator &&
                                 !coAutherData.includes(user.id)
                               ) {

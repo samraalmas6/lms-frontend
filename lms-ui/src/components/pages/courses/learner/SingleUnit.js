@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import SingleVideo from "./SingleVideo";
+import { useNavigate } from "react-router-dom";
+import SinglePdf from "./SinglePdf";
 
 const SingleUnit = ({
   unit,
@@ -11,52 +13,16 @@ const SingleUnit = ({
   handleAssignmentClick,
   setShowAssignment,
 }) => {
+  const navigate = useNavigate();
   const [unitPDF, setUnitPDF] = useState([]);
   const [unitAssignment, setUnitAssignment] = useState([]);
   const [unitResources, setUnitResources] = useState([]);
-  const [showPDF, setShowPdf] = useState(false);
-  const [showResource, setShowResource] = useState(false); 
-  const [doc, setDoc] = useState([]);
-  const [isCourseContentVisible, setIsCourseContentVisible] = useState(true);
-  const [selectedAssignment, setSelectedAssignment] = useState(null);
-  const [lessonResources, setLessonResources] = useState({});
-  const [lectureCompleted, setLectureCompleted] = useState(false);
+  const [showResource, setShowResource] = useState(false);
   const [videoData, setVideoData] = useState([]);
-  const handleFileComplete = (file) => {
-    let completed = "";
-    if (lectureCompleted !== true) {
-      completed = file.file_completed;
-    } else {
-      completed = lectureCompleted;
-    }
-    const updatedObj = {
-      title: file.title,
-      instructor: file.instructor,
-      unit: file.unit,
-      updated_by: sessionStorage.getItem("user_id"),
-      file_completed: completed,
-    };
+  const [openUnit, setOpenUnit] = useState("show");
 
-    fetch(`http://127.0.0.1:8000/api/files/${file.id}/`, {
-      method: "PUT",
-      body: JSON.stringify(updatedObj),
-      headers: {
-        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    }).then((response) => {
-      if (response.status === 200) {
-        response.json().then(function (result) {
-          console.log("updated data: ", result);
-        });
-      } else {
-        console.log(response);
-      }
-    });
-  };
-
-  const handleUnitPDF = (unit) => {
-    fetch(`http://127.0.0.1:8000/api/units/${unit.id}/files/`, {
+  const handleUnitPDF = (id) => {
+    fetch(`http://127.0.0.1:8000/api/units/${id}/files/`, {
       method: "GET",
       headers: {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
@@ -105,20 +71,8 @@ const SingleUnit = ({
     });
   };
 
-  const handleViewPdf = (file) => {
-    console.log("pdf url", file);
-    // const obj = moduleUnit.filter((unit) => {
-    //   return unit.id === id;
-    // });
-    // console.log('handleViewPdf ka obj',obj)
-    // setDoc(() => file);
-    setShowPdf(!showPDF);
-    setLectureCompleted(true);
-    window.open(file, "_blank");
-  };
-
   const handleViewResource = (file) => {
-    alert(file)
+    alert(file);
     console.log("pdf url", file);
     // const obj = moduleUnit.filter((unit) => {
     //   return unit.id === id;
@@ -127,7 +81,7 @@ const SingleUnit = ({
     // setDoc(() => file);
     setShowResource(!showResource);
     window.open(file, "_blank");
-  };   
+  };
 
   const toggleLesson = (lesson) => {
     fetch(`http://127.0.0.1:8000/api/units/${lesson.id}/videos/`, {
@@ -148,6 +102,17 @@ const SingleUnit = ({
     });
   };
 
+  const handleOpenCloseUnit = (id) => {
+    var collapse = document.getElementById(`${id}`);
+    if (collapse && openUnit === "show") {
+      collapse.classList.add(openUnit);
+      setOpenUnit("remove");
+    } else if (openUnit === "remove") {
+      collapse.classList.remove("show");
+      setOpenUnit("show");
+    }
+  };
+
   return (
     <div>
       <div className="module-content-container" key={unit.id}>
@@ -160,14 +125,17 @@ const SingleUnit = ({
               name="lesson"
               // value={`lesson-${unit.id}`}
               value={unitCompletion}
-              checked={unit.unit_completed}
+              checked={unit.completion}
             />
           </form>
         </div>
         <div className="content-inside-container">
           <li
-            data-bs-toggle="collapse"
-            data-bs-target={`#${unit.id}`}
+            onClick={() => {
+              handleOpenCloseUnit(unit.id);
+            }}
+            // data-bs-toggle="collapse"
+            // data-bs-target={`#${unit.id}`}
             className={`lesson-item ${
               selectedLesson === unit ? "active" : ""
             } upper-row`}
@@ -176,7 +144,7 @@ const SingleUnit = ({
             <li
               className="lecture-name"
               onClick={() => {
-                handleUnitPDF(unit);
+                handleUnitPDF(unit.id);
                 toggleLesson(unit);
               }}
             >
@@ -201,8 +169,8 @@ const SingleUnit = ({
               onClick={() => {
                 toggleLesson(unit);
               }}
-              data-bs-toggle="collapse"
-              data-bs-target={`#${unit.id}`}
+              // data-bs-toggle="collapse"
+              // data-bs-target={`#${unit.id}`}
               className={`lesson-item upper-row`}
             >
               <div className="lesson-content-container">
@@ -222,30 +190,7 @@ const SingleUnit = ({
                     ? "No Document"
                     : unitPDF &&
                       unitPDF.map((pdf) => {
-                        return (
-                          <div
-                            className="pdf-doc-container"
-                            onClick={() => {
-                              handleViewPdf(pdf.file);
-                            }}
-                          >
-                            <div
-                              className="check-box-div"
-                              onClick={handleFileComplete(pdf)}
-                            >
-                              <input
-                                className="checkbox"
-                                type="checkbox"
-                                id={pdf.id}
-                                name="lesson-checkbox"
-                                value={pdf.id}
-                                checked={pdf.file_completed}
-                              />
-                            </div>
-                            <i class="fas fa-solid fa-file-pdf"></i>
-                            <li>{pdf.title}</li>
-                          </div>
-                        );
+                        return <SinglePdf handleUnitPDF={handleUnitPDF} pdf={pdf} />;
                       })}
                 </div>
                 <div
@@ -259,9 +204,13 @@ const SingleUnit = ({
                         return (
                           <div
                             className="NoDoc-pdf-container"
-                            onClick={() =>
-                              // navigate("/course/my-assignments")
-                              handleAssignmentClick(assignment)
+                            onClick={
+                              () =>
+                                navigate(
+                                  `/course/my-assignments/${assignment.id}`,
+                                  { state: { assignment: assignment } }
+                                )
+                              // handleAssignmentClick(assignment)
                             }
                           >
                             <div>
@@ -269,7 +218,7 @@ const SingleUnit = ({
                                 className="checkbox"
                                 type="checkbox"
                                 name="lesson-checkbox"
-                                checked={assignment.assignment_completed}
+                                checked={assignment.completion}
                               />
                             </div>
                             <i class="far fa-file-alt"></i>
@@ -311,7 +260,15 @@ const SingleUnit = ({
                     {unitResources.length === 0
                       ? null
                       : unitResources.map((resource) => {
-                          return <div onClick={()=> handleViewResource(resource.resource)}>{resource.title}</div>;
+                          return (
+                            <div
+                              onClick={() =>
+                                handleViewResource(resource.resource)
+                              }
+                            >
+                              {resource.title}
+                            </div>
+                          );
                         })}
                   </div>
                 </div>

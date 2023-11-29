@@ -3,6 +3,7 @@ import "../../../styles/AssignmentView.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import fil from "../../../content/Images/fil.png";
+import { useLocation } from "react-router-dom";
 
 // function calculateSubmissionStatus(dueDate, isResubmit, isSubmitClicked) {
 //   const formattedSubmissionDate = new Date();
@@ -35,8 +36,10 @@ function calculateSubmissionStatus(due_date, isResubmit, isSubmitClicked) {
 }
 
 function AssignmentView({ selectedAssignments }) {
+  const userId = +sessionStorage.getItem("user_id");
+  const {state} = useLocation();
   const [selectedAssignment, setSelectedAssignment] =
-    useState(selectedAssignments);
+    useState(state.assignment);
   const [files, setFiles] = useState(null);
   const [link, setLink] = useState("");
   const [file, setFile] = useState(null);
@@ -63,7 +66,6 @@ function AssignmentView({ selectedAssignments }) {
   });
   const [showAddNewSubmission, setShowAddNewSubmission] = useState(false);
   const [showLink, setShowLink] = useState(false);
-  const [submittedLink, setSubmittedLink] = useState("");
   const [submissionStatus, setSubmissionStatus] = useState([]);
   const [submissionId, setSubmissionId] = useState(null);
   const [isEditClicked, setIsEditClicked] = useState(false);
@@ -399,8 +401,9 @@ function AssignmentView({ selectedAssignments }) {
         marks: selectedAssignment.marks,
         instructor: selectedAssignment.instructor,
         unit: selectedAssignment.unit,
-        updated_by: sessionStorage.getItem("user_id"),
-        assignment_completed: true
+        updated_by: userId,
+        completion: true,
+        learner: userId
       };
 
       fetch(`http://127.0.0.1:8000/api/assignments/${id}/`, {

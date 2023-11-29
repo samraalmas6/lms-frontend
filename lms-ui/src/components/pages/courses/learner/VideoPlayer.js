@@ -6,13 +6,14 @@ const VideoPlayer = ({
   handleVideoProgress,
   setVideoCompletion,
 }) => {
+  const userId = +sessionStorage.getItem("user_id");
   const [timer, setTimer] = useState(true)
   useEffect(() => {
     if(selectedLesson){
-    setVideoCompletion(selectedLesson.video_completed);
+    setVideoCompletion(selectedLesson.completion);
     }
   }, [selectedLesson]);
-  console.log('Selected Video', selectedLesson);
+  
   const handleProgress = (progress) => {
     const percentage = progress.played * 100;
     console.log("Video completion ", percentage);
@@ -26,8 +27,9 @@ const VideoPlayer = ({
         url: selectedLesson.url,
         instructor: selectedLesson.instructor,
         unit: selectedLesson.unit,
-        updated_by: sessionStorage.getItem("user_id"),
-        video_completed: true,
+        updated_by: userId,
+        learner: userId,
+        completion: true,
       };
 
       fetch(`http://127.0.0.1:8000/api/videos/${selectedLesson.id}/`, {

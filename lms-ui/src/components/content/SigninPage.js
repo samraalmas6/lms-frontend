@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const SigninPage = () => {
   const navigate = useNavigate();
-  sessionStorage.clear()
+  sessionStorage.clear();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-  const [invalidUser, setInvalidUser] = useState({})
-	const [eyeMode,setEyeMode] = useState('fa-eye-slash');
-	const [passwordType,setPasswordType] = useState("password");
+  const [invalidUser, setInvalidUser] = useState({});
+  const [eyeMode, setEyeMode] = useState("fa-eye-slash");
+  const [passwordType, setPasswordType] = useState("password");
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
@@ -19,17 +20,15 @@ const SigninPage = () => {
     setPassword(e.target.value);
   };
 
-
-  const handleEyeMode =()=>{
-		if(eyeMode === 'fa-eye-slash'){
-			setEyeMode('fa-eye');
-			setPasswordType("text");
-		}
-		else{
-			setEyeMode('fa-eye-slash');
-			setPasswordType("password");
-		}
-	}
+  const handleEyeMode = () => {
+    if (eyeMode === "fa-eye-slash") {
+      setEyeMode("fa-eye");
+      setPasswordType("text");
+    } else {
+      setEyeMode("fa-eye-slash");
+      setPasswordType("password");
+    }
+  };
 
   const validateLogin = (values) => {
     let errors = {};
@@ -46,9 +45,9 @@ const SigninPage = () => {
     return errors;
   };
 
- const handleForgetPasswordBtn =() =>{
-    navigate('/auth/reset_password')
- }
+  const handleForgetPasswordBtn = () => {
+    navigate("/auth/reset_password");
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -57,7 +56,7 @@ const SigninPage = () => {
     if (Object.keys(errors).length === 0) {
       const data = {
         email,
-        password
+        password,
       };
       console.log(data);
       // API CALL
@@ -72,31 +71,40 @@ const SigninPage = () => {
           sessionStorage.clear();
           response.json().then(function (result) {
             console.log(result);
-            sessionStorage.clear()
-
-            sessionStorage.setItem("user_id", result.id);
-            sessionStorage.setItem('first_name', result.first_name);
-            sessionStorage.setItem('last_name', result.last_name);
-            sessionStorage.setItem('role', result.role);
-            sessionStorage.setItem('user_token', result.token);
-            console.log(sessionStorage);
-            if(result.role === 'learner'){
-              navigate('/course/my-courses')
+            sessionStorage.clear();
+            if (result.is_active === true) {
+              sessionStorage.setItem("user_id", result.id);
+              sessionStorage.setItem("first_name", result.first_name);
+              sessionStorage.setItem("last_name", result.last_name);
+              sessionStorage.setItem("role", result.role);
+              sessionStorage.setItem("user_token", result.token);
+              console.log(sessionStorage);
+              if (result.role === "learner") {
+                navigate("/course/my-courses");
+              } else {
+                navigate("/");
+              }
+              setEmail("");
+              setPassword("");
+            } else {
+              Swal.fire({
+                icon: "warning",
+                html: `<b>Your Account is not Active</b>`
+              })
             }
-            else{
-            navigate("/");
-            }
-            setEmail("");
-            setPassword("");
           });
         } else if (response.status === 404) {
-          response.json().then(function (res) {
-            setInvalidUser(res)
-          });
-        }
-        else {
-          const err = {message: 'User is not Registered'}
-          setInvalidUser(err)
+          Swal.fire({
+            icon: "error",
+            html: `<b>Internal Server Error</b>`
+          })
+        } else {
+          const err = { message: "User is not Registered" };
+          Swal.fire({
+            icon: "error",
+            html: `<b>${err.message}</b>`
+          })
+          // setInvalidUser(err);
         }
       });
     }
@@ -109,14 +117,9 @@ const SigninPage = () => {
     // }
   };
 
-
-
-
-
   return (
     <div className="sign-in-page">
       <form className="sign-in-form">
-        {invalidUser.message && <p className={`error m-0`}>{invalidUser.message}</p>}
         <label>Email</label>
         <input
           type="email"
@@ -127,16 +130,18 @@ const SigninPage = () => {
         {errors.email && <p className={`error m-0`}>{errors.email}</p>}
         <label>Password</label>
         <div className="password-field">
-        <input
-          type={passwordType}
-          value={password}
-          onChange={handlePassword}
-          placeholder="Password"
+          <input
+            type={passwordType}
+            value={password}
+            onChange={handlePassword}
+            placeholder="Password"
           />
-          <i className={`eye_show fas fa-solid ${eyeMode}`} onClick={handleEyeMode}></i>
+          <i
+            className={`eye_show fas fa-solid ${eyeMode}`}
+            onClick={handleEyeMode}
+          ></i>
         </div>
-     
-  
+
         {errors.password && <p className={`error m-0`}>{errors.password}</p>}
         <input
           type="submit"
@@ -145,7 +150,10 @@ const SigninPage = () => {
           className="button"
         />
         <span className="forgot-password">
-          Forgot your <a role="button"  onClick={() => handleForgetPasswordBtn()}>password?</a>
+          Forgot your{" "}
+          <a role="button" onClick={() => handleForgetPasswordBtn()}>
+            password?
+          </a>
         </span>
       </form>
     </div>

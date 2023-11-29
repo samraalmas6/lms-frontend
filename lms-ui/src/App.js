@@ -63,7 +63,7 @@ function App() {
         <Route path="/course/content/:courseId" element={<PrivateRoute><CourseContent /></PrivateRoute>}></Route>
         <Route path="/course/my-courses" element={<PrivateRoute page="My Courses"><MyCourses /></PrivateRoute>}></Route>
         <Route path="/course/create-assignment" element={<PrivateRoute><AssignmentScreen /></PrivateRoute>}></Route>
-        <Route path="/course/my-assignments" element={<PrivateRoute page="My Assignments"><AssignmentView /></PrivateRoute>}></Route>
+        <Route path="/course/my-assignments/:id" element={<PrivateRoute page="My Assignments"><AssignmentView /></PrivateRoute>}></Route>
         <Route path="/course/assignment-hub" element={<PrivateRoute page="Assignments"><AssignmentGrading /></PrivateRoute>}></Route>
         <Route path="/my-courses/show" element={<PrivateRoute page="Course"><CourseTable /></PrivateRoute>}></Route>
         <Route path="/category/add" element={<PrivateRoute page="Category"><AddCategory /></PrivateRoute>}></Route>

@@ -222,7 +222,7 @@ const AllUsers = () => {
                         </div>
                       </td>
                       <td>
-                        <p className={`all-user-role-container`}>{user.role}</p>
+                        <p className={`all-user-role-container`} style={{ textTransform: "capitalize"}}>{user.role}</p>
                       </td>
                       <td><p className={`all-user-role-container`}>{user.email}</p></td>
                       <td><p className={`all-user-role-container`}>{user.phone_number}</p></td>
