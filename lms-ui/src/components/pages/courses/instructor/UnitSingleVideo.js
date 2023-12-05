@@ -153,6 +153,7 @@ const UnitSingleVideo = ({video, index, getUSerFullName, handleUnitContent }) =>
         {editVideo ? (
           <input
             type="text"
+            autoFocus
             placeholder="Unit Title"
             value={videoTitle}
             onChange={(e) => handleVideoTitle(e)}

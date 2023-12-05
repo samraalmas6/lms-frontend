@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import emailjs from "@emailjs/browser";
+import finalLogo from '../content/Images/xloop-logo-2.png'
+import '../styles/ForgetPassword.css'
+import Swal from "sweetalert2";
 
 const ForgetPassword = () => {
     useEffect(() => emailjs.init("739xGz6oDs9E1tq_w"), []);
@@ -22,7 +25,7 @@ const ForgetPassword = () => {
         if (response.status === 200) {
             response.json().then(function (result) {
                 console.log(result);
-                sendEmail(result.link[0])
+                sendEmail(result.token)
               });
      
           
@@ -46,7 +49,10 @@ const ForgetPassword = () => {
         token: message,
         sender: "LMS",
       });
-      alert("email successfully sent check inbox");
+  Swal.fire({
+    icon: "success",
+    text: "Reset link sent Successfully!"
+  })
       setEmail("")
     } catch (error) {
       console.log(error);
@@ -55,6 +61,11 @@ const ForgetPassword = () => {
 
   return (
     <div className="forget-password-main">
+      <div className="lms-logo-main-container">
+        <div className="lms-log-container">
+          <img src={finalLogo} alt="LMS" width={350} />
+        </div>
+      </div>
       <form className="sign-in-form forget-password">
         <label>Email</label>
         <input

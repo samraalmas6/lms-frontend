@@ -78,7 +78,7 @@ const SinglePdf = ({handleUnitPDF, pdf }) => {
           />
         </div>
         <i class="fas fa-solid fa-file-pdf"></i>
-        <li>{pdf.title}</li>
+        <li>{pdf.title.length < 35 ? pdf.title : pdf.title.slice(0,35)+"..."}</li>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import img from "../../../content/Images/uploadImg.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CourseProbs } from "../../../../App";
 import Swal from "sweetalert2";
+import '../../../styles/CourseContent.css'
 // import Swal from 'sweetalert2';
 
 const CourseContent = ({}) => {
@@ -348,6 +349,7 @@ const CourseContent = ({}) => {
         formData.append("start_date", courseStart);
         formData.append("end_date", courseEnd);
       }
+      formData.append("is_active", visibility);
       formData.append("category", [courseCategory]);
       formData.append("instructor", instructor);
       formData.append("updated_by", sessionStorage.getItem("user_id"));
@@ -397,12 +399,14 @@ const CourseContent = ({}) => {
                       return (
                         <div key={course.id}>
                           <li
+                          className={`course-content-sub-menue-li ${courseTitle === course.title && "active-course"}`}
                             role="button"
                             onClick={() => {
                               handleCourseContent(course);
                             }}
                           >
                             {course.title}
+                            {courseTitle === course.title && <span>  <i class="fa fa-chevron-circle-right"></i></span>}
                           </li>
                         </div>
                       );
@@ -459,9 +463,9 @@ const CourseContent = ({}) => {
                   /> */}
                 </div>
 
-                <div className="btn-group dropstart">
+                <div className="btn-group dropstart course-content-close-btn-container">
                   <i
-                    className="bi bi-three-dots-vertical "
+                    className="bi bi-three-dots-vertical course-content-three-dots"
                     type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
@@ -469,11 +473,11 @@ const CourseContent = ({}) => {
                   ></i>
                   <button
                     type="button"
-                    className="btn-close ms-2  me-2"
+                    className="course-content-close-btn"
                     data-bs-dismiss="offcanvas"
                     aria-label="Close"
                     onClick={() => navigate(-1)}
-                  ></button>
+                  >X</button>
                   <div className="dropdown-menu option-main-container">
                     <ul className="option-ul" style={{ display: "flex" }}>
                       <li>
@@ -512,7 +516,7 @@ const CourseContent = ({}) => {
               <form className="course-content-form">
                 <div className="course-content-description-section">
                   <div className="course-content-editor me-2">
-                    <label className="mb-0 mt-1 course-content-label">
+                    <label className="course-content-label">
                       Description
                     </label>
                     <Editor
@@ -615,12 +619,13 @@ const CourseContent = ({}) => {
                         <ul className="coauthor-list-section">
                           {coAutherData.length !== 0 ? 
                             coAutherData.map((coAuthor, index) => {
-                              if ((coAuthor=== +userId || courseCreator === coAuthor) && sessionStorage.getItem('role') !== "admin") {
+                              if ((coAuthor=== +userId || courseCreator === coAuthor) && sessionStorage.getItem('role') === "admin") {
                                 return null;
                               }
                               return (
                                 <li
                                   key={coAuthor}
+                                  className="course-content-coauthor-list-li"
                                   style={{
                                     display: "flex",
                                     justifyContent: "space-between",
@@ -628,7 +633,7 @@ const CourseContent = ({}) => {
                                   }}
                                 >
                                   <div
-                                    className=""
+                                    className="course-content-coauthor-list-avator"
                                     style={{
                                       display: "flex",
                                       alignItems: "center",
@@ -757,7 +762,7 @@ const CourseContent = ({}) => {
                     courseId={courseId}
                   />
                 </div>
-                <div className="category-save-btn">
+                <div className="save-course-content-btn-container">
                   <button
                     type="button"
                     className="btn btn-primary"

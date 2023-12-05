@@ -9,10 +9,13 @@
 .dashboard-main-container {
   padding-left: 12px;
   padding-right: 12px;
-  height: 90vh;
+  height: 88vh;
 }
 .dashboard-chart-section {
   width: 45%;
+  min-height: 52vh !important;
+  max-height: 100vh !important;
+
 }
 .dashboard-chart-section div {
   width: 100% !important;
@@ -21,6 +24,8 @@
   display: flex;
   justify-content: space-between;
   align-items: start;
+  min-height: 55vh;
+  max-height: 55vh;
 }
 
 .dashboard-new-registered-user-section {

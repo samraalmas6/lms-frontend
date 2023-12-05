@@ -393,9 +393,9 @@ function CourseTable({ modules, assignments }) {
           selectedAssignments={selectedAssignment} />
         </div>
       ) : (
-        <div className="">
-          <div className="main-outer-container">
-            <div className={`course-main ${videoPaneState}`}>
+        <div className="div-main-size-container">
+          <div className="main-outer-container div-main-size-container">
+            <div className={`course-main ${videoPaneState} div-main-size-container`}>
               <div className="videos-section">
                 <VideoPlayer
                   selectedLesson={selectedLesson}
@@ -405,7 +405,11 @@ function CourseTable({ modules, assignments }) {
                 {/* tabs below video */}
               </div>
 
-              <div className="tabs-container">
+
+            {/* This is tab section */}
+
+
+              {/* <div className="tabs-container">
                 <ul className="tabs">
                   <li
                     className={activeTab === "Course Content" ? "active" : ""}
@@ -428,22 +432,22 @@ function CourseTable({ modules, assignments }) {
                 <div className="tab-content">
                   {activeTab === "Course Content" && (
                     <div>
-                      {/* Add content for Course Content tab */}
+                     
                       <p>Course Content tab.</p>
                     </div>
                   )}
 
                   {activeTab === "Overview" && (
                     <div>
-                      {/* Add content for Overview tab */}
+                     
                       <p>Overview tab.</p>
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
             </div>
             {isCourseContentVisible && (
-              <div className="App">
+              <div className="App-container div-main-size-container">
                 <header className="App_header">
                   <h1>Course Content</h1>
                   <i

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import userImg from "../../content/Images/user.png";
 import "../../styles/Users.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Avatar from "react-avatar";
 import Swal from "sweetalert2";
 // import Avatar from "react-avatar";
 
 const AllUsers = () => {
+  const {state} = useLocation()
   const [showBlock, setShowBlock] = useState(false);
   const [userData, setUserData] = useState([]);
   const [usersData, setUsersData] = useState([]);
@@ -25,7 +26,7 @@ const AllUsers = () => {
         if (response.status === 200) {
           response.json().then(function (result) {
             console.log(result);
-            setUserData(result);
+            setUserData(handleFilterData(result, state ? state.filter: "all"));
             setUsersData(result);
           });
         } else {
@@ -34,10 +35,23 @@ const AllUsers = () => {
       });
     };
     getUsers();
-  }, []);
+    
+  }, [0, state]);
 
   const handleViewTogle = () => {
     setShowBlock((prev) => !prev);
+  };
+
+  const handleFilterData = (usersData,value) => {
+    if (value !== "all") {
+      const filteredUserData = usersData.filter((user) => {
+        return user.role === value;
+      });
+      console.log("filtered Data", filteredUserData, value);
+      return filteredUserData
+    } else {
+      return usersData
+    }
   };
 
   const handleFilterBtn = (value) => {
@@ -112,7 +126,7 @@ const AllUsers = () => {
   }
 
   return (
-    <div className="main pt-2" style={{ boxShadow: "4px 3px 21px -10px gray" }}>
+    <div className="main pt-2" style={{ boxShadow: "4px 5px 15px -3px gray" }}>
       <form className="all-usersform">
         {/* <input
           type="search"
@@ -175,7 +189,7 @@ const AllUsers = () => {
         {!showBlock ? (
           <>
           <div className="all-user-content-table">
-          <table className="table">
+          <table className="table table-striped">
             <thead>
               <tr>
               <th colSpan="1" className="all-user-table-heading ps-2">#</th>
@@ -308,13 +322,13 @@ const AllUsers = () => {
             </div>
             <div className="user-profile-section">
               <div
-                className={`offcanvas offcanvas-end ${showProfile} `}
+                className={`offcanvas offcanvas-end single-user-offcanvas ${showProfile} `}
                 tabIndex="-1"
-                style={{ width: "30%" }}
+                style={{ width: "32%" }}
                 id="offcanvasTeam"
                 aria-labelledby="offcanvasRightLabel"
               >
-                <div className="offcanvas-body ">
+                <div className="offcanvas-body single-user-offcanvas-body">
                   <div className="offcanvas-head">
                     <span
                       className="offcanvas-title single-user-heading-title"
@@ -393,11 +407,11 @@ const AllUsers = () => {
                               </span>
                             </div>
                             <div className="signle-user-country single-user-container">
-                              <span className="single-user-label">Active</span>
+                              <span className="single-user-label">Status</span>
                               <span className="country-tag">
                                 {user.is_active
-                                  ? "Activated User"
-                                  : "Not Activated"}
+                                  ? "Active"
+                                  : "Inactive"}
                               </span>
                             </div>
                             <div className="single-user-teams single-user-container"></div>

@@ -16,3 +16,16 @@
     align-items: center;
     justify-content: space-between;
 }
+.unit-heading-container-title {
+    min-width: 20%;
+    max-width: 20%;
+  }
+.additionalbtn {
+    padding: 6px 8px;
+    border: none;
+    border-radius: 5px;
+    background-color: #29a98a;
+    color: #ffffff;
+    font-size: 16px;
+    text-transform: capitalize;
+  }

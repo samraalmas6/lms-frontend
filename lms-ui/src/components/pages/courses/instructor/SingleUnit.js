@@ -274,7 +274,9 @@ const SingleUnit = ({ unit, setUnitId }) => {
     }
   };
 
-
+const handleAddResourse = () => {
+  navigate("/course/add-resourses")
+}
 
   const handleDeleteUnit = (unit, deleted) => {
     let action = "";
@@ -357,14 +359,15 @@ const SingleUnit = ({ unit, setUnitId }) => {
             onMouseEnter={() => setShowEditBtn(true)}
             onMouseLeave={() => setShowEditBtn(false)}
           >
-            <div className={`${unit.is_delete ? "deleted-content " : ""}`}>
+            <div className={`${unit.is_delete ? "deleted-content unit-heading-container-title" : "unit-heading-container-title"}`}>
               <span className="me-3" >Unit</span>
               {editUnit ? (
                 <input
                   type="text"
+                  autoFocus
                   placeholder="Unit Title"
                   value={unitTitle}
-                  className={`${unit.is_delete ? "deleted-content" : "unitTitle"}`}
+                  className={`${unit.is_delete ? "deleted-content w-50" : "unitTitle w-50"}`}
                   disabled={unit.is_delete}
                   onChange={(e) => handleUnitTitle(e)}
                   required
@@ -373,14 +376,18 @@ const SingleUnit = ({ unit, setUnitId }) => {
                   onMouseLeave={preventAccordionOpen}
                 />
               ) : (
-                <span>{unitTitle}</span>
+                <span>{unitTitle}              
+                {showEditBtn && (
+                  <i
+                    className="bi bi-pencil ms-2 module-edit-btn"
+                    onClick={(e) => {
+  
+                      setEditUnit(true)
+                    }}
+                  ></i>
+                )}</span>
               )}
-              {showEditBtn && (
-                <i
-                  className="bi bi-pencil ms-2 module-edit-btn"
-                  onClick={() => setEditUnit(true)}
-                ></i>
-              )}
+
             </div>
             <div className={`${unit.is_delete ? "deleted-content" : ""}`}>
               <label>Start Date:</label>
@@ -661,7 +668,11 @@ const SingleUnit = ({ unit, setUnitId }) => {
               />
             )} */}
           </div>
-          <div className="slide-section"></div>
+          <div className="slide-section">
+            <button type="button" className="additionalbtn"
+              onClick={() => handleAddResourse()}
+            ><span>+</span> Additional resources</button>
+          </div>
           <div className="pdf-section"></div>
         </div>
       </div>

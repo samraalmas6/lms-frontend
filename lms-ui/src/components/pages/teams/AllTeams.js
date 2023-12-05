@@ -167,7 +167,7 @@ const AllTeams = ({ show }) => {
           response.json().then(function (result) {
             console.log(result);
             setTeamName(result.name);
-            setTeamTitle("")
+            setTeamTitle("");
             setEditTeam(false);
             // window.location.reload();
           });
@@ -630,12 +630,12 @@ const AllTeams = ({ show }) => {
   const handleTeamUpdate = () => {};
 
   return (
-    <div className="" style={{ boxShadow: "4px 3px 21px -10px gray" }}>
-      <div className="all-team-content pt-2">
-        <div className="creat-course-btn">
+    <div className="pt-2" style={{ boxShadow: "4px 5px 15px -3px gray" }}>
+      <form className="add-teamform">
+        <div className="creat-team-btn">
           <button
             type="button"
-            className="btn btn-primary ms-3 mb-2"
+            className="btn btn-primary ms-3"
             data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasTeam"
             aria-controls="offcanvasRight"
@@ -644,10 +644,12 @@ const AllTeams = ({ show }) => {
           </button>
           {/* This is for Team Add panel */}
         </div>
+      </form>
+      <div className="all-team-content">
         <div
           className={`offcanvas offcanvas-end ${show} `}
           tabIndex="-1"
-          style={{ width: "28%" }}
+          style={{ width: "30%" }}
           id="offcanvasTeam"
           aria-labelledby="offcanvasRightLabel"
         >
@@ -720,8 +722,7 @@ const AllTeams = ({ show }) => {
                     teamData.map((team) => {
                       return (
                         <div key={team.id}>
-                          <li>
-                            <a
+                          {/* <li
                               role="button"
                               onClick={() => {
                                 setTeamName(team.name);
@@ -732,7 +733,28 @@ const AllTeams = ({ show }) => {
                               }}
                             >
                               {team.name}
-                            </a>
+                          
+                          </li> */}
+                          <li
+                            className={`course-content-sub-menue-li ${
+                              teamName === team.name && "active-course"
+                            }`}
+                            role="button"
+                            onClick={() => {
+                              setTeamName(team.name);
+                              setTeamTitle(team.name);
+                              setTeamUser(team.users);
+                              setTeamId(team.id);
+                              setTeamCourses(team.courses);
+                            }}
+                          >
+                            {team.name}
+                            {teamName === team.name && (
+                              <span>
+                                {" "}
+                                <i class="fa fa-chevron-circle-right"></i>
+                              </span>
+                            )}
                           </li>
                         </div>
                       );
@@ -753,42 +775,41 @@ const AllTeams = ({ show }) => {
                   ></button>
                 </div>
                 <form>
-                <div
-                  className=""
-                  style={{ display: "flex", flexDirection: "column" }}
-                  onMouseEnter={() => setShowEditBtn(true)}
-                  onMouseLeave={() => setShowEditBtn(false)}
-                >
-                    <label className="mb-0">Team Name:</label>
+                  <div
+                    className=""
+                    style={{ display: "flex", flexDirection: "column" }}
+                    onMouseEnter={() => setShowEditBtn(true)}
+                    onMouseLeave={() => setShowEditBtn(false)}
+                  >
+                    {/* <label className="mb-0 team-title-label">Team Name:</label> */}
                     {/* <span>{teamName}</span> */}
-              
 
-                  {editTeam ? (
-                    <input
-                      type="text"
-                      placeholder="Team Title"
-                      value={teamTitle}
-                      style={{ width: "99%" }}
-                      className="course-title mb-2"
-                      onChange={(e) => {
-                        handleTeamTitle(e);
-                      }}
-                      required
-                      onKeyDown={(e) => handleUpdateTitle(e)}
-                      onContextMenu={(e) => handleUpdateTitle(e)}
-                    />
-                  ) : (
-                    <span style={{ width: "" }} className="course-title mb-2">
-                      {teamName}
-                      {showEditBtn && (
-                        <i
-                          className="bi bi-pencil ms-2 module-edit-btn"
-                          onClick={() => setEditTeam(true)}
-                        ></i>
-                      )}
-                    </span>
-                  )}
-                      </div>
+                    {editTeam ? (
+                      <input
+                        type="text"
+                        placeholder="Team Title"
+                        value={teamTitle}
+                        style={{ width: "99%" }}
+                        className="team-title mb-2"
+                        onChange={(e) => {
+                          handleTeamTitle(e);
+                        }}
+                        required
+                        onKeyDown={(e) => handleUpdateTitle(e)}
+                        onContextMenu={(e) => handleUpdateTitle(e)}
+                      />
+                    ) : (
+                      <span style={{ width: "" }} className="team-title  mb-2">
+                        {teamName}
+                        {showEditBtn && (
+                          <i
+                            className="bi bi-pencil ms-2 module-edit-btn"
+                            onClick={() => setEditTeam(true)}
+                          ></i>
+                        )}
+                      </span>
+                    )}
+                  </div>
                   {/* <input
                     type="text"
                     value={teamName}
@@ -985,14 +1006,14 @@ const AllTeams = ({ show }) => {
                         <h3>Courses List</h3>
                         <button
                           type="button"
-                          className="text-bg-primary add-new-user"
+                          className="add-to-team-done-btn"
                           onClick={(e) => handleAddCourse(e)}
                         >
                           Done
                         </button>
                       </div>
 
-                      <table className="table">
+                      <table className="table table-striped">
                         <thead>
                           <tr>
                             <th
@@ -1001,14 +1022,25 @@ const AllTeams = ({ show }) => {
                                 handlCourseAllSelect();
                               }}
                               style={{ cursor: "pointer" }}
+                              className="team-table-heading"
                             >
                               Select All
                             </th>
-                            <th scope="col">Course Title</th>
-                            <th scope="col">Author</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Last Update</th>
-                            <th scope="col">Action</th>
+                            <th scope="col" className="team-table-heading">
+                              Course Title
+                            </th>
+                            <th scope="col" className="team-table-heading">
+                              Author
+                            </th>
+                            <th scope="col" className="team-table-heading">
+                              Description
+                            </th>
+                            <th scope="col" className="team-table-heading">
+                              Last Update
+                            </th>
+                            <th scope="col" className="team-table-heading">
+                              Action
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1095,14 +1127,14 @@ const AllTeams = ({ show }) => {
                           <h3>Users List</h3>
                           <button
                             type="button"
-                            className="text-bg-primary add-new-user"
+                            className="add-to-team-done-btn"
                             onClick={handleAddUser}
                           >
                             Done
                           </button>
                         </div>
 
-                        <table className="table">
+                        <table className="table table-striped">
                           <thead>
                             <tr>
                               <th
@@ -1111,15 +1143,28 @@ const AllTeams = ({ show }) => {
                                   handlUserAllSelect();
                                 }}
                                 style={{ cursor: "pointer" }}
+                                className="team-table-heading"
                               >
                                 Select All
                               </th>
-                              <th scope="col">Name</th>
-                              <th scope="col">Gender</th>
-                              <th scope="col">Role</th>
-                              <th scope="col">Email</th>
-                              <th scope="col">Phone Number</th>
-                              <th scope="col">Active</th>
+                              <th scope="col" className="team-table-heading">
+                                Name
+                              </th>
+                              <th scope="col" className="team-table-heading">
+                                Gender
+                              </th>
+                              <th scope="col" className="team-table-heading">
+                                Role
+                              </th>
+                              <th scope="col" className="team-table-heading">
+                                Email
+                              </th>
+                              <th scope="col" className="team-table-heading">
+                                Phone Number
+                              </th>
+                              <th scope="col" className="team-table-heading">
+                                Active
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -1145,7 +1190,7 @@ const AllTeams = ({ show }) => {
                                       </td>
                                       <td
                                         scope="row"
-                                        className="allusers-name-container"
+                                        className="team-allusers-name-container"
                                       >
                                         <div></div>
                                         <div className="allusers-name-section">
@@ -1205,13 +1250,13 @@ const AllTeams = ({ show }) => {
         </div>
         <div className="team-table-main-container">
           {!showBlock ? (
-            <table className="table">
+            <table className="table table-striped">
               <thead>
                 <tr>
                   <th className="team-table-heading" style={{ width: "3%" }}>
                     #
                   </th>
-                  <th className="team-table-heading">Team</th>
+                  <th className="team-table-heading ">Team</th>
                   <th className="team-table-heading">Users</th>
                   <th className="team-table-heading">Courses</th>
                   <th className="team-table-heading">Action</th>
@@ -1240,7 +1285,7 @@ const AllTeams = ({ show }) => {
                       <td style={{ width: "3%", fontWeight: "bold" }}>
                         {index + 1}
                       </td>
-                      <td>{team.name}</td>
+                      <td className="all-team-table-team-title">{team.name}</td>
                       <td>
                         {team.users && team.users.length !== 0 ? (
                           <span className={styles.text_with_background}>

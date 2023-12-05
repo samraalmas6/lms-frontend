@@ -220,6 +220,7 @@ input[type="tel"]:hover, input[type="tel"]:focus {
     border: none;
     color: #fff;
     font-weight: 500;
+    font-size: 22px;
     margin-left: 5px;
     margin-bottom: 12px;
     width: 55%;

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "../styles/Verification.module.css";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function VerificationPage() {
   const navigate = useNavigate();
@@ -55,9 +56,13 @@ console.log('token ',token);
     e.preventDefault();
 
     if (newPassword === "" || confirmPassword === "") {
-      alert("Fill in the required fields");
+      Swal.fire({
+        icon: "warning",
+        text: `This field can't be empty`
+      })
       return;
-    } else {
+    } 
+    else if(newPassword === confirmPassword) {
       
       if(token){
         const userData = {
@@ -77,7 +82,18 @@ console.log('token ',token);
             setOldPassword("");
             setNewPassword("");
             setConfirmPassword("");
-            navigate("/auth/login");
+            Swal.fire({
+              icon: "success",
+              text: "Password Reset successfully!"
+            }).then(
+            navigate("/auth/login")
+            )
+          }
+          else {
+            Swal.fire({
+              icon: "error",
+              text: "Invalid Token"
+            })
           }
           // response.json().then(function (result) {
           //   console.log(result);
@@ -106,14 +122,31 @@ console.log('token ',token);
             setOldPassword("");
             setNewPassword("");
             setConfirmPassword("");
-            navigate("/auth/login");
+            Swal.fire({
+              icon: "success",
+              text: `Account Acctivated Successfully!`
+            }).then(
+              navigate("/auth/login")
+            )
+          }else{
+            Swal.fire({
+              icon: "error",
+              text: `Account Not Acctivated!`
+            })
           }
+
           // response.json().then(function (result) {
           //   console.log(result);
           // })
         });
       }
 
+    }
+    else{
+      Swal.fire({
+        icon: "warning",
+        text: `Confirmation password not matched`
+      })
     }
   };
 

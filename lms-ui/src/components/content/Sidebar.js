@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../styles/Sidebar.css";
 import { Link, NavLink } from "react-router-dom";
 import lmsLogo from '../content/Images/lms-logo.png'
+import finalLogo from '../content/Images/xloop-logo-2.png'
 
 const Sidebar = () => {
   const USER_Role = sessionStorage.getItem("role");
@@ -32,11 +33,11 @@ const Sidebar = () => {
       {/* <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button> */}
 
       <ul className="nav flex-column sticky-top pl-0 pt-0 sidebar-nav ">
-        <li className={`nav-item mb-2 mt-2`} >
-          <Link to={USER_Role === "admin" ? "/dashboard" : "/course/my-courses"} className="nav-link text-secondary" >
-            <h5 style={{ textAlign: "center" }}>
-              <img src={lmsLogo} alt=" XLoop LMS" width={120}/>
-             </h5>
+        <li className={`nav-item mb-2 mt-2 lms-logo-link`} >
+          <Link to={USER_Role === "admin" ? "/dashboard" : "/course/my-courses"} className="nav-link text-secondary p-0 text-center " >
+            <span style={{ textAlign: "center" }}>
+              <img src={finalLogo} alt=" XLoop LMS" width={170}/>
+             </span>
           </Link>
         </li>
 

@@ -54,7 +54,7 @@ const SingleUnit = ({
       }
     });
 
-    fetch(`http://127.0.0.1:8000/api/units/1/resources/`, {
+    fetch(`http://127.0.0.1:8000/api/units/${unit.id}/resources/`, {
       method: "GET",
       headers: {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
@@ -70,15 +70,7 @@ const SingleUnit = ({
       }
     });
   };
-
   const handleViewResource = (file) => {
-    alert(file);
-    console.log("pdf url", file);
-    // const obj = moduleUnit.filter((unit) => {
-    //   return unit.id === id;
-    // });
-    // console.log('handleViewPdf ka obj',obj)
-    // setDoc(() => file);
     setShowResource(!showResource);
     window.open(file, "_blank");
   };
@@ -116,7 +108,7 @@ const SingleUnit = ({
   return (
     <div>
       <div className="module-content-container" key={unit.id}>
-        <div className="check-box-div">
+        {/* <div className="check-box-div">
           <form onSubmit={(e) => e.preventDefault()}>
             <input
               className="checkbox"
@@ -128,7 +120,7 @@ const SingleUnit = ({
               checked={unit.completion}
             />
           </form>
-        </div>
+        </div> */}
         <div className="content-inside-container">
           <li
             onClick={() => {
@@ -223,7 +215,7 @@ const SingleUnit = ({
                             </div>
                             <i class="far fa-file-alt"></i>
                             <div className="assignment-pdf">
-                              {assignment.title}
+                              {assignment.title.length < 35 ? assignment.title : assignment.title.slice(0,35)+"..."}
                             </div>
                           </div>
                         );
@@ -251,27 +243,30 @@ const SingleUnit = ({
                       })}
                 </div> */}
                 {/* --------------------------------------- */}
-                <div class="dropdown">
-                  <button class="dropbtn">
-                    <i class="fas fa-folder"></i> Resources
-                    <i class="fas fa-thin fa-chevron-down fa-rotate-180arrow resources-arrow"></i>{" "}
-                  </button>
-                  <div class="dropdown-content">
-                    {unitResources.length === 0
-                      ? null
-                      : unitResources.map((resource) => {
-                          return (
-                            <div
-                              onClick={() =>
-                                handleViewResource(resource.resource)
-                              }
-                            >
-                              {resource.title}
-                            </div>
-                          );
-                        })}
-                  </div>
-                </div>
+                {unitResources.length !== 0 && 
+                                <div class="dropdown">
+                                <button class="dropbtn">
+                                  <i class="fas fa-folder"></i> Resources
+                                  <i class="fas fa-thin fa-chevron-down fa-rotate-180arrow resources-arrow ms-1"></i>
+                                </button>
+                                <div class="dropdown-content">
+                                  {unitResources.length === 0
+                                    ? null
+                                    : unitResources.map((resource) => {
+                                        return (
+                                          <div
+                                            onClick={() =>
+                                              handleViewResource(resource.resource)
+                                            }
+                                          >
+                                            {resource.title}
+                                          </div>
+                                        );
+                                      })}
+                                </div>
+                              </div>
+                }
+
                 {/* --------------------------------------- */}
               </div>
             </li>

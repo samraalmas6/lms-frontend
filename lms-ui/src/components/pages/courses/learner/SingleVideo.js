@@ -33,7 +33,7 @@ const SingleVideo = ({video, videoCompletion, handleLessonSelect}) => {
           style={{ marginTop: "3px" }}
         />
 
-        <li>{video.title}</li>
+        <li>{video.title.length < 35 ? video.title : video.title.slice(0,35)+"..."}</li>
       </div>
     </div>
   );

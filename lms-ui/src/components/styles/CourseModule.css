@@ -3,3 +3,13 @@
   text-decoration: line-through;
   cursor: not-allowed;
 }
+.module-heading-container-title {
+  min-width: 20%;
+  max-width: 20%;
+}
+.course-module-title{
+  font-weight: 600;
+    text-transform: capitalize;
+    color: #007bd5;
+    text-shadow: 1px 1px 2px #c5c5c5;
+}

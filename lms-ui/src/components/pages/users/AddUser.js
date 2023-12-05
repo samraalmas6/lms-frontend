@@ -44,10 +44,11 @@ function AddUser() {
   useEffect(() => emailjs.init("739xGz6oDs9E1tq_w"), [0]);
 
   useEffect(() => {
-    if(team.length === 0) {
-      document.getElementById("react-select-3-placeholder").innerHTML  = "Select Team (optional)"
+    if (team.length === 0) {
+      document.getElementById("react-select-3-placeholder").innerHTML =
+        "Select Team (optional)";
     }
-  },[team])
+  }, [team]);
 
   useEffect(() => {
     const getAllTeams = () => {
@@ -61,9 +62,11 @@ function AddUser() {
           response.json().then(function (result) {
             console.log(result);
             setTeamData(result);
-            setTeamOptions(result.map(team => {
-              return {value: team.name, label: team.name}
-            }))
+            setTeamOptions(
+              result.map((team) => {
+                return { value: team.name, label: team.name };
+              })
+            );
           });
         } else {
           console.log(response);
@@ -94,7 +97,7 @@ function AddUser() {
   const handleTeam = (selectedOption) => {
     setTeam(selectedOption);
   };
-  console.log('select team', team);
+  console.log("select team", team);
   const handleCityChange = (e) => {
     setCity(e.target.value);
   };
@@ -171,7 +174,6 @@ function AddUser() {
         is_active: isActive,
         role: userType,
       };
-      console.log(userData);
 
       fetch(`${"http://127.0.0.1:8000/register/"}`, {
         method: "POST",
@@ -184,9 +186,27 @@ function AddUser() {
         if (response.status === 201) {
           response.json().then(function (result) {
             console.log(result);
-            if(result.role !== "instructor"){
-            addToTeamApiRequest(result.id);
+            if (result.role !== "instructor") {
+              addToTeamApiRequest(result.id);
             }
+
+            fetch(`${"http://127.0.0.1:8000/request_password_reset/"}`, {
+              method: "POST",
+              body: JSON.stringify({ email: result.email }),
+              headers: {
+                "Content-type": "application/json",
+              },
+            }).then((response) => {
+              if (response.status === 200) {
+                response.json().then(function (result) {
+                  console.log(result);
+                  sendEmail(result.token);
+                });
+              } else {
+                console.log(response);
+              }
+            });
+
             setFirstName("");
             setLastName("");
             setGender("");
@@ -196,14 +216,10 @@ function AddUser() {
             setPhoneNumber("");
             setIsActive(false);
             setUserType("");
-            Swal.fire({
-              icon: "success",
-              title: "Registered ",
-              html: `User Registered successfully!<br /> check Your inbox`,
-            });
+          
             // Swal.fire("User Registered successfully! check Your inbox");
           });
-          sendEmail();
+          // sendEmail();
         } else if (response.status === 403) {
           console.log(response);
           response.json().then(function (result) {
@@ -219,29 +235,50 @@ function AddUser() {
             keys.forEach((key) => {
               if (result.hasOwnProperty(key)) {
                 Swal.fire({
-                  icon: "error",
-                  title: "Not Registered",
-                  text: `${key} ${String(result[key]).slice(5)}`,
+                  icon: "success",
+                  title: "Registered ",
+                  html: `User Registered successfully!<br /> Reset password link sent`,
                 });
               }
             });
           });
         }
       });
-      const sendEmail = async () => {
+
+      const sendEmail = async (message) => {
         const serviceId = "service_x39w5wk";
-        const templateId = "template_yakcx3c";
+        const templateId = "template_tn75w5s";
         try {
           await emailjs.send(serviceId, templateId, {
-            name: `${firstName} ${lastName}`,
+            name: `${"LMS"} ${"User"}`,
             recipient: email,
-            message: "Verify Account",
+            token: message,
             sender: "LMS",
           });
+          Swal.fire({
+            icon: "success",
+            text: "Reset link sent Successfully!",
+          });
+          setEmail("");
         } catch (error) {
           console.log(error);
         }
       };
+
+      // const sendEmail = async () => {
+      //   const serviceId = "service_x39w5wk";
+      //   const templateId = "template_yakcx3c";
+      //   try {
+      //     await emailjs.send(serviceId, templateId, {
+      //       name: `${firstName} ${lastName}`,
+      //       recipient: email,
+      //       message: "Verify Account",
+      //       sender: "LMS",
+      //     });
+      //   } catch (error) {
+      //     console.log(error);
+      //   }
+      // };
     } else {
       const keys = Object.keys(errors);
       keys.forEach((key) => {
@@ -265,6 +302,11 @@ function AddUser() {
 
   const handleExcelFile = (e) => {
     const reader = new FileReader();
+    if(e.target.files[0]){
+      setExcelUsers([])
+      setShowErrorCol(false)
+      setShowSuccess(false)
+    }
     reader.readAsBinaryString(e.target.files[0]);
     console.log(reader);
     reader.onload = (e) => {
@@ -297,6 +339,24 @@ function AddUser() {
       }).then((response) => {
         if (response.status === 201) {
           response.json().then(function (result) {
+
+            fetch(`${"http://127.0.0.1:8000/request_password_reset/"}`, {
+              method: "POST",
+              body: JSON.stringify({ email: result.email }),
+              headers: {
+                "Content-type": "application/json",
+              },
+            }).then((response) => {
+              if (response.status === 200) {
+                response.json().then(function (res) {
+                  console.log(res);
+                  sendEmail(res.token, result.email);
+                });
+              } else {
+                console.log(response);
+              }
+            });
+
             setShowSuccess(true);
             if (last === "last" && counter === 0) {
               setLoading(false);
@@ -357,6 +417,27 @@ function AddUser() {
           });
         }
       });
+
+      const sendEmail = async (message, email) => {
+        const serviceId = "service_x39w5wk";
+        const templateId = "template_tn75w5s";
+        try {
+          await emailjs.send(serviceId, templateId, {
+            name: `${"LMS"} ${"User"}`,
+            recipient: email,
+            token: message,
+            sender: "LMS",
+          });
+          Swal.fire({
+            icon: "success",
+            text: "Reset link sent Successfully!",
+          });
+          setEmail("");
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      
     };
 
     // const reader = new FileReader();
@@ -403,18 +484,17 @@ function AddUser() {
           });
         }
       });
-    }
+    };
 
-    if(team.length !== 0){
-    team.forEach(team => {
-      addTeamApi({team_name: team.value, user_ids: [userId]})
-    });
-  }
+    if (team.length !== 0) {
+      team.forEach((team) => {
+        addTeamApi({ team_name: team.value, user_ids: [userId] });
+      });
+    }
     // const obj = {
     //   team_name: team,
     //   user_ids: [userId],
     // };
-
   };
   const getUserRegisteredStatus = (email) => {
     const obj = registeredErrors.filter((element) => {
@@ -478,102 +558,102 @@ function AddUser() {
         {/* <UploadPicture /> */}
         <form className={styles.form}>
           <div className="">
-          <div className="">
-            <h3 className="text-center">Register Single User</h3>
-          </div>
-          <div className={styles.firstlast}>
-            <input
-              type="text"
-              name="firstName"
-              placeholder="First Name"
-              required
-              value={firstName}
-              onChange={handleFirstNameChange}
-            />
-            <input
-              type="text"
-              name="lastName"
-              placeholder="Last Name"
-              required
-              value={lastName}
-              onChange={handleLastNameChnage}
-            />
-          </div>
-          <div className={styles.passemail}>
-            <select
-              value={gender}
-              onChange={handleGender}
-              className={styles.roles}
-            >
-              <option value="" disabled>
-                ---Select Gender---
-              </option>
-              <option value="M">Male</option>
-              <option value="F">Female</option>
-              <option value="O">Other</option>
-            </select>
-            <select
-              value={userType}
-              onChange={handleUserTypeChange}
-              name="userType"
-              className={styles.roles}
-            >
-              <option value="" disabled>
-                ---Select Role---
-              </option>
-              {/* <option value="admin">ADMIN</option> */}
-              <option value="instructor">INSTRUCTOR</option>
-              <option value="learner">LEARNER</option>
-              {/* <option value="custom">CUSTOM ROLE</option> */}
-            </select>
-          </div>
-          <div className={styles.phonecity}>
-            <input
-              type="text"
-              name="email"
-              placeholder="Email"
-              required
-              value={email}
-              onChange={handleEmailChange}
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={password}
-              onChange={handlePasswordChange}
-            />
-          </div>
-          <div className={styles.phonecity}>
-            <input
-              type="text"
-              name="city"
-              placeholder="City (optional)"
-              value={city}
-              onChange={handleCityChange}
-            />
-            <div className={styles.country}>
-              <Select
-                options={options}
-                value={country}
-                onChange={changeHandler}
-                // defaultValue={
-                //   }
+            <div className="">
+              <h3 className="text-center">Register Single User</h3>
+            </div>
+            <div className={styles.firstlast}>
+              <input
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                required
+                value={firstName}
+                onChange={handleFirstNameChange}
+              />
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Last Name"
+                required
+                value={lastName}
+                onChange={handleLastNameChnage}
               />
             </div>
-          </div>
-          <div className={`${styles.addTeamSelector}`}>
-            <span className={`w-50 ${styles.phoneNumberContainer}`}>
-              <PhoneInput
-                defaultCountry="PK"
-                country="PK"
-                international={true}
-                placeholder="Phone Number (optional)"
-                value={phoneNumber}
-                onChange={setPhoneNumber}
+            <div className={styles.passemail}>
+              <select
+                value={gender}
+                onChange={handleGender}
+                className={styles.roles}
+              >
+                <option value="" disabled>
+                  ---Select Gender---
+                </option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+                <option value="O">Other</option>
+              </select>
+              <select
+                value={userType}
+                onChange={handleUserTypeChange}
+                name="userType"
+                className={styles.roles}
+              >
+                <option value="" disabled>
+                  ---Select Role---
+                </option>
+                {/* <option value="admin">ADMIN</option> */}
+                <option value="instructor">INSTRUCTOR</option>
+                <option value="learner">LEARNER</option>
+                {/* <option value="custom">CUSTOM ROLE</option> */}
+              </select>
+            </div>
+            <div className={styles.phonecity}>
+              <input
+                type="text"
+                name="email"
+                placeholder="Email"
+                required
+                value={email}
+                onChange={handleEmailChange}
               />
-            </span>
-            {/* <div className={`${styles.addTeamSelector}`}> */}
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={password}
+                onChange={handlePasswordChange}
+              />
+            </div>
+            <div className={styles.phonecity}>
+              <input
+                type="text"
+                name="city"
+                placeholder="City (optional)"
+                value={city}
+                onChange={handleCityChange}
+              />
+              <div className={styles.country}>
+                <Select
+                  options={options}
+                  value={country}
+                  onChange={changeHandler}
+                  // defaultValue={
+                  //   }
+                />
+              </div>
+            </div>
+            <div className={`${styles.addTeamSelector}`}>
+              <span className={`w-50 ${styles.phoneNumberContainer}`}>
+                <PhoneInput
+                  defaultCountry="PK"
+                  country="PK"
+                  international={true}
+                  placeholder="Phone Number (optional)"
+                  value={phoneNumber}
+                  onChange={setPhoneNumber}
+                />
+              </span>
+              {/* <div className={`${styles.addTeamSelector}`}> */}
               <Select
                 value={team}
                 options={teamOptions}
@@ -589,30 +669,28 @@ function AddUser() {
                     return <option value={team.name}>{team.name}</option>;
                   })} */}
               </Select>
-            {/* </div> */}
-          </div>
-          <div className={`form-check form-switch ps-3 ${styles.active}`}>
-            <div className="">
-            <label htmlFor="IsActive" className={`form-check-label`}>
-              Is Active
-            </label>
-            <input
-              className="form-check-input"
-              type="checkbox"
-              role="switch"
-              value={isActive}
-              onChange={handleIsActiveChange}
-              id="flexSwitchCheckDefault"
-            />
+              {/* </div> */}
             </div>
-           
-            <div className="">
-          </div>
-          </div>
+            <div className={`form-check form-switch ps-3 ${styles.active}`}>
+              <div className="">
+                <label htmlFor="IsActive" className={`form-check-label`}>
+                  Is Active
+                </label>
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  value={isActive}
+                  onChange={handleIsActiveChange}
+                  id="flexSwitchCheckDefault"
+                />
+              </div>
+
+              <div className=""></div>
+            </div>
           </div>
           <div className={styles.addBtnContainer}>
-            
-          <button
+            <button
               className={styles.btn_add}
               onClick={(e) => handleFormSubmit(e)}
               type="button"
@@ -632,7 +710,13 @@ function AddUser() {
                 : styles.excelFileNotSelected
             }`}
           >
-            <label className={`${styles.downloadExcel} ${excelObj.length ===0 ? styles.fileNotSelected : styles.fileSelected}`}>
+            <label
+              className={`${styles.downloadExcel} ${
+                excelObj.length === 0
+                  ? styles.fileNotSelected
+                  : styles.fileSelected
+              }`}
+            >
               Download Excel File Template
               <ExportExcel
                 excelData={ExcelExportData}
@@ -640,7 +724,13 @@ function AddUser() {
                 className={styles.excelexport}
               />
             </label>
-            <label className={`${excelObj.length === 0 ? styles.fileNotSelected :styles.fileSelected}`} >
+            <label
+              className={`${
+                excelObj.length === 0
+                  ? styles.fileNotSelected
+                  : styles.fileSelected
+              }`}
+            >
               Import From Excel file
               <input
                 type="file"

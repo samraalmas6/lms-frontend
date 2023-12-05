@@ -26,6 +26,7 @@ import AssignmentGrading from "./components/pages/courses/instructor/AssignmentG
 import Practice from "./components/hooks/Practice";
 import ForgetPassword from "./components/content/ForgetPassword";
 import CourseContent from "./components/pages/courses/instructor/CourseContent";
+import UnitResourse from "./components/pages/courses/instructor/UnitResourse";
 
 
 export const CourseProbs = createContext(null);
@@ -63,6 +64,7 @@ function App() {
         <Route path="/course/content/:courseId" element={<PrivateRoute><CourseContent /></PrivateRoute>}></Route>
         <Route path="/course/my-courses" element={<PrivateRoute page="My Courses"><MyCourses /></PrivateRoute>}></Route>
         <Route path="/course/create-assignment" element={<PrivateRoute><AssignmentScreen /></PrivateRoute>}></Route>
+        <Route path="/course/add-resourses" element={<PrivateRoute><UnitResourse /></PrivateRoute>}></Route>
         <Route path="/course/my-assignments/:id" element={<PrivateRoute page="My Assignments"><AssignmentView /></PrivateRoute>}></Route>
         <Route path="/course/assignment-hub" element={<PrivateRoute page="Assignments"><AssignmentGrading /></PrivateRoute>}></Route>
         <Route path="/my-courses/show" element={<PrivateRoute page="Course"><CourseTable /></PrivateRoute>}></Route>

@@ -202,6 +202,7 @@ const AssignmentGrading = () => {
 
   const handleGraderName = (id) => {
     const author = authorData.filter(author => author.id === id);
+    if(author.length !==0){
     const graderName = userData.filter((obj) => obj.id === author[0].created_by);
     console.log("This is grader name", graderName);
     if (graderName.length !== 0) {
@@ -209,6 +210,7 @@ const AssignmentGrading = () => {
     } else {
       return "";
     }
+  }
   };
 
   const handleSubmit = (userId, gradingId, submissionId) => {

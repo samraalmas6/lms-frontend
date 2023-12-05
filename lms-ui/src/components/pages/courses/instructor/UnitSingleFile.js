@@ -149,6 +149,7 @@ const UnitSingleFile = ({ file, index, handleUnitContent }) => {
         {editFile ? (
           <input
             type="text"
+            autoFocus
             placeholder="Unit Title"
             value={fileTitle}
             onChange={(e) => handleFileTitle(e)}

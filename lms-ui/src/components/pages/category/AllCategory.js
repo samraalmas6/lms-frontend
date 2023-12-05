@@ -188,11 +188,12 @@ const AllCategory = ({ show }) => {
   };
 
   return (
-    <div className="all-category-outer-main-container">
-      <div className="creat-course-btn p-2">
+    <div className="pt-2 all-category-outer-main-container">
+       <form className="add-categoryform">
+       <div className="create-category-btn">
         <button
           type="button"
-          className="btn btn-primary ms-3 mb-2"
+          className="btn btn-primary ms-3"
           data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasRight"
           aria-controls="offcanvasRight"
@@ -201,6 +202,8 @@ const AllCategory = ({ show }) => {
         </button>
         {/* This is for Category panel */}
       </div>
+       </form>
+
       <div
         className={`offcanvas offcanvas-end ${show}`}
         tabIndex="-1"
@@ -220,8 +223,9 @@ const AllCategory = ({ show }) => {
         </div>
         <div className="offcanvas-body">
           <div className="add-category-content">
-            <form>
-              <label className="mb-0">
+            <form className="add-new-category-form">
+              <div className="add-new-category-form-content">
+              <label className="mb-0 w-100">
                 Title<span style={{ color: "red" }}>*</span>
               </label>
               <input
@@ -229,9 +233,11 @@ const AllCategory = ({ show }) => {
                 value={categoryName}
                 onChange={handleCatName}
                 required
+                placeholder="Team Title"
+                className="w-100"
               />
-              <label className="mb-0 mt-1">Parent Category</label>
-              <select onChange={handleParentCat} value={parentCat}>
+              <label className="mb-0 mt-1 w-100">Parent Category</label>
+              <select onChange={handleParentCat} value={parentCat} className="w-100">
                 <option value="">--Select Category--</option>
                 {categoryData &&
                   categoryData.map((category) => {
@@ -241,12 +247,8 @@ const AllCategory = ({ show }) => {
                       </option>
                     );
                   })}
-                {/* <option value="Category 1">Category 1</option>
-                <option value="Category 2">Category 2</option>
-                <option value="Category 3">Category 3</option>
-                <option value="Category 4">Category 4</option>
-                <option value="Category 5">Category 5</option> */}
               </select>
+              </div>
               <div className="category-save-btn">
                 <button
                   type="button"
@@ -261,7 +263,7 @@ const AllCategory = ({ show }) => {
         </div>
       </div>
 
-      <table className="table">
+      <table className="table table-striped">
         <thead>
           <tr>
             <th className="category-table-heading">#</th>
@@ -278,6 +280,7 @@ const AllCategory = ({ show }) => {
               return (
                 <tr
                   key={category.id}
+                  style={{borderBottom: "1px solid #dee2e6"}}
                   role="button"
                   onClick={() => {
                     setCategoryContent(category);
@@ -301,13 +304,13 @@ const AllCategory = ({ show }) => {
                   <td style={{ width: "3%", fontWeight: "bold" }}>
                     {index + 1}
                   </td>
-                  <td>{category.title}</td>
+                  <td className="category-table-title">{category.title}</td>
                   <td>{category.description}</td>
-                  <td style={{ fontWeight: "bold" }}>
+                  <td style={{ fontWeight: "bold" }} className="ps-3">
                     {getNumberOfCourses(category.id)}
                   </td>
                   <td>{getCategoryName(category.parent)}</td>
-                  <td style={{ display: "flex" }} className="ps-0">
+                  <td style={{ display: "flex", border: "none" }} className="ps-3">
                       {category.is_delete ? (
                         <i
                           className="bi bi-recycle text-info"

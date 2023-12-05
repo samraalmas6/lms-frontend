@@ -16,6 +16,14 @@ body::-webkit-scrollbar {
     display: none; 
   }
 
+.lms-logo-link {
+    /* border-bottom: 2px solid gray; */
+    padding-bottom: 30px;
+    padding-top: 30px;
+    /* margin-bottom: 30px !important; */
+    
+}
+
   .active-link {
     color: #ffffff !important;
   }
@@ -37,14 +45,15 @@ body::-webkit-scrollbar {
     padding: 0px;
     border-bottom: 2px solid #b7b7b7;
     color: #afa9a9 !important;
-    font-weight: 500;
+    font-weight: 400;
+    font-size: 14px;
 }
 .sidebar-nav > :first-child a {
     border-bottom: none;
 }
 .sidebar-nav li a span {
-    font-weight: 600;
+    font-weight: 500;
     text-transform: capitalize;
     color: #f1f1f1;
-    font-size: 16px;
+    font-size: 15px;
 }

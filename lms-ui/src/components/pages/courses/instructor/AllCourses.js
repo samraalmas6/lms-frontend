@@ -30,8 +30,8 @@ const AllCourse = ({ show, minDate }) => {
   const [categoryData, setCategoryData] = useState([]);
   const [teamData, setTeamData] = useState([]);
   const [userData, setUserData] = useState([]);
+  const [descriptionHover, setDescriptionHover] = useState("")
 
-  const [moduleData, setModuleData] = useState([]);
   const [singleCourse, setSingleCourse] = useState([]);
   const [courseCategory, setCourseCategory] = useState("");
   const [courseTitle, setCourseTitle] = useState("");
@@ -180,7 +180,7 @@ const AllCourse = ({ show, minDate }) => {
               result.is_active ? "activated" : "deactivated"
             }`,
             icon: "success",
-          }).then(res => {
+          }).then((res) => {
             window.location.reload();
           });
           // window.location.reload();
@@ -408,87 +408,99 @@ const AllCourse = ({ show, minDate }) => {
     // });
   };
 
+  const onHover = (e) => {
+    setDescriptionHover(e.description)
+    console.log("hovered");
+  };
+
+  const onHoverOver = (e) => {
+    setDescriptionHover("")
+    console.log("out");
+  };
+
   return (
     <div className="">
       <div className="all-course-content pt-2">
-        <div className="creat-course-btn">
-          <button
-            type="button"
-            className="btn btn-primary ms-3 mb-2"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasRight"
-            aria-controls="offcanvasRight"
-            onClick={() => {
-              setCourseTitle("");
-              setCourseCategory("");
-            }}
-          >
-            <i className="fas fa-solid fa-plus"></i> Add Course
-          </button>
-
-          {/* This is for Category panel */}
-
-          <div className="create-course">
-            <div
-              className={`offcanvas offcanvas-end ${show}`}
-              tabIndex="-1"
-              id="offcanvasRight"
-              aria-labelledby="offcanvasRightLabel"
+        <div className="create-course-form">
+          <div className="create-course-btn">
+            <button
+              type="button"
+              className="btn btn-primary ms-3"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasRight"
+              aria-controls="offcanvasRight"
+              onClick={() => {
+                setCourseTitle("");
+                setCourseCategory("");
+              }}
             >
-              <div className="offcanvas-header">
-                <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                  Add Course
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="offcanvas"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div className="offcanvas-body">
-                <div className="add-category-content">
-                  <form onSubmit={(e) => e.preventDefault()}>
-                    <label className="mb-0">
-                      Title<span style={{ color: "red" }}>*</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={courseTitle}
-                      onChange={handleCourseTitle}
-                      required
-                    />
-                    <label className="mb-0 mt-1">
-                      Category<span style={{ color: "red" }}>*</span>
-                    </label>
-                    <select
-                      onChange={(e) => handlecourseCategory(e)}
-                      value={courseCategory}
-                      required
-                    >
-                      <option value="">--Select Category--</option>
-                      {categoryData.length === 0 ||
-                      categoryData.detail == "No objects found"
-                        ? categoryData.detail
-                        : categoryData &&
-                          categoryData.map((category) => {
-                            return (
-                              <option value={category.id} key={category.id}>
-                                {category.title}
-                              </option>
-                            );
-                          })}
-                    </select>
-                    <div className="category-save-btn">
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={(e) => handleSave(e)}
+              <i className="fas fa-solid fa-plus"></i> Add Course
+            </button>
+
+            {/* This is for Category panel */}
+
+            <div className="create-course">
+              <div
+                className={`offcanvas offcanvas-end ${show}`}
+                tabIndex="-1"
+                id="offcanvasRight"
+                aria-labelledby="offcanvasRightLabel"
+              >
+                <div className="offcanvas-header">
+                  <h5 className="offcanvas-title" id="offcanvasRightLabel">
+                    Add Course
+                  </h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="offcanvas"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div className="offcanvas-body">
+                  <div className="add-category-content">
+                    <form onSubmit={(e) => e.preventDefault()}>
+                      <label className="mb-0">
+                        Title<span style={{ color: "red" }}>*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={courseTitle}
+                        onChange={handleCourseTitle}
+                        required
+                      />
+                      <label className="mb-0 mt-1">
+                        Category<span style={{ color: "red" }}>*</span>
+                      </label>
+                      <select
+                        onChange={(e) => handlecourseCategory(e)}
+                        value={courseCategory}
+                        required
                       >
-                        Save
-                      </button>
-                    </div>
-                  </form>
+                        <option value="">--Select Category--</option>
+                        {categoryData.length === 0 ||
+                        categoryData.detail == "No objects found"
+                          ? categoryData.detail
+                          : categoryData &&
+                            categoryData.map((category) => {
+                              return (
+                                <option value={category.id} key={category.id}>
+                                  {category.title}
+                                </option>
+                              );
+                            })}
+                      </select>
+                      <div className="category-save-btn">
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={(e) => handleSave(e)}
+                        >
+                          Save
+                        </button>
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
@@ -508,104 +520,128 @@ const AllCourse = ({ show, minDate }) => {
                 setShowContent={setShowContent}
               /> */}
         <div className="course-table-container">
-        <table className="table table-striped ">
-          <thead className="table-info">
-            <tr>
-            <th className="course-table-heading"  style={{ width: "2%" }}>#</th>
-              <th className="course-table-heading">Course Title</th>
-              <th className="course-table-heading">Description</th>
-              <th className="course-table-heading">Author</th>
-              <th className="course-table-heading">Users Enrolled</th>
-              <th className="course-table-heading">Created</th>
-              <th colSpan="2" className="course-table-heading">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {courseContent.length !== 0 &&
-              courseContent.map((course, index) => {
-                let deletedCourse = "";
-                if (course.is_delete === true) {
-                  deletedCourse = "course-delete";
-                }
-                return (
-                  <tr
-                    key={course.id}
-                    role="button"
-                    // data-bs-toggle="offcanvas"
-                    // data-bs-target="#offcanvasCourse"
-                    // aria-controls="offcanvasRight"
-                    onClick={() => {
-                      setShowContent("show");
-                      handleCourseContentData(course);
-                    }}
-                  >
-                    <td style={{ width: "3%", fontWeight: "bold" }}>{index+1}</td>
-
-                    <td
-                      className={`deletedCourse} ${
-                        deletedCourse && "deleteCourse-line"
-                      }`}
+          <table className="table table-striped ">
+            <thead className="table-info">
+              <tr>
+                <th className="course-table-heading" style={{ width: "2%" }}>
+                  #
+                </th>
+                <th className="course-table-heading">Course Title</th>
+                <th className="course-table-heading course-table-heading-des">Description</th>
+                <th className="course-table-heading">Author</th>
+                <th className="course-table-heading">Users Enrolled</th>
+                <th className="course-table-heading">Created</th>
+                <th colSpan="2" className="course-table-heading">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {courseContent.length !== 0 &&
+                courseContent.map((course, index) => {
+                  let deletedCourse = "";
+                  if (course.is_delete === true) {
+                    deletedCourse = "course-delete";
+                  }
+                  return (
+                    <tr
+                      key={course.id}
+                      role="button"
+                      // data-bs-toggle="offcanvas"
+                      // data-bs-target="#offcanvasCourse"
+                      // aria-controls="offcanvasRight"
+                      onClick={() => {
+                        setShowContent("show");
+                        handleCourseContentData(course);
+                      }}
                     >
-                      {console.log('type of course title', course.title.length)}
-                      {course.title && course.title.length < 30 ? course.title : course.title.slice(0, 30)+"..."}
-                    </td>
-                    <td className={deletedCourse}>{course.description &&course.description.length < 30 ? course.description : course.description.slice(0,35)+"..."}</td>
-                    <td className={deletedCourse}>
-                      <Avatar
-                        name={getUSerFullName(course.instructor)}
-                        style={{
-                          backgroundColor: randomColor(),
-                        }}
-                        className="me-1"
-                        round={true}
-                        size="30px"
-                      ></Avatar>
-                      {getUSerFullName(course.instructor)}
-                    </td>
-                    <td className={`text-center ${deletedCourse}`}>
-                      {getNumberOfUsers(course.id)}
-                    </td>
-                    <td className={deletedCourse}>{course.created_at}</td>
-                    <td className="" style={{ width: "2%" }}>
-                      <div className="form-check form-switch visibility">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          role="switch"
-                          checked={course.is_active}
-                          value={course.is_active}
-                          onClick={(e) => {
-                            e.stopPropagation();
+                      <td style={{ width: "3%", fontWeight: "bold" }}>
+                        {index + 1}
+                      </td>
+                      <td
+                        className={`deletedCourse} ${
+                          deletedCourse && "deleteCourse-line"
+                        } course-table-title-td`}
+                      >
+                        {console.log(
+                          "type of course title",
+                          course.title.length
+                        )}
+                        {course.title && course.title.length < 30
+                          ? course.title
+                          : course.title.slice(0, 30) + "..."}
+                      </td>
+                      <td
+                        className={`${deletedCourse} course-table-heading-des`}
+                        onMouseEnter={(e) => onHover(course)}
+                        onMouseLeave={(e) => onHoverOver(course)}
+                      >
+                        {descriptionHover === course.description && descriptionHover}
+                        {descriptionHover === course.description ? "": course.description && course.description.length < 35
+                          ? course.description
+                          : course.description.slice(0, 35) + "..."}
+                      </td>
+                      <td className={`${deletedCourse} course-table-author-td`}>
+                        <Avatar
+                          name={getUSerFullName(course.instructor)}
+                          style={{
+                            backgroundColor: randomColor(),
                           }}
-                          onChange={(e) => {
-                            e.stopPropagation();
-                            handleVisibility(course)}}
-                          id="flexSwitchCheckDefault"
-                        />
-                      </div>
-                    </td>
-                    <td style={{ display: "flex" }} className="ps-0">
-                      {course.is_delete ? (
-                        <i
-                          className="bi bi-recycle text-info"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteCourse(course, false);
-                          }}
-                        ></i>
-                      ) : (
-                        <i
-                          className="bi bi-trash text-danger"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteCourse(course, true);
-                          }}
-                        ></i>
-                      )}
+                          className="me-1"
+                          round={true}
+                          size="30px"
+                        ></Avatar>
+                        {getUSerFullName(course.instructor)}
+                      </td>
+                      <td
+                        className={`${deletedCourse} course-table-userEnrolled-td`}
+                      >
+                        {getNumberOfUsers(course.id)}
+                      </td>
+                      <td
+                        className={`${deletedCourse} course-table-createdDate-td`}
+                      >
+                        {course.created_at}
+                      </td>
+                      <td className="" style={{ width: "2%" }}>
+                        <div className="form-check form-switch">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            role="switch"
+                            checked={course.is_active}
+                            value={course.is_active}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                            }}
+                            onChange={(e) => {
+                              e.stopPropagation();
+                              handleVisibility(course);
+                            }}
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td className="ps-0">
+                        {course.is_delete ? (
+                          <i
+                            className="bi bi-recycle text-info"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteCourse(course, false);
+                            }}
+                          ></i>
+                        ) : (
+                          <i
+                            className="bi bi-trash text-danger"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteCourse(course, true);
+                            }}
+                          ></i>
+                        )}
 
-                      {/* <div className="form-check form-switch">
+                        {/* <div className="form-check form-switch">
                           <input
                             className="form-check-input "
                             type="checkbox"
@@ -616,12 +652,12 @@ const AllCourse = ({ show, minDate }) => {
                             id="flexSwitchCheckDefault"
                           />
                         </div> */}
-                    </td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

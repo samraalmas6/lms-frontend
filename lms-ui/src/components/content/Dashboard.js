@@ -187,8 +187,8 @@ const Dashboard = () => {
   };
 
 
-  const handleUserClick = () => {
-    navigate("/user/all");
+  const handleUserClick = (value) => {
+    navigate("/user/all",{state:{filter: value}});
   };
   const handleCourseClick = () => {
     navigate("/course/all");
@@ -212,13 +212,13 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-main-container">
-      <div className="mb-1 dashboard-card-container">
+      <div className="mb-3 dashboard-card-container">
         <div className="dashboard-card-inner-container text-center">
           <div className="card bg-success text-white dashboard-card">
             <div
               className="card-body bg-success "
               style={{ backgroundColor: "#57b960" }}
-              onClick={() => handleUserClick()}
+              onClick={() => handleUserClick("all")}
             >
               <div className="rotate">
                 <i className="fa fa-user fa-4x"></i>
@@ -231,7 +231,7 @@ const Dashboard = () => {
         <div className="dashboard-card-inner-container text-center">
           <div
             className="card text-white bg-warning h-100 dashboard-card"
-            onClick={() => handleUserClick()}
+            onClick={() => handleUserClick("instructor")}
           >
             <div className="card-body">
               <div className="rotate">
@@ -245,7 +245,7 @@ const Dashboard = () => {
         <div className="dashboard-card-inner-container text-center">
           <div
             className="card text-white bg-primary h-100 dashboard-card"
-            onClick={() => handleUserClick()}
+            onClick={() => handleUserClick("learner")}
           >
             <div className="card-body">
               <div className="rotate">
@@ -301,14 +301,15 @@ const Dashboard = () => {
           <Chart
             chartType="Bar"
             width="100%"
-            height="400px"
+            height="350px"
             data={data}
             options={options}
           />
         </div>
         <div className="dashboard-new-registered-user-section">
-          <h5 className="mt-1 mb-2 text-secondary">
-            Recently Registered Users
+          <h5 className="mt-1 mb-2">
+            <strong>Recently Registered Users</strong>
+            
           </h5>
           <table className="table mb-1">
             <thead>

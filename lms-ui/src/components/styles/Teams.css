@@ -3,6 +3,10 @@
     max-height: 90vh !important;
     min-height: 90vh !important;
 }
+.creat-team-btn{
+    margin-top: 8px !important;
+    margin-bottom: 10px;
+}
 .add-team-content {
     display: flex;
     min-height: 97vh;
@@ -16,7 +20,32 @@
     min-height: 97vh;
     max-height: 97vh;
 }
-
+.all-team-table-team-title{
+    font-size: 16px;
+    font-weight: 600;
+    text-shadow: 2px 2px 4px #bfbaba;
+    text-transform: capitalize;
+}
+.team-title-label {
+    font-size: 16px;
+    padding-top: 5px;
+}
+.team-title {
+    padding: 10px 12px;
+    margin: 6px 2px 3px;
+    border-radius: 6px;
+    border-style: solid;
+    border-color: #eee;
+    font-size: 18px;
+    font-weight: 600;
+    text-shadow: 2px 2px 4px #bfbaba;
+    text-transform: capitalize;
+  }
+  .team-title:hover,
+  .team-title:focus {
+    outline: none;
+    border-color: #e3e3e3;
+  }
 .team-content-user-table-container {
     width: 55%;
     max-height: 40vh;
@@ -71,10 +100,10 @@
     padding: 9px 0px;
     position: sticky;
     top: 0;
-    background-color: #e9e9e9 !important;
+    background-color: #cff4fc  !important; 
     z-index: 1;
     text-align: start;
-    border: none;
+    border: none !important;
 }
 .team-content-teamName-container{
     padding: 12px 5px;
@@ -148,4 +177,31 @@
     color: #000000;
     outline: none;
     border: none;
+}
+.add-to-team-done-btn{
+    padding: 8px 15px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    background-color: #0d6efd;
+    border: 3px solid #0d6efd;
+    color: #ffff;
+    margin-right: 5px;
+    font-size: 16px;
+    font-weight: 600;
+}
+.add-to-team-done-btn:hover {
+    /* border: 3px solid #ffff; */
+    color: #000000;
+    background: none;
+ 
+}
+.team-allusers-name-container{
+    display: flex;
+    margin: 0;
+    align-items: center;
+    justify-content: start;
+    border: none;
+    padding: 0px !important;
+    padding-bottom: 2px !important;
+
 }

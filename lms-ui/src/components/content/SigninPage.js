@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import finalLogo from '../content/Images/xloop-logo-2.png'
+import '../styles/SigninPage.css'
 import Swal from "sweetalert2";
 
 const SigninPage = () => {
@@ -89,21 +91,21 @@ const SigninPage = () => {
             } else {
               Swal.fire({
                 icon: "warning",
-                html: `<b>Your Account is not Active</b>`
-              })
+                html: `<b>Your Account is not Active</b>`,
+              });
             }
           });
         } else if (response.status === 404) {
           Swal.fire({
             icon: "error",
-            html: `<b>Internal Server Error</b>`
-          })
+            html: `<b>Internal Server Error</b>`,
+          });
         } else {
           const err = { message: "User is not Registered" };
           Swal.fire({
             icon: "error",
-            html: `<b>${err.message}</b>`
-          })
+            html: `<b>${err.message}</b>`,
+          });
           // setInvalidUser(err);
         }
       });
@@ -119,6 +121,11 @@ const SigninPage = () => {
 
   return (
     <div className="sign-in-page">
+      <div className="lms-logo-main-container">
+        <div className="lms-log-container">
+          <img src={finalLogo} alt="LMS" width={350} />
+        </div>
+      </div>
       <form className="sign-in-form">
         <label>Email</label>
         <input
@@ -150,9 +157,11 @@ const SigninPage = () => {
           className="button"
         />
         <span className="forgot-password">
-          Forgot your{" "}
+          Forgot your
           <a role="button" onClick={() => handleForgetPasswordBtn()}>
-            password?
+            <strong style={{ color: "red"}}>
+            Password?
+            </strong>
           </a>
         </span>
       </form>

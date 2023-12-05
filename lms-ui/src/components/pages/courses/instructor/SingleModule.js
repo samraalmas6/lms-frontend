@@ -17,7 +17,7 @@ const SingleModule = ({ module, setModuelContent, setModuleId }) => {
   const endDateRefModule = useRef(null);
   const { courseId } = useContext(CourseProbs);
   const accordion = useRef(null);
-
+  const [openModule, setOpenModule] = useState(false)
   const [moduleTitle, setModuleTitle] = useState(module.title);
   const [moduleStart, setModuleStart] = useState(module.start_date);
   const [moduleEnd, setModuleEnd] = useState(module.end_date);
@@ -199,6 +199,17 @@ const SingleModule = ({ module, setModuelContent, setModuleId }) => {
     });
   };
 
+  const handleOpenModule = (id) => {
+    var collapse = document.getElementById(id);
+    if (collapse && openModule) {
+      collapse.classList.add("show");
+      setOpenModule(false)
+    }
+    else {
+      collapse.classList.remove("show")
+      setOpenModule(true)
+    }
+  };
   return (
     <div
       type="button"
@@ -219,10 +230,13 @@ const SingleModule = ({ module, setModuelContent, setModuleId }) => {
         <div
           className="accordion-button collapsed module-button w-100  "
           type="button"
-          data-bs-toggle="collapse"
-          data-bs-target={`#module${module.id}`}
-          aria-expanded="false"
-          aria-controls={`flush-module${module.id}`}
+          onClick={() => {
+            handleOpenModule(`module${module.id}`);
+          }}
+          // data-bs-toggle="collapse"
+          // data-bs-target={`#module${module.id}`}
+          // aria-expanded="false"
+          // aria-controls={`flush-module${module.id}`}
           ref={accordion}
           // onClick={(e) => e.stopPropagation()}
         >
@@ -231,7 +245,13 @@ const SingleModule = ({ module, setModuelContent, setModuleId }) => {
             onMouseEnter={() => setShowEditBtn(true)}
             onMouseLeave={() => setShowEditBtn(false)}
           >
-            <div className={`${module.is_delete ? "deleted-content" : ""}`}>
+            <div
+              className={`${
+                module.is_delete
+                  ? "deleted-content module-heading-container-title"
+                  : " module-heading-container-title"
+              }`}
+            >
               <span
                 className={`${
                   module.is_delete ? "deleted-content me-3" : "me-3"
@@ -242,10 +262,11 @@ const SingleModule = ({ module, setModuelContent, setModuleId }) => {
               {editModule ? (
                 <input
                   type="text"
+                  autoFocus
                   placeholder="Module Title"
                   value={moduleTitle}
                   disabled={module.is_delete}
-                  className="moduleTitle"
+                  className="moduleTitle w-50 course-module-title"
                   onChange={(e) => {
                     handleModuleTitle(e);
                   }}
@@ -256,14 +277,21 @@ const SingleModule = ({ module, setModuelContent, setModuleId }) => {
                   onMouseLeave={preventAccordionOpen}
                 />
               ) : (
-                <span>{moduleTitle}</span>
-              )}
-              {showEditBtn && (
+                <span className="course-module-title w-50">
+                  {moduleTitle}
+                  {showEditBtn && (
                 <i
                   className="bi bi-pencil ms-2 module-edit-btn"
-                  onClick={() => setEditModule(true)}
+                  onClick={(e) => {
+                  
+                    e.preventDefault();
+                    setEditModule(true);
+                  }}
                 ></i>
               )}
+                </span>
+              )}
+            
             </div>
             <div className={`${module.is_delete ? "deleted-content" : ""}`}>
               <label>Start Date:</label>

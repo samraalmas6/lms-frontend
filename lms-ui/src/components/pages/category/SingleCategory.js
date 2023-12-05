@@ -72,7 +72,7 @@ const SingleCategory = ({categoryContent,categoryData, getCategoryName, coursesD
                   categoryData.map((category) => {
                     return (
                       <div key={category.id}>
-                        <li style={{ fontWeight: "bold"}}>
+                        {/* <li style={{ fontWeight: "bold"}}>
                           <a
                             role="button"
                             onClick={() => {
@@ -84,7 +84,27 @@ const SingleCategory = ({categoryContent,categoryData, getCategoryName, coursesD
                           >
                             {category.title}
                           </a>
-                        </li>
+                        </li> */}
+                        <li
+                            className={`course-content-sub-menue-li ${
+                              categoryTitle === category.title && "active-course"
+                            }`}
+                            role="button"
+                            onClick={() => {
+                              setCategoryTitle(category.title);
+                              setCategoryId(category.id)
+                              setParentCat(category.parent);
+                              getNameOfCourses(category.id);
+                              setCategoryName(category.title)   }}
+                          >
+                          {category.title}
+                            {categoryTitle === category.title && (
+                              <span>
+                                {" "}
+                                <i class="fa fa-chevron-circle-right"></i>
+                              </span>
+                            )}
+                          </li>
                       </div>
                     );
                   })}
@@ -115,16 +135,16 @@ const SingleCategory = ({categoryContent,categoryData, getCategoryName, coursesD
                   onMouseEnter={() => setShowEditBtn(true)}
                   onMouseLeave={() => setShowEditBtn(false)}
                 >
-                  <label className="mb-0">
+                  {/* <label className="mb-0">
                     Category Name<span style={{ color: "red" }}>*</span>
-                  </label>
+                  </label> */}
                   {editCategory ? (
                     <input
                       type="text"
-                      placeholder="Module Title"
+                      placeholder="Category Title"
                       value={categoryTitle}
                       style={{ width: "99%" }}
-                      className="course-title mb-2"
+                      className="category-title mb-2"
                       onChange={(e) => {
                         handleCategoryName(e);
                       }}
@@ -133,7 +153,7 @@ const SingleCategory = ({categoryContent,categoryData, getCategoryName, coursesD
                       onContextMenu={(e) => handleUpdateTitle(e)}
                     />
                   ) : (
-                    <span style={{ width: "" }} className="course-title mb-2">
+                    <span style={{ width: "" }} className="category-title mb-2">
                       {categoryTitle}
                       {showEditBtn && (
                         <i
