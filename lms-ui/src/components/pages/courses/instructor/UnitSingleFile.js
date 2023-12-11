@@ -174,15 +174,16 @@ const UnitSingleFile = ({ file, index, handleUnitContent, getUSerFullName }) => 
           )}
         </div>
       </td>
-      <td className="single-unit-file-type-td">
-        {file.file.split(".").slice(-1)}
-      </td>
+     
       <td className="single-unit-file-name-td">
         <div className="single-unit-file-name-container">
           <a href={file.file} target="_blank" className="single-unit-file-name-link">
             {file.file.length > 65 ? file.file.slice(34,60)+"..." : file.file.slice(34)}
           </a>
         </div>
+      </td>
+      <td className="single-unit-file-type-td">
+        {file.file.split(".").slice(-1)}
       </td>
       <td className="single-unit-file-created-td">{file.created_at}</td>
       <td className="single-unit-assign-updated-td">

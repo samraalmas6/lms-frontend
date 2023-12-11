@@ -530,8 +530,8 @@ const handleAddResourse = () => {
                           <tr>
                             <th className="single-unit-file-table-heading">#</th>
                             <th className="single-unit-file-table-heading">Title</th>
-                            <th className="single-unit-file-table-heading">type</th>
                             <th className="single-unit-file-table-heading">File</th>
+                            <th className="single-unit-file-table-heading">type</th>
                             <th className="single-unit-file-table-heading">Created At</th>
                             <th className="single-unit-file-table-heading">Updated By</th>
                             <th className="single-unit-file-table-heading">Action</th>
