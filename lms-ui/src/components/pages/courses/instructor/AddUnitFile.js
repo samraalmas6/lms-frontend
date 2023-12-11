@@ -91,6 +91,8 @@ const AddUnitFile = ({ setUnitFiles }) => {
     }).then((response) => {
       if (response.status === 201) {
         response.json().then(function (result) {
+          pdfSelector.current.removeAttribute("id", "hide-field");
+          pdfSection.current.setAttribute("id", "hide-field");
           setUnitPDF(null);
           setUnitSlide(null);
           setUnitFiles((pre) => [...pre, result]);
@@ -106,14 +108,13 @@ const AddUnitFile = ({ setUnitFiles }) => {
 
   return (
     <div>
-      <div className="pdf-section">
-        <div className="unit-selection-section">
-          <span className="unit-form-span-title">Add File</span>
-          <i
+      <div className="add-unit-pdf-section">
+        <div className="add-unit-selection-section">
+          <span className="unit-form-span-title">Add File <i
             className="bi bi-plus-circle plus-icon unit-form-i-title"
             ref={pdfSelector}
             onClick={() => hanldePDFUpload()}
-          ></i>
+          ></i></span>
         </div>
         <div className="unit-field-section" id="hide-field" ref={pdfSection}>
           <input

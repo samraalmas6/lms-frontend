@@ -13,8 +13,8 @@ const UnitSingleAssignment = ({
   const [visibility, setVisibility] = useState(false);
 
   useEffect(() => {
-    setVisibility(assignment.is_active)
-  },[0])
+    setVisibility(assignment.is_active);
+  }, [0]);
 
   const handleVisibility = (e) => {
     setVisibility(!visibility);
@@ -45,8 +45,10 @@ const UnitSingleAssignment = ({
           console.log(result);
           Swal.fire({
             icon: "success",
-            text: `${result.title} has been ${result.is_active ? "activated" : "deactivated"}`
-          })
+            text: `${result.title} has been ${
+              result.is_active ? "activated" : "deactivated"
+            }`,
+          });
           // window.location.reload();
         });
       } else {
@@ -65,53 +67,51 @@ const UnitSingleAssignment = ({
     Swal.fire({
       title: "Attention",
       text: `Do you want to ${action} this assignment?`,
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: `${action}`
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: `${action}`,
     }).then((result) => {
       if (result.isConfirmed) {
-    const obj = {
-      title: assignment.title,
-      instructor: assignment.instructor,
-      unit: assignment.unit,
-      description: assignment.description,
-      due_date: assignment.due_date,
-      due_time: assignment.due_time,
-      updated: true,
-      is_delete: deleted,
-      marks: assignment.marks,
-      updated_by: sessionStorage.getItem("user_id"),
-    };
+        const obj = {
+          title: assignment.title,
+          instructor: assignment.instructor,
+          unit: assignment.unit,
+          description: assignment.description,
+          due_date: assignment.due_date,
+          due_time: assignment.due_time,
+          updated: true,
+          is_delete: deleted,
+          marks: assignment.marks,
+          updated_by: sessionStorage.getItem("user_id"),
+        };
 
-    fetch(`http://127.0.0.1:8000/api/assignments/${assignment.id}/`, {
-      method: "PUT",
-      body: JSON.stringify(obj),
-      headers: {
-        Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    }).then((response) => {
-      if (response.status === 200) {
-        response.json().then(function (result) {
-          console.log("Api result: ", result);
-          Swal.fire(
-            `${action}d!`,
-            `${result.title} has been ${action}d.`,
-            'success'
-          ).then(res => {
-            window.location.reload();
-          })
-
-          
+        fetch(`http://127.0.0.1:8000/api/assignments/${assignment.id}/`, {
+          method: "PUT",
+          body: JSON.stringify(obj),
+          headers: {
+            Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }).then((response) => {
+          if (response.status === 200) {
+            response.json().then(function (result) {
+              console.log("Api result: ", result);
+              Swal.fire(
+                `${action}d!`,
+                `${result.title} has been ${action}d.`,
+                "success"
+              ).then((res) => {
+                window.location.reload();
+              });
+            });
+          } else {
+            console.log(response);
+          }
         });
-      } else {
-        console.log(response);
       }
     });
-      }
-    })
   };
 
   const handleAssignmentTitle = (e) => {
@@ -157,16 +157,20 @@ const UnitSingleAssignment = ({
 
   return (
     <tr key={assignment.id}>
-      <td>{index + 1}</td>
+      <td className="single-unit-assign-index-td">{index + 1}</td>
       <td
         onMouseEnter={() => {
           setShowEditAssignmentBtn(true);
           // setFileTitle(file.title);
         }}
         onMouseLeave={() => setShowEditAssignmentBtn(false)}
+        className="single-unit-assign-title-td"
       >
+                <div className="single-unit-file-title-container">
         {editAssignment ? (
           <input
+            autoFocus
+            className="single-course-unit-assign-title"
             type="text"
             placeholder="Unit Title"
             value={assignmentTitle}
@@ -177,25 +181,33 @@ const UnitSingleAssignment = ({
             //   onMouseLeave={preventAccordionOpen}
           />
         ) : (
-          assignment.title.slice(0, 20)
+          <span className="single-course-unit-assign-title">
+            {assignment.title.length > 30
+              ? assignment.title.slice(0, 30) + "..."
+              : assignment.title}
+            {showEditAssignmentBtn && (
+              <i
+                className="bi bi-pencil ms-2 module-edit-btn"
+                onClick={() => setEditAssignment(true)}
+              ></i>
+            )}
+          </span>
         )}
-
-        {showEditAssignmentBtn && (
-          <i
-            className="bi bi-pencil ms-2 module-edit-btn"
-            onClick={() => setEditAssignment(true)}
-          ></i>
-        )}
+        </div>
       </td>
-      <td>{assignment.description}</td>
-      <td>{assignment.due_date}</td>
-      {/* <td>{assignment.updated_by}</td> */}
-      <td>{getUSerFullName(assignment.updated_by)}</td>
-      <td colspan="2">
+      <td className="single-unit-assign-description-td">
+        {assignment.description.length > 30 ? assignment.description.slice(0,30)+"..." : assignment.description}
+      </td>
+      <td className="single-unit-assign-due-td text-danger">{assignment.due_date}</td>
+      <td className="single-unit-assign-created-td">{assignment.created_at}</td>
+      <td className="single-unit-assign-updated-td">
+        {getUSerFullName(assignment.updated_by)}
+      </td>
+      <td colspan="2" className="single-unit-assign-action-td">
         {/* {String(file.is_active).toUpperCase()} */}
-        <ul className="unit-content-file-vidoe-options">
+        <ul className="unit-content-assign-options">
           <li>
-            <div className="form-check form-switch visibility">
+            <div className="form-check form-switch">
               <input
                 className="form-check-input "
                 type="checkbox"
@@ -208,23 +220,21 @@ const UnitSingleAssignment = ({
             </div>
           </li>
           <li>
-          {assignment.length !== 0 && assignment.is_delete ? (
-                      <i
-                        className="bi bi-recycle text-success"
-                      
-                        onClick={() => handleDeleteAssignment(assignment, false)}
-                      ></i>
-                    ) : (
-                      <i
-                        className="bi bi-trash text-danger"
-                        onClick={() => handleDeleteAssignment(assignment, true)}
-                    
-                      ></i>
-                    )}
+            {assignment.length !== 0 && assignment.is_delete ? (
+              <i
+                className="bi bi-recycle text-success"
+                onClick={() => handleDeleteAssignment(assignment, false)}
+              ></i>
+            ) : (
+              <i
+                className="bi bi-trash text-danger"
+                onClick={() => handleDeleteAssignment(assignment, true)}
+              ></i>
+            )}
           </li>
-          <li>
+          {/* <li>
             <i className="bi bi-copy text-info"></i>
-          </li>
+          </li> */}
         </ul>
       </td>
     </tr>

@@ -606,10 +606,10 @@ function AssignmentView({ selectedAssignments }) {
                     <strong>Marks:</strong>
                     {selectedAssignment.marks}
                   </div>
-                  <div className="detail-create">
+                  {/* <div className="detail-create">
                     <strong>Created At:</strong>
                     {selectedAssignment.created_at}
-                  </div>
+                  </div> */}
                   <div className="detail-date">
                     <strong>Due date:</strong>
                     {selectedAssignment.due_date}

@@ -99,6 +99,9 @@
     align-content: center !important;
     justify-content: flex-start !important;
 }
+.team > div:nth-child(4) > div {
+    background-color: #f7f7f7 !important;
+}
 .phoneNumberContainer:hover,  .phoneNumberContainer:focus{
     outline: none;
     box-shadow: 2px 2px 22px -9px #000;

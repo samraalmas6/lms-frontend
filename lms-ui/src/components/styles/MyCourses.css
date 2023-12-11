@@ -129,7 +129,7 @@
 .main-listView-Container {
   overflow-y: scroll;
   height: 100%;
-  padding-top: 5%;
+  padding-top: 0%;
 }
 body::-webkit-scrollbar {
   display: none;
@@ -147,6 +147,7 @@ body::-webkit-scrollbar {
   align-items: center;
   /* padding: 30px; */
   border-bottom: 1px dotted black;
+  margin-top: 10px;
 }
 .course-card-image {
   min-height: 100%;
@@ -174,6 +175,7 @@ body::-webkit-scrollbar {
 .progress-statics-div {
   /* display: flex;
     gap: 5px; */
+    font-weight: 600;
 }
 
 .launch-btn {
@@ -204,7 +206,7 @@ body::-webkit-scrollbar {
 
 .pdf-doc-container {
   display: flex;
-  gap: 20px;
+  gap: 12px;
 }
 
 .resource-title-container {

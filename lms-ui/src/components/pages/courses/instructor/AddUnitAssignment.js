@@ -16,13 +16,13 @@ const AddUnitAssignment = () => {
 
   return (
     <div>
-      <div className="assignment-section">
-        <div className="unit-selection-section">
-          <span className="unit-form-span-title">Add Assignment</span>
-          <i
+      <div className="add-unit-assign-section">
+        <div className="add-unit-assign-selection-section">
+          <span className="unit-form-span-title">Add Assignment  <i
             className="bi bi-plus-circle plus-icon unit-form-i-title"
             onClick={() => handleAssignment()}
-          ></i>
+          ></i></span>
+         
         </div>
       </div>
     </div>

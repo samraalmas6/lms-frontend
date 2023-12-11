@@ -50,6 +50,8 @@ const AddUnitVideo = ({setUnitVideos}) => {
       }).then((response) => {
         if (response.status === 201) {
           response.json().then(function (result) {
+            videoAddRef.current.removeAttribute("id", "hide-field");
+            videoFieldRef.current.setAttribute("id", "hide-field");
             console.log(result);
             setVideoTitle("");
             setVidoUrl("");
@@ -66,14 +68,14 @@ const AddUnitVideo = ({setUnitVideos}) => {
 
   return (
     <div>
-      <div className="unit-video-section">
-        <div className="unit-selection-section unit-selection-section-video">
-          <span className="unit-form-span-title">Add video</span>
-          <i
+      <div className="add-unit-video-section">
+        <div className="add-unit-video-selection-section">
+          <span className="unit-form-span-title">Add video <i
             className="bi bi-plus-circle plus-icon unit-form-i-title"
             ref={videoAddRef}
             onClick={(e) => hanldeVideoUpload(e)}
-          ></i>
+          ></i></span>
+         
         </div>
         <div
           className="unit-field-section unit-video-main-container"

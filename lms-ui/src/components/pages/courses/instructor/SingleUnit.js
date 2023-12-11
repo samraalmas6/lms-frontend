@@ -1,9 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import AddUnit from "./AddUnit";
 import { ModuleProbs } from "./CourseModule";
-// import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import AddVideo from "./AddUnitVideo";
 import AddUnitFile from "./AddUnitFile";
 import AddUnitVideo from "./AddUnitVideo";
 import AddUnitAssignment from "./AddUnitAssignment";
@@ -20,6 +17,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
 
   const startDateRefUnit = useRef(null);
   const endDateRefUnit = useRef(null);
+  const [showUnitOptions, setShowUnitOptions] = useState(false)
   const [fileShow, setFileShow] = useState(false);
   const [vidoShow, setVideoShow] = useState(false);
   const [assignmentShow, setAssignmentShow] = useState(false);
@@ -270,7 +268,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
       const name = userData.filter((users) => users.id === id);
       return `${name[0].first_name} ${name[0].last_name}`;
     } else {
-      return "N/A";
+      return "None";
     }
   };
 
@@ -367,7 +365,7 @@ const handleAddResourse = () => {
                   autoFocus
                   placeholder="Unit Title"
                   value={unitTitle}
-                  className={`${unit.is_delete ? "deleted-content w-50" : "unitTitle w-50"}`}
+                  className={`${unit.is_delete ? "deleted-content w-50" : "w-50"} single-unit-title`}
                   disabled={unit.is_delete}
                   onChange={(e) => handleUnitTitle(e)}
                   required
@@ -376,7 +374,7 @@ const handleAddResourse = () => {
                   onMouseLeave={preventAccordionOpen}
                 />
               ) : (
-                <span>{unitTitle}              
+                <span className="single-unit-title">{unitTitle}              
                 {showEditBtn && (
                   <i
                     className="bi bi-pencil ms-2 module-edit-btn"
@@ -389,7 +387,7 @@ const handleAddResourse = () => {
               )}
 
             </div>
-            <div className={`${unit.is_delete ? "deleted-content" : ""}`}>
+            <div className={`${unit.is_delete ? "deleted-content unit-date-container" : "unit-date-container"}`}>
               <label>Start Date:</label>
 
               <input
@@ -414,26 +412,17 @@ const handleAddResourse = () => {
                 ref={endDateRefUnit}
               />
             </div>
-
-            <div className="btn-group dropstart">
-              <i
-                className="bi bi-three-dots-vertical "
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                onClick={(e) => e.stopPropagation()}
-                onMouseEnter={preventAccordionClose}
-                onMouseLeave={preventAccordionOpen}
-              ></i>
-              <div className="dropdown-menu option-main-container module-option">
+            <div className="btn-group dropstart unit-content-close-btn-container">
+                <div className="dropdown-men option-main-container " >
                 <ul
-                  className="option-ul"
+                  className="option-ul hide-course-option"
                   style={{
                     display: "flex",
                   }}
+                  id={`unit-${unit.id}option`}
                 >
                   <li>
-                    <div className="form-check form-switch visibility">
+                    <div className="form-check form-switch">
                       <input
                         className="form-check-input "
                         type="checkbox"
@@ -464,15 +453,34 @@ const handleAddResourse = () => {
                       ></i>
                     )}
                   </li>
-                  <li>
+                  {/* <li>
                     <i
                       className="bi bi-copy text-info"
                       onMouseEnter={preventAccordionClose}
                       onMouseLeave={preventAccordionOpen}
-                    ></i>
-                  </li>
+                    ></i> 
+                  </li>*/}
                 </ul>
               </div>
+              <i
+                className="bi bi-three-dots-vertical "
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  const unitOptionEle = document.getElementById(`unit-${unit.id}option`);
+                  if(showUnitOptions === true){
+                    unitOptionEle.classList.add("hide-course-option")
+                    setShowUnitOptions(false)
+                  }
+                  else{
+                    unitOptionEle.classList.remove("hide-course-option")
+                    setShowUnitOptions(true)
+                  }
+                }}
+                onMouseEnter={preventAccordionClose}
+                onMouseLeave={preventAccordionOpen}
+              ></i>
+
             </div>
           </div>
         </div>
@@ -503,7 +511,7 @@ const handleAddResourse = () => {
                   style={{ display: "flex", alignItems: "center" }}
                 >
                   <div className="unit-content-ribbon btn-info"></div>
-                  <strong className="text-info">Unit Files</strong>
+                  <strong className="text-info ms-3">Unit Files</strong>
                   <div className="collapse-icon-course ms-3">
                     <i class="fa fa-chevron-circle-down text-info"></i>
                   </div>
@@ -520,20 +528,20 @@ const handleAddResourse = () => {
                       <>
                         <thead className="table-light">
                           <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">type</th>
-                            <th scope="col">File</th>
-                            <th scope="col">Created At</th>
-                            <th scope="col">Action</th>
-                            <th scope="col"></th>
+                            <th className="single-unit-file-table-heading">#</th>
+                            <th className="single-unit-file-table-heading">Title</th>
+                            <th className="single-unit-file-table-heading">type</th>
+                            <th className="single-unit-file-table-heading">File</th>
+                            <th className="single-unit-file-table-heading">Created At</th>
+                            <th className="single-unit-file-table-heading">Updated By</th>
+                            <th className="single-unit-file-table-heading">Action</th>
                           </tr>
                         </thead>
                         <tbody>
                           {unitFiles &&
                             unitFiles.map((file, index) => {
                               return (
-                                <UnitSingleFile file={file} index={index} handleUnitContent={handleUnitContent} />
+                                <UnitSingleFile file={file} index={index} handleUnitContent={handleUnitContent} getUSerFullName={getUSerFullName} />
                               );
                             })}
                         </tbody>
@@ -554,7 +562,7 @@ const handleAddResourse = () => {
                   style={{ display: "flex", alignItems: "center" }}
                 >
                   <div className="unit-content-ribbon btn-success"></div>
-                  <strong className="text-success">Unit Videos</strong>
+                  <strong className="text-success  ms-3">Unit Videos</strong>
                   <div className="collapse-icon-course ms-3">
                     <i class="fa fa-chevron-circle-down text-success"></i>
                   </div>
@@ -571,13 +579,12 @@ const handleAddResourse = () => {
                       <>
                         <thead className="table-light">
                           <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Video</th>
-                            <th scope="col">Created At</th>
-                            <th scope="col">Updated By</th>
-                            <th scope="col">Action</th>
-                            <th scope="col"></th>
+                            <th className="single-unit-video-table-heading">#</th>
+                            <th className="single-unit-video-table-heading">Title</th>
+                            <th className="single-unit-video-table-heading">Video</th>
+                            <th className="single-unit-video-table-heading">Created At</th>
+                            <th className="single-unit-video-table-heading">Updated By</th>
+                            <th className="single-unit-video-table-heading">Action</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -608,7 +615,7 @@ const handleAddResourse = () => {
                   style={{ display: "flex", alignItems: "center" }}
                 >
                   <div className="unit-content-ribbon btn-secondary"></div>
-                  <strong className="text-secondary">Unit Assignments</strong>
+                  <strong className="text-secondary  ms-3">Unit Assignments</strong>
                   <div className="collapse-icon-course ms-3">
                     <i class="fa fa-chevron-circle-down text-secondary"></i>
                   </div>
@@ -625,13 +632,13 @@ const handleAddResourse = () => {
                       <>
                         <thead className="table-light">
                           <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Due Date</th>
-                            <th scope="col">Updated By</th>
-                            <th scope="col">Action</th>
-                            <th scope="col"></th>
+                            <th  className="single-unit-assignment-table-heading">#</th>
+                            <th  className="single-unit-assignment-table-heading">Title</th>
+                            <th  className="single-unit-assignment-table-heading">Description</th>
+                            <th  className="single-unit-assignment-table-heading">Due Date</th>
+                            <th className="single-unit-assignment-table-heading">Created At</th>
+                            <th  className="single-unit-assignment-table-heading">Updated By</th>
+                            <th  className="single-unit-assignment-table-heading">Action</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -668,12 +675,12 @@ const handleAddResourse = () => {
               />
             )} */}
           </div>
-          <div className="slide-section">
+          <div className="slide-section mt-5">
             <button type="button" className="additionalbtn"
               onClick={() => handleAddResourse()}
             ><span>+</span> Additional resources</button>
           </div>
-          <div className="pdf-section"></div>
+          {/* <div className="pdf-section"></div> */}
         </div>
       </div>
     </div>

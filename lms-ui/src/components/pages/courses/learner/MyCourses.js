@@ -263,13 +263,13 @@ const getCourseProgress = (courseId) => {
                             })}
                           </div>
                         </div>
-                        <div className="instr-img">
+                        {/* <div className="instr-img">
                           <img src={user} width={"50px"} alt="" />
-                        </div>
+                        </div> */}
                       </div>
-                      <div className="second-half">
+                      <div className="second-half" >
                         {/* <p>tagline</p> */}
-                        <div className="w-100 block-view">
+                        <div className="w-100 block-view" style={{fontWeight: "bold"}}>
                           {/* progress % */}
                           {`${getCourseProgress(course.id).toString().slice(0,4)}%`}
                           {/* progress bar */}

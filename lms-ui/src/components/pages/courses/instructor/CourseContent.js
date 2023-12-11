@@ -5,7 +5,8 @@ import img from "../../../content/Images/uploadImg.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CourseProbs } from "../../../../App";
 import Swal from "sweetalert2";
-import '../../../styles/CourseContent.css'
+import Select from "react-select";
+import "../../../styles/CourseContent.css";
 // import Swal from 'sweetalert2';
 
 const CourseContent = ({}) => {
@@ -19,10 +20,9 @@ const CourseContent = ({}) => {
     courseCreator,
   } = useContext(CourseProbs);
   const userId = sessionStorage.getItem("user_id");
-  console.log("course coAuthors:", courseCoauthors);
   const navigate = useNavigate();
   const { state } = useLocation();
-  console.log("state", state);
+  const [showCourseOptions, setShowCourseOptions] = useState(false)
   const [courseContent, setCourseContent] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
   const [userData, setUserData] = useState([]);
@@ -40,11 +40,21 @@ const CourseContent = ({}) => {
   const [coAuthor, setCoAuthor] = useState("");
   const [coAutherData, setCoAuthorData] = useState([]);
 
-  const [courseCategory, setCourseCategory] = useState("");
+  const [courseCat, setCourseCat] = useState([]);
+  const [courseCategories, setCourseCategories] = useState([]);
+  const [categoryOptions, setCategoryOptions] = useState([]);
   const [courseTitle, setCourseTitle] = useState("");
   const [courseImg, setCourseImg] = useState("");
   const [visibility, setVisibility] = useState();
   const [courseDes, setCourseDes] = useState("");
+  // useEffect(() => {
+  //   if (courseCategory.length === 0) {
+  //     const ele = document.getElementById("react-select-3-placeholder");
+  //     if(ele) {
+  //      ele.innerHTML ="Select Category (optional)";
+  //     }
+  //    }
+  // }, [courseCategory]);
 
   useEffect(() => {
     const getModuleData = (id) => {
@@ -76,6 +86,21 @@ const CourseContent = ({}) => {
         }
       });
     };
+    setCategoryOptions(
+      state.categoryData.map((category) => {
+        return { value: category.id, label: category.title };
+      })
+    );
+
+    setCourseCat([]);
+    state.categoryData.forEach((category) => {
+      if (state.course.category.includes(category.id)) {
+        setCourseCat((pre) => [
+          ...pre,
+          { value: category.id, label: category.title },
+        ]);
+      }
+    });
 
     getModuleData(state.course.id);
     setCourse(state.course);
@@ -114,7 +139,20 @@ const CourseContent = ({}) => {
     setCourseStart(course.start_date);
     setCourseEnd(course.end_date);
     setCourseDes(`<i>${course.description}</i>`);
-    setCourseCategory(course.category);
+    setCourseCategories(course.category);
+    setCourseCat([])
+    if(course.category && state.categoryData){
+    state.categoryData.forEach((category) => {
+  
+      if (course.category.includes(category.id)) {
+        setCourseCat((pre) => [
+          ...pre,
+          { value: category.id, label: category.title },
+        ]);
+      }
+    
+    });
+  }
     setCourseImg(course.course_image);
     setVisibility(course.is_active);
   }, [course]);
@@ -137,13 +175,19 @@ const CourseContent = ({}) => {
     setCourseEnd(e.target.value);
   };
 
-  const handlecourseCategory = (e) => {
-    setCourseCategory(e.target.value);
+  const handlecourseCategory = (selectedOption) => {
+    setCourseCat(selectedOption);
+    setCourseCategories([]);
+    selectedOption.forEach(category => {
+      setCourseCategories(pre => [...pre,category.value]);
+    })
+
   };
+  console.log("course Categories", courseCategories);
 
   const handleCoAuthor = (e) => {
     setCoAuthor(e.target.value);
-    setCourseCoauthors((pre) => [ +e.target.value, ...pre]);
+    setCourseCoauthors((pre) => [+e.target.value, ...pre]);
   };
   console.log("this is co-authors:", courseCoauthors);
   const handleDescription = (value, e) => {
@@ -178,7 +222,7 @@ const CourseContent = ({}) => {
       title: courseTitle,
       instructor: instructor,
       updated_by: sessionStorage.getItem("user_id"),
-      category: courseCategory,
+      category: courseCategories,
       is_active: !visibility,
     };
     fetch(`http://127.0.0.1:8000/api/courses/${courseId}/`, {
@@ -304,7 +348,8 @@ const CourseContent = ({}) => {
                 navigate(-1);
               });
               setCourseContent((pre) => [...pre, result]);
-              setCourseCategory("");
+              setCourseCategories([]);
+              setCourseCat([]);
               setCourseTitle("");
             });
           } else {
@@ -316,9 +361,7 @@ const CourseContent = ({}) => {
   };
 
   const handleSaveCourse = () => {
-    if (courseTitle && courseCategory) {
-      console.log("instructor id", instructor);
-
+    if (courseTitle && courseCategories.length !== 0) {
       fetch(`http://127.0.0.1:8000/api/authors/${instructor}/`, {
         method: "PUT",
         body: JSON.stringify({
@@ -350,7 +393,10 @@ const CourseContent = ({}) => {
         formData.append("end_date", courseEnd);
       }
       formData.append("is_active", visibility);
-      formData.append("category", [courseCategory]);
+      // formData.append("category", courseCategories);
+      courseCategories.forEach((id) => {
+        formData.append("category", id);
+      });
       formData.append("instructor", instructor);
       formData.append("updated_by", sessionStorage.getItem("user_id"));
       // formData.append("created_by", courseCreator);
@@ -369,7 +415,8 @@ const CourseContent = ({}) => {
         if (response.status === 200) {
           response.json().then(function (result) {
             console.log(result);
-            setCourseCategory("");
+            setCourseCategories([]);
+            setCourseCat([]);
             setCourseTitle("");
             navigate(-1);
           });
@@ -399,14 +446,21 @@ const CourseContent = ({}) => {
                       return (
                         <div key={course.id}>
                           <li
-                          className={`course-content-sub-menue-li ${courseTitle === course.title && "active-course"}`}
+                            className={`course-content-sub-menue-li ${
+                              courseTitle === course.title && "active-course"
+                            }`}
                             role="button"
                             onClick={() => {
                               handleCourseContent(course);
                             }}
                           >
                             {course.title}
-                            {courseTitle === course.title && <span>  <i class="fa fa-chevron-circle-right"></i></span>}
+                            {courseTitle === course.title && (
+                              <span>
+                                {" "}
+                                <i class="fa fa-chevron-circle-right"></i>
+                              </span>
+                            )}
                           </li>
                         </div>
                       );
@@ -464,24 +518,10 @@ const CourseContent = ({}) => {
                 </div>
 
                 <div className="btn-group dropstart course-content-close-btn-container">
-                  <i
-                    className="bi bi-three-dots-vertical course-content-three-dots"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    onClick={() => null}
-                  ></i>
-                  <button
-                    type="button"
-                    className="course-content-close-btn"
-                    data-bs-dismiss="offcanvas"
-                    aria-label="Close"
-                    onClick={() => navigate(-1)}
-                  >X</button>
-                  <div className="dropdown-menu option-main-container">
+                <div className="dropdown-men option-main-container hide-course-option" id="course-options">
                     <ul className="option-ul" style={{ display: "flex" }}>
                       <li>
-                        <div className="form-check form-switch visibility">
+                        <div className="form-check form-switch">
                           <input
                             className="form-check-input "
                             type="checkbox"
@@ -506,19 +546,43 @@ const CourseContent = ({}) => {
                           ></i>
                         )}
                       </li>
-                      <li>
+                     {/* <li>
                         <i className="bi bi-copy text-info"></i>
-                      </li>
+                      </li> */}
                     </ul>
                   </div>
+
+                  <i
+                    className="bi bi-three-dots-vertical course-content-three-dots"
+                    type="button"
+                    onClick={() => {
+                      const courseOptionEle = document.getElementById("course-options");
+                      if(showCourseOptions === true){
+                        courseOptionEle.classList.add("hide-course-option")
+                        setShowCourseOptions(false)
+                      }
+                      else{
+                        courseOptionEle.classList.remove("hide-course-option")
+                        setShowCourseOptions(true)
+                      }
+                    }}
+                  ></i>
+                  <button
+                    type="button"
+                    className="course-content-close-btn"
+                    data-bs-dismiss="offcanvas"
+                    aria-label="Close"
+                    onClick={() => navigate(-1)}
+                  >
+                    X
+                  </button>
+
                 </div>
               </div>
               <form className="course-content-form">
                 <div className="course-content-description-section">
                   <div className="course-content-editor me-2">
-                    <label className="course-content-label">
-                      Description
-                    </label>
+                    <label className="course-content-label">Description</label>
                     <Editor
                       apiKey={process.env.REACT_APP_API_KEY}
                       onInit={(evt, editor) => (editorRef.current = editor)}
@@ -565,7 +629,22 @@ const CourseContent = ({}) => {
                       <label className="mb-0 mt-1 course-content-label">
                         Category
                       </label>
-                      <select
+                      <Select
+                        value={courseCat}
+                        options={categoryOptions}
+                        onChange={handlecourseCategory}
+                        className={"categorySelector"}
+                        isMulti={true}
+                      >
+                        {/* <option value="" disabled>
+                  ---Add Team---
+                </option>
+                {teamData.length !== 0 &&
+                  teamData.map((team) => {
+                    return <option value={team.name}>{team.name}</option>;
+                  })} */}
+                      </Select>
+                      {/* <select
                         onChange={handlecourseCategory}
                         value={courseCategory}
                       >
@@ -580,7 +659,7 @@ const CourseContent = ({}) => {
                                 </option>
                               );
                             })}
-                      </select>
+                      </select> */}
                     </div>
                     <div className="dropdown-section-for-cat-couthor">
                       <div className="coauthor-section">
@@ -604,12 +683,15 @@ const CourseContent = ({}) => {
                                     {`${user.first_name} ${user.last_name}`}
                                   </option>
                                 );
-                              } else if (  user.role === "instructor" &&
-                              user.id !== courseCreator ) {
-                                return (<option value="" disabled key={user.id}>
-                                {`${user.first_name} ${user.last_name}`}
-                              </option>
-                                )
+                              } else if (
+                                user.role === "instructor" &&
+                                user.id !== courseCreator
+                              ) {
+                                return (
+                                  <option value="" disabled key={user.id}>
+                                    {`${user.first_name} ${user.last_name}`}
+                                  </option>
+                                );
                               }
                             })}
                         </select>
@@ -617,9 +699,13 @@ const CourseContent = ({}) => {
 
                       <div className="coauther-selection">
                         <ul className="coauthor-list-section">
-                          {coAutherData.length !== 0 ? 
+                          {coAutherData.length !== 0 ? (
                             coAutherData.map((coAuthor, index) => {
-                              if ((coAuthor=== +userId || courseCreator === coAuthor) && sessionStorage.getItem('role') === "admin") {
+                              if (
+                                (coAuthor === +userId ||
+                                  courseCreator === coAuthor) &&
+                                sessionStorage.getItem("role") === "admin"
+                              ) {
                                 return null;
                               }
                               return (
@@ -637,7 +723,7 @@ const CourseContent = ({}) => {
                                     style={{
                                       display: "flex",
                                       alignItems: "center",
-                                      width: "50%"
+                                      width: "50%",
                                     }}
                                   >
                                     <div
@@ -660,7 +746,12 @@ const CourseContent = ({}) => {
                                   </div>
                                 </li>
                               );
-                            }) : <div className="ms-3 mt-2">No CoAuthor selected</div>}
+                            })
+                          ) : (
+                            <div className="ms-3 mt-2">
+                              No CoAuthor selected
+                            </div>
+                          )}
                         </ul>
                       </div>
                     </div>
@@ -679,7 +770,11 @@ const CourseContent = ({}) => {
                       {courseImg ? (
                         <img
                           // src={URL.createObjectURL(courseImg)}
-                          src={courseImg}
+                          src={
+                            typeof courseImg === "object"
+                              ? URL.createObjectURL(courseImg)
+                              : courseImg
+                          }
                           alt=""
                           className="course-content-cover-img"
                         />

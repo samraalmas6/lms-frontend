@@ -17,6 +17,7 @@ const SingleModule = ({ module, setModuelContent, setModuleId }) => {
   const endDateRefModule = useRef(null);
   const { courseId } = useContext(CourseProbs);
   const accordion = useRef(null);
+  const [showModuleOptions, setShowModuleOptions] = useState(false)
   const [openModule, setOpenModule] = useState(false)
   const [moduleTitle, setModuleTitle] = useState(module.title);
   const [moduleStart, setModuleStart] = useState(module.start_date);
@@ -342,20 +343,11 @@ const SingleModule = ({ module, setModuelContent, setModuleId }) => {
               />
             </div>
 
-            <div className="btn-group dropstart">
-              <i
-                className="bi bi-three-dots-vertical "
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                onClick={() => null}
-                onMouseEnter={preventAccordionClose}
-                onMouseLeave={preventAccordionOpen}
-              ></i>
-              <div className="dropdown-menu option-main-container module-option">
+            <div className="btn-group dropstart module-content-close-btn-container">
+                <div className="dropdown-men option-main-container hide-course-option" id={`module-${module.id}option`}>
                 <ul className="option-ul" style={{ display: "flex" }}>
                   <li>
-                    <div className="form-check form-switch visibility">
+                    <div className="form-check form-switch">
                       <input
                         className="form-check-input "
                         type="checkbox"
@@ -387,14 +379,33 @@ const SingleModule = ({ module, setModuelContent, setModuleId }) => {
                     )}
                   </li>
                   <li>
-                    <i
+                    {/* <i
                       className="bi bi-copy text-info"
                       onMouseEnter={preventAccordionClose}
                       onMouseLeave={preventAccordionOpen}
-                    ></i>
+                    ></i> */}
                   </li>
                 </ul>
               </div>
+              <i
+                className="bi bi-three-dots-vertical "
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  const moduleOptionEle = document.getElementById(`module-${module.id}option`);
+                  if(showModuleOptions === true){
+                    moduleOptionEle.classList.add("hide-course-option")
+                    setShowModuleOptions(false)
+                  }
+                  else{
+                    moduleOptionEle.classList.remove("hide-course-option")
+                    setShowModuleOptions(true)
+                  }
+                }}
+                onMouseEnter={preventAccordionClose}
+                onMouseLeave={preventAccordionOpen}
+              ></i>
+          
             </div>
           </div>
         </div>

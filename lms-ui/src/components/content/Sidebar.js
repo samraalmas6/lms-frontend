@@ -286,7 +286,7 @@ const Sidebar = () => {
                   aria-expanded="true"
                 >
                   <i className="fas fa-book font-weight-bold"></i>
-                  <span className="ml-2 text-white">Course Management</span>
+                  <span className="ml-2 text-white">Course Section</span>
                 </a>
                 <ul
                   className="list-unstyled flex-column collapse sidebar-nav-sub show"
