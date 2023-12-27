@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 // import Avatar from "react-avatar";
 
 const AllTeams = ({ show }) => {
+  const userRole = sessionStorage.getItem("role");
   const [showBlock, setShowBlock] = useState(false);
   const [showAddUser, setShowAddUser] = useState(false);
   const [showAddCourse, setShowAddCourse] = useState(false);
@@ -630,7 +631,7 @@ const AllTeams = ({ show }) => {
   const handleTeamUpdate = () => {};
 
   return (
-    <div className="pt-2" style={{ boxShadow: "4px 5px 15px -3px gray" }}>
+    <div className="pt-2">
       <form className="add-teamform">
         <div className="creat-team-btn">
           <button
@@ -1259,7 +1260,9 @@ const AllTeams = ({ show }) => {
                   <th className="team-table-heading ">Team</th>
                   <th className="team-table-heading">Users</th>
                   <th className="team-table-heading">Courses</th>
-                  <th className="team-table-heading">Action</th>
+                  <th className="team-table-heading">
+                    {userRole === "admin" ? "Action" : "Created At"}
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -1314,7 +1317,11 @@ const AllTeams = ({ show }) => {
                           handleDeleteTeam(team.id);
                         }}
                       >
-                        <i className="bi bi-trash text-danger"></i>
+                        {userRole === "admin" ? (
+                          <i className="bi bi-trash text-danger"></i>
+                        ) : (
+                          team.created_at.slice(0,10)
+                        )}
                       </td>
                     </tr>
                   );

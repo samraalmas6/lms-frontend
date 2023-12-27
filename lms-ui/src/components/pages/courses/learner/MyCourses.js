@@ -15,7 +15,7 @@ const MyCourses = () => {
   const [userData, setUserData] = useState([]);
   const [authorData, setAuthorData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
-  const [courseProgress, setCourseProgress] = useState([])
+  const [courseProgress, setCourseProgress] = useState([]);
 
   console.log("I have come to my-courses screen");
   useEffect(() => {
@@ -57,40 +57,50 @@ const MyCourses = () => {
           Authorization: `Token ${sessionStorage.getItem("user_token")}`,
         },
       }).then((response) => {
-        if(response.status === 200) {
-        response.json().then(function (result) {
-          console.log('Course Api Result', result);
+        if (response.status === 200) {
+          response.json().then(function (result) {
+            console.log("Course Api Result", result);
 
-          const courses = [];
-          for (const course of result) {
-            getCourseStatus(course.id);
-            if (totalCourses.includes(course.id) && course.is_delete === false) {
-              courses.push(course)
-          }
+            const courses = [];
+            for (const course of result) {
+              getCourseStatus(course.id);
+              if (
+                totalCourses.includes(course.id) &&
+                course.is_delete === false
+              ) {
+                courses.push(course);
+              }
+            }
+            setCourseContent(courses);
+            console.log("this is course object", courses);
+          });
         }
-          setCourseContent(courses);
-          console.log('this is course object', courses);
-        });
-      }
       });
     };
 
     const getCourseStatus = (courseId) => {
-      fetch(`http://127.0.0.1:8000/api/course-progress/${userId}/${courseId}/`, {        method: "GET",
-        headers: {
-          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
-        },
-      }).then((response) => {
+      fetch(
+        `http://127.0.0.1:8000/api/course-progress/${userId}/${courseId}/`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          },
+        }
+      ).then((response) => {
         if (response.status === 200) {
           response.json().then(function (result) {
             console.log("progress data: ", result);
-            setCourseProgress(pre => [...pre, {course: courseId, progress:result.overall_progress}])
+            setCourseProgress((pre) => [
+              ...pre,
+              { course: courseId, progress: result.overall_progress },
+            ]);
           });
         } else {
           console.log(response);
         }
       });
-    }
+    };
 
     // const getUnitData = () => {
     //   fetch("http://127.0.0.1:8000/api/units/", {
@@ -167,21 +177,19 @@ const MyCourses = () => {
       });
     };
 
-
     getCategoriesData();
   }, [0]);
 
-const getCourseProgress = (courseId) => {
-  const progress = courseProgress.filter(course => {
-    return course.course === courseId
-  });
-  if(progress.length !== 0){
-    return progress[0].progress
-  }
-  else{
-    return ""
-  }
-}
+  const getCourseProgress = (courseId) => {
+    const progress = courseProgress.filter((course) => {
+      return course.course === courseId;
+    });
+    if (progress.length !== 0) {
+      return progress[0].progress;
+    } else {
+      return "";
+    }
+  };
   const handleViewToggle = () => {
     setShowBlock((prev) => !prev);
   };
@@ -220,23 +228,25 @@ const getCourseProgress = (courseId) => {
   return (
     <>
       <div className="my-courses-main-container">
-        <div className="me-3 mt-3" style={{ display: "flex", justifyContent: "flex-end"}}>
-          <div className=""></div>
-        <button
-          className="btn btn-secondary course-toggle-btn"
-          type="button"
-          // style={{ width: "50px" }}
-          onClick={handleViewToggle}
+        <div
+          className="me-3 mt-3"
+          style={{ display: "flex", justifyContent: "flex-end" }}
         >
-          {showBlock ? (
-            <i className="fas fa-solid fa-list"></i>
-          ) : (
-            <i className="fas fa-solid fa-grip-vertical"></i>
-          )}
-        </button>
+          <div className=""></div>
+          <button
+            className="btn btn-secondary course-toggle-btn"
+            type="button"
+            // style={{ width: "50px" }}
+            onClick={handleViewToggle}
+          >
+            {showBlock ? (
+              <i className="fas fa-solid fa-list"></i>
+            ) : (
+              <i className="fas fa-solid fa-grip-vertical"></i>
+            )}
+          </button>
         </div>
 
- 
         {/* Courses Block view */}
         {showBlock ? (
           <div className="main-cards-container">
@@ -251,9 +261,22 @@ const getCourseProgress = (courseId) => {
                       // data-bs-target="#offcanvasExample"
                       key={course.id}
                     >
-                      <div className="upper-half">
+                      <div
+                        className="upper-half"
+                        style={{
+                          backgroundImage: `url(${
+                            course.course_image
+                              ? course.course_image
+                              : "../content/Images/card-background.jpg"
+                          })`,
+                        }}
+                      >
                         <div>
-                          <h5 className="w-100">{course.title && course.title.length < 22 ? course.title : course.title.slice(0,22)+"..."}</h5>
+                          <h5 className="w-100">
+                            {course.title && course.title.length < 22
+                              ? course.title
+                              : course.title.slice(0, 22) + "..."}
+                          </h5>
                           {/* <p>{course.unit}</p> */}
                           {/* <h6>{"Course Author"}</h6> */}
                           <h6>{getUSerFullName(course.instructor)}</h6>
@@ -267,17 +290,24 @@ const getCourseProgress = (courseId) => {
                           <img src={user} width={"50px"} alt="" />
                         </div> */}
                       </div>
-                      <div className="second-half" >
+                      <div className="second-half">
                         {/* <p>tagline</p> */}
-                        <div className="w-100 block-view" style={{fontWeight: "bold"}}>
+                        <div
+                          className="w-100 block-view"
+                          style={{ fontWeight: "bold" }}
+                        >
                           {/* progress % */}
-                          {`${getCourseProgress(course.id).toString().slice(0,4)}%`}
+                          {`${getCourseProgress(course.id)
+                            .toString()
+                            .slice(0, 4)}%`}
                           {/* progress bar */}
                           <div class="progress">
                             <div
                               class="progress-bar bg-success"
                               role="progressbar"
-                              style={{ width: `${getCourseProgress(course.id)}%` }}
+                              style={{
+                                width: `${getCourseProgress(course.id)}%`,
+                              }}
                               aria-valuenow="25"
                               aria-valuemin="0"
                               aria-valuemax="100"
@@ -360,7 +390,12 @@ const getCourseProgress = (courseId) => {
                         </div>
                         <div className="progress-statics-div">
                           {/* progress % */}
-                          <div className="text-center">{getCourseProgress(course.id).toString().slice(0,4)}%</div>
+                          <div className="text-center">
+                            {getCourseProgress(course.id)
+                              .toString()
+                              .slice(0, 4)}
+                            %
+                          </div>
 
                           {/* <div className="text-center">{`${course.progress.toString().slice(0,4)}%`}</div> */}
                           {/* progress bar */}
@@ -368,7 +403,9 @@ const getCourseProgress = (courseId) => {
                             <div
                               class="progress-bar bg-success"
                               role="progressbar"
-                              style={{ width: `${getCourseProgress(course.id)}%` }}
+                              style={{
+                                width: `${getCourseProgress(course.id)}%`,
+                              }}
                               aria-valuenow="25"
                               aria-valuemin="0"
                               aria-valuemax="100"

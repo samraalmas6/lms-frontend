@@ -1,7 +1,12 @@
 .all-category-outer-main-container {
   box-shadow: gray 4px 3px 21px -10px;
-  min-height: 90vh;
-  max-height: 90vh;
+  min-height: 91vh;
+  max-height: 91vh;
+}
+.all-category-content {
+  box-shadow: 4px 5px 15px -3px gray;
+  max-height: 82vh !important;
+  min-height: 82vh !important;
 }
 .create-category-btn {
   margin-top: 8px;
@@ -14,7 +19,7 @@
 .add-new-category-form {
   display: flex;
   flex-direction: column;
-  height: 90vh;
+  height: 100%;
 }
 .add-new-category-form-content {
   display: flex;

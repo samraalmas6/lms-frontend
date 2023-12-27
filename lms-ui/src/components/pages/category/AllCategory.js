@@ -12,7 +12,6 @@ const AllCategory = ({ show }) => {
   const [coursesData, setCoursesData] = useState([]);
   const [categoryContent, setCategoryContent] = useState([]);
 
-
   useEffect(() => {
     const getCategory = () => {
       fetch("http://127.0.0.1:8000/api/categories", {
@@ -61,7 +60,6 @@ const AllCategory = ({ show }) => {
     setParentCat(e.target.value);
   };
 
-
   const handleAddCat = (e) => {
     const obj = {
       title: categoryName,
@@ -99,12 +97,8 @@ const AllCategory = ({ show }) => {
     });
   };
 
-
   const handleDeleteCategory = (category, deleted) => {
-
-    if (
-      sessionStorage.getItem("role") === "admin"
-    ) {
+    if (sessionStorage.getItem("role") === "admin") {
       let action = "";
       if (deleted) {
         action = "Delete";
@@ -125,7 +119,7 @@ const AllCategory = ({ show }) => {
             title: category.title,
             is_updated: true,
             created_by: category.created_by,
-            is_delete: deleted,            
+            is_delete: deleted,
             updated_by: sessionStorage.getItem("user_id"),
           };
 
@@ -173,8 +167,6 @@ const AllCategory = ({ show }) => {
     return counter;
   };
 
-
-
   const getCategoryName = (id) => {
     const category = categoryData.filter((category) => {
       return category.id === id;
@@ -188,24 +180,25 @@ const AllCategory = ({ show }) => {
   };
 
   return (
-    <div className="pt-2 all-category-outer-main-container">
-       <form className="add-categoryform">
-       <div className="create-category-btn">
-        <button
-          type="button"
-          className="btn btn-primary ms-3"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasRight"
-          aria-controls="offcanvasRight"
-        >
-          <i className="fas fa-solid fa-plus"></i> Add Category
-        </button>
-        {/* This is for Category panel */}
-      </div>
-       </form>
-
+    <div className="pt-2">
+      <form className="add-categoryform">
+        <div className="create-category-btn">
+          <button
+            type="button"
+            className="btn btn-primary ms-3"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasRight"
+            aria-controls="offcanvasRight"
+          >
+            <i className="fas fa-solid fa-plus"></i> Add Category
+          </button>
+          {/* This is for Category panel */}
+        </div>
+      </form>
+      <div className="all-category-content">
       <div
         className={`offcanvas offcanvas-end ${show}`}
+        style={{ width: "30%"}}
         tabIndex="-1"
         id="offcanvasRight"
         aria-labelledby="offcanvasRightLabel"
@@ -225,29 +218,33 @@ const AllCategory = ({ show }) => {
           <div className="add-category-content">
             <form className="add-new-category-form">
               <div className="add-new-category-form-content">
-              <label className="mb-0 w-100">
-                Title<span style={{ color: "red" }}>*</span>
-              </label>
-              <input
-                type="text"
-                value={categoryName}
-                onChange={handleCatName}
-                required
-                placeholder="Team Title"
-                className="w-100"
-              />
-              <label className="mb-0 mt-1 w-100">Parent Category</label>
-              <select onChange={handleParentCat} value={parentCat} className="w-100">
-                <option value="">--Select Category--</option>
-                {categoryData &&
-                  categoryData.map((category) => {
-                    return (
-                      <option value={category.id} key={category.id}>
-                        {category.title}
-                      </option>
-                    );
-                  })}
-              </select>
+                <label className="mb-0 w-100">
+                  Title<span style={{ color: "red" }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  value={categoryName}
+                  onChange={handleCatName}
+                  required
+                  placeholder="Team Title"
+                  className="w-100"
+                />
+                <label className="mb-0 mt-1 w-100">Parent Category</label>
+                <select
+                  onChange={handleParentCat}
+                  value={parentCat}
+                  className="w-100"
+                >
+                  <option value="">--Select Category--</option>
+                  {categoryData &&
+                    categoryData.map((category) => {
+                      return (
+                        <option value={category.id} key={category.id}>
+                          {category.title}
+                        </option>
+                      );
+                    })}
+                </select>
               </div>
               <div className="category-save-btn">
                 <button
@@ -280,19 +277,19 @@ const AllCategory = ({ show }) => {
               return (
                 <tr
                   key={category.id}
-                  style={{borderBottom: "1px solid #dee2e6"}}
+                  style={{ borderBottom: "1px solid #dee2e6" }}
                   role="button"
                   onClick={() => {
                     setCategoryContent(category);
                     var myOffcanvas =
-                    document.getElementById("offcanvasCourse");
-                  if (myOffcanvas) {
-                    myOffcanvas.classList.add("show");
-                  }
+                      document.getElementById("offcanvasCourse");
+                    if (myOffcanvas) {
+                      myOffcanvas.classList.add("show");
+                    }
                     // setCatgoryName(category.title);
                     // setParentCat(category.parent);
                     // setcategoryCourses(() => category.courses);
-               
+
                     //   setTeamUser(team.Users);
                     //   setTeamCourses(team.Courses);
                     // setTeamDetail([team.Users, team.Courses]);
@@ -310,25 +307,28 @@ const AllCategory = ({ show }) => {
                     {getNumberOfCourses(category.id)}
                   </td>
                   <td>{getCategoryName(category.parent)}</td>
-                  <td style={{ display: "flex", border: "none" }} className="ps-3">
-                      {category.is_delete ? (
-                        <i
-                          className="bi bi-recycle text-info"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteCategory(category, false);
-                          }}
-                        ></i>
-                      ) : (
-                        <i
-                          className="bi bi-trash text-danger"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteCategory(category, true);
-                          }}
-                        ></i>
-                      )}
-                    </td>
+                  <td
+                    style={{ display: "flex", border: "none" }}
+                    className="ps-3"
+                  >
+                    {category.is_delete ? (
+                      <i
+                        className="bi bi-recycle text-info"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteCategory(category, false);
+                        }}
+                      ></i>
+                    ) : (
+                      <i
+                        className="bi bi-trash text-danger"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteCategory(category, true);
+                        }}
+                      ></i>
+                    )}
+                  </td>
                 </tr>
               );
             })}
@@ -352,6 +352,12 @@ const AllCategory = ({ show }) => {
           />
         </div>
       </div>
+
+
+      </div>
+
+
+
     </div>
   );
 };

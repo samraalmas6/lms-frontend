@@ -30,12 +30,18 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  /* overflow-y: scroll; */
-  /* height: 70vh; */
-  padding-top: 10%px;
-  padding-bottom: 0px;
+  overflow-y: scroll; 
+  min-height: 82vh; 
+  max-height: 82vh;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
-
+.main-cards-container::-webkit-scrollbar {
+  display: none; 
+}
+body::-webkit-scrollbar {
+  display: none; 
+}
 .card-container {
   display: flex;
   flex-direction: column;
@@ -47,7 +53,7 @@
 }
 
 .card-container .upper-half {
-  background-image: url(../content/Images/card-background.jpg);
+  /* background-image: url(../content/Images/card-background.jpg); */
   color: white;
   display: flex;
   padding: 5px;
