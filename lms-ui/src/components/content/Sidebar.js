@@ -34,7 +34,7 @@ const Sidebar = () => {
 
       <ul className="nav flex-column sticky-top pl-0 pt-0 sidebar-nav ">
         <li className={`nav-item mb-2 mt-2 lms-logo-link`} >
-          <Link to={USER_Role === "admin" ? "/dashboard" : "/course/my-courses"} className="nav-link text-secondary p-0 text-center " >
+          <Link to={USER_Role === "admin" || USER_Role === "instructor" ? "/dashboard" : "/course/my-courses"} className="nav-link text-secondary p-0 text-center " >
             <span style={{ textAlign: "center" }}>
               <img src={finalLogo} alt=" XLoop LMS" width={170}/>
              </span>

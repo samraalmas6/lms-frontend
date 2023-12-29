@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 // import Avatar from "react-avatar";
 
 const AllUsers = () => {
+  const userRole = sessionStorage.getItem("role");
   const {state} = useLocation()
   const [showBlock, setShowBlock] = useState(false);
   const [userData, setUserData] = useState([]);
@@ -148,7 +149,7 @@ const AllUsers = () => {
           </button>
           <Link to="/user/add" className="text-bg-primary add-new-user">
             Add User
-            <i class="ms-2 bi bi-plus-circle"></i>
+            <i className="fas fa-solid fa-plus ms-2"></i>
           </Link>
         </div>
 
@@ -242,7 +243,22 @@ const AllUsers = () => {
                       <td><p className={`all-user-role-container`}>{user.phone_number}</p></td>
                       <td className="ps-2">
                         <div className="form-check form-switch ">
-                          <input
+                          {
+                            (userRole === "instructor" && user.role !== "learner") ? 
+                            <input
+                            className="form-check-input all-user-role-container"
+                            type="checkbox"
+                            role="switch"
+                            disabled
+                            checked={user.is_active}
+                            value={user.is_active}
+                            onChange={() => {
+                              handleVisibility(user.email, user.is_active);
+                            }}
+                            id="flexSwitchCheckDefault"
+                          />
+                            :
+                            <input
                             className="form-check-input all-user-role-container"
                             type="checkbox"
                             role="switch"
@@ -253,6 +269,18 @@ const AllUsers = () => {
                             }}
                             id="flexSwitchCheckDefault"
                           />
+                          }
+                          {/* <input
+                            className="form-check-input all-user-role-container"
+                            type="checkbox"
+                            role="switch"
+                            checked={user.is_active}
+                            value={user.is_active}
+                            onChange={() => {
+                              handleVisibility(user.email, user.is_active);
+                            }}
+                            id="flexSwitchCheckDefault"
+                          /> */}
                         </div>
                       </td>
                     </tr>

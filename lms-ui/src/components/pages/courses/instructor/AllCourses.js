@@ -434,7 +434,7 @@ const AllCourse = ({ show, minDate }) => {
                 setCourseCategory("");
               }}
             >
-              <i className="fas fa-solid fa-plus"></i> Add Course
+            Add Course<i className="fas fa-solid fa-plus ms-2"></i>
             </button>
 
             {/* This is for Category panel */}

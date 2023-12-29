@@ -190,7 +190,7 @@ const AllCategory = ({ show }) => {
             data-bs-target="#offcanvasRight"
             aria-controls="offcanvasRight"
           >
-            <i className="fas fa-solid fa-plus"></i> Add Category
+          Add Category<i className="fas fa-solid fa-plus ms-2"></i>
           </button>
           {/* This is for Category panel */}
         </div>

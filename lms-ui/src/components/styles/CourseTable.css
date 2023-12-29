@@ -200,14 +200,13 @@
   overflow-y: auto;
   margin-right: 5px;
   padding-right: 3px;
-
 }
 
 .App-container::-webkit-scrollbar {
-  display: none; 
+  display: none;
 }
 .App-container::-webkit-scrollbar {
-  display: none; 
+  display: none;
 }
 
 .App_header {
@@ -264,7 +263,7 @@
 
 .module-list {
   flex: 1;
-  padding-right: 20px;
+  padding-right: 2px;
 }
 
 .module_list h3 {
@@ -325,7 +324,8 @@ border: 10px solid red;
   color: #1463b8;
 }
 
-.lesson-content-container .lecture-pdf .pdf-doc-container:hover ,.assignment-container .assignment-pdf:hover {
+.lesson-content-container .lecture-pdf .pdf-doc-container:hover,
+.assignment-container .assignment-pdf:hover {
   color: #1463b8;
   text-decoration: none;
   list-style: none;
@@ -334,6 +334,7 @@ border: 10px solid red;
 .module-content .upper-row {
   display: flex;
   gap: 15px;
+  width: 100%;
 }
 
 .video-player-icon {
@@ -353,8 +354,21 @@ border: 10px solid red;
 .module-content-container {
   display: flex;
   gap: 15px;
-  width: 400px;
+  width: 100%;
   /* background-color: yellow; */
+}
+#main
+  > div
+  > div:nth-child(2)
+  > div
+  > div.div-main-size-container
+  > div
+  > div.App-container.div-main-size-container
+  > div
+  > div
+  > div:nth-child(1)
+  > div.ReactCollapse--collapse {
+  width: 100%;
 }
 
 .content-inside-container {
@@ -363,7 +377,7 @@ border: 10px solid red;
   gap: 10px;
   /* margin-bottom: 10px; */
   color: #2d2f31;
-  width: 400px;
+  width: 100%;
 }
 
 .module-header h3 {
@@ -382,9 +396,10 @@ border: 10px solid red;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
 }
 
-.lesson-title{
+.lesson-title {
   display: flex;
   gap: 10px;
 }
@@ -440,18 +455,19 @@ border: 10px solid red;
   background: #f7f9fa;
 } */
 
-.NoDoc-pdf-container ,.additional-resources-container{
+.NoDoc-pdf-container,
+.additional-resources-container {
   display: flex;
   gap: 12px;
 }
 
-.additional-resources-container{
- /* background-color:yellow; */
- margin-top: -10px;
- justify-content: flex-end;
+.additional-resources-container {
+  /* background-color:yellow; */
+  margin-top: -10px;
+  justify-content: flex-end;
 }
 
-.assignment-pdf{
+.assignment-pdf {
   /* display: flex;
   flex-direction:column;
   gap: 10px; */
@@ -473,7 +489,7 @@ border: 10px solid red;
   display: inline-block;
   margin-right: 15px;
   display: flex;
-    justify-content: flex-end;
+  justify-content: flex-end;
 }
 
 .dropdown-content {
@@ -481,13 +497,13 @@ border: 10px solid red;
   position: absolute;
   background-color: #f9f9f9;
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
-.dropdown{
+.dropdown {
   display: flex;
-    justify-content: flex-end;
-    width: 57%;
+  justify-content: flex-end;
+  width: 100%;
 }
 .dropdown-content div {
   color: black;
@@ -496,18 +512,20 @@ border: 10px solid red;
   display: block;
 }
 
-.dropdown-content div:hover {background-color: #f1f1f1}
+.dropdown-content div:hover {
+  background-color: #f1f1f1;
+}
 
 .dropdown:hover .dropdown-content {
   display: block;
 }
 
 .dropdown:hover .dropbtn {
-  background-color: rgb(30, 151, 199);
+  color: #606464;
 }
 /* -----------xxxxxx---------------- */
 
-.resources-arrow{
+.resources-arrow {
   font-size: 15px;
 }
 .div-main-size-container {

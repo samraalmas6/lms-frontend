@@ -15,8 +15,8 @@
 //   const minDate = `${year}-${month}-${day}`;
 
 //   const [showComp, setShowComp] = useState(false);
-//   const [courseStart, setCourseStart] = useState(minDate);
-//   const [courseEnd, setCourseEnd] = useState("");
+//   const [dueDate, setDueDate] = useState(minDate);
+//   const [dueTime, setDueTime] = useState("");
 //   const [showAttachFile, setShowFileAttach] = useState(false);
 //   const [title, setTitle] = useState("")
 //   const [marks, setMarks] = useState("")
@@ -36,12 +36,12 @@
 //     setShowComp(!showComp);
 //   };
 
-//   const handleCourseStart = (e) => {
-//     setCourseStart(e.target.value);
+//   const handledueDate = (e) => {
+//     setDueDate(e.target.value);
 //   };
 
-//   const handleCourseEnd = (e) => {
-//     setCourseEnd(e.target.value);
+//   const handledueTime = (e) => {
+//     setDueTime(e.target.value);
 //   };
 
 //   const handleFileAttachment = () => {
@@ -62,7 +62,7 @@
 // // ]
 //     const obj = {
 //       title: title,
-//       due_date : courseStart,
+//       due_date : dueDate,
 //       marks : marks,
 //       unit: 1
 //       // Add other data properties as needed
@@ -79,7 +79,7 @@
 //       if (response.status == 201) {
 //         response.json().then(function (result) {
 //           console.log(result);
-//           // setCourseStart(""),
+//           // setDueDate(""),
 //           // setTitle(""),
 //           // setMarks("")
 //         });
@@ -128,8 +128,8 @@
 //                 type="date"
 //                 placeholder="Start Date"
 //                 min={minDate}
-//                 value={courseStart}
-//                 onChange={handleCourseStart}
+//                 value={dueDate}
+//                 onChange={handledueDate}
 //               />
 //             </div>
 //             {/* <p>Due time</p> */}
@@ -140,8 +140,8 @@
 //                 type="time"
 //                 // max="2030-12-30"
 //                 // min={minDate}
-//                 value={courseEnd}
-//                 onChange={handleCourseEnd}
+//                 value={dueTime}
+//                 onChange={handledueTime}
 //               />
 //             </div>
 //           </div>
@@ -183,6 +183,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import "../../../styles/editor.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 export const AssignmentProbs = createContext(null);
 const AssignmentScreen = () => {
@@ -199,8 +200,8 @@ const AssignmentScreen = () => {
   const minDate = `${year}-${month}-${day}`;
 
   const [showComp, setShowComp] = useState(false);
-  const [courseStart, setCourseStart] = useState(minDate);
-  const [courseEnd, setCourseEnd] = useState("");
+  const [dueDate, setDueDate] = useState(minDate);
+  const [dueTime, setDueTime] = useState("");
   const [title, setTitle] = useState("");
   const [marks, setMarks] = useState("");
   const [content, setContent] = useState("");
@@ -216,6 +217,15 @@ const AssignmentScreen = () => {
 
   const courseID = state.courseId;
 
+  useEffect(() => {
+    if(state.assignment){
+      setTitle(state.assignment.title)
+      setMarks(state.assignment.marks)
+      setContent(state.assignment.description);
+      setDueDate(state.assignment.due_date)
+      setDueTime(state.assignment.due_time)
+    }
+  },[state])
   const getTeamData = () => {
     fetch("http://127.0.0.1:8000/teams_list_data/", {
       method: "GET",
@@ -319,12 +329,12 @@ const AssignmentScreen = () => {
     setShowComp(!showComp);
   };
 
-  const handleCourseStart = (e) => {
-    setCourseStart(e.target.value);
+  const handledueDate = (e) => {
+    setDueDate(e.target.value);
   };
 
-  const handleCourseEnd = (e) => {
-    setCourseEnd(e.target.value);
+  const handledueTime = (e) => {
+    setDueTime(e.target.value);
   };
   const handleFileUpload = (selectedFile) => {
     // Handle the selected file here
@@ -341,9 +351,9 @@ const AssignmentScreen = () => {
     if(selectedFile){formData.append("assignment_file", selectedFile)}
     formData.append("title", title);
     formData.append("description", content);
-    formData.append("due_date", courseStart);
+    formData.append("due_date", dueDate);
     formData.append("marks", marks);
-    formData.append("due_time", courseEnd);
+    formData.append("due_time", dueTime);
     formData.append("unit", state.unitId);
     formData.append("is_team_submission_allowed", teamSubmission);
     formData.append("instructor", state.instructor);
@@ -354,18 +364,24 @@ const AssignmentScreen = () => {
     // const obj = {
     //   title: title,
     //   description: content, // You can add the description here if you have it
-    //   due_date: courseStart,
+    //   due_date: dueDate,
     //   marks: marks,
-    //   due_time: courseEnd,
+    //   due_time: dueTime,
     //   unit: state.unitId, // Assuming a default unit value
     //   is_team_submission_allowed: teamSubmission,
     //   instructor: state.instructor,
     //   updated_by: userId
     //   // Number_of_members: 1,
     // };
+    let requestMethod = "POST"
+    let requestURL = "http://127.0.0.1:8000/api/assignments/"
+    if(state.assignment){
+      requestMethod = "PUT"
+      requestURL = `http://127.0.0.1:8000/api/assignments/${state.assignment.id}/`
+    }
 
-    fetch("http://127.0.0.1:8000/api/assignments/", {
-      method: "POST",
+    fetch(requestURL, {
+      method: requestMethod,
       body: formData,
       headers: {
         Authorization: `Token ${sessionStorage.getItem("user_token")}`,
@@ -373,7 +389,7 @@ const AssignmentScreen = () => {
       },
     })
       .then((response) => {
-        if (response.status === 201) {
+        if (response.status === 201 || response.status === 200) {
           response.json().then(function (result) {
             console.log("assignment posted: ", result);
             // if (result.is_team_submission_allowed === true){
@@ -383,17 +399,29 @@ const AssignmentScreen = () => {
             setNewCreatedAssignment(result)
             setTitle("");
             setMarks("");
-            setCourseStart("");
-            setCourseEnd("");
+            setDueDate("");
+            setDueTime("");
             setSelectedFile(null);
             setAssignmentId(result.id);
             // handleCreateGroup(result.id);
-            console.log("assignment id: ", assignmentId);
-            if (result.is_team_submission_allowed === true) {
-              setGroupSub(true);
-            } else {
-              navigate(-1);
+            let action = "Created"
+            if(response.status === 200){
+              action = "Updated"
             }
+            Swal.fire(
+              `${action}!`,
+              `${result.title} has been ${action}.`,
+              "success"
+            ).then((res) => {
+              navigate(-1);
+            });
+
+            console.log("assignment id: ", assignmentId);
+            // if (result.is_team_submission_allowed === true) {
+            //   setGroupSub(true);
+            // } else {
+            //   navigate(-1);
+            // }
             //
           });
         } else {
@@ -450,6 +478,7 @@ const AssignmentScreen = () => {
               <div className="description-container">
                 <div>
                   <Editor
+                    apiKey={process.env.REACT_APP_API_KEY}
                     initialValue="<p>This is the initial content of the editor</p>"
                     init={{
                       height: 500,
@@ -485,7 +514,10 @@ const AssignmentScreen = () => {
                 handleBehavior(e, groupSub);
               }}
             >
-              Create Assignment
+              {
+                state.assignment ? "Update Assignment" : "Create Assignment"
+              }
+              
             </button>
           </div>
         ) : (
@@ -511,18 +543,18 @@ const AssignmentScreen = () => {
                     type="date"
                     placeholder="Start Date"
                     min={minDate}
-                    value={courseStart}
+                    value={dueDate}
                     className="assignment-screen-input-field "
-                    onChange={handleCourseStart}
+                    onChange={handledueDate}
                   />
                 </div>
                 <div className="due-date-time">
                   <i className="far fa-clock"></i>
                   <input
                     type="time"
-                    value={courseEnd}
+                    value={dueTime}
                     className="assignment-screen-input-field "
-                    onChange={handleCourseEnd}
+                    onChange={handledueTime}
                   />
                 </div>
               </div>

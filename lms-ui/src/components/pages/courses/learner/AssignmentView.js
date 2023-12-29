@@ -647,19 +647,19 @@ function AssignmentView({ selectedAssignments }) {
                   )}
               </div> */}
               <div className="resource-files">
-                {selectedAssignment.content ? (
+                {selectedAssignment.assignment_file ? (
                   <>
                     <p>Attached Resource File:</p>
                     <a
                       className="res"
-                      href={selectedAssignment.content}
+                      href={selectedAssignment.assignment_file}
                       download
                     >
                       <i
-                        className="fas fa-file"
+                        className="fas fa-file me-2"
                         style={{ marginRight: "5px" }}
                       ></i>
-                      {selectedAssignment.content}
+                      <strong>{selectedAssignment.assignment_file.slice(44,)}</strong>
                     </a>
                   </>
                 ) : (

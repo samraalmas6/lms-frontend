@@ -182,7 +182,9 @@ const SingleUnit = ({
                     ? "No Document"
                     : unitPDF &&
                       unitPDF.map((pdf) => {
-                        return <SinglePdf handleUnitPDF={handleUnitPDF} pdf={pdf} />;
+                        return (
+                          <SinglePdf handleUnitPDF={handleUnitPDF} pdf={pdf} />
+                        );
                       })}
                 </div>
                 <div
@@ -215,7 +217,9 @@ const SingleUnit = ({
                             </div>
                             <i class="far fa-file-alt"></i>
                             <div className="assignment-pdf">
-                              {assignment.title.length < 35 ? assignment.title : assignment.title.slice(0,35)+"..."}
+                              {assignment.title.length < 35
+                                ? assignment.title
+                                : assignment.title.slice(0, 35) + "..."}
                             </div>
                           </div>
                         );
@@ -243,29 +247,34 @@ const SingleUnit = ({
                       })}
                 </div> */}
                 {/* --------------------------------------- */}
-                {unitResources.length !== 0 && 
-                                <div class="dropdown">
-                                <button class="dropbtn">
-                                  <i class="fas fa-folder"></i> Resources
-                                  <i class="fas fa-thin fa-chevron-down fa-rotate-180arrow resources-arrow ms-1"></i>
-                                </button>
-                                <div class="dropdown-content">
-                                  {unitResources.length === 0
-                                    ? null
-                                    : unitResources.map((resource) => {
-                                        return (
-                                          <div
-                                            onClick={() =>
-                                              handleViewResource(resource.resource)
-                                            }
-                                          >
-                                            {resource.title}
-                                          </div>
-                                        );
-                                      })}
-                                </div>
-                              </div>
-                }
+                {unitResources.length !== 0 && (
+                  <div class="dropdown">
+                    <button
+                      class="dropbtn dropdown-toggle"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <i class="fas fa-folder"></i> Resources
+                    </button>
+                    <ul class="dropdown-menu">
+                      {unitResources.length === 0
+                        ? null
+                        : unitResources.map((resource) => {
+                            return (
+                              <li
+                                onClick={() =>
+                                  handleViewResource(resource.resource)
+                                }
+                                className="dropdown-item"
+                              >
+                                {resource.title}
+                              </li>
+                            );
+                          })}
+                    </ul>
+                  </div>
+                )}
 
                 {/* --------------------------------------- */}
               </div>

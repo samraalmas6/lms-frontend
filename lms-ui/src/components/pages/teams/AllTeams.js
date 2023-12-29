@@ -633,7 +633,9 @@ const AllTeams = ({ show }) => {
   return (
     <div className="pt-2">
       <form className="add-teamform">
-        <div className="creat-team-btn">
+        {
+          userRole === "admin" ? 
+          <div className="creat-team-btn">
           <button
             type="button"
             className="btn btn-primary ms-3"
@@ -641,10 +643,13 @@ const AllTeams = ({ show }) => {
             data-bs-target="#offcanvasTeam"
             aria-controls="offcanvasRight"
           >
-            <i className="fas fa-solid fa-plus"></i> Add Team
+            Add Team<i className="fas fa-solid fa-plus ms-2"></i>
           </button>
           {/* This is for Team Add panel */}
-        </div>
+        </div>:
+        <h3>Team List</h3>
+        }
+  
       </form>
       <div className="all-team-content">
         <div
@@ -776,41 +781,51 @@ const AllTeams = ({ show }) => {
                   ></button>
                 </div>
                 <form>
-                  <div
-                    className=""
-                    style={{ display: "flex", flexDirection: "column" }}
-                    onMouseEnter={() => setShowEditBtn(true)}
-                    onMouseLeave={() => setShowEditBtn(false)}
-                  >
-                    {/* <label className="mb-0 team-title-label">Team Name:</label> */}
-                    {/* <span>{teamName}</span> */}
+                  {userRole === "admin" ? (
+                    <div
+                      className=""
+                      style={{ display: "flex", flexDirection: "column" }}
+                      onMouseEnter={() => setShowEditBtn(true)}
+                      onMouseLeave={() => setShowEditBtn(false)}
+                    >
+                      {/* <label className="mb-0 team-title-label">Team Name:</label> */}
+                      {/* <span>{teamName}</span> */}
 
-                    {editTeam ? (
-                      <input
-                        type="text"
-                        placeholder="Team Title"
-                        value={teamTitle}
-                        style={{ width: "99%" }}
-                        className="team-title mb-2"
-                        onChange={(e) => {
-                          handleTeamTitle(e);
-                        }}
-                        required
-                        onKeyDown={(e) => handleUpdateTitle(e)}
-                        onContextMenu={(e) => handleUpdateTitle(e)}
-                      />
-                    ) : (
-                      <span style={{ width: "" }} className="team-title  mb-2">
-                        {teamName}
-                        {showEditBtn && (
-                          <i
-                            className="bi bi-pencil ms-2 module-edit-btn"
-                            onClick={() => setEditTeam(true)}
-                          ></i>
-                        )}
-                      </span>
-                    )}
-                  </div>
+                      {editTeam ? (
+                        <input
+                          type="text"
+                          placeholder="Team Title"
+                          value={teamTitle}
+                          style={{ width: "99%" }}
+                          className="team-title mb-2"
+                          onChange={(e) => {
+                            handleTeamTitle(e);
+                          }}
+                          required
+                          onKeyDown={(e) => handleUpdateTitle(e)}
+                          onContextMenu={(e) => handleUpdateTitle(e)}
+                        />
+                      ) : (
+                        <span
+                          style={{ width: "" }}
+                          className="team-title  mb-2"
+                        >
+                          {teamName}
+                          {showEditBtn && (
+                            <i
+                              className="bi bi-pencil ms-2 module-edit-btn"
+                              onClick={() => setEditTeam(true)}
+                            ></i>
+                          )}
+                        </span>
+                      )}
+                    </div>
+                  ) : (
+                    <span  className="team-title  mb-2">
+                      {teamName}
+                    </span>
+                  )}
+
                   {/* <input
                     type="text"
                     value={teamName}
@@ -836,13 +851,15 @@ const AllTeams = ({ show }) => {
                             >
                               Users
                             </th>
-                            <th
-                              colSpan="2"
-                              style={{ borderTop: "none" }}
-                              className="team-table-heading"
-                            >
-                              Action
-                            </th>
+                            {/* {userRole === "admin" && ( */}
+                              <th
+                                colSpan="2"
+                                style={{ borderTop: "none" }}
+                                className="team-table-heading"
+                              >
+                                Action
+                              </th>
+                            {/* )} */}
                           </tr>
                         </thead>
                         <tbody>
@@ -859,44 +876,50 @@ const AllTeams = ({ show }) => {
                                   >
                                     <span>{getUSerFullName(user)}</span>
                                   </td>
-                                  <td
-                                    className={`${styles.borderLess} ps-0`}
-                                    style={{ width: "3%" }}
-                                  >
-                                    <div className="form-check form-switch">
-                                      <input
-                                        className="form-check-input "
-                                        type="checkbox"
-                                        role="switch"
-                                        checked={
-                                          getUSerAcivationStatus(user)[0]
-                                            .is_active
-                                        }
-                                        value={
-                                          getUSerAcivationStatus(user)[0]
-                                            .is_active
-                                        }
-                                        onChange={() => {
-                                          handleUserVisibility(
-                                            getUSerAcivationStatus(user)[0]
-                                              .email,
-                                            getUSerAcivationStatus(user)[0]
-                                              .is_active
-                                          );
-                                        }}
-                                        id="flexSwitchCheckDefault"
-                                      />
-                                    </div>
-                                  </td>
-                                  <td className={`${styles.borderLess} ps-0`}>
-                                    <button
-                                      type="button"
-                                      className={`${styles.deleteBtn} p-0`}
-                                      onClick={() => handleDeleteUser(user)}
-                                    >
-                                      <i className="bi bi-trash"></i>
-                                    </button>
-                                  </td>
+
+                            
+                                      <td
+                                        className={`${styles.borderLess} ps-0`}
+                                        style={{ width: "3%" }}
+                                      >
+                                        <div className="form-check form-switch">
+                                          <input
+                                            className="form-check-input "
+                                            type="checkbox"
+                                            role="switch"
+                                            checked={
+                                              getUSerAcivationStatus(user)[0]
+                                                .is_active
+                                            }
+                                            value={
+                                              getUSerAcivationStatus(user)[0]
+                                                .is_active
+                                            }
+                                            onChange={() => {
+                                              handleUserVisibility(
+                                                getUSerAcivationStatus(user)[0]
+                                                  .email,
+                                                getUSerAcivationStatus(user)[0]
+                                                  .is_active
+                                              );
+                                            }}
+                                            id="flexSwitchCheckDefault"
+                                          />
+                                        </div>
+                                      </td>
+                                      {userRole === "admin" && (
+                                      <td
+                                        className={`${styles.borderLess} ps-0`}
+                                      >
+                                        <button
+                                          type="button"
+                                          className={`${styles.deleteBtn} p-0`}
+                                          onClick={() => handleDeleteUser(user)}
+                                        >
+                                          <i className="bi bi-trash"></i>
+                                        </button>
+                                      </td>
+                                  )}
                                 </tr>
                               );
                             })}
@@ -914,13 +937,15 @@ const AllTeams = ({ show }) => {
                             >
                               Courses
                             </th>
-                            <th
-                              colSpan="2"
-                              style={{ borderTop: "none" }}
-                              className="team-table-heading"
-                            >
-                              Action
-                            </th>
+                            {userRole === "admin" && (
+                              <th
+                                colSpan="2"
+                                style={{ borderTop: "none" }}
+                                className="team-table-heading"
+                              >
+                                Action
+                              </th>
+                            )}
                           </tr>
                         </thead>
                         <tbody>
@@ -931,41 +956,49 @@ const AllTeams = ({ show }) => {
                                   <td className={styles.borderLess}>
                                     {getTeamCourseName(course)}
                                   </td>
-                                  <td
-                                    className={`${styles.borderLess} ps-0`}
-                                    style={{ width: "3%" }}
-                                  >
-                                    <div className="form-check form-switch">
-                                      <input
-                                        className="form-check-input "
-                                        type="checkbox"
-                                        role="switch"
-                                        checked={
-                                          getCourseActivationStatus(course)
-                                            .is_active
-                                        }
-                                        value={
-                                          getCourseActivationStatus(course)
-                                            .is_active
-                                        }
-                                        onChange={() => {
-                                          handleCourseVisibility(
-                                            getCourseActivationStatus(course)
-                                          );
-                                        }}
-                                        id="flexSwitchCheckDefault"
-                                      />
-                                    </div>
-                                  </td>
-                                  <td className={styles.borderLess}>
-                                    <button
-                                      type="button"
-                                      className={`${styles.deleteBtn} p-0`}
-                                      onClick={() => handleDeleteCourse(course)}
-                                    >
-                                      <i className="bi bi-trash"></i>
-                                    </button>
-                                  </td>
+                                  {userRole === "admin" && (
+                                    <>
+                                      <td
+                                        className={`${styles.borderLess} ps-0`}
+                                        style={{ width: "3%" }}
+                                      >
+                                        <div className="form-check form-switch">
+                                          <input
+                                            className="form-check-input "
+                                            type="checkbox"
+                                            role="switch"
+                                            checked={
+                                              getCourseActivationStatus(course)
+                                                .is_active
+                                            }
+                                            value={
+                                              getCourseActivationStatus(course)
+                                                .is_active
+                                            }
+                                            onChange={() => {
+                                              handleCourseVisibility(
+                                                getCourseActivationStatus(
+                                                  course
+                                                )
+                                              );
+                                            }}
+                                            id="flexSwitchCheckDefault"
+                                          />
+                                        </div>
+                                      </td>
+                                      <td className={styles.borderLess}>
+                                        <button
+                                          type="button"
+                                          className={`${styles.deleteBtn} p-0`}
+                                          onClick={() =>
+                                            handleDeleteCourse(course)
+                                          }
+                                        >
+                                          <i className="bi bi-trash"></i>
+                                        </button>
+                                      </td>
+                                    </>
+                                  )}
                                 </tr>
                               );
                             })}
@@ -973,28 +1006,31 @@ const AllTeams = ({ show }) => {
                       </table>
                     </div>
                   </div>
-                  <div className="teamAddBtn">
-                    <button
-                      className="btn btn-primary me-3"
-                      type="button"
-                      onClick={() => {
-                        setShowAddCourse(!showAddCourse);
-                        setShowAddUser(false);
-                      }}
-                    >
-                      Add Course
-                    </button>
-                    <button
-                      className="btn btn-secondary"
-                      type="button"
-                      onClick={() => {
-                        setShowAddUser(!showAddUser);
-                        setShowAddCourse(false);
-                      }}
-                    >
-                      Add User
-                    </button>
-                  </div>
+                  {userRole === "admin" && (
+                    <div className="teamAddBtn">
+                      <button
+                        className="btn btn-primary me-3"
+                        type="button"
+                        onClick={() => {
+                          setShowAddCourse(!showAddCourse);
+                          setShowAddUser(false);
+                        }}
+                      >
+                        Add Course
+                      </button>
+                      <button
+                        className="btn btn-secondary"
+                        type="button"
+                        onClick={() => {
+                          setShowAddUser(!showAddUser);
+                          setShowAddCourse(false);
+                        }}
+                      >
+                        Add User
+                      </button>
+                    </div>
+                  )}
+
                   {showAddCourse && (
                     <div className="team-add-course-section mt-3 mb-3">
                       <div
@@ -1320,7 +1356,7 @@ const AllTeams = ({ show }) => {
                         {userRole === "admin" ? (
                           <i className="bi bi-trash text-danger"></i>
                         ) : (
-                          team.created_at.slice(0,10)
+                          team.created_at.slice(0, 10)
                         )}
                       </td>
                     </tr>

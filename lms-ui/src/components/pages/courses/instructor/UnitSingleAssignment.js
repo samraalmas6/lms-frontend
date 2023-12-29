@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const UnitSingleAssignment = ({
@@ -7,6 +8,8 @@ const UnitSingleAssignment = ({
   getUSerFullName,
   handleUnitContent,
 }) => {
+  const navigate = useNavigate();
+
   const [assignmentTitle, setAssignmentTitle] = useState(assignment.title);
   const [showEditAssignmentBtn, setShowEditAssignmentBtn] = useState(false);
   const [editAssignment, setEditAssignment] = useState(false);
@@ -15,6 +18,13 @@ const UnitSingleAssignment = ({
   useEffect(() => {
     setVisibility(assignment.is_active);
   }, [0]);
+
+
+const handleAssignment = (assignment,unitId, courseId, instructor) => {
+    navigate("/course/create-assignment", {
+      state: { assignment, unitId, courseId, instructor },
+    });
+  };
 
   const handleVisibility = (e) => {
     setVisibility(!visibility);
@@ -156,7 +166,11 @@ const UnitSingleAssignment = ({
   };
 
   return (
-    <tr key={assignment.id}>
+    <tr key={assignment.id}
+      onClick={() =>  {
+        handleAssignment(assignment,assignment.unit,14, assignment.instructor)
+      }}
+    >
       <td className="single-unit-assign-index-td">{index + 1}</td>
       <td
         onMouseEnter={() => {

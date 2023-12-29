@@ -108,7 +108,7 @@ const ModuleCard = ({
           } arrow`}
         ></i>
       </div>
-      <Collapse isOpened={isExpanded}>
+      <Collapse isOpened={isExpanded} className="w-100">
         <div className="module-list">
           <ul className="module-content">
             {moduleUnit.length === 0
