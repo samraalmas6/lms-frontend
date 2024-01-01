@@ -479,7 +479,7 @@ const AssignmentScreen = () => {
                 <div>
                   <Editor
                     apiKey={process.env.REACT_APP_API_KEY}
-                    initialValue="<p>This is the initial content of the editor</p>"
+                    initialValue="<p>Write assignment question here and/or upload the file below</p>"
                     init={{
                       height: 500,
                       menubar: false,

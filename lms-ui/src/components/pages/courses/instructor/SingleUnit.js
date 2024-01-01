@@ -273,7 +273,7 @@ const SingleUnit = ({ unit, setUnitId }) => {
   };
 
 const handleAddResourse = () => {
-  navigate("/course/add-resourses")
+  navigate("/course/add-resourses",{state: {unit}})
 }
 
   const handleDeleteUnit = (unit, deleted) => {
@@ -678,7 +678,7 @@ const handleAddResourse = () => {
           <div className="slide-section mt-5">
             <button type="button" className="additionalbtn"
               onClick={() => handleAddResourse()}
-            ><span>+</span> Additional resources</button>
+            > Additional resources<strong className="ms-1">+</strong></button>
           </div>
           {/* <div className="pdf-section"></div> */}
         </div>

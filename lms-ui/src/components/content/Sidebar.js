@@ -159,7 +159,7 @@ const Sidebar = () => {
                   { USER_Role === "instructor" && <li className="nav-item mb-2 ">
                     <Link
                       to="/course/assignment-hub"
-                      className="nav-link text-secondary text-white"
+                      className="nav-link text-secondary text-white ps-0"
                     >
                       Assignment Hub
                     </Link>

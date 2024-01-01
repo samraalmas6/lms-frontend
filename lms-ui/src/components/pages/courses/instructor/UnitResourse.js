@@ -1,62 +1,81 @@
-import { Editor } from '@tinymce/tinymce-react';
-import React from 'react'
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { writeFile } from "xlsx";
+
 
 const UnitResourse = () => {
+  const {state} = useLocation();
+  const [resourceTitle, setResourceTitle] = useState("");
+  const [resourceLinks, setResourceLinks] = useState([]);
+
+  const handleResourceTitle = (e) => {
+    setResourceTitle(e.target.value);
+  };
+
+  const handleResourceLinks = (e) => {
+    setResourceLinks(e.target.value);
+  };
+
+  const handleSubmit = (e) => {    
+    e.preventDefault();
+    const file = new File([resourceLinks], `${state.unit.title}-resource.txt` )
+    const formData = new FormData();
+    formData.append("title", resourceTitle);
+    formData.append("unit", state.unit.id)
+    formData.append("instructor", state.unit.instructor);
+    formData.append("updated_by", sessionStorage.getItem('user_id'));
+    formData.append("resource", file);
+
+    fetch(`http://localhost:8000/api/resources/`, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("user_token")}`,
+          // "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.status === 201) {
+          response.json().then(function (result) {
+            console.log(result);
+          });
+        } else {
+          console.log(response);
+        }
+      });
+  };
+
   return (
     <div>
-        <div className="assignment-details">
-            <form>
-              <i className="fas fa-pen"></i>
-              <input
-                type="text"
-                placeholder="Title"
-                value={''}
-                // className="assignment-screen-input-field "
-                onChange={''}
-              />
-            </form>
-            <div className="editor-container">
-              <div>
-               
-              </div>
-              <div className="description-container">
-                <div>
-                  <Editor
-                    initialValue="<p>This is the initial content of the editor</p>"
-                    init={{
-                      height: 500,
-                      menubar: false,
-                      plugins: [
-                        "advlist autolink lists link image charmap print preview anchor",
-                        "searchreplace visualblocks code fullscreen",
-                        "insertdatetime media table paste code help wordcount",
-                      ],
-                      toolbar:
-                        "undo redo | formatselect | bold italic backcolor | \
-                      alignleft aligncenter alignright alignjustify | \
-                      bullist numlist outdent indent | removeformat | help",
-                    }}
-                    // onEditorChange={handleEditorChange}
-                    // onEditorChange={(value, evt) =>
-                    // //   handleEditorChange(value, evt)
-                    // }
-                    // value={content}
-                  />
-                </div>
-                {/* <div>
-                <FileUploadComponent />
-              </div> */}
-              </div>
-            </div>
-            
-            <button
-             type='button'
-            >
-            Add Resources
-            </button>
+      <div className="assignment-details mt-2">
+        <form>
+          <i className="fas fa-pen"></i>
+          <input
+            type="text"
+            placeholder="Title"
+            value={resourceTitle}
+            // className="assignment-screen-input-field "
+            onChange={(e) => handleResourceTitle(e)}
+          />
+        </form>
+        <div className="editor-container">
+          <div className="resource-link-container">
+            <i class="fas fa-link"></i>
+            <textarea
+              cols="136"
+              rows="25"
+              placeholder="Addition Resource Links"
+              onChange={(e) => handleResourceLinks(e)}
+              value={resourceLinks}
+            ></textarea>
           </div>
-    </div>
-  )
-}
+        </div>
 
-export default UnitResourse
+        <button type="button" onClick={(e) => handleSubmit(e)}>
+          Add Resources
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default UnitResourse;
