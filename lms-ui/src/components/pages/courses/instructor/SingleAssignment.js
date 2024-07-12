@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import SingleGroup from "./SingleGroup";
-import '../../../styles/SingleAssignment.css'
+import "../../../styles/SingleAssignment.css";
 
 const SingleAssignment = ({ assignment }) => {
   const [allGroupsData, setAllGroupsData] = useState([]);
   const [particularGroup, setParticularGroup] = useState([]);
-  const [showGroup, setShowGroup] = useState(false)
+  const [showGroup, setShowGroup] = useState(false);
   useEffect(() => {
     const getAssignmentGroupData = () => {
       fetch("http://127.0.0.1:8000/api/assignment_partners_group/", {
@@ -35,7 +35,7 @@ const SingleAssignment = ({ assignment }) => {
   }, [0]);
 
   const handleGetGroups = (id) => {
-    setShowGroup(!showGroup)
+    setShowGroup(!showGroup);
     const groups = allGroupsData.filter((group) => {
       return group.assignment === +id;
     });
@@ -45,12 +45,16 @@ const SingleAssignment = ({ assignment }) => {
 
   return (
     <div>
-      <div className="assignment-title" onClick={() => handleGetGroups(assignment.id)}>
+      <div
+        className="assignment-title"
+        onClick={() => handleGetGroups(assignment.id)}
+      >
         {assignment.title}
       </div>
 
       <div className="">
-        {(particularGroup && showGroup) &&
+        {particularGroup &&
+          showGroup &&
           particularGroup.map((group, i) => {
             return <SingleGroup group={group} i={i} />;
           })}

@@ -1,19 +1,16 @@
 .assignment-view{
   display: flex;
   justify-content: space-between;
-  width:100%;
+  width:99%;
 
 }
-.submit-section {
-  background-color: #ffff;
-    width: 277px;
-    margin-top: 81px;
-    box-shadow: 5px 8px 19px -3px rgb(177, 173, 173);
-    left: -542%;
+.submit-section { 
+    background-color: #ffff;
+    width: 60%;
+    margin-top: 5%;
+    box-shadow: 5px 8px 19px -3px #b1adad;
     border-radius: 5px;
     border: 2px solid #8eafd1;
-    height: auto;
-    position: relative;
 }
 /* 
 .toggle-submission-button{
@@ -195,8 +192,7 @@ element.style {
   border-bottom: 2px solid #0056b3;
 }
 .detail {
-  width: 69%;;
-
+  width: 70%;;
   margin-left: 10px;
 }
 .detail-time{
@@ -204,8 +200,8 @@ element.style {
 }
 .submit {
   background-color: #fff;
-  width: 400px;
-  margin-left: 120%;
+  width: 30%;
+  margin-left: 5px;
   height: 100vh;
 }
 
@@ -213,7 +209,7 @@ element.style {
   font-size: 30px;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   color: #0056b3;
-  width: 1289px;
+  width: 100%;
   background-color: #cff4fc;
   /* border: 6px solid #cff4fc; */
   padding: 1px 2px;
@@ -280,7 +276,6 @@ element.style {
 }
 .uploaded-files {
   background-color: #fff;
-  position: relative;
   margin-top: 9px;
   padding-top: 10px;
 }
@@ -490,7 +485,6 @@ ul.resources {
 
 .submitted-status {
   color: green;
-  margin-right: 17px;
   font-family:'Times New Roman', Times, serif;
   font-size: 18px;
 }
@@ -524,9 +518,8 @@ ul.resources {
 }
 
 .submission-status{
-  
-  text-align: right;
-  width: 274px;
+  text-align: center;
+  width: 100%;
   font-family: sans-serif;
 }
 
@@ -703,7 +696,7 @@ margin-left: 1px;
   font-size: 17px;
   margin-left: 22px;
   background-color: #dee2e6;
-  width: 240px;
+  width: 100%;
   border-radius: 5px;
   font-family: ui-serif;
   
@@ -849,18 +842,21 @@ margin-left: 1px;
 .resource-files{
   padding-top: 10px;
 }
+.resubmit-btn-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .resubmit-btn{
   cursor: pointer;
-  width: 194px;
+  width: 70%;
   border: 1px solid #8e8b8b;
   padding: 1px 20px;
   border-radius: 5px;
   margin-bottom: 30px;
   background-color: #0056b3;
   color: #ffff;
-  height: 36px;
-  margin-left: 39px;
+  margin-left: 0px;
   margin-top: 10px;
-  text-align: center;
-  
+  text-align: center
 }

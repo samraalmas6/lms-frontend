@@ -757,7 +757,7 @@ function AssignmentView({ selectedAssignments }) {
                 <div className="feedback-section">
                   <div className="toggle-submission-button">
                     {isSubmitClicked && (
-                      <div>
+                      <div className="resubmit-btn-container">
                         {showEditButton && (
                           <button
                             type="button"

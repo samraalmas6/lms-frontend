@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { writeFile } from "xlsx";
-
+import '../../../styles/Resource.css'
 
 const UnitResourse = () => {
   const {state} = useLocation();
@@ -45,9 +44,9 @@ const UnitResourse = () => {
   };
 
   return (
-    <div>
+    <div className="resource-main-outer-container">
       <div className="assignment-details mt-2">
-        <form>
+        <form className="resource-form">
           <i className="fas fa-pen"></i>
           <input
             type="text"
@@ -59,10 +58,9 @@ const UnitResourse = () => {
         </form>
         <div className="editor-container">
           <div className="resource-link-container">
-            <i class="fas fa-link"></i>
+            <i class="fas fa-link resource-link-icon"></i>
             <textarea
-              cols="136"
-              rows="25"
+              className="resouce-link-textArea"
               placeholder="Addition Resource Links"
               onChange={(e) => handleResourceLinks(e)}
               value={resourceLinks}
@@ -70,10 +68,26 @@ const UnitResourse = () => {
           </div>
         </div>
 
-        <button type="button" onClick={(e) => handleSubmit(e)}>
+        <button type="button" className="resource-add-btn" onClick={(e) => handleSubmit(e)}>
           Add Resources
         </button>
       </div>
+      {/* <div className="resource-unit-section">
+        <div className="">
+        <span>Course</span>
+        
+        </div>
+        <div className="">
+        <span>Module</span>
+        </div>
+        <div className="">
+        <span>Unit</span> 
+        <span>{state.unit.title}</span>
+        </div>
+        <div className="">
+        <span>Course Created by</span>
+        </div>
+      </div> */}
     </div>
   );
 };
